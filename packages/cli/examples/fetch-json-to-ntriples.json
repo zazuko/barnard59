@@ -1,0 +1,71 @@
+{
+  "@context": {
+    "@base": "http://example.org/pipeline/",
+    "@vocab": "http://example.org/barnard59/",
+    "code": "http://example.org/code/",
+    "arguments": {
+      "@container": "@list"
+    },
+    "operation": {
+      "@type": "@id"
+    },
+    "steps": {
+      "@type": "@id"
+    },
+    "stepList": {
+      "@container": "@list"
+    }
+  },
+  "@graph": [{
+    "@id": "utc",
+    "@type": "Pipeline",
+    "variables": {
+      "variable": [{
+        "name": "url",
+        "value": "http://worldclockapi.com/api/json/utc/now"
+      }, {
+        "@id": "dateContext"
+      }]
+    },
+    "steps": "steps"
+  }, {
+    "@id": "cet",
+    "@type": "Pipeline",
+    "variables": {
+      "variable": [{
+        "name": "url",
+        "value": "http://worldclockapi.com/api/json/cet/now"
+      }, {
+        "@id": "dateContext"
+      }]
+    },
+    "steps": "steps"
+  }, {
+    "@id": "dateContext",
+    "name": "context",
+    "value": "{\"date\":\"http://purl.org/dc/elements/1.1/date\"}"
+  }, {
+    "@id": "steps",
+    "stepList": [{
+      "@id": "fetch",
+      "operation": "file:../node_modules/barnard59-base#fetch.json",
+      "arguments": [{
+        "@value": "${url}",
+        "@type": "code:ecmaScriptTemplateLiteral"
+      }]
+    }, {
+      "@id": "jsonldStructure",
+      "operation": "file:../node_modules/barnard59-base#map",
+      "arguments": [{
+        "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }",
+        "@type": "code:ecmaScript"
+      }]
+    }, {
+      "@id": "parse",
+      "operation": "file:../node_modules/barnard59-formats#jsonld.parse.object"
+    }, {
+      "@id": "serialize",
+      "operation": "file:../node_modules/barnard59-formats#ntriples.serialize"
+    }]
+  }]
+}
