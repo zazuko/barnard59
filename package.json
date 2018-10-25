@@ -1,0 +1,30 @@
+{
+  "name": "barnard59-main",
+  "version": "0.0.0",
+  "description": "Linked Data pipelines",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59-main.git"
+  },
+  "keywords": [],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59-main/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59-main",
+  "dependencies": {
+    "barnard59-base": "git+https://github.com/zazuko/barnard59-base.git#master",
+    "barnard59-core": "git+https://github.com/zazuko/barnard59-core.git#master",
+    "barnard59-formats": "git+https://github.com/zazuko/barnard59-formats.git#master",
+    "commander": "^2.19.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "standard": "^12.0.1"
+  }
+}
