@@ -1,5 +1,4 @@
 const clownface = require('clownface')
-const iriRequire = require('./iriRequire')
 const parseCode = require('./code').parse
 const ns = require('./namespaces')
 const once = require('lodash/once')
@@ -60,19 +59,21 @@ class Pipeline extends Readable {
   }
 
   parseArgument (arg) {
-    if (arg.term.termType === 'NamedNode') {
-      return iriRequire(arg.value, this.basePath)
+    const code = parseCode(arg, this.context, this.variables, this.basePath)
+
+    if (code) {
+      return code
     }
 
-    return parseCode(arg, this.context, this.variables) || arg.value
+    if (arg.term.termType === 'Literal') {
+      return arg.value
+    }
+
+    return arg
   }
 
   parseOperation (operation) {
-    if (operation.term.termType === 'NamedNode') {
-      return iriRequire(operation.value, this.basePath)
-    }
-
-    return parseCode(operation, this.context, this.variables)
+    return parseCode(operation, this.context, this.variables, this.basePath)
   }
 
   parseStep (step) {

@@ -5,6 +5,8 @@ const run = require('..').run
 function buildDefinition () {
   const ns = {
     arguments: rdf.namedNode('http://example.org/barnard59/arguments'),
+    codeLink: rdf.namedNode('http://example.org/code/link'),
+    codeType: rdf.namedNode('http://example.org/code/type'),
     ecmaScript: rdf.namedNode('http://example.org/code/ecmaScript'),
     ecmaScriptTemplateLiteral: rdf.namedNode('http://example.org/code/ecmaScriptTemplateLiteral'),
     first: rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#first'),
@@ -27,11 +29,14 @@ function buildDefinition () {
   const stepList = rdf.blankNode()
   const readFileStep = rdf.blankNode()
   const readFile = rdf.blankNode()
+  const readFileCode = rdf.blankNode()
   const filename = rdf.blankNode()
   const parseCsvStep = rdf.blankNode()
   const parseCsv = rdf.blankNode()
+  const parseCsvCode = rdf.blankNode()
   const serializeJsonStep = rdf.blankNode()
   const serializeJson = rdf.blankNode()
+  const serializeJsonCode = rdf.blankNode()
 
   return Promise.resolve(rdf.dataset([
     rdf.quad(pipeline, ns.type, ns.Pipeline),
@@ -42,16 +47,22 @@ function buildDefinition () {
     rdf.quad(pipeline, ns.steps, stepList),
     rdf.quad(stepList, ns.stepList, readFileStep),
     rdf.quad(readFileStep, ns.first, readFile),
-    rdf.quad(readFile, ns.operation, rdf.namedNode('node:fs#createReadStream')),
+    rdf.quad(readFile, ns.operation, readFileCode),
+    rdf.quad(readFileCode, ns.codeLink, rdf.namedNode('node:fs#createReadStream')),
+    rdf.quad(readFileCode, ns.codeType, ns.ecmaScript),
     rdf.quad(readFile, ns.arguments, filename),
     rdf.quad(filename, ns.first, rdf.literal('${filename}', ns.ecmaScriptTemplateLiteral)), // eslint-disable-line no-template-curly-in-string
     rdf.quad(filename, ns.rest, ns.nil),
     rdf.quad(readFileStep, ns.rest, parseCsvStep),
     rdf.quad(parseCsvStep, ns.first, parseCsv),
-    rdf.quad(parseCsv, ns.operation, rdf.namedNode('file:steps/parseCsv.js')),
+    rdf.quad(parseCsv, ns.operation, parseCsvCode),
+    rdf.quad(parseCsvCode, ns.codeLink, rdf.namedNode('file:steps/parseCsv.js')),
+    rdf.quad(parseCsvCode, ns.codeType, ns.ecmaScript),
     rdf.quad(parseCsvStep, ns.rest, serializeJsonStep),
     rdf.quad(serializeJsonStep, ns.first, serializeJson),
-    rdf.quad(serializeJson, ns.operation, rdf.namedNode('file:steps/serializeJson.js')),
+    rdf.quad(serializeJson, ns.operation, serializeJsonCode),
+    rdf.quad(serializeJsonCode, ns.codeLink, rdf.namedNode('file:steps/serializeJson.js')),
+    rdf.quad(serializeJsonCode, ns.codeType, ns.ecmaScript),
     rdf.quad(serializeJsonStep, ns.rest, ns.nil)
   ]))
 }
