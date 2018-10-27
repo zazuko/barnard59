@@ -6,6 +6,12 @@
     "arguments": {
       "@container": "@list"
     },
+    "code:link": {
+      "@type": "@id"
+    },
+    "code:type": {
+      "@type": "@id"
+    },
     "operation": {
       "@type": "@id"
     },
@@ -48,24 +54,36 @@
     "@id": "steps",
     "stepList": [{
       "@id": "fetch",
-      "operation": "file:../node_modules/barnard59-base#fetch.json",
+      "operation": {
+        "code:link": "file:../node_modules/barnard59-base#fetch.json",
+        "code:type": "code:ecmaScript"
+      },
       "arguments": [{
         "@value": "${url}",
         "@type": "code:ecmaScriptTemplateLiteral"
       }]
     }, {
       "@id": "jsonldStructure",
-      "operation": "file:../node_modules/barnard59-base#map",
+      "operation": {
+        "code:link": "file:../node_modules/barnard59-base#map",
+        "code:type": "code:ecmaScript"
+      },
       "arguments": [{
         "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }",
         "@type": "code:ecmaScript"
       }]
     }, {
       "@id": "parse",
-      "operation": "file:../node_modules/barnard59-formats#jsonld.parse.object"
+      "operation": {
+        "code:link": "file:../node_modules/barnard59-formats#jsonld.parse.object",
+        "code:type": "code:ecmaScript"
+      }
     }, {
       "@id": "serialize",
-      "operation": "file:../node_modules/barnard59-formats#ntriples.serialize"
+      "operation": {
+        "code:link": "file:../node_modules/barnard59-formats#ntriples.serialize",
+        "code:type": "code:ecmaScript"
+      }
     }]
   }]
 }

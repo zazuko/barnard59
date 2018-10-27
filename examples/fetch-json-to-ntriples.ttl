@@ -31,15 +31,27 @@
   p:stepList ( <fetch> <jsonldStructure> <parse> <serialize> ) .
 
 <fetch> a p:Step ;
-  p:operation <file:../node_modules/barnard59-base#fetch.json> ;
+  p:operation [
+    code:link <file:../node_modules/barnard59-base#fetch.json> ;
+    code:type code:ecmaScript
+  ];
   p:arguments ("${url}"^^code:ecmaScriptTemplateLiteral) .
 
 <jsonldStructure> a p:Step ;
-  p:operation <file:../node_modules/barnard59-base#map> ;
+  p:operation [
+    code:link <file:../node_modules/barnard59-base#map> ;
+    code:type code:ecmaScript
+  ];
   p:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:ecmaScript) .
 
 <parse> a p:Step ;
-  p:operation <file:../node_modules/barnard59-formats#jsonld.parse.object> .
+  p:operation [
+    code:link <file:../node_modules/barnard59-formats#jsonld.parse.object> ;
+    code:type code:ecmaScript
+  ] .
 
 <serialize> a p:Step ;
-  p:operation <file:../node_modules/barnard59-formats#ntriples.serialize> .
+  p:operation [
+    code:link <file:../node_modules/barnard59-formats#ntriples.serialize> ;
+    code:type code:ecmaScript
+  ] .
