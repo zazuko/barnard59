@@ -1,70 +1,53 @@
+const cf = require('clownface')
+const namespace = require('@rdfjs/namespace')
+const ns = require('../lib/namespaces')
 const pipeline = require('..').pipeline
 const rdf = require('rdf-ext')
 const run = require('..').run
 
 function buildDefinition () {
-  const ns = {
-    arguments: rdf.namedNode('http://example.org/barnard59/arguments'),
-    codeLink: rdf.namedNode('http://example.org/code/link'),
-    codeType: rdf.namedNode('http://example.org/code/type'),
-    ecmaScript: rdf.namedNode('http://example.org/code/ecmaScript'),
-    ecmaScriptTemplateLiteral: rdf.namedNode('http://example.org/code/ecmaScriptTemplateLiteral'),
-    first: rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#first'),
-    name: rdf.namedNode('http://example.org/barnard59/name'),
-    nil: rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'),
-    operation: rdf.namedNode('http://example.org/barnard59/operation'),
-    rest: rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'),
-    stepList: rdf.namedNode('http://example.org/barnard59/stepList'),
-    steps: rdf.namedNode('http://example.org/barnard59/steps'),
-    type: rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-    value: rdf.namedNode('http://example.org/barnard59/value'),
-    variable: rdf.namedNode('http://example.org/barnard59/variable'),
-    variables: rdf.namedNode('http://example.org/barnard59/variables'),
-    Pipeline: rdf.namedNode('http://example.org/barnard59/Pipeline')
-  }
+  const base = namespace('http://example.org/pipeline#')
+  const dataset = rdf.dataset()
 
-  const pipeline = rdf.blankNode()
-  const variables = rdf.blankNode()
-  const variableFilename = rdf.blankNode()
-  const stepList = rdf.blankNode()
-  const readFileStep = rdf.blankNode()
-  const readFile = rdf.blankNode()
-  const readFileCode = rdf.blankNode()
-  const filename = rdf.blankNode()
-  const parseCsvStep = rdf.blankNode()
-  const parseCsv = rdf.blankNode()
-  const parseCsvCode = rdf.blankNode()
-  const serializeJsonStep = rdf.blankNode()
-  const serializeJson = rdf.blankNode()
-  const serializeJsonCode = rdf.blankNode()
+  const def = cf.dataset(dataset, base('pipeline'))
 
-  return Promise.resolve(rdf.dataset([
-    rdf.quad(pipeline, ns.type, ns.Pipeline),
-    rdf.quad(pipeline, ns.variables, variables),
-    rdf.quad(variables, ns.variable, variableFilename),
-    rdf.quad(variableFilename, ns.name, rdf.literal('filename')),
-    rdf.quad(variableFilename, ns.value, rdf.literal('examples/test.csv')),
-    rdf.quad(pipeline, ns.steps, stepList),
-    rdf.quad(stepList, ns.stepList, readFileStep),
-    rdf.quad(readFileStep, ns.first, readFile),
-    rdf.quad(readFile, ns.operation, readFileCode),
-    rdf.quad(readFileCode, ns.codeLink, rdf.namedNode('node:fs#createReadStream')),
-    rdf.quad(readFileCode, ns.codeType, ns.ecmaScript),
-    rdf.quad(readFile, ns.arguments, filename),
-    rdf.quad(filename, ns.first, rdf.literal('${filename}', ns.ecmaScriptTemplateLiteral)), // eslint-disable-line no-template-curly-in-string
-    rdf.quad(filename, ns.rest, ns.nil),
-    rdf.quad(readFileStep, ns.rest, parseCsvStep),
-    rdf.quad(parseCsvStep, ns.first, parseCsv),
-    rdf.quad(parseCsv, ns.operation, parseCsvCode),
-    rdf.quad(parseCsvCode, ns.codeLink, rdf.namedNode('file:steps/parseCsv.js')),
-    rdf.quad(parseCsvCode, ns.codeType, ns.ecmaScript),
-    rdf.quad(parseCsvStep, ns.rest, serializeJsonStep),
-    rdf.quad(serializeJsonStep, ns.first, serializeJson),
-    rdf.quad(serializeJson, ns.operation, serializeJsonCode),
-    rdf.quad(serializeJsonCode, ns.codeLink, rdf.namedNode('file:steps/serializeJson.js')),
-    rdf.quad(serializeJsonCode, ns.codeType, ns.ecmaScript),
-    rdf.quad(serializeJsonStep, ns.rest, ns.nil)
-  ]))
+  def
+    .addOut(ns.rdf('type'), ns.p('Pipeline'))
+    .addOut(ns.p('variables'), variables => {
+      variables
+        .addOut(ns.p('variable'), filename => {
+          filename
+            .addOut(ns.p('name'), 'filename')
+            .addOut(ns.p('value'), 'examples/test.csv')
+        })
+    })
+    .addOut(ns.p('steps'), steps => {
+      steps.addList(ns.p('stepList'), [
+        def.node(base('readFile'))
+          .addOut(ns.p('operation'), code => {
+            code
+              .addOut(ns.code('link'), def.node('node:fs#createReadStream', { type: 'NamedNode' }))
+              .addOut(ns.code('type'), ns.code('ecmaScript'))
+          })
+          .addList(ns.p('arguments'), [
+            def.node('${filename}', { datatype: ns.code('ecmaScriptTemplateLiteral') })
+          ]),
+        def.node(base('parseCsv'))
+          .addOut(ns.p('operation'), code => {
+            code
+              .addOut(ns.code('link'), def.node('file:steps/parseCsv.js', { type: 'NamedNode' }))
+              .addOut(ns.code('type'), ns.code('ecmaScript'))
+          }),
+        def.node(base('serializeJson'))
+          .addOut(ns.p('operation'), code => {
+            code
+              .addOut(ns.code('link'), def.node('file:steps/serializeJson.js', { type: 'NamedNode' }))
+              .addOut(ns.code('type'), ns.code('ecmaScript'))
+          })
+      ])
+    })
+
+  return Promise.resolve(dataset)
 }
 
 buildDefinition()
