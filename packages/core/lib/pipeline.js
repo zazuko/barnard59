@@ -6,8 +6,8 @@ const rdf = require('rdf-ext')
 const Readable = require('readable-stream').Readable
 
 class Pipeline extends Readable {
-  constructor (node, { basePath = process.cwd(), context = {}, variables = new Map() } = {}) {
-    super()
+  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map() } = {}) {
+    super({ objectMode })
 
     this.node = node
     this.basePath = basePath
@@ -15,6 +15,7 @@ class Pipeline extends Readable {
 
     this.context = context
     this.context.basePath = this.basePath
+    this.context.pipeline = this
     this.context.variables = this.variables
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
@@ -25,12 +26,12 @@ class Pipeline extends Readable {
   }
 
   _init () {
-    return this.initSteps().then(streams => {
-      for (let index = 0; index < streams.length - 1; index++) {
-        streams[index].pipe(streams[index + 1])
+    return this.initSteps().then(() => {
+      for (let index = 0; index < this.streams.length - 1; index++) {
+        this.streams[index].pipe(this.streams[index + 1])
       }
 
-      streams.forEach((stream, index) => {
+      this.streams.forEach((stream, index) => {
         const step = this.steps[index]
 
         stream.on('error', cause => {
@@ -42,7 +43,7 @@ class Pipeline extends Readable {
         })
       })
 
-      const lastStream = streams[streams.length - 1]
+      const lastStream = this.streams[this.streams.length - 1]
 
       lastStream.on('data', chunk => this.push(chunk))
       lastStream.on('end', () => this.push(null))
@@ -55,7 +56,9 @@ class Pipeline extends Readable {
   initSteps () {
     this.steps = [...this.node.out(ns.p('steps')).out(ns.p('stepList')).list()]
 
-    return Promise.all(this.steps.map(step => this.parseStep(step)))
+    return Promise.all(this.steps.map(step => this.parseStep(step))).then(streams => {
+      this.streams = streams
+    })
   }
 
   parseArgument (arg) {
@@ -100,7 +103,7 @@ class Pipeline extends Readable {
     let node
 
     if (iri) {
-      node = clownface.dataset(definition, rdf.namedNode(iri.toString()))
+      node = clownface.dataset(definition, rdf.namedNode(iri.value || iri.toString()))
     } else {
       node = clownface.dataset(definition).has(ns.rdf('type'), ns.p('Pipeline'))
     }
@@ -112,8 +115,8 @@ class Pipeline extends Readable {
     return node
   }
 
-  static create (definition, { iri, basePath, context, variables } = {}) {
-    return new Pipeline(Pipeline.pipelineNode(definition, iri), { basePath, context, variables })
+  static create (definition, { iri, basePath, context, objectMode, variables } = {}) {
+    return new Pipeline(Pipeline.pipelineNode(definition, iri), { basePath, context, objectMode, variables })
   }
 }
 
