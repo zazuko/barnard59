@@ -22,7 +22,8 @@
     "@rdfjs/serializer-jsonld": "^1.2.0",
     "@rdfjs/serializer-ntriples": "^1.0.1",
     "@rdfjs/sink-to-duplex": "git+https://github.com/rdfjs/sink-to-duplex.git#master",
-    "barnard59-base": "git+https://github.com/zazuko/barnard59-base.git#master"
+    "barnard59-base": "git+https://github.com/zazuko/barnard59-base.git#master",
+    "rdf-parser-csvw": "git://github.com/rdf-ext/rdf-parser-csvw.git#develop"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
