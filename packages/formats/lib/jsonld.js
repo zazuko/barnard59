@@ -1,5 +1,5 @@
 const combine = require('barnard59-base').combine
-const sinkToDuplex = require('./sinkToDuplex')
+const sinkToDuplex = require('@rdfjs/sink-to-duplex')
 const stringify = require('barnard59-base').json.stringify
 const Parser = require('@rdfjs/parser-jsonld')
 const Serializer = require('@rdfjs/serializer-jsonld')

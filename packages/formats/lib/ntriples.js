@@ -1,4 +1,4 @@
-const sinkToDuplex = require('./sinkToDuplex')
+const sinkToDuplex = require('@rdfjs/sink-to-duplex')
 const Serializer = require('@rdfjs/serializer-ntriples')
 
 function serialize () {
