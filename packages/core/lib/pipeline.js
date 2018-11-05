@@ -61,8 +61,36 @@ class Pipeline extends Readable {
     })
   }
 
+  parsePipelineCode (value) {
+    const link = value.out(ns.code('link'))
+    const type = value.out(ns.code('type'))
+
+    if (link.term && link.term.termType !== 'NamedNode') {
+      return null
+    }
+
+    if (type.term && type.term.equals(ns.p('Pipeline'))) {
+      return new Pipeline(link, {
+        basePath: this.basePath,
+        context: this.context,
+        variables: this.variables
+      })
+    }
+
+    if (type.term && type.term.equals(ns.p('ObjectPipeline'))) {
+      return new Pipeline(link, {
+        basePath: this.basePath,
+        context: this.context,
+        variables: this.variables,
+        objectMode: true
+      })
+    }
+
+    return null
+  }
+
   parseArgument (arg) {
-    const code = parseCode(arg, this.context, this.variables, this.basePath)
+    const code = parseCode(arg, this.context, this.variables, this.basePath) || this.parsePipelineCode(arg)
 
     if (code) {
       return code
