@@ -1,0 +1,17 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "tableSchema": {
+    "aboutUrl": "http://example.org/{columnA}",
+    "columns": [
+      {
+        "titles": "columnB",
+        "propertyUrl": "http://example.org/b",
+        "datatype": "date"
+      },
+      {
+        "titles": "columnC",
+        "propertyUrl": "http://example.org/c"
+      }
+    ]
+  }
+}

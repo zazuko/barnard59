@@ -1,0 +1,61 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <http://example.org/code/> .
+@prefix p: <http://example.org/barnard59/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<parseCsvw> a p:Pipeline;
+  p:variables [
+    p:variable [
+      p:name "filename";
+      p:value "test.csv";
+    ], [
+      p:name "metadata";
+      p:value "test.csv-metadata.json";
+    ]
+  ];
+  p:steps [
+    p:stepList ( <readFile> <parse> <serialize> )
+  ].
+
+<readFile> a p:Step;
+  p:operation [
+    code:link <node:fs#createReadStream>;
+    code:type code:ecmaScript
+  ];
+  p:arguments ("${filename}"^^code:ecmaScriptTemplateLiteral).
+
+
+<parse> a p:Step;
+  p:operation [
+    code:link <node:barnard59-formats#csvw.parse>;
+    code:type code:ecmaScript
+  ];
+  p:arguments ([
+    code:link <parseMetadata>;
+    code:type p:ObjectPipeline
+  ]).
+
+<serialize> a p:Step;
+  p:operation [
+    code:link <file:../node_modules/barnard59-formats#ntriples.serialize> ;
+    code:type code:ecmaScript
+  ].
+
+
+<parseMetadata> a p:Pipeline;
+  p:steps [
+    p:stepList ( <readMetadata> <parseMetadata> )
+  ].
+
+<readMetadata> a p:Step;
+  p:operation [
+    code:link <node:fs#createReadStream>;
+    code:type code:ecmaScript
+  ];
+  p:arguments ("${metadata}"^^code:ecmaScriptTemplateLiteral).
+
+<parseMetadata> a p:Step;
+  p:operation [
+    code:link <node:barnard59-formats#jsonld.parse>;
+    code:type code:ecmaScript
+  ].
