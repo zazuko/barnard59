@@ -7,10 +7,10 @@
   p:variables [
     p:variable [
       p:name "filename";
-      p:value "test.csv";
+      p:value "examples/test.csv";
     ], [
       p:name "metadata";
-      p:value "test.csv-metadata.json";
+      p:value "examples/test.csv-metadata.json";
     ]
   ];
   p:steps [

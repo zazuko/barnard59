@@ -31,3 +31,12 @@ With the `--output` parameter, the output can be also written to a file:
 ```
 node bin/barnard59.js run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet --output test.nt
 ```
+
+### parse-csvw
+
+A simple pipeline to parse a CSV file using CSV on the Web.
+This example shows how a Pipeline can be used as an argument for a step.
+
+```
+node bin/barnard59.js run examples/parse-csvw.ttl --format=text/turtle --pipeline=http://example.org/pipeline/parseCsvw
+```
