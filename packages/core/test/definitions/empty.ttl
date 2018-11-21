@@ -1,0 +1,6 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <http://example.org/code/> .
+@prefix p: <http://example.org/barnard59/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<empty> a p:Pipeline .

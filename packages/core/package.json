@@ -24,7 +24,9 @@
     "readable-stream": "^3.0.6"
   },
   "devDependencies": {
+    "@rdfjs/parser-n3": "^1.1.2",
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "rdf-ext": "^1.1.2",
     "standard": "^12.0.1"
   }
