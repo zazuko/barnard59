@@ -22,5 +22,5 @@ vars:credentials p:variable [
 
 vars:endpoints p:variable [
   p:name "auth" ;
-  p:value "http://auth0.com/connetc/token"
+  p:value "http://auth0.com/connect/token"
 ] .

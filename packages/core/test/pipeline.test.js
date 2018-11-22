@@ -82,7 +82,7 @@ describe('pipeline', () => {
       // then
       expect(pipeline.variables.size).toBe(2)
       expect(pipeline.variables.get('username')).toBe('tpluscode')
-      expect(pipeline.variables.get('auth')).toBe('http://auth0.com/connetc/token')
+      expect(pipeline.variables.get('auth')).toBe('http://auth0.com/connect/token')
     })
   })
 })
