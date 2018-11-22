@@ -4,7 +4,7 @@
   "description": "Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "test": "standard && mocha"
+    "test": "standard && jest"
   },
   "repository": {
     "type": "git",
@@ -25,9 +25,14 @@
   },
   "devDependencies": {
     "@rdfjs/parser-n3": "^1.1.2",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
+    "jest": "^23.6.0",
     "rdf-ext": "^1.1.2",
     "standard": "^12.0.1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "lib/**"
+    ]
   }
 }
