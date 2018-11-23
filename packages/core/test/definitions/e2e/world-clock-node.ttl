@@ -1,0 +1,39 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <http://example.org/code/> .
+@prefix p: <http://example.org/barnard59/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<variables> p:variable
+  [
+    p:name "url" ;
+    p:value "http://worldclockapi.com/api/json/cet/now"
+  ], [
+    p:name "context" ;
+    p:value """{"date\":"http://purl.org/dc/elements/1.1/date"}"""
+  ] .
+
+<> a p:Pipeline ;
+  p:variables <variables> ;
+  p:steps [
+    p:stepList ( <fetch> <jsonldStructure> <serialize> )
+  ] .
+
+<fetch> a p:Step ;
+  p:operation [
+    code:link <node:barnard59-base#fetch.json> ;
+    code:type code:ecmaScript
+  ];
+  p:arguments ("${url}"^^code:ecmaScriptTemplateLiteral) .
+
+<jsonldStructure> a p:Step ;
+  p:operation [
+    code:link <node:barnard59-base#map> ;
+    code:type code:ecmaScript
+  ];
+  p:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:ecmaScript) .
+
+<serialize> a p:Step ;
+  p:operation [
+    code:link <node:barnard59-base#json.stringify> ;
+    code:type code:ecmaScript
+  ] .
