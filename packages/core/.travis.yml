@@ -10,7 +10,6 @@ addons:
       - g++-4.9
 before_install:
   - export CXX="g++-4.9" CC="gcc-4.9"
-before_install:
   - npm install -g codecov
 script:
   - npm test
