@@ -1,0 +1,26 @@
+@base <http://example.org/pipeline/> .
+@prefix vars: <http://example.org/variables/> .
+@prefix code: <http://example.org/code/> .
+@prefix p: <http://example.org/barnard59/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<inline> a p:Pipeline ;
+  p:variables [
+    p:variable [
+      p:name "foo" ;
+      p:value "bar"
+    ]
+  ] .
+
+<multiset>  a p:Pipeline ;
+  p:variables vars:credentials, vars:endpoints .
+
+vars:credentials p:variable [
+  p:name "username" ;
+  p:value "tpluscode"
+] .
+
+vars:endpoints p:variable [
+  p:name "auth" ;
+  p:value "http://auth0.com/connect/token"
+] .

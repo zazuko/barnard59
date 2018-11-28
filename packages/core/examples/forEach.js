@@ -45,7 +45,7 @@ function buildDefinition () {
               .addOut(ns.code('type'), ns.code('ecmaScript'))
           })
           .addList(ns.p('arguments'), [
-            def.node('${filename}', { datatype: ns.code('ecmaScriptTemplateLiteral') })
+            def.node('${filename}', { datatype: ns.code('ecmaScriptTemplateLiteral') }) // eslint-disable-line no-template-curly-in-string
           ]),
         def.node(base('parseCsv'))
           .addOut(ns.p('operation'), code => {

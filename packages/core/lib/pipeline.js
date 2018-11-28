@@ -131,9 +131,9 @@ class Pipeline extends Readable {
     let node
 
     if (iri) {
-      node = clownface.dataset(definition, rdf.namedNode(iri.value || iri.toString()))
+      node = clownface(definition, rdf.namedNode(iri.value || iri.toString()))
     } else {
-      node = clownface.dataset(definition).has(ns.rdf('type'), ns.p('Pipeline'))
+      node = clownface(definition).has(ns.rdf('type'), ns.p('Pipeline'))
     }
 
     if (!node.term) {

@@ -4,7 +4,7 @@
   "description": "Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "test": "standard && mocha"
+    "test": "standard && jest"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,19 @@
     "readable-stream": "^3.0.6"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
+    "@rdfjs/parser-n3": "^1.1.2",
+    "@types/expect": "^1.20.3",
+    "barnard59-base": "git+https://github.com/zazuko/barnard59-base.git#master",
+    "barnard59-formats": "git+https://github.com/zazuko/barnard59-formats.git#master",
+    "expect": "^23.6.0",
+    "jest": "^23.6.0",
     "rdf-ext": "^1.1.2",
     "standard": "^12.0.1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "lib/**"
+    ]
   }
 }
