@@ -14,7 +14,7 @@ describe('ecmaScriptTemplate loader', () => {
   test('should return string filled in with variables', () => {
     // given
     // eslint-disable-next-line no-template-curly-in-string
-    const node = rdf.literal('Hello ${hello}', ns.code('ecmaScriptLiteral'))
+    const node = rdf.literal('Hello ${hello}', ns.code('ecmaScriptTemplateLiteral'))
     const variables = new Map()
     variables.set('hello', 'world')
 

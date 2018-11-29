@@ -21,19 +21,19 @@
 <fetch> a p:Step ;
   p:operation [
     code:link <node:barnard59-base#fetch.json> ;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ];
   p:arguments ("${url}"^^code:ecmaScriptTemplateLiteral) .
 
 <jsonldStructure> a p:Step ;
   p:operation [
     code:link <node:barnard59-base#map> ;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ];
   p:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:ecmaScript) .
 
 <serialize> a p:Step ;
   p:operation [
     code:link <node:barnard59-base#json.stringify> ;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ] .

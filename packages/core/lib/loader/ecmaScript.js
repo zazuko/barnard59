@@ -7,9 +7,7 @@ function parseLiteral (node, context) {
     return (function () { return eval(node.value) }).call(context) // eslint-disable-line no-eval,no-extra-parens
   }
 
-  const err = new Error(`Cannot load ecmaScript code from node ${node}`)
-  err.node = node
-  throw err
+  throw new Error(`Cannot load ecmaScript code from node ${node}`)
 }
 
 function parseNamedNode (node, dataset, context) {
@@ -21,9 +19,7 @@ function parseNamedNode (node, dataset, context) {
     return iriRequire(link.value, context.basePath)
   }
 
-  const err = new Error(`Cannot load ecmaScript code from node ${node}`)
-  err.node = node
-  throw err
+  throw new Error(`Cannot load ecmaScript code from node ${node}`)
 }
 
 module.exports = (node, dataset, context) => {

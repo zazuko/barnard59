@@ -1,9 +1,11 @@
 const clownface = require('clownface')
-const parseCode = require('./code').parse
 const ns = require('./namespaces')
 const once = require('lodash/once')
 const rdf = require('rdf-ext')
 const Readable = require('readable-stream').Readable
+const LoaderRegistry = require('./loader/registry')
+const jsLoader = require('./loader/ecmaScript')
+const templateStringLoader = require('./loader/ecmaScriptLiteral')
 
 class Pipeline extends Readable {
   constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map() } = {}) {
@@ -19,6 +21,11 @@ class Pipeline extends Readable {
     this.context.variables = this.variables
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
+
+    this.loaders = new LoaderRegistry()
+    this.loaders.registerNodeLoader(ns.code('ecmaScript'), jsLoader)
+    this.loaders.registerLiteralLoader(ns.code('ecmaScript'), jsLoader)
+    this.loaders.registerLiteralLoader(ns.code('ecmaScriptTemplateLiteral'), templateStringLoader)
   }
 
   _read () {
@@ -90,7 +97,7 @@ class Pipeline extends Readable {
   }
 
   parseArgument (arg) {
-    const code = parseCode(arg, this.context, this.variables, this.basePath) || this.parsePipelineCode(arg)
+    const code = this.loaders.load(arg, this.context, this.variables, this.basePath)
 
     if (code) {
       return code
@@ -104,7 +111,13 @@ class Pipeline extends Readable {
   }
 
   parseOperation (operation) {
-    return parseCode(operation, this.context, this.variables, this.basePath)
+    let result = this.loaders.load(operation, this.context, this.variables, this.basePath)
+
+    if (!result) {
+      throw new Error(`Failed to load operation ${operation.value}`)
+    }
+
+    return result
   }
 
   parseStep (step) {
