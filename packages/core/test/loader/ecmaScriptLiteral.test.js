@@ -19,7 +19,7 @@ describe('ecmaScriptTemplate loader', () => {
     variables.set('hello', 'world')
 
     // when
-    const string = loader(node, dataset, {}, variables)
+    const string = loader(node, dataset, { context: {}, variables })
 
     // then
     expect(string).toBe('Hello world')

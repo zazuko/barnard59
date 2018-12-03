@@ -29,7 +29,7 @@ describe('pipeline loader', () => {
     ])
 
     // when
-    const pipeline = loader(node, dataset, context, variables, context.basePath)
+    const pipeline = loader(node, dataset, { context, variables, basePath: context.basePath })
 
     // then
     expect(pipeline.variables.get('foo')).toBe('bar')
@@ -60,7 +60,7 @@ describe('pipeline loader', () => {
         .addOut(ns.rdf('type'), ns.p('ObjectPipeline'))
 
       // when
-      const pipeline = loader(node, dataset, context, new Map(), context.basePath)
+      const pipeline = loader(node, dataset, { context, variables: new Map(), basePath: context.basePath })
 
       // then
       expect(pipeline._readableState.objectMode).toBeTruthy()
@@ -74,7 +74,7 @@ describe('pipeline loader', () => {
         .addOut(ns.rdf('type'), ns.p('Pipeline'))
 
       // when
-      const pipeline = loader(node, dataset, context, new Map(), context.basePath)
+      const pipeline = loader(node, dataset, { context, variables: new Map(), basePath: context.basePath })
 
       // then
       expect(pipeline._readableState.objectMode).toBeFalsy()

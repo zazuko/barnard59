@@ -1,7 +1,7 @@
 /* global describe, test */
 const assert = require('assert')
 const expect = require('expect')
-const Pipeline = require('../lib/pipeline')
+const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
 const ns = require('./support/namespaces')
 
@@ -12,7 +12,7 @@ describe('pipeline', () => {
       const definition = await load('empty.ttl')
 
       // when
-      const pipeline = Pipeline.create(definition)
+      const pipeline = Pipeline(definition)
 
       // then
       assert.deepStrictEqual(pipeline.node.term, ns.pipeline('empty'))
@@ -23,7 +23,7 @@ describe('pipeline', () => {
       const definition = await load('multiple.ttl')
 
       // when
-      const pipeline = Pipeline.create(definition, {
+      const pipeline = Pipeline(definition, {
         iri: ns.pipeline('pipelineB')
       })
 
@@ -38,7 +38,7 @@ describe('pipeline', () => {
       // then
       assert.throws(() => {
         // when
-        Pipeline.create(definition)
+        Pipeline(definition)
       })
     })
   })
@@ -50,7 +50,7 @@ describe('pipeline', () => {
       const iri = ns.pipeline('inline')
 
       // when
-      const pipeline = Pipeline.create(definition, { iri })
+      const pipeline = Pipeline(definition, { iri })
 
       // then
       expect(pipeline.variables.get('foo')).toBe('bar')
@@ -64,7 +64,7 @@ describe('pipeline', () => {
       const iri = ns.pipeline('inline')
 
       // when
-      const pipeline = Pipeline.create(definition, { iri, variables })
+      const pipeline = Pipeline(definition, { iri, variables })
 
       // then
       expect(pipeline.variables.size).toBe(2)
@@ -77,7 +77,7 @@ describe('pipeline', () => {
       const iri = ns.pipeline('multiset')
 
       // when
-      const pipeline = Pipeline.create(definition, { iri })
+      const pipeline = Pipeline(definition, { iri })
 
       // then
       expect(pipeline.variables.size).toBe(2)

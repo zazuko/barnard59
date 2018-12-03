@@ -1,15 +1,9 @@
-const clownface = require('clownface')
 const ns = require('./namespaces')
 const once = require('lodash/once')
-const rdf = require('rdf-ext')
 const Readable = require('readable-stream').Readable
-const LoaderRegistry = require('./loader/registry')
-const jsLoader = require('./loader/ecmaScript')
-const templateStringLoader = require('./loader/ecmaScriptLiteral')
-const pipelineLoader = require('./loader/pipeline')
 
 class Pipeline extends Readable {
-  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaders = [] } = {}) {
+  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaderRegistry } = {}) {
     super({ objectMode })
 
     this.node = node
@@ -20,13 +14,9 @@ class Pipeline extends Readable {
     this.context.basePath = this.basePath
     this.context.pipeline = this
     this.context.variables = this.variables
+    this.loaderRegistry = loaderRegistry
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
-
-    this.loaders = loaders.reduce((registry, loader) => {
-      loader.register(registry)
-      return registry
-    }, new LoaderRegistry())
   }
 
   _read () {
@@ -70,7 +60,7 @@ class Pipeline extends Readable {
   }
 
   parseArgument (arg) {
-    const code = this.loaders.load(arg, this.context, this.variables, this.basePath)
+    const code = this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
 
     if (code) {
       return code
@@ -84,7 +74,7 @@ class Pipeline extends Readable {
   }
 
   parseOperation (operation) {
-    let result = this.loaders.load(operation, this.context, this.variables, this.basePath)
+    let result = this.loaderRegistry.load(operation, this.context, this.variables, this.basePath)
 
     if (!result) {
       throw new Error(`Failed to load operation ${operation.value}`)
@@ -111,34 +101,6 @@ class Pipeline extends Readable {
     return variableNodes.toArray().reduce((variables, variable) => {
       return variables.set(variable.out(ns.p('name')).value, variable.out(ns.p('value')).value)
     }, new Map())
-  }
-
-  static pipelineNode (definition, iri) {
-    let node
-
-    if (iri) {
-      node = clownface(definition, rdf.namedNode(iri.value || iri.toString()))
-    } else {
-      node = clownface(definition).has(ns.rdf('type'), ns.p('Pipeline'))
-    }
-
-    if (!node.term) {
-      throw new Error('expected an existing IRI or a single Pipeline class in definition')
-    }
-
-    return node
-  }
-
-  static create (definition, { iri, basePath, context, objectMode, variables, additionalLoaders = [] } = {}) {
-    const defaultLoaders = [
-      jsLoader,
-      pipelineLoader,
-      templateStringLoader
-    ]
-
-    const loaders = [ ...defaultLoaders, ...additionalLoaders ]
-
-    return new Pipeline(Pipeline.pipelineNode(definition, iri), { basePath, context, objectMode, variables, loaders })
   }
 }
 

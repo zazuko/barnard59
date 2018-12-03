@@ -40,7 +40,7 @@ class LoaderRegistry {
     }
 
     if (loader) {
-      return loader(node.term, node.dataset, context, variables, basePath)
+      return loader(node.term, node.dataset, { context, variables, basePath, loaderRegistry: this })
     }
 
     return null

@@ -50,7 +50,7 @@ describe('ecmaScript loader', () => {
       node.addOut(ns.code('link'), rdf.namedNode('node:barnard59-base#map'))
 
       // when
-      const code = loader(node.term, dataset, context)
+      const code = loader(node.term, dataset, { context })
 
       // then
       expect(code.name).toBe('map')
@@ -63,7 +63,7 @@ describe('ecmaScript loader', () => {
       node.addOut(ns.code('link'), rdf.namedNode('node:barnard59-formats#jsonld.parse.object'))
 
       // when
-      const code = loader(node.term, dataset, context)
+      const code = loader(node.term, dataset, { context })
 
       // then
       expect(typeof code).toBe('function')

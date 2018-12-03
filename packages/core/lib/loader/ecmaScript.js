@@ -10,7 +10,7 @@ function parseLiteral (node, context) {
   throw new Error(`Cannot load ecmaScript code from node ${node}`)
 }
 
-function parseNamedNode (node, dataset, context) {
+function parseNamedNode (node, dataset, { context }) {
   const def = cf(dataset)
   const cfNode = def.node(node)
   const link = cfNode.out(ns.code('link'))
@@ -22,12 +22,12 @@ function parseNamedNode (node, dataset, context) {
   throw new Error(`Cannot load ecmaScript code from node ${node}`)
 }
 
-function loader (node, dataset, context) {
+function loader (node, dataset, { context }) {
   if (node && node.termType === 'Literal') {
     return parseLiteral(node, context)
   }
 
-  return parseNamedNode(node, dataset, context)
+  return parseNamedNode(node, dataset, { context })
 }
 
 loader.register = registry => {
