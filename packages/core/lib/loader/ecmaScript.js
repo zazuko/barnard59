@@ -22,10 +22,17 @@ function parseNamedNode (node, dataset, context) {
   throw new Error(`Cannot load ecmaScript code from node ${node}`)
 }
 
-module.exports = (node, dataset, context) => {
+function loader (node, dataset, context) {
   if (node && node.termType === 'Literal') {
     return parseLiteral(node, context)
   }
 
   return parseNamedNode(node, dataset, context)
 }
+
+loader.register = registry => {
+  registry.registerNodeLoader(ns.code('ecmaScript'), loader)
+  registry.registerLiteralLoader(ns.code('ecmaScript'), loader)
+}
+
+module.exports = loader

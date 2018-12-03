@@ -9,7 +9,7 @@ const templateStringLoader = require('./loader/ecmaScriptLiteral')
 const pipelineLoader = require('./loader/pipeline')
 
 class Pipeline extends Readable {
-  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map() } = {}) {
+  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaders = [] } = {}) {
     super({ objectMode })
 
     this.node = node
@@ -23,12 +23,10 @@ class Pipeline extends Readable {
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
 
-    this.loaders = new LoaderRegistry()
-    this.loaders.registerNodeLoader(ns.code('ecmaScript'), jsLoader)
-    this.loaders.registerLiteralLoader(ns.code('ecmaScript'), jsLoader)
-    this.loaders.registerLiteralLoader(ns.code('ecmaScriptTemplateLiteral'), templateStringLoader)
-    this.loaders.registerLiteralLoader(ns.p('Pipeline'), pipelineLoader)
-    this.loaders.registerLiteralLoader(ns.p('ObjectPipeline'), pipelineLoader)
+    this.loaders = loaders.reduce((registry, loader) => {
+      loader.register(registry)
+      return registry
+    }, new LoaderRegistry())
   }
 
   _read () {
@@ -131,8 +129,16 @@ class Pipeline extends Readable {
     return node
   }
 
-  static create (definition, { iri, basePath, context, objectMode, variables } = {}) {
-    return new Pipeline(Pipeline.pipelineNode(definition, iri), { basePath, context, objectMode, variables })
+  static create (definition, { iri, basePath, context, objectMode, variables, additionalLoaders } = {}) {
+    const defaultLoaders = [
+      jsLoader,
+      pipelineLoader,
+      templateStringLoader
+    ]
+
+    const loaders = [ ...defaultLoaders, ...additionalLoaders ]
+
+    return new Pipeline(Pipeline.pipelineNode(definition, iri), { basePath, context, objectMode, variables, loaders })
   }
 }
 

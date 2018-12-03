@@ -2,7 +2,7 @@ const cf = require('clownface')
 const ns = require('../namespaces')
 const Pipeline = require('../pipeline')
 
-module.exports = (term, dataset, context, variables, basePath) => {
+function loader (term, dataset, context, variables, basePath) {
   const node = cf(dataset).node(term)
 
   const type = node.out(ns.rdf('type'))
@@ -20,3 +20,10 @@ module.exports = (term, dataset, context, variables, basePath) => {
 
   throw new Error('Unrecognized or missing pipeline type')
 }
+
+loader.register = registry => {
+  registry.registerNodeLoader(ns.p('Pipeline'), loader)
+  registry.registerNodeLoader(ns.p('ObjectPipeline'), loader)
+}
+
+module.exports = loader
