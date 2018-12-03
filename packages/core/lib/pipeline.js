@@ -6,6 +6,7 @@ const Readable = require('readable-stream').Readable
 const LoaderRegistry = require('./loader/registry')
 const jsLoader = require('./loader/ecmaScript')
 const templateStringLoader = require('./loader/ecmaScriptLiteral')
+const pipelineLoader = require('./loader/pipeline')
 
 class Pipeline extends Readable {
   constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map() } = {}) {
@@ -26,6 +27,8 @@ class Pipeline extends Readable {
     this.loaders.registerNodeLoader(ns.code('ecmaScript'), jsLoader)
     this.loaders.registerLiteralLoader(ns.code('ecmaScript'), jsLoader)
     this.loaders.registerLiteralLoader(ns.code('ecmaScriptTemplateLiteral'), templateStringLoader)
+    this.loaders.registerLiteralLoader(ns.p('Pipeline'), pipelineLoader)
+    this.loaders.registerLiteralLoader(ns.p('ObjectPipeline'), pipelineLoader)
   }
 
   _read () {
@@ -66,34 +69,6 @@ class Pipeline extends Readable {
     return Promise.all(this.steps.map(step => this.parseStep(step))).then(streams => {
       this.streams = streams
     })
-  }
-
-  parsePipelineCode (value) {
-    const link = value.out(ns.code('link'))
-    const type = value.out(ns.code('type'))
-
-    if (link.term && link.term.termType !== 'NamedNode') {
-      return null
-    }
-
-    if (type.term && type.term.equals(ns.p('Pipeline'))) {
-      return new Pipeline(link, {
-        basePath: this.basePath,
-        context: this.context,
-        variables: this.variables
-      })
-    }
-
-    if (type.term && type.term.equals(ns.p('ObjectPipeline'))) {
-      return new Pipeline(link, {
-        basePath: this.basePath,
-        context: this.context,
-        variables: this.variables,
-        objectMode: true
-      })
-    }
-
-    return null
   }
 
   parseArgument (arg) {
@@ -161,4 +136,4 @@ class Pipeline extends Readable {
   }
 }
 
-module.exports = Pipeline.create
+module.exports = Pipeline
