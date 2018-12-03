@@ -129,7 +129,7 @@ class Pipeline extends Readable {
     return node
   }
 
-  static create (definition, { iri, basePath, context, objectMode, variables, additionalLoaders } = {}) {
+  static create (definition, { iri, basePath, context, objectMode, variables, additionalLoaders = [] } = {}) {
     const defaultLoaders = [
       jsLoader,
       pipelineLoader,
