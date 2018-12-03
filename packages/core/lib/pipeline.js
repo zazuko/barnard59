@@ -1,12 +1,9 @@
-const clownface = require('clownface')
-const parseCode = require('./code').parse
 const ns = require('./namespaces')
 const once = require('lodash/once')
-const rdf = require('rdf-ext')
 const Readable = require('readable-stream').Readable
 
 class Pipeline extends Readable {
-  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map() } = {}) {
+  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaderRegistry } = {}) {
     super({ objectMode })
 
     this.node = node
@@ -17,6 +14,7 @@ class Pipeline extends Readable {
     this.context.basePath = this.basePath
     this.context.pipeline = this
     this.context.variables = this.variables
+    this.loaderRegistry = loaderRegistry
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
   }
@@ -61,36 +59,8 @@ class Pipeline extends Readable {
     })
   }
 
-  parsePipelineCode (value) {
-    const link = value.out(ns.code('link'))
-    const type = value.out(ns.code('type'))
-
-    if (link.term && link.term.termType !== 'NamedNode') {
-      return null
-    }
-
-    if (type.term && type.term.equals(ns.p('Pipeline'))) {
-      return new Pipeline(link, {
-        basePath: this.basePath,
-        context: this.context,
-        variables: this.variables
-      })
-    }
-
-    if (type.term && type.term.equals(ns.p('ObjectPipeline'))) {
-      return new Pipeline(link, {
-        basePath: this.basePath,
-        context: this.context,
-        variables: this.variables,
-        objectMode: true
-      })
-    }
-
-    return null
-  }
-
   parseArgument (arg) {
-    const code = parseCode(arg, this.context, this.variables, this.basePath) || this.parsePipelineCode(arg)
+    const code = this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
 
     if (code) {
       return code
@@ -104,7 +74,13 @@ class Pipeline extends Readable {
   }
 
   parseOperation (operation) {
-    return parseCode(operation, this.context, this.variables, this.basePath)
+    let result = this.loaderRegistry.load(operation, this.context, this.variables, this.basePath)
+
+    if (!result) {
+      throw new Error(`Failed to load operation ${operation.value}`)
+    }
+
+    return result
   }
 
   parseStep (step) {
@@ -126,26 +102,6 @@ class Pipeline extends Readable {
       return variables.set(variable.out(ns.p('name')).value, variable.out(ns.p('value')).value)
     }, new Map())
   }
-
-  static pipelineNode (definition, iri) {
-    let node
-
-    if (iri) {
-      node = clownface(definition, rdf.namedNode(iri.value || iri.toString()))
-    } else {
-      node = clownface(definition).has(ns.rdf('type'), ns.p('Pipeline'))
-    }
-
-    if (!node.term) {
-      throw new Error('expected an existing IRI or a single Pipeline class in definition')
-    }
-
-    return node
-  }
-
-  static create (definition, { iri, basePath, context, objectMode, variables } = {}) {
-    return new Pipeline(Pipeline.pipelineNode(definition, iri), { basePath, context, objectMode, variables })
-  }
 }
 
-module.exports = Pipeline.create
+module.exports = Pipeline

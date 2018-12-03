@@ -1,7 +1,7 @@
 /* global describe, test */
 const assert = require('assert')
 const expect = require('expect')
-const Pipeline = require('../lib/pipeline')
+const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
 const ns = require('./support/namespaces')
 

@@ -1,6 +1,6 @@
 /* global describe, test */
 const expect = require('expect')
-const Pipeline = require('../lib/pipeline')
+const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
 const run = require('../lib/run')
 
