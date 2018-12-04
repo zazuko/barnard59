@@ -48,7 +48,7 @@ describe('Pipeline', () => {
     const pipe = Pipeline(definition, {
       additionalLoaders: [
         asyncLoaders.promisedUrl,
-        asyncLoaders.promiseWrapper
+        asyncLoaders.ecmaScriptLoaderWrapper
       ]
     })
     let out = ''

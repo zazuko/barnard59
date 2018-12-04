@@ -22,7 +22,8 @@
     a ex:DeferredEcmaScript
   ];
   p:arguments ([
-    a ex:PromisedUrl
+    a ex:PromisedUrl ;
+    ex:url "http://worldclockapi.com/api/json/cet/now"
   ]).
 
 <jsonldStructure> a p:Step ;
