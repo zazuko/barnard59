@@ -9,9 +9,6 @@
     "code:link": {
       "@type": "@id"
     },
-    "code:type": {
-      "@type": "@id"
-    },
     "operation": {
       "@type": "@id"
     },
@@ -56,7 +53,7 @@
       "@id": "fetch",
       "operation": {
         "code:link": "file:../node_modules/barnard59-base#fetch.json",
-        "code:type": "code:ecmaScript"
+        "@type": "code:ecmaScript"
       },
       "arguments": [{
         "@value": "${url}",
@@ -66,7 +63,7 @@
       "@id": "jsonldStructure",
       "operation": {
         "code:link": "file:../node_modules/barnard59-base#map",
-        "code:type": "code:ecmaScript"
+        "@type": "code:ecmaScript"
       },
       "arguments": [{
         "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }",
@@ -76,13 +73,13 @@
       "@id": "parse",
       "operation": {
         "code:link": "file:../node_modules/barnard59-formats#jsonld.parse.object",
-        "code:type": "code:ecmaScript"
+        "@type": "code:ecmaScript"
       }
     }, {
       "@id": "serialize",
       "operation": {
         "code:link": "file:../node_modules/barnard59-formats#ntriples.serialize",
-        "code:type": "code:ecmaScript"
+        "@type": "code:ecmaScript"
       }
     }]
   }]
