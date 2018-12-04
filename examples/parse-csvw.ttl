@@ -20,7 +20,7 @@
 <readFile> a p:Step;
   p:operation [
     code:link <node:fs#createReadStream>;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ];
   p:arguments ("${filename}"^^code:ecmaScriptTemplateLiteral).
 
@@ -28,34 +28,31 @@
 <parse> a p:Step;
   p:operation [
     code:link <node:barnard59-formats#csvw.parse>;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ];
-  p:arguments ([
-    code:link <parseMetadata>;
-    code:type p:ObjectPipeline
-  ]).
+  p:arguments ( <parseMetadata> ).
 
 <serialize> a p:Step;
   p:operation [
     code:link <file:../node_modules/barnard59-formats#ntriples.serialize> ;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ].
 
 
-<parseMetadata> a p:Pipeline;
+<parseMetadata> a p:ObjectPipeline;
   p:steps [
-    p:stepList ( <readMetadata> <parseMetadata> )
+    p:stepList ( <readMetadata> <parseMetadataStep> )
   ].
 
 <readMetadata> a p:Step;
   p:operation [
     code:link <node:fs#createReadStream>;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ];
   p:arguments ("${metadata}"^^code:ecmaScriptTemplateLiteral).
 
-<parseMetadata> a p:Step;
+<parseMetadataStep> a p:Step;
   p:operation [
     code:link <node:barnard59-formats#jsonld.parse>;
-    code:type code:ecmaScript
+    a code:ecmaScript
   ].
