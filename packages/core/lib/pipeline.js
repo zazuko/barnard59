@@ -59,8 +59,8 @@ class Pipeline extends Readable {
     })
   }
 
-  parseArgument (arg) {
-    const code = this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
+  async parseArgument (arg) {
+    const code = await this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
 
     if (code) {
       return code
@@ -73,8 +73,8 @@ class Pipeline extends Readable {
     return arg
   }
 
-  parseOperation (operation) {
-    let result = this.loaderRegistry.load(operation, this.context, this.variables, this.basePath)
+  async parseOperation (operation) {
+    let result = await this.loaderRegistry.load(operation, this.context, this.variables, this.basePath)
 
     if (!result) {
       throw new Error(`Failed to load operation ${operation.value}`)
@@ -83,15 +83,15 @@ class Pipeline extends Readable {
     return result
   }
 
-  parseStep (step) {
-    const operation = this.parseOperation(step.out(ns.p('operation')))
+  async parseStep (step) {
+    const operation = await this.parseOperation(step.out(ns.p('operation')))
 
     const args = step.out(ns.p('arguments'))
 
     const argsArray = (args.term ? [...args.list()] : []).map(arg => this.parseArgument(arg))
 
-    return Promise.resolve().then(() => {
-      return operation.apply(this.context, argsArray)
+    return Promise.all(argsArray).then(resolved => {
+      return operation.apply(this.context, resolved)
     })
   }
 
