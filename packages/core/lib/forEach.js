@@ -1,4 +1,4 @@
-const pipeline = require('./pipeline')
+const pipeline = require('./pipelineFactory')
 const Readable = require('readable-stream').Readable
 const Transform = require('readable-stream').Transform
 
@@ -15,17 +15,17 @@ class ObjectToReadable extends Readable {
 }
 
 class ForEach extends Transform {
-  constructor (node, master) {
+  constructor (pipeline, master) {
     super({ objectMode: true })
 
-    this.node = node
+    this.child = pipeline
     this.master = master
   }
 
   _transform (chunk, encoding, callback) {
     const item = new ObjectToReadable(chunk)
-    const current = pipeline(this.node._context[0].dataset, {
-      iri: this.node.term,
+    const current = pipeline(this.child.node._context[0].dataset, {
+      iri: this.child.node.term,
       basePath: this.master.basePath,
       context: this.master.context,
       variables: this.master.variables,
@@ -43,8 +43,8 @@ class ForEach extends Transform {
     current.on('error', err => callback(err))
   }
 
-  static create (node) {
-    return new ForEach(node, this.pipeline)
+  static create (pipeline) {
+    return new ForEach(pipeline, this.pipeline)
   }
 }
 
