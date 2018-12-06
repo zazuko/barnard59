@@ -1,6 +1,8 @@
-const pipeline = require('./pipelineFactory')
 const Readable = require('readable-stream').Readable
 const Transform = require('readable-stream').Transform
+const isWritable = require('isstream').isWritable
+const run = require('./run')
+const eventToPromise = require('./eventToPromise')
 
 class ObjectToReadable extends Readable {
   constructor (content) {
@@ -15,36 +17,45 @@ class ObjectToReadable extends Readable {
 }
 
 class ForEach extends Transform {
-  constructor (pipeline, master) {
+  constructor (pipeline, master, handleChunk) {
     super({ objectMode: true })
 
     this.child = pipeline
     this.master = master
+    this.handleChunk = handleChunk
   }
 
   _transform (chunk, encoding, callback) {
-    const item = new ObjectToReadable(chunk)
-    const current = pipeline(this.child.node._context[0].dataset, {
-      iri: this.child.node.term,
-      basePath: this.master.basePath,
-      context: this.master.context,
-      variables: this.master.variables,
+    const current = this.child.clone({
+      ...this.master,
       objectMode: true
     })
 
-    current.on('error', err => callback(err))
-
-    current.init().then(() => {
-      item.pipe(current.streams[0])
-    }).catch(err => this.emit('error', err))
+    this.runPipeline(chunk, current)
+      .then(() => callback())
+      .catch(err => callback(err))
 
     current.on('data', chunk => this.push(chunk))
-    current.on('end', () => callback())
     current.on('error', err => callback(err))
   }
 
-  static create (pipeline) {
-    return new ForEach(pipeline, this.pipeline)
+  runPipeline (chunk, pipeline) {
+    if (this.handleChunk) {
+      this.handleChunk.call(pipeline, chunk)
+    }
+
+    return pipeline.init().then(() => {
+      if (!isWritable(pipeline.streams[0])) {
+        return run(pipeline.streams[0])
+      } else {
+        const item = new ObjectToReadable(chunk)
+        return eventToPromise(item.pipe(pipeline.streams[0]), 'end')
+      }
+    })
+  }
+
+  static create (pipeline, handleChunk) {
+    return new ForEach(pipeline, this.pipeline, handleChunk)
   }
 }
 

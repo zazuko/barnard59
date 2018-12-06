@@ -19,6 +19,16 @@ class Pipeline extends Readable {
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
   }
 
+  clone ({ basePath, context, objectMode, variables }) {
+    return new Pipeline(this.node, {
+      basePath: basePath || this.basePath,
+      context: context || this.context,
+      variables: variables || this.variables,
+      loaderRegistry: this.loaderRegistry,
+      objectMode: objectMode || this.objectMode
+    })
+  }
+
   _read () {
     this.init()
   }
