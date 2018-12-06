@@ -44,4 +44,16 @@ describe('variable loader', () => {
     // then
     expect(result).toBe('bar')
   })
+
+  test('loads variable from a string', () => {
+    // given
+    const node = rdf.literal('foo', ns.p('variable'))
+    const variables = new Map([ [ 'foo', 'bar' ] ])
+
+    // when
+    const result = loader(node, dataset, { variables })
+
+    // then
+    expect(result).toBe('bar')
+  })
 })
