@@ -5,6 +5,7 @@ const Pipeline = require('./pipeline')
 const jsLoader = require('./loader/ecmaScript')
 const templateStringLoader = require('./loader/ecmaScriptLiteral')
 const pipelineLoader = require('./loader/pipeline')
+const variableLoader = require('./loader/variable')
 const LoaderRegistry = require('./loader/registry')
 
 function pipelineNode (definition, iri) {
@@ -27,7 +28,8 @@ function create (definition, { iri, basePath, context, objectMode, variables, ad
   const defaultLoaders = [
     jsLoader,
     pipelineLoader,
-    templateStringLoader
+    templateStringLoader,
+    variableLoader
   ]
 
   const loaders = [ ...defaultLoaders, ...additionalLoaders ]
