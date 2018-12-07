@@ -1,0 +1,28 @@
+@prefix ns1: <http://example.org/code/> .
+@prefix ns2: <http://example.org/barnard59/> .
+
+<http://example.org/pipeline#pipeline> a ns2:Pipeline ;
+    ns2:steps [ ns2:stepList ( <http://example.org/pipeline#readFile> <http://example.org/pipeline#parseCsv> <http://example.org/pipeline#forEach> <http://example.org/pipeline#serializeJson> ) ] ;
+    ns2:variables [ ns2:variable [ ns2:name "filename" ;
+                    ns2:value "examples/test.csv" ] ] .
+
+<http://example.org/pipeline#duplicate> ns2:operation [ a ns1:ecmaScript ;
+            ns1:link <file:steps/duplicate.js> ] .
+
+<http://example.org/pipeline#forEach> ns2:arguments ( <http://example.org/pipeline#subPipeline> ) ;
+    ns2:operation [ a ns1:ecmaScript ;
+            ns1:link <file:..#forEach> ] .
+
+<http://example.org/pipeline#parseCsv> ns2:operation [ a ns1:ecmaScript ;
+            ns1:link <file:steps/parseCsv.js> ] .
+
+<http://example.org/pipeline#readFile> ns2:arguments ( "${filename}"^^ns1:ecmaScriptTemplateLiteral ) ;
+    ns2:operation [ a ns1:ecmaScript ;
+            ns1:link <node:fs#createReadStream> ] .
+
+<http://example.org/pipeline#serializeJson> ns2:operation [ a ns1:ecmaScript ;
+            ns1:link <file:steps/serializeJson.js> ] .
+
+<http://example.org/pipeline#subPipeline> a ns2:Pipeline ;
+    ns2:steps [ ns2:stepList ( <http://example.org/pipeline#duplicate> ) ] .
+

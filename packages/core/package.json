@@ -20,6 +20,7 @@
   "dependencies": {
     "@rdfjs/namespace": "^1.0.0",
     "clownface": "git+https://github.com/rdf-ext/clownface.git#develop",
+    "isstream": "^0.1.2",
     "lodash": "^4.17.11",
     "readable-stream": "^3.0.6"
   },

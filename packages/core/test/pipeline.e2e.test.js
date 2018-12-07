@@ -2,7 +2,7 @@
 const expect = require('expect')
 const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
-const run = require('../lib/run')
+const run = require('./support/pipelineToString')
 const asyncLoaders = require('./support/asyncLoaders')
 
 describe('Pipeline', () => {
@@ -10,13 +10,9 @@ describe('Pipeline', () => {
     // given
     const definition = await load('e2e/world-clock-node.ttl')
     const pipe = Pipeline(definition)
-    let out = ''
-    pipe.on('data', (chunk) => {
-      out += chunk
-    })
 
     // when
-    await run(pipe)
+    const out = await run(pipe)
 
     // then
     const outJson = JSON.parse(out)
@@ -28,13 +24,9 @@ describe('Pipeline', () => {
     // given
     const definition = await load('e2e/world-clock-file.ttl')
     const pipe = Pipeline(definition)
-    let out = ''
-    pipe.on('data', (chunk) => {
-      out += chunk
-    })
 
     // when
-    await run(pipe)
+    const out = await run(pipe)
 
     // then
     const outJson = JSON.parse(out)
@@ -51,13 +43,9 @@ describe('Pipeline', () => {
         asyncLoaders.ecmaScriptLoaderWrapper
       ]
     })
-    let out = ''
-    pipe.on('data', (chunk) => {
-      out += chunk
-    })
 
     // when
-    await run(pipe)
+    const out = await run(pipe)
 
     // then
     const outJson = JSON.parse(out)
