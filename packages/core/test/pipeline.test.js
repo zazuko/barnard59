@@ -7,31 +7,18 @@ const ns = require('./support/namespaces')
 
 describe('pipeline', () => {
   describe('constructor', () => {
-    test('loads the single pipeline from definition', async () => {
-      // given
-      const definition = await load('empty.ttl')
-
-      // when
-      const pipeline = Pipeline(definition)
-
-      // then
-      assert.deepStrictEqual(pipeline.node.term, ns.pipeline('empty'))
-    })
-
     test('loads selected pipeline when there are multiple', async () => {
       // given
       const definition = await load('multiple.ttl')
 
       // when
-      const pipeline = Pipeline(definition, {
-        iri: ns.pipeline('pipelineB')
-      })
+      const pipeline = Pipeline(definition, ns.pipeline('pipelineB'))
 
       // then
       assert.ok(pipeline)
     })
 
-    test('throws when multiple pipelines are found without specifying the iri', async () => {
+    test('throws when the iri is missing', async () => {
       // given
       const definition = await load('multiple.ttl')
 
@@ -50,7 +37,7 @@ describe('pipeline', () => {
       const iri = ns.pipeline('inline')
 
       // when
-      const pipeline = Pipeline(definition, { iri })
+      const pipeline = Pipeline(definition, iri)
 
       // then
       expect(pipeline.variables.get('foo')).toBe('bar')
@@ -64,7 +51,7 @@ describe('pipeline', () => {
       const iri = ns.pipeline('inline')
 
       // when
-      const pipeline = Pipeline(definition, { iri, variables })
+      const pipeline = Pipeline(definition, iri, { variables })
 
       // then
       expect(pipeline.variables.size).toBe(2)
@@ -77,7 +64,7 @@ describe('pipeline', () => {
       const iri = ns.pipeline('multiset')
 
       // when
-      const pipeline = Pipeline(definition, { iri })
+      const pipeline = Pipeline(definition, iri)
 
       // then
       expect(pipeline.variables.size).toBe(2)

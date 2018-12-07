@@ -9,8 +9,7 @@ describe('forEach', () => {
   test('executes example correctly', async () => {
     // given
     const definition = await load('../../examples/forEach.ttl')
-    const pipe = Pipeline(definition, {
-      iri: 'http://example.org/pipeline#pipeline',
+    const pipe = Pipeline(definition, 'http://example.org/pipeline#pipeline', {
       basePath: path.resolve('examples')
     })
 
