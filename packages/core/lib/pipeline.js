@@ -45,7 +45,7 @@ class Pipeline extends Readable {
         stream.on('error', cause => {
           const err = new Error(`error in pipeline step ${step.value}`)
 
-          err.cause = cause
+          err.stack += `\nCaused by: ${cause.stack}`
 
           this.emit('error', err)
         })
@@ -55,7 +55,6 @@ class Pipeline extends Readable {
 
       lastStream.on('data', chunk => this.push(chunk))
       lastStream.on('end', () => this.push(null))
-      lastStream.on('error', err => this.emit('error', err))
 
       return this
     })
