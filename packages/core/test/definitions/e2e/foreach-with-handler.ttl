@@ -1,0 +1,52 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <http://example.org/code/> .
+@prefix ex: <http://example.org/> .
+@prefix p: <http://example.org/barnard59/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<> a p:ObjectPipeline ;
+  p:steps [
+    p:stepList ( <iterateDirectory> <printLength> )
+  ] .
+
+<iterateDirectory> a p:Step ;
+  p:operation [
+    code:link <file:support/operations/iterateDirectory> ;
+    a code:ecmaScript
+  ] ;
+  p:arguments (
+    "definitions/e2e"
+  ).
+
+<printLength> a p:Step ;
+  p:operation [
+    code:link <file:..#forEach> ;
+    a code:ecmaScript
+  ];
+  p:arguments (
+    <Print>
+    "chunk => this.variables.set('file', chunk)"^^code:ecmaScript
+  ).
+
+<Print> a p:ObjectPipeline ;
+  p:steps [
+    p:stepList ( <readFile> <getLength> )
+  ] .
+
+<readFile> a p:Step ;
+  p:operation [
+    code:link <node:fs#createReadStream> ;
+    a code:ecmaScript
+  ] ;
+  p:arguments (
+    "file"^^p:VariableName
+  ).
+
+<getLength> a p:Step ;
+  p:operation [
+    code:link <file:support/operations/inlineTransform> ;
+    a code:ecmaScript
+  ] ;
+  p:arguments (
+    "chunk => chunk.length"^^code:ecmaScript
+  ) .

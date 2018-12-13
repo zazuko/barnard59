@@ -2,7 +2,7 @@
 const expect = require('expect')
 const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
-const run = require('./support/pipelineToString')
+const run = require('./support/run')
 const asyncLoaders = require('./support/asyncLoaders')
 
 describe('Pipeline', () => {

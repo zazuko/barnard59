@@ -4,7 +4,8 @@
 <http://example.org/pipeline#pipeline> a ns2:Pipeline ;
     ns2:steps [ ns2:stepList ( <http://example.org/pipeline#readFile> <http://example.org/pipeline#parseCsv> <http://example.org/pipeline#forEach> <http://example.org/pipeline#serializeJson> ) ] ;
     ns2:variables [ ns2:variable [ ns2:name "filename" ;
-                    ns2:value "examples/test.csv" ] ] .
+                    ns2:value "examples/test.csv" ;
+                    a ns2:Variable ] ] .
 
 <http://example.org/pipeline#duplicate> ns2:operation [ a ns1:ecmaScript ;
             ns1:link <file:steps/duplicate.js> ] .

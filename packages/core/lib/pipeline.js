@@ -8,15 +8,19 @@ class Pipeline extends Readable {
 
     this.node = node
     this.basePath = basePath
-    this.variables = new Map([...this.parseVariables(), ...variables])
+    this.variables = variables
 
     this.context = context
     this.context.basePath = this.basePath
     this.context.pipeline = this
-    this.context.variables = this.variables
     this.loaderRegistry = loaderRegistry
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
+    this.initVariables = once(async () => {
+      const parsedVariables = await this.parseVariables()
+      this.variables = new Map([...parsedVariables, ...this.variables])
+      this.context.variables = this.variables
+    })
   }
 
   clone ({ basePath, context, objectMode, variables }) {
@@ -33,31 +37,33 @@ class Pipeline extends Readable {
     this.init()
   }
 
-  _init () {
-    return this.initSteps().then(() => {
-      for (let index = 0; index < this.streams.length - 1; index++) {
-        this.streams[index].pipe(this.streams[index + 1])
-      }
+  async _init () {
+    await this.initVariables()
 
-      this.streams.forEach((stream, index) => {
-        const step = this.steps[index]
+    await this.initSteps()
 
-        stream.on('error', cause => {
-          const err = new Error(`error in pipeline step ${step.value}`)
+    for (let index = 0; index < this.streams.length - 1; index++) {
+      this.streams[index].pipe(this.streams[index + 1])
+    }
 
-          err.stack += `\nCaused by: ${cause.stack}`
+    this.streams.forEach((stream, index) => {
+      const step = this.steps[index]
 
-          this.emit('error', err)
-        })
+      stream.on('error', cause => {
+        const err = new Error(`error in pipeline step ${step.value}`)
+
+        err.stack += `\nCaused by: ${cause.stack}`
+
+        this.emit('error', err)
       })
-
-      const lastStream = this.streams[this.streams.length - 1]
-
-      lastStream.on('data', chunk => this.push(chunk))
-      lastStream.on('end', () => this.push(null))
-
-      return this
     })
+
+    const lastStream = this.streams[this.streams.length - 1]
+
+    lastStream.on('data', chunk => this.push(chunk))
+    lastStream.on('end', () => this.push(null))
+
+    return this
   }
 
   initSteps () {
@@ -107,9 +113,16 @@ class Pipeline extends Readable {
   parseVariables () {
     const variableNodes = this.node.out(ns.p('variables')).out(ns.p('variable'))
 
-    return variableNodes.toArray().reduce((variables, variable) => {
-      return variables.set(variable.out(ns.p('name')).value, variable.out(ns.p('value')).value)
-    }, new Map())
+    return variableNodes.toArray().reduce(async (p, variableNode) => {
+      const variables = await p
+      const variable = await this.loaderRegistry.load(variableNode, this.context, new Map())
+      if (!variable) {
+        throw new Error(`Failed to load variable ${variableNode}`)
+      }
+
+      variables.push([ variable.name, variable.value ])
+      return variables
+    }, Promise.resolve([]))
   }
 }
 

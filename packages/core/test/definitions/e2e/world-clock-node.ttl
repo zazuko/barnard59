@@ -5,9 +5,11 @@
 
 <variables> p:variable
   [
+    a p:Variable;
     p:name "url" ;
     p:value "http://worldclockapi.com/api/json/cet/now"
   ], [
+    a p:Variable;
     p:name "context" ;
     p:value """{"date\":"http://purl.org/dc/elements/1.1/date"}"""
   ] .

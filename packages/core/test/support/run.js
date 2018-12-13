@@ -1,7 +1,6 @@
 const run = require('../../lib/run')
 
-module.exports = async function (pipe) {
-  let out = ''
+module.exports = async function (pipe, out = '') {
   pipe.on('data', (chunk) => {
     out += chunk
   })

@@ -19,7 +19,7 @@ describe('pipeline loader', () => {
     def = cf(dataset, rdf.namedNode('http://example.com/'))
   })
 
-  test("should inherit parent's variables", () => {
+  test("should inherit parent's variables", async () => {
     // given
     const node = def.node(example('sub-pipeline'))
       .addOut(ns.rdf('type'), ns.p('Pipeline'))
@@ -30,6 +30,7 @@ describe('pipeline loader', () => {
 
     // when
     const pipeline = loader(node, dataset, { context, variables, basePath: context.basePath })
+    await pipeline.initVariables()
 
     // then
     expect(pipeline.variables.get('foo')).toBe('bar')

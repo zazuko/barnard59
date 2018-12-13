@@ -30,6 +30,21 @@ describe('variable loader', () => {
     expect(result).toBe('bar')
   })
 
+  test('adds name to variable value term', () => {
+    // given
+    const node = def.node(example('var'))
+      .addOut(ns.rdf('type'), ns.p('Variable'))
+      .addOut(ns.p('name'), 'foo')
+      .addOut(ns.p('value'), 'bar')
+    const variables = new Map()
+
+    // when
+    const result = loader(node, dataset, { variables })
+
+    // then
+    expect(result.name).toBe('foo')
+  })
+
   test('loads variable from the node if not present in variable map', () => {
     // given
     const node = def.node(example('var'))
@@ -42,12 +57,12 @@ describe('variable loader', () => {
     const result = loader(node, dataset, { variables })
 
     // then
-    expect(result).toBe('bar')
+    expect(result.value).toBe('bar')
   })
 
   test('loads variable from a string', () => {
     // given
-    const node = rdf.literal('foo', ns.p('variable'))
+    const node = rdf.literal('foo', ns.p('VariableName'))
     const variables = new Map([ [ 'foo', 'bar' ] ])
 
     // when

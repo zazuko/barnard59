@@ -7,6 +7,7 @@
 <inline> a p:Pipeline ;
   p:variables [
     p:variable [
+      a p:Variable;
       p:name "foo" ;
       p:value "bar"
     ]
@@ -16,11 +17,13 @@
   p:variables vars:credentials, vars:endpoints .
 
 vars:credentials p:variable [
+  a p:Variable;
   p:name "username" ;
   p:value "tpluscode"
 ] .
 
 vars:endpoints p:variable [
+  a p:Variable;
   p:name "auth" ;
   p:value "http://auth0.com/connect/token"
 ] .
