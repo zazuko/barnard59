@@ -6,9 +6,11 @@
 <parseCsvw> a p:Pipeline;
   p:variables [
     p:variable [
+      a p:Variable;
       p:name "filename";
       p:value "examples/test.csv";
     ], [
+      a p:Variable;
       p:name "metadata";
       p:value "examples/test.csv-metadata.json";
     ]
@@ -22,7 +24,7 @@
     code:link <node:fs#createReadStream>;
     a code:ecmaScript
   ];
-  p:arguments ("${filename}"^^code:ecmaScriptTemplateLiteral).
+  p:arguments ("filename"^^p:VariableName).
 
 
 <parse> a p:Step;
@@ -49,7 +51,7 @@
     code:link <node:fs#createReadStream>;
     a code:ecmaScript
   ];
-  p:arguments ("${metadata}"^^code:ecmaScriptTemplateLiteral).
+  p:arguments ("metadata"^^p:VariableName).
 
 <parseMetadataStep> a p:Step;
   p:operation [
