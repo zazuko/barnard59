@@ -24,6 +24,7 @@
     "@type": "Pipeline",
     "variables": {
       "variable": [{
+        "@type": "Variable",
         "name": "url",
         "value": "http://worldclockapi.com/api/json/utc/now"
       }, {
@@ -36,6 +37,7 @@
     "@type": "Pipeline",
     "variables": {
       "variable": [{
+        "@type": "Variable",
         "name": "url",
         "value": "http://worldclockapi.com/api/json/cet/now"
       }, {
@@ -45,6 +47,7 @@
     "steps": "steps"
   }, {
     "@id": "dateContext",
+    "@type": "Variable",
     "name": "context",
     "value": "{\"date\":\"http://purl.org/dc/elements/1.1/date\"}"
   }, {
