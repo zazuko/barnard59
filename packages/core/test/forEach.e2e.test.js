@@ -34,9 +34,13 @@ describe('forEach', () => {
     })
 
     // when
-    const out = await run(pipe, 0)
+    const out = await run(pipe, [], (c, out) => {
+      out.push(c)
+      return out
+    })
 
     // then
-    expect(out).toBeGreaterThan(0)
+    expect(out.length).toBeGreaterThan(0)
+    expect(out[0]).not.toBe(out[1])
   })
 })

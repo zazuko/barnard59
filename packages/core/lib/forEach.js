@@ -47,7 +47,7 @@ class ForEach extends Transform {
 
   runPipeline (chunk, pipeline) {
     if (this.handleChunk) {
-      this.handleChunk.call(pipeline, chunk)
+      this.handleChunk.call(undefined, pipeline, chunk)
     }
 
     return pipeline.init().then(() => {
