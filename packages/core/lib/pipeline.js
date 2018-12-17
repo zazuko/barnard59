@@ -99,6 +99,8 @@ class Pipeline extends Readable {
   }
 
   async parseStep (step) {
+    this.emit('stepInit', step)
+
     const operation = await this.parseOperation(step.out(ns.p('operation')))
 
     const args = step.out(ns.p('arguments'))
@@ -107,6 +109,14 @@ class Pipeline extends Readable {
 
     return Promise.all(argsArray).then(resolved => {
       return operation.apply(this.context, resolved)
+    }).then(stream => {
+      stream.on('finish', () => {
+        this.emit('stepFinish', step)
+      })
+
+      this.emit('stepCreate', step)
+
+      return stream
     })
   }
 
