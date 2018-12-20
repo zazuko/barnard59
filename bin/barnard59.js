@@ -9,7 +9,7 @@ const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
 
 const ns = {
-  p: namespace('http://example.org/barnard59/'),
+  p: namespace('https://pipeline.described.at/'),
   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 }
 
