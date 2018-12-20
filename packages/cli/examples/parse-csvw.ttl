@@ -1,6 +1,6 @@
 @base <http://example.org/pipeline/> .
-@prefix code: <http://example.org/code/> .
-@prefix p: <http://example.org/barnard59/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 <parseCsvw> a p:Pipeline;
@@ -20,24 +20,24 @@
   ].
 
 <readFile> a p:Step;
-  p:operation [
+  code:implementedBy [
     code:link <node:fs#createReadStream>;
-    a code:ecmaScript
+    a code:EcmaScript
   ];
-  p:arguments ("filename"^^p:VariableName).
+  code:arguments ("filename"^^p:VariableName).
 
 
 <parse> a p:Step;
-  p:operation [
+  code:implementedBy [
     code:link <node:barnard59-formats#csvw.parse>;
-    a code:ecmaScript
+    a code:EcmaScript
   ];
-  p:arguments ( <parseMetadata> ).
+  code:arguments ( <parseMetadata> ).
 
 <serialize> a p:Step;
-  p:operation [
+  code:implementedBy [
     code:link <file:../node_modules/barnard59-formats#ntriples.serialize> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ].
 
 
@@ -47,14 +47,14 @@
   ].
 
 <readMetadata> a p:Step;
-  p:operation [
+  code:implementedBy [
     code:link <node:fs#createReadStream>;
-    a code:ecmaScript
+    a code:EcmaScript
   ];
-  p:arguments ("metadata"^^p:VariableName).
+  code:arguments ("metadata"^^p:VariableName).
 
 <parseMetadataStep> a p:Step;
-  p:operation [
+  code:implementedBy [
     code:link <node:barnard59-formats#jsonld.parse>;
-    a code:ecmaScript
+    a code:EcmaScript
   ].

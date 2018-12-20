@@ -1,9 +1,9 @@
 {
   "@context": {
     "@base": "http://example.org/pipeline/",
-    "@vocab": "http://example.org/barnard59/",
-    "code": "http://example.org/code/",
-    "arguments": {
+    "@vocab": "https://pipeline.described.at/",
+    "code": "https://code.described.at/",
+    "code:arguments": {
       "@container": "@list"
     },
     "code:link": {
@@ -54,35 +54,35 @@
     "@id": "steps",
     "stepList": [{
       "@id": "fetch",
-      "operation": {
+      "code:implementedBy": {
         "code:link": "file:../node_modules/barnard59-base#fetch.json",
-        "@type": "code:ecmaScript"
+        "@type": "code:EcmaScript"
       },
-      "arguments": [{
+      "code:arguments": [{
         "@value": "${url}",
-        "@type": "code:ecmaScriptTemplateLiteral"
+        "@type": "code:EcmaScriptTemplateLiteral"
       }]
     }, {
       "@id": "jsonldStructure",
-      "operation": {
+      "code:implementedBy": {
         "code:link": "file:../node_modules/barnard59-base#map",
-        "@type": "code:ecmaScript"
+        "@type": "code:EcmaScript"
       },
-      "arguments": [{
+      "code:arguments": [{
         "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }",
-        "@type": "code:ecmaScript"
+        "@type": "code:EcmaScript"
       }]
     }, {
       "@id": "parse",
-      "operation": {
+      "code:implementedBy": {
         "code:link": "file:../node_modules/barnard59-formats#jsonld.parse.object",
-        "@type": "code:ecmaScript"
+        "@type": "code:EcmaScript"
       }
     }, {
       "@id": "serialize",
-      "operation": {
+      "code:implementedBy": {
         "code:link": "file:../node_modules/barnard59-formats#ntriples.serialize",
-        "@type": "code:ecmaScript"
+        "@type": "code:EcmaScript"
       }
     }]
   }]
