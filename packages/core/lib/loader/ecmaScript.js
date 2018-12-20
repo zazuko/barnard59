@@ -3,7 +3,7 @@ const ns = require('../namespaces')
 const iriRequire = require('../iriRequire')
 
 function parseLiteral (node, context) {
-  if (node.datatype.equals(ns.code('ecmaScript'))) {
+  if (node.datatype.equals(ns.code('EcmaScript'))) {
     return (function () { return eval(node.value) }).call(context) // eslint-disable-line no-eval,no-extra-parens
   }
 
@@ -31,8 +31,8 @@ function loader (node, dataset, { context }) {
 }
 
 loader.register = registry => {
-  registry.registerNodeLoader(ns.code('ecmaScript'), loader)
-  registry.registerLiteralLoader(ns.code('ecmaScript'), loader)
+  registry.registerNodeLoader(ns.code('EcmaScript'), loader)
+  registry.registerLiteralLoader(ns.code('EcmaScript'), loader)
 }
 
 module.exports = loader

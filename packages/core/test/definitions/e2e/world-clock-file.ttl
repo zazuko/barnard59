@@ -1,6 +1,6 @@
 @base <http://example.org/pipeline/> .
-@prefix code: <http://example.org/code/> .
-@prefix p: <http://example.org/barnard59/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 <variables> p:variable
@@ -21,21 +21,21 @@
   ] .
 
 <fetch> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <file:./node_modules/barnard59-base#fetch.json> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ];
-  p:arguments ("${url}"^^code:ecmaScriptTemplateLiteral) .
+  code:arguments ("${url}"^^code:EcmaScriptTemplateLiteral) .
 
 <jsonldStructure> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <node:barnard59-base#map> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ];
-  p:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:ecmaScript) .
+  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:EcmaScript) .
 
 <serialize> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <file:node_modules/barnard59-base#json.stringify> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ] .
