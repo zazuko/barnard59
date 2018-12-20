@@ -99,9 +99,9 @@ class Pipeline extends Readable {
   }
 
   async parseStep (step) {
-    const operation = await this.parseOperation(step.out(ns.p('operation')))
+    const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
 
-    const args = step.out(ns.p('arguments'))
+    const args = step.out(ns.code('arguments'))
 
     const argsArray = (args.term ? [...args.list()] : []).map(arg => this.parseArgument(arg))
 

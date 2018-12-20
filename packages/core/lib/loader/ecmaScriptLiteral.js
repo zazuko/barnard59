@@ -2,7 +2,7 @@ const code = require('../namespaces').code
 const evalTemplateLiteral = require('../evalTemplateLiteral')
 
 function loader (node, dataset, { context, variables }) {
-  if (!(node.termType !== 'Literal' || !node.datatype.equals(code('ecmaScriptTemplateLiteral')))) {
+  if (!(node.termType !== 'Literal' || !node.datatype.equals(code('EcmaScriptTemplateLiteral')))) {
     return evalTemplateLiteral(node.value, { context, variables })
   }
 
@@ -10,7 +10,7 @@ function loader (node, dataset, { context, variables }) {
 }
 
 loader.register = registry => {
-  registry.registerLiteralLoader(code('ecmaScriptTemplateLiteral'), loader)
+  registry.registerLiteralLoader(code('EcmaScriptTemplateLiteral'), loader)
 }
 
 module.exports = loader

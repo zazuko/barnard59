@@ -1,7 +1,6 @@
 @base <http://example.org/pipeline/> .
-@prefix code: <http://example.org/code/> .
-@prefix ex: <http://example.org/> .
-@prefix p: <http://example.org/barnard59/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 <> a p:ObjectPipeline ;
@@ -10,22 +9,22 @@
   ] .
 
 <iterateDirectory> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <file:support/operations/iterateDirectory> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ] ;
-  p:arguments (
+  code:arguments (
     "definitions/e2e"
   ).
 
 <printLength> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <file:..#forEach> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ];
-  p:arguments (
+  code:arguments (
     <Print>
-    "(p, chunk) => p.variables.set('file', chunk)"^^code:ecmaScript
+    "(p, chunk) => p.variables.set('file', chunk)"^^code:EcmaScript
   ).
 
 <Print> a p:ObjectPipeline ;
@@ -34,19 +33,19 @@
   ] .
 
 <readFile> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <node:fs#createReadStream> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ] ;
-  p:arguments (
+  code:arguments (
     "file"^^p:VariableName
   ).
 
 <getLength> a p:Step ;
-  p:operation [
+  code:implementedBy [
     code:link <file:support/operations/inlineTransform> ;
-    a code:ecmaScript
+    a code:EcmaScript
   ] ;
-  p:arguments (
-    "_ => this.variables.get('file')"^^code:ecmaScript
+  code:arguments (
+    "_ => this.variables.get('file')"^^code:EcmaScript
   ) .

@@ -23,7 +23,7 @@ describe('ecmaScript loader', () => {
     test('should return function parsed from value', () => {
       // given
       // eslint-disable-next-line no-template-curly-in-string
-      const node = rdf.literal('who => `Hello ${who}`', ns.code('ecmaScript'))
+      const node = rdf.literal('who => `Hello ${who}`', ns.code('EcmaScript'))
 
       // when
       const code = loader(node, dataset, context)
