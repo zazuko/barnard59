@@ -12,7 +12,7 @@ const run = require('../../lib/run')
  *
  * @param pipe
  * @param initialValue
- * @param {requestCallback} appendChunk optional function to append to the outpu
+ * @param {requestCallback} appendChunk optional function to append to the output
  * @returns {Promise<*>}
  */
 module.exports = async function (pipe, initialValue = '', appendChunk = null) {
