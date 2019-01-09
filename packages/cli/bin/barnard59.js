@@ -7,7 +7,7 @@ const program = require('commander')
 const cf = require('clownface')
 const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
-const TextLogStream = require('./TextLogStream')
+const TextLogStream = require('../lib/TextLogStream')
 
 const ns = {
   p: namespace('https://pipeline.described.at/'),
@@ -64,7 +64,7 @@ program
   .option('--output [filename]', 'output file', '-')
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables)
-  .option('--verbose', 'enable diagnostic console output')
+  .option('-v, --verbose', 'enable diagnostic console output')
   .action((filename, { format, output, pipeline, variable, verbose } = {}) => {
     p.fileToDataset(format, filename)
       .then(dataset => {
