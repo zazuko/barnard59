@@ -25,7 +25,8 @@
     "barnard59-protocols": "git+https://github.com/zazuko/barnard59-protocols.git#master",
     "clownface": "git+https://github.com/rdf-ext/clownface.git#develop",
     "commander": "^2.19.0",
-    "rdf-ext": "^1.1.2"
+    "rdf-ext": "^1.1.2",
+    "readable-stream": "^3.1.1"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
