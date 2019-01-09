@@ -23,6 +23,7 @@
     "barnard59-core": "git+https://github.com/zazuko/barnard59-core.git#master",
     "barnard59-formats": "git+https://github.com/zazuko/barnard59-formats.git#master",
     "barnard59-protocols": "git+https://github.com/zazuko/barnard59-protocols.git#master",
+    "barnard59-shell": "git+https://github.com/zazuko/barnard59-shell.git#master",
     "clownface": "git+https://github.com/rdf-ext/clownface.git#develop",
     "commander": "^2.19.0",
     "rdf-ext": "^1.1.2",
