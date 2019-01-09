@@ -17,9 +17,10 @@ class ObjectToReadable extends Readable {
 }
 
 class ForEach extends Transform {
-  constructor (pipeline, master, handleChunk) {
+  constructor (pipeline, master, log, handleChunk) {
     super({ objectMode: true })
 
+    this.log = log
     this.child = pipeline
     this.master = master
     this.handleChunk = handleChunk
@@ -28,7 +29,8 @@ class ForEach extends Transform {
   _transform (chunk, encoding, callback) {
     const current = this.child.clone({
       ...this.master,
-      objectMode: true
+      objectMode: true,
+      log: this.log
     })
 
     this.runPipeline(chunk, current)
@@ -61,7 +63,7 @@ class ForEach extends Transform {
   }
 
   static create (pipeline, handleChunk) {
-    return new ForEach(pipeline, this.pipeline, handleChunk)
+    return new ForEach(pipeline, this.pipeline, this.log, handleChunk)
   }
 }
 

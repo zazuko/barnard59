@@ -1,6 +1,7 @@
 const ns = require('./namespaces')
 const once = require('lodash/once')
 const Readable = require('readable-stream').Readable
+const Logger = require('./logger')
 
 class Pipeline extends Readable {
   constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaderRegistry } = {}) {
@@ -10,10 +11,12 @@ class Pipeline extends Readable {
     this.basePath = basePath
     this.variables = variables
 
-    this.context = context
+    this.context = { ...context }
     this.context.basePath = this.basePath
     this.context.pipeline = this
     this.loaderRegistry = loaderRegistry
+
+    this.context.log = new Logger(this.node, { master: context.log })
 
     this.init = once(() => this._init().catch(err => this.emit('error', err)))
     this.initVariables = once(async () => {
@@ -23,13 +26,14 @@ class Pipeline extends Readable {
     })
   }
 
-  clone ({ basePath, context, objectMode, variables }) {
+  clone ({ basePath, context, objectMode, variables, log }) {
     return new Pipeline(this.node, {
       basePath: basePath || this.basePath,
       context: context || this.context,
       variables: variables || this.variables,
       loaderRegistry: this.loaderRegistry,
-      objectMode: objectMode || this.objectMode
+      objectMode: objectMode || this.objectMode,
+      log
     })
   }
 
@@ -38,6 +42,8 @@ class Pipeline extends Readable {
   }
 
   async _init () {
+    this.context.log.info('initializing pipeline')
+
     await this.initVariables()
 
     await this.initSteps()
@@ -99,6 +105,9 @@ class Pipeline extends Readable {
   }
 
   async parseStep (step) {
+    const log = new Logger(step, { master: this.context.log })
+
+    log.info('step init', { name: 'beforeStepInit' })
     const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
 
     const args = step.out(ns.code('arguments'))
@@ -106,8 +115,16 @@ class Pipeline extends Readable {
     const argsArray = (args.term ? [...args.list()] : []).map(arg => this.parseArgument(arg))
 
     return Promise.all(argsArray).then(resolved => {
-      return operation.apply(this.context, resolved)
-    })
+      return operation.apply({ ...this.context, log }, resolved)
+    }).then(stream => {
+      stream.on('finish', () => {
+        log.info('step finished', { name: 'afterStep' })
+      })
+
+      log.info('step created', { name: 'afterStepInit' })
+
+      return stream
+    }).catch(e => this.emit('error', e))
   }
 
   parseVariables () {
