@@ -1,0 +1,30 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<shell> a p:Pipeline;
+  p:variables [
+    p:variable [
+      a p:Variable;
+      p:name "filename";
+      p:value "examples/test.csv";
+    ]
+  ];
+  p:steps [
+    p:stepList (<readFile> <echo>)
+  ].
+
+<readFile> a p:Step;
+  code:implementedBy [
+    code:link <node:fs#createReadStream>;
+    a code:EcmaScript
+  ];
+  code:arguments ("filename"^^p:VariableName).
+
+<echo> a p:Step;
+  code:implementedBy [
+    code:link <node:barnard59-shell/after>;
+    a code:EcmaScript
+  ];
+  code:arguments ("echo" "Hello World!").
