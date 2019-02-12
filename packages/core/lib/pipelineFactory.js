@@ -1,11 +1,11 @@
 const clownface = require('clownface')
 const rdf = require('rdf-ext')
 const Pipeline = require('./pipeline')
-const jsLoader = require('./loader/ecmaScript')
-const templateStringLoader = require('./loader/ecmaScriptLiteral')
+const jsLoader = require('rdf-native-loader-code/ecmaScript')
+const templateStringLoader = require('rdf-native-loader-code/ecmaScriptLiteral')
 const pipelineLoader = require('./loader/pipeline')
 const variableLoader = require('./loader/variable')
-const LoaderRegistry = require('./loader/registry')
+const LoaderRegistry = require('rdf-native-loader')
 
 function pipelineNode (definition, iri) {
   if (!iri) {
