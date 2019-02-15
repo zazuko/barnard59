@@ -30,7 +30,7 @@ describe('pipeline loader', () => {
 
     // when
     const pipeline = loader(node, dataset, { context, variables, basePath: context.basePath })
-    await pipeline.initVariables()
+    await pipeline._pipeline.initVariables()
 
     // then
     expect(pipeline.variables.get('foo')).toBe('bar')
@@ -58,7 +58,8 @@ describe('pipeline loader', () => {
     test('should initialize pipeline in object mode', () => {
       // given
       const node = def.node(example('sub-pipeline'))
-        .addOut(ns.rdf('type'), ns.p('ObjectPipeline'))
+        .addOut(ns.rdf('type'), ns.p('Pipeline'))
+        .addOut(ns.rdf('type'), ns.p('ReadableObjectMode'))
 
       // when
       const pipeline = loader(node, dataset, { context, variables: new Map(), basePath: context.basePath })

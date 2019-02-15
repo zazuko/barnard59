@@ -38,7 +38,7 @@ describe('pipeline', () => {
 
       // when
       const pipeline = Pipeline(definition, iri)
-      await pipeline.initVariables()
+      await pipeline._pipeline.initVariables()
 
       // then
       expect(pipeline.variables.get('foo')).toBe('bar')
@@ -53,7 +53,7 @@ describe('pipeline', () => {
 
       // when
       const pipeline = Pipeline(definition, iri, { variables })
-      await pipeline.initVariables()
+      await pipeline._pipeline.initVariables()
 
       // then
       expect(pipeline.variables.size).toBe(2)
@@ -67,7 +67,7 @@ describe('pipeline', () => {
 
       // when
       const pipeline = Pipeline(definition, iri)
-      await pipeline.initVariables()
+      await pipeline._pipeline.initVariables()
 
       // then
       expect(pipeline.variables.size).toBe(2)

@@ -3,7 +3,7 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-<> a p:ObjectPipeline ;
+<> a p:Pipeline, p:Readable ;
   p:steps [
     p:stepList ( <iterateDirectory> <printLength> )
   ] .
@@ -27,7 +27,7 @@
     "(p, chunk) => p.variables.set('file', chunk)"^^code:EcmaScript
   ).
 
-<Print> a p:ObjectPipeline ;
+<Print> a p:Pipeline, p:ReadableObjectMode ;
   p:steps [
     p:stepList ( <readFile> <getLength> )
   ] .

@@ -1,29 +1,42 @@
+const createPipelineStream = require('./createPipelineStream')
 const ns = require('./namespaces')
-const once = require('lodash/once')
-const Readable = require('readable-stream').Readable
 const Logger = require('./logger')
 
-class Pipeline extends Readable {
+class Pipeline {
+  /**
+   * Creates a new Pipeline stream
+   * The actual object returned by the constructor is the stream and not the pipeline instance
+   * @param node
+   * @param basePath
+   * @param context
+   * @param objectMode
+   * @param variables
+   * @param loaderRegistry
+   * @returns {*}
+   */
   constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaderRegistry } = {}) {
-    super({ objectMode })
-
     this.node = node
     this.basePath = basePath
     this.variables = variables
+    this.loaderRegistry = loaderRegistry
+
+    this.readableObjectMode = Boolean(this.node.has(ns.rdf.type, ns.p.ReadableObjectMode).term)
+    this.readable = Boolean(this.node.has(ns.rdf.type, ns.p.Readable).term) || this.readableObjectMode
+    this.writableObjectMode = Boolean(this.node.has(ns.rdf.type, ns.p.WritableObjectMode).term)
+    this.writable = Boolean(this.node.has(ns.rdf.type, ns.p.Writable).term) || this.writableObjectMode
 
     this.context = { ...context }
     this.context.basePath = this.basePath
-    this.context.pipeline = this
-    this.loaderRegistry = loaderRegistry
-
     this.context.log = new Logger(this.node, { master: context.log })
 
-    this.init = once(() => this._init().catch(err => this.emit('error', err)))
-    this.initVariables = once(async () => {
-      const parsedVariables = await this.parseVariables()
-      this.variables = new Map([...parsedVariables, ...this.variables])
-      this.context.variables = this.variables
-    })
+    this.stream = createPipelineStream(this)
+    this.context.pipeline = this.stream
+
+    return this.stream
+  }
+
+  error (err) {
+    this.stream.emit('error', err)
   }
 
   clone ({ basePath, context, objectMode, variables, log }) {
@@ -37,11 +50,7 @@ class Pipeline extends Readable {
     })
   }
 
-  _read () {
-    this.init()
-  }
-
-  async _init () {
+  async init () {
     this.context.log.info('initializing pipeline')
 
     await this.initVariables()
@@ -60,14 +69,9 @@ class Pipeline extends Readable {
 
         err.stack += `\nCaused by: ${cause.stack}`
 
-        this.emit('error', err)
+        this.error(err)
       })
     })
-
-    const lastStream = this.streams[this.streams.length - 1]
-
-    lastStream.on('data', chunk => this.push(chunk))
-    lastStream.on('end', () => this.push(null))
 
     return this
   }
@@ -124,7 +128,14 @@ class Pipeline extends Readable {
       log.info('step created', { name: 'afterStepInit' })
 
       return stream
-    }).catch(e => this.emit('error', e))
+    }).catch(e => this.error(e))
+  }
+
+  async initVariables () {
+    const parsedVariables = await this.parseVariables()
+
+    this.variables = new Map([...parsedVariables, ...this.variables])
+    this.context.variables = this.variables
   }
 
   parseVariables () {
