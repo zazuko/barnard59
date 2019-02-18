@@ -1,8 +1,8 @@
 /* global describe, test */
+const eventToPromise = require('../lib/eventToPromise')
 const expect = require('expect')
 const createBaseStream = require('../lib/createBaseStream')
 const { isReadable, isWritable, isDuplex } = require('isstream')
-const sleep = require('./support/sleep')
 
 describe('createBaseStream', () => {
   describe('Readable wrapper', () => {
@@ -28,8 +28,9 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline, { init })
 
       // when
-      stream.read()
-      await sleep(10)
+      stream.resume()
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -63,8 +64,9 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline, { init, read, write })
 
       // when
-      stream.read()
-      await sleep(10)
+      stream.resume()
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -83,7 +85,8 @@ describe('createBaseStream', () => {
 
       // when
       stream.write('')
-      await sleep(10)
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -101,8 +104,9 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline, { init, read, write })
 
       // when
-      stream.read()
-      await sleep(10)
+      stream.resume()
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -121,7 +125,8 @@ describe('createBaseStream', () => {
 
       // when
       stream.write('')
-      await sleep(10)
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -153,8 +158,9 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline, { init, read })
 
       // when
-      stream.read()
-      await sleep(10)
+      stream.resume()
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -171,8 +177,9 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline, { init, read })
 
       // when
-      stream.read()
-      await sleep(10)
+      stream.resume()
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -205,7 +212,8 @@ describe('createBaseStream', () => {
 
       // when
       stream.write('')
-      await sleep(10)
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
@@ -223,7 +231,8 @@ describe('createBaseStream', () => {
 
       // when
       stream.write('')
-      await sleep(10)
+      stream.destroy()
+      await eventToPromise(stream, 'close')
 
       // then
       expect(touched).toBe(true)
