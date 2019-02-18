@@ -1,4 +1,5 @@
 const eventToPromise = require('./eventToPromise')
+const { isReadable, isWritable } = require('isstream')
 
 /**
  * Run a pipe.
@@ -17,7 +18,7 @@ function run (something) {
     })
   }
 
-  if (something.readable || something.writable) {
+  if (isReadable(something) || isWritable(something)) {
     return run.stream(something)
   }
 
