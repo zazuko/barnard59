@@ -1,20 +1,12 @@
-const createPipelineStream = require('./createPipelineStream')
 const ns = require('./namespaces')
 const Logger = require('./logger')
 
+function nextLoop () {
+  return new Promise(resolve => setTimeout(resolve, 0))
+}
+
 class Pipeline {
-  /**
-   * Creates a new Pipeline stream
-   * The actual object returned by the constructor is the stream and not the pipeline instance
-   * @param node
-   * @param basePath
-   * @param context
-   * @param objectMode
-   * @param variables
-   * @param loaderRegistry
-   * @returns {*}
-   */
-  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaderRegistry } = {}) {
+  constructor (node, { basePath = process.cwd(), context = {}, variables = new Map(), loaderRegistry } = {}) {
     this.node = node
     this.basePath = basePath
     this.variables = variables
@@ -28,30 +20,17 @@ class Pipeline {
     this.context = { ...context }
     this.context.basePath = this.basePath
     this.context.log = new Logger(this.node, { master: context.log })
-
-    this.stream = createPipelineStream(this)
-    this.context.pipeline = this.stream
-
-    return this.stream
   }
 
   error (err) {
     this.stream.emit('error', err)
   }
 
-  clone ({ basePath, context, objectMode, variables, log }) {
-    return new Pipeline(this.node, {
-      basePath: basePath || this.basePath,
-      context: context || this.context,
-      variables: variables || this.variables,
-      loaderRegistry: this.loaderRegistry,
-      objectMode: objectMode || this.objectMode,
-      log
-    })
-  }
-
-  async init () {
+  async init (stream) {
     this.context.log.info('initializing pipeline')
+
+    this.stream = stream
+    this.context.pipeline = this.stream
 
     await this.initVariables()
 
@@ -73,7 +52,49 @@ class Pipeline {
       })
     })
 
+    this.initStreamInterface()
+
     return this
+  }
+
+  initStreamInterface () {
+    this.firstStream = this.streams[0]
+    this.lastStream = this.streams[this.streams.length - 1]
+    this.destroyed = false
+
+    if (this.readable) {
+      this.lastStream.on('end', () => this.stream.push(null))
+    }
+
+    if (this.writable) {
+      this.stream.on('finish', () => this.firstStream.end())
+    }
+
+    this.read = async (size) => {
+      for (;;) {
+        if (this.destroyed) {
+          return
+        }
+
+        const chunk = this.lastStream.read(size)
+
+        if (!chunk) {
+          await nextLoop()
+        } else if (!this.stream.push(chunk)) {
+          return
+        }
+      }
+    }
+
+    this.write = (chunk, encoding, callback) => {
+      this.firstStream.write(chunk, encoding, callback)
+    }
+
+    this.destroy = (err, callback) => {
+      this.destroyed = true
+
+      callback(err)
+    }
   }
 
   initSteps () {

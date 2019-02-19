@@ -1,14 +1,15 @@
 /* global describe, test */
+const createBaseStream = require('../lib/createBaseStream')
+const createDummyPipeline = require('./support/createDummyPipeline')
 const eventToPromise = require('../lib/eventToPromise')
 const expect = require('expect')
-const createBaseStream = require('../lib/createBaseStream')
 const { isReadable, isWritable, isDuplex } = require('isstream')
 
 describe('createBaseStream', () => {
   describe('Readable wrapper', () => {
     test('creates a Readable stream', async () => {
       // given
-      const pipeline = {}
+      const pipeline = createDummyPipeline()
       const init = () => {}
 
       // when
@@ -21,11 +22,11 @@ describe('createBaseStream', () => {
     test('calls the init function on read', async () => {
       // given
       let touched = false
-      const pipeline = {}
       const init = () => {
         touched = true
       }
-      const stream = createBaseStream(pipeline, { init })
+      const pipeline = createDummyPipeline({ init })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.resume()
@@ -40,13 +41,10 @@ describe('createBaseStream', () => {
   describe('Duplex', () => {
     test('creates a Duplex stream', async () => {
       // given
-      const pipeline = { readable: true, writable: true }
-      const init = () => {}
-      const read = () => {}
-      const write = () => {}
+      const pipeline = createDummyPipeline({ readable: true, writable: true })
 
-      // when
-      const stream = createBaseStream(pipeline, { init, read, write })
+      // when, { init }
+      const stream = createBaseStream(pipeline)
 
       // then
       expect(isDuplex(stream)).toBe(true)
@@ -55,13 +53,11 @@ describe('createBaseStream', () => {
     test('calls the init function when read is called first', async () => {
       // given
       let touched = false
-      const pipeline = { readable: true, writable: true }
       const init = () => {
         touched = true
       }
-      const read = () => {}
-      const write = () => {}
-      const stream = createBaseStream(pipeline, { init, read, write })
+      const pipeline = createDummyPipeline({ readable: true, writable: true, init })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.resume()
@@ -75,13 +71,11 @@ describe('createBaseStream', () => {
     test('calls the init function when write is called first', async () => {
       // given
       let touched = false
-      const pipeline = { readable: true, writable: true }
       const init = () => {
         touched = true
       }
-      const read = () => {}
-      const write = () => {}
-      const stream = createBaseStream(pipeline, { init, read, write })
+      const pipeline = createDummyPipeline({ readable: true, writable: true, init })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.write('')
@@ -95,13 +89,11 @@ describe('createBaseStream', () => {
     test('calls the read function on read', async () => {
       // given
       let touched = false
-      const pipeline = { readable: true, writable: true }
-      const init = () => {}
       const read = () => {
         touched = true
       }
-      const write = () => {}
-      const stream = createBaseStream(pipeline, { init, read, write })
+      const pipeline = createDummyPipeline({ readable: true, writable: true, read })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.resume()
@@ -115,13 +107,11 @@ describe('createBaseStream', () => {
     test('calls the write function on write', async () => {
       // given
       let touched = false
-      const pipeline = { readable: true, writable: true }
-      const init = () => {}
-      const read = () => {}
       const write = () => {
         touched = true
       }
-      const stream = createBaseStream(pipeline, { init, read, write })
+      const pipeline = createDummyPipeline({ readable: true, writable: true, write })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.write('')
@@ -136,12 +126,10 @@ describe('createBaseStream', () => {
   describe('Readable', () => {
     test('creates a Readable stream', async () => {
       // given
-      const pipeline = { readable: true }
-      const init = () => {}
-      const read = () => {}
+      const pipeline = createDummyPipeline({ readable: true })
 
       // when
-      const stream = createBaseStream(pipeline, { init, read })
+      const stream = createBaseStream(pipeline)
 
       // then
       expect(isReadable(stream)).toBe(true)
@@ -150,12 +138,11 @@ describe('createBaseStream', () => {
     test('calls the init function when read is called', async () => {
       // given
       let touched = false
-      const pipeline = { readable: true }
       const init = () => {
         touched = true
       }
-      const read = () => {}
-      const stream = createBaseStream(pipeline, { init, read })
+      const pipeline = createDummyPipeline({ readable: true, init })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.resume()
@@ -169,12 +156,11 @@ describe('createBaseStream', () => {
     test('calls the read function on read', async () => {
       // given
       let touched = false
-      const pipeline = { readable: true }
-      const init = () => {}
       const read = () => {
         touched = true
       }
-      const stream = createBaseStream(pipeline, { init, read })
+      const pipeline = createDummyPipeline({ readable: true, read })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.resume()
@@ -189,12 +175,10 @@ describe('createBaseStream', () => {
   describe('Writable', () => {
     test('creates a Writable stream', async () => {
       // given
-      const pipeline = { writable: true }
-      const init = () => {}
-      const write = () => {}
+      const pipeline = createDummyPipeline({ writable: true })
 
       // when
-      const stream = createBaseStream(pipeline, { init, write })
+      const stream = createBaseStream(pipeline)
 
       // then
       expect(isWritable(stream)).toBe(true)
@@ -203,12 +187,11 @@ describe('createBaseStream', () => {
     test('calls the init function when write is called', async () => {
       // given
       let touched = false
-      const pipeline = { writable: true }
       const init = () => {
         touched = true
       }
-      const write = () => {}
-      const stream = createBaseStream(pipeline, { init, write })
+      const pipeline = createDummyPipeline({ writable: true, init })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.write('')
@@ -222,12 +205,11 @@ describe('createBaseStream', () => {
     test('calls the write function on write', async () => {
       // given
       let touched = false
-      const pipeline = { writable: true }
-      const init = () => {}
       const write = () => {
         touched = true
       }
-      const stream = createBaseStream(pipeline, { init, write })
+      const pipeline = createDummyPipeline({ writable: true, write })
+      const stream = createBaseStream(pipeline)
 
       // when
       stream.write('')

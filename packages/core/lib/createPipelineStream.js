@@ -1,63 +1,28 @@
 const createBaseStream = require('./createBaseStream')
+const Pipeline = require('./Pipeline')
 
-function nextLoop () {
-  return new Promise(resolve => setTimeout(resolve, 0))
-}
-
-function createPipelineStream (pipeline) {
-  let destroyed = false
-  let firstStream = null
-  let lastStream = null
-
-  const stream = createBaseStream(pipeline, {
-    init: async () => {
-      await pipeline.init()
-
-      // TODO: validate readable/writable
-
-      firstStream = pipeline.streams[0]
-      lastStream = pipeline.streams[pipeline.streams.length - 1]
-
-      if (pipeline.readable) {
-        lastStream.on('end', () => stream.push(null))
-      }
-
-      if (pipeline.writable) {
-        const firstStream = pipeline.streams[0]
-
-        stream.on('finish', () => firstStream.end())
-      }
-    },
-    read: async (size) => {
-      lastStream = pipeline.streams[pipeline.streams.length - 1]
-
-      for (;;) {
-        if (destroyed) {
-          return
-        }
-
-        const chunk = lastStream.read(size)
-
-        if (!chunk) {
-          await nextLoop()
-        } else if (!stream.push(chunk)) {
-          return
-        }
-      }
-    },
-    write: (chunk, encoding, callback) => {
-      firstStream.write(chunk, encoding, callback)
-    },
-    destroy: (err, callback) => {
-      destroyed = true
-
-      callback(err)
-    }
+function createPipelineStream (node, { basePath = process.cwd(), context = {}, variables = new Map(), loaderRegistry, log } = {}) {
+  const pipeline = new Pipeline(node, {
+    basePath,
+    context,
+    variables,
+    loaderRegistry,
+    log
   })
+
+  const stream = createBaseStream(pipeline)
 
   stream._pipeline = pipeline
 
-  stream.clone = pipeline.clone.bind(pipeline)
+  stream.clone = ({ basePath, context, objectMode, variables, log }) => {
+    return createPipelineStream(pipeline.node, {
+      basePath: basePath || pipeline.basePath,
+      context: context || pipeline.context,
+      variables: variables || pipeline.variables,
+      loaderRegistry: pipeline.loaderRegistry,
+      log
+    })
+  }
 
   const properties = ['basePath', 'context', 'node', 'variables']
 

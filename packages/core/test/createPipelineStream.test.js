@@ -1,22 +1,26 @@
 /* global describe, test */
+const clownface = require('clownface')
+const createLoaderRegistry = require('../lib/createLoaderRegistry')
 const createPipelineStream = require('../lib/createPipelineStream')
 const expect = require('expect')
-const factory = require('../lib/pipelineFactory')
 const isStream = require('isstream')
 const load = require('./support/load-pipeline')
 const path = require('path')
+const rdf = require('rdf-ext')
 const run = require('./support/run')
 const Clownface = require('clownface/lib/Clownface')
-const Pipeline = require('../lib/pipeline')
+const Pipeline = require('../lib/Pipeline')
+
+const pipelineTerm = rdf.namedNode('http://example.org/pipeline/')
 
 describe('createPipelineStream', () => {
   test('returns a stream', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(isStream(stream)).toBe(true)
@@ -25,10 +29,10 @@ describe('createPipelineStream', () => {
   test('inner pipeline is assigned to _pipeline property', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(stream._pipeline instanceof Pipeline).toBe(true)
@@ -37,10 +41,10 @@ describe('createPipelineStream', () => {
   test('clone is a method', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(typeof stream.clone).toBe('function')
@@ -49,10 +53,10 @@ describe('createPipelineStream', () => {
   test('basePath is a string property', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(typeof stream.basePath).toBe('string')
@@ -61,10 +65,10 @@ describe('createPipelineStream', () => {
   test('context is a object property', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(typeof stream.context).toBe('object')
@@ -73,10 +77,10 @@ describe('createPipelineStream', () => {
   test('node is a clownface property', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(stream.node instanceof Clownface).toBe(true)
@@ -85,10 +89,10 @@ describe('createPipelineStream', () => {
   test('variables is a Map property', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
+    const node = clownface(definition, pipelineTerm)
 
     // when
-    const stream = createPipelineStream(pipeline._pipeline)
+    const stream = createPipelineStream(node)
 
     // then
     expect(stream.variables instanceof Map).toBe(true)
@@ -97,24 +101,22 @@ describe('createPipelineStream', () => {
   test('write on pipeline is forwarded to stream', async () => {
     // given
     const definition = await load('write.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/')
-    const stream = createPipelineStream(pipeline._pipeline)
+    const node = clownface(definition, pipelineTerm)
+    const stream = createPipelineStream(node, { loaderRegistry: createLoaderRegistry() })
 
     // when
     stream.end('test')
     await run(stream)
 
     // then
-    expect(pipeline.context.content.toString()).toBe('test')
+    expect(stream.context.content.toString()).toBe('test')
   })
 
   test('read on pipeline is forwarded to stream', async () => {
     // given
     const definition = await load('read.ttl')
-    const pipeline = factory(definition, 'http://example.org/pipeline/', {
-      basePath: path.resolve('test')
-    })
-    const stream = createPipelineStream(pipeline._pipeline)
+    const node = clownface(definition, pipelineTerm)
+    const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
 
     // when
     const content = await run(stream)

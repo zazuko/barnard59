@@ -1,11 +1,7 @@
 const clownface = require('clownface')
+const createLoaderRegistry = require('./createLoaderRegistry')
+const createPipelineStream = require('./createPipelineStream')
 const rdf = require('rdf-ext')
-const Pipeline = require('./pipeline')
-const jsLoader = require('rdf-native-loader-code/ecmaScript')
-const templateStringLoader = require('rdf-native-loader-code/ecmaScriptLiteral')
-const pipelineLoader = require('./loader/pipeline')
-const variableLoader = require('./loader/variable')
-const LoaderRegistry = require('rdf-native-loader')
 
 function pipelineNode (definition, iri) {
   if (!iri) {
@@ -15,22 +11,10 @@ function pipelineNode (definition, iri) {
   return clownface(definition, rdf.namedNode(iri.value || iri.toString()))
 }
 
-function create (definition, iri, { basePath, context, objectMode, variables, additionalLoaders = [] } = {}) {
-  const defaultLoaders = [
-    jsLoader,
-    pipelineLoader,
-    templateStringLoader,
-    variableLoader
-  ]
+function create (definition, iri, { basePath, context, variables, additionalLoaders = [] } = {}) {
+  const loaderRegistry = createLoaderRegistry(additionalLoaders)
 
-  const loaders = [ ...defaultLoaders, ...additionalLoaders ]
-
-  const loaderRegistry = loaders.reduce((registry, loader) => {
-    loader.register(registry)
-    return registry
-  }, new LoaderRegistry())
-
-  return new Pipeline(pipelineNode(definition, iri), { basePath, context, objectMode, variables, loaderRegistry })
+  return createPipelineStream(pipelineNode(definition, iri), { basePath, context, variables, loaderRegistry })
 }
 
 module.exports = create
