@@ -1,5 +1,6 @@
-const eventToPromise = require('./eventToPromise')
 const { isReadable, isWritable } = require('isstream')
+const { finished } = require('readable-stream')
+const { promisify } = require('util')
 
 /**
  * Run a pipe.
@@ -25,12 +26,6 @@ function run (something) {
   return Promise.reject(new Error('unknown content'))
 }
 
-run.stream = function (stream) {
-  return Promise.race([
-    eventToPromise(stream, 'end'),
-    eventToPromise(stream, 'finish'),
-    eventToPromise(stream, 'error').reject()
-  ])
-}
+run.stream = promisify(finished)
 
 module.exports = run

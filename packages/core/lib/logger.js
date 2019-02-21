@@ -10,7 +10,7 @@ class Logger extends Transform {
 
     this.node = node.term.value
     if (master) {
-      this.pipe(master)
+      this.pipe(master, { end: false })
     }
   }
 

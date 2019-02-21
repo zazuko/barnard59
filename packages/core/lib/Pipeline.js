@@ -93,6 +93,8 @@ class Pipeline {
     this.destroy = (err, callback) => {
       this.destroyed = true
 
+      this.context.log.end()
+
       callback(err)
     }
   }

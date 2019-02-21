@@ -1,3 +1,4 @@
+const autoDestroy = require('./autoDestroy')
 const { Duplex } = require('readable-stream')
 
 class DuplexPipeline extends Duplex {
@@ -17,9 +18,10 @@ class DuplexPipeline extends Duplex {
       },
       destroy: (err, callback) => {
         pipeline.destroy(err, callback)
-      },
-      autoDestroy: true
+      }
     })
+
+    autoDestroy(this)
   }
 }
 

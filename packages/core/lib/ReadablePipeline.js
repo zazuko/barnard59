@@ -1,3 +1,4 @@
+const autoDestroy = require('./autoDestroy')
 const { Readable } = require('readable-stream')
 
 class ReadablePipeline extends Readable {
@@ -11,9 +12,10 @@ class ReadablePipeline extends Readable {
       },
       destroy: (err, callback) => {
         pipeline.destroy(err, callback)
-      },
-      autoDestroy: true
+      }
     })
+
+    autoDestroy(this)
   }
 }
 
