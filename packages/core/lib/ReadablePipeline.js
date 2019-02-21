@@ -6,9 +6,9 @@ class ReadablePipeline extends Readable {
     super({
       objectMode: pipeline.readableObjectMode,
       read: async (size) => {
-        await init(this)
-
-        pipeline.read(size)
+        if (await init(this)) {
+          pipeline.read(size)
+        }
       },
       destroy: (err, callback) => {
         pipeline.destroy(err, callback)

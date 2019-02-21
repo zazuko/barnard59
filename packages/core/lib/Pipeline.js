@@ -1,3 +1,5 @@
+const isStream = require('isstream')
+const { isReadable, isWritable } = require('isstream')
 const ns = require('./namespaces')
 const Logger = require('./logger')
 
@@ -26,35 +28,72 @@ class Pipeline {
     this.stream.emit('error', err)
   }
 
+  destroy (err, callback) {
+    this.destroyed = true
+
+    this.context.log.end()
+
+    callback(err)
+  }
+
   async init (stream) {
-    this.context.log.info('initializing pipeline')
+    try {
+      this.context.log.info('initializing pipeline')
 
-    this.stream = stream
-    this.context.pipeline = this.stream
+      this.stream = stream
+      this.context.pipeline = this.stream
 
-    await this.initVariables()
+      await this.initVariables()
 
-    await this.initSteps()
+      await this.initSteps()
 
-    for (let index = 0; index < this.streams.length - 1; index++) {
-      this.streams[index].pipe(this.streams[index + 1])
+      for (let index = 0; index < this.streams.length - 1; index++) {
+        this.streams[index].pipe(this.streams[index + 1])
+      }
+
+      this.streams.forEach((stream, index) => {
+        const step = this.steps[index]
+
+        stream.on('error', cause => {
+          const err = new Error(`error in pipeline step ${step.value}`)
+
+          err.stack += `\nCaused by: ${cause.stack}`
+
+          this.error(err)
+        })
+      })
+
+      this.initStreamInterface()
+      this.validateStreams()
+    } catch (err) {
+      this.error(err)
+
+      return false
     }
 
-    this.streams.forEach((stream, index) => {
-      const step = this.steps[index]
+    return true
+  }
 
-      stream.on('error', cause => {
-        const err = new Error(`error in pipeline step ${step.value}`)
+  validateStreams () {
+    if (this.readable) {
+      if (!isReadable(this.lastStream)) {
+        this.error(new Error('Pipeline is defined as Readable, but last stream doesn\'t have a Readable interface'))
+      }
+    } else {
+      if (isReadable(this.lastStream)) {
+        this.error(new Error('Pipeline is not defined as Readable, but last stream has a Readable interface'))
+      }
+    }
 
-        err.stack += `\nCaused by: ${cause.stack}`
-
-        this.error(err)
-      })
-    })
-
-    this.initStreamInterface()
-
-    return this
+    if (this.writable) {
+      if (!isWritable(this.firstStream)) {
+        this.error(new Error('Pipeline is defined as Writable, but first stream doesn\'t have a Writable interface'))
+      }
+    } else {
+      if (isWritable(this.firstStream)) {
+        this.error(new Error('Pipeline is not defined as Writable, but first stream has a Writable interface'))
+      }
+    }
   }
 
   initStreamInterface () {
@@ -88,14 +127,6 @@ class Pipeline {
 
     this.write = (chunk, encoding, callback) => {
       this.firstStream.write(chunk, encoding, callback)
-    }
-
-    this.destroy = (err, callback) => {
-      this.destroyed = true
-
-      this.context.log.end()
-
-      callback(err)
     }
   }
 
@@ -136,22 +167,22 @@ class Pipeline {
 
     log.info('step init', { name: 'beforeStepInit' })
     const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
-
     const args = step.out(ns.code('arguments'))
-
     const argsArray = (args.term ? [...args.list()] : []).map(arg => this.parseArgument(arg))
+    const argsResolved = await Promise.all(argsArray)
+    const stream = await operation.apply({ ...this.context, log }, argsResolved)
 
-    return Promise.all(argsArray).then(resolved => {
-      return operation.apply({ ...this.context, log }, resolved)
-    }).then(stream => {
-      stream.on('finish', () => {
-        log.info('step finished', { name: 'afterStep' })
-      })
+    if (!stream || !isStream(stream)) {
+      throw new Error(`${step.value} didn't return a stream`)
+    }
 
-      log.info('step created', { name: 'afterStepInit' })
+    stream.on('finish', () => {
+      log.info('step finished', { name: 'afterStep' })
+    })
 
-      return stream
-    }).catch(e => this.error(e))
+    log.info('step created', { name: 'afterStepInit' })
+
+    return stream
   }
 
   async initVariables () {

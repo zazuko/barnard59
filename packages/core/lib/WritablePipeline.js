@@ -6,9 +6,9 @@ class WritablePipeline extends Writable {
     super({
       objectMode: pipeline.writableObjectMode,
       write: async (chunk, encoding, callback) => {
-        await init(this)
-
-        pipeline.write(chunk, encoding, callback)
+        if (await init(this)) {
+          pipeline.write(chunk, encoding, callback)
+        }
       },
       destroy: (err, callback) => {
         pipeline.destroy(err, callback)

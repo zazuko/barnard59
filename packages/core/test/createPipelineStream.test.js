@@ -102,7 +102,7 @@ describe('createPipelineStream', () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
-    const stream = createPipelineStream(node, { loaderRegistry: createLoaderRegistry() })
+    const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
 
     // when
     stream.end('test')
@@ -123,5 +123,18 @@ describe('createPipelineStream', () => {
 
     // then
     expect(content.toString()).toBe('test')
+  })
+
+  test('should handle step creating errors', async () => {
+    // given
+    const definition = await load('step-error.ttl')
+    const node = clownface(definition, pipelineTerm)
+    const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
+
+    // when
+    const promise = run(stream)
+
+    // then
+    expect(promise).rejects.toBeInstanceOf(Error)
   })
 })

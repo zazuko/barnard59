@@ -5,7 +5,7 @@
 
 <> a p:Pipeline, p:Writable ;
   p:steps [
-    p:stepList ( <toContext> )
+    p:stepList ( <toContext> <null> )
   ] .
 
 <toContext> a p:Step ;
@@ -17,3 +17,8 @@
 
     return input
   }"""^^code:EcmaScript) .
+
+<null> a p:Step ;
+  code:implementedBy [ a code:EcmaScript ;
+    code:link <file:support/operations/null>
+  ] .
