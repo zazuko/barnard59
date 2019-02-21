@@ -22,6 +22,8 @@
     "clownface": "git+https://github.com/rdf-ext/clownface.git#develop",
     "isstream": "^0.1.2",
     "lodash": "^4.17.11",
+    "rdf-native-loader": "git+https://github.com/zazuko/rdf-native-loader.git#master",
+    "rdf-native-loader-code": "git+https://github.com/zazuko/rdf-native-loader-code.git#master",
     "readable-stream": "^3.0.6"
   },
   "devDependencies": {

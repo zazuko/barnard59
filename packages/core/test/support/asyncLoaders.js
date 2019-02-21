@@ -1,6 +1,6 @@
 const cf = require('clownface')
 const rdf = require('rdf-ext')
-const ecmaScriptLoader = require('../../lib/loader/ecmaScript')
+const ecmaScriptLoader = require('rdf-native-loader-code/ecmaScript')
 
 function promisedUrl (term, dataset) {
   const node = cf(dataset).node(term)
