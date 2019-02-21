@@ -21,7 +21,7 @@
   },
   "@graph": [{
     "@id": "utc",
-    "@type": "Pipeline",
+    "@type": ["Pipeline", "Readable"],
     "variables": {
       "variable": [{
         "@type": "Variable",
@@ -34,7 +34,7 @@
     "steps": "steps"
   }, {
     "@id": "cet",
-    "@type": "Pipeline",
+    "@type": ["Pipeline", "Readable"],
     "variables": {
       "variable": [{
         "@type": "Variable",

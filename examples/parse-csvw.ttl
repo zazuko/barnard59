@@ -3,7 +3,7 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-<parseCsvw> a p:Pipeline;
+<parseCsvw> a p:Pipeline, p:Readable;
   p:variables [
     p:variable [
       a p:Variable;
@@ -41,7 +41,7 @@
   ].
 
 
-<parseMetadata> a p:ObjectPipeline;
+<parseMetadata> a p:Pipeline, p:ReadableObjectMode;
   p:steps [
     p:stepList ( <readMetadata> <parseMetadataStep> )
   ].
