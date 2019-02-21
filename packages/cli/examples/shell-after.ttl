@@ -3,7 +3,7 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-<shell> a p:Pipeline;
+<shell> a p:Pipeline, p:Readable;
   p:variables [
     p:variable [
       a p:Variable;

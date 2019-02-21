@@ -77,6 +77,8 @@ program
           variables: variable
         })
 
+        stream.on('error', err => console.error(err))
+
         stream.pipe(createOutputStream(output))
 
         if (verbose) {
