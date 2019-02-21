@@ -18,7 +18,7 @@ describe('forEach', () => {
 
     // then
     const outJson = JSON.parse(out)
-    expect(outJson.length).toBe(8)
+    expect(outJson.length).toBe(24)
   })
 
   /*

@@ -1,48 +1,36 @@
 const ns = require('./namespaces')
-const once = require('lodash/once')
-const Readable = require('readable-stream').Readable
 const Logger = require('./logger')
 
-class Pipeline extends Readable {
-  constructor (node, { basePath = process.cwd(), context = {}, objectMode, variables = new Map(), loaderRegistry } = {}) {
-    super({ objectMode })
+function nextLoop () {
+  return new Promise(resolve => setTimeout(resolve, 0))
+}
 
+class Pipeline {
+  constructor (node, { basePath = process.cwd(), context = {}, variables = new Map(), loaderRegistry } = {}) {
     this.node = node
     this.basePath = basePath
     this.variables = variables
+    this.loaderRegistry = loaderRegistry
+
+    this.readableObjectMode = Boolean(this.node.has(ns.rdf.type, ns.p.ReadableObjectMode).term)
+    this.readable = Boolean(this.node.has(ns.rdf.type, ns.p.Readable).term) || this.readableObjectMode
+    this.writableObjectMode = Boolean(this.node.has(ns.rdf.type, ns.p.WritableObjectMode).term)
+    this.writable = Boolean(this.node.has(ns.rdf.type, ns.p.Writable).term) || this.writableObjectMode
 
     this.context = { ...context }
     this.context.basePath = this.basePath
-    this.context.pipeline = this
-    this.loaderRegistry = loaderRegistry
-
     this.context.log = new Logger(this.node, { master: context.log })
-
-    this.init = once(() => this._init().catch(err => this.emit('error', err)))
-    this.initVariables = once(async () => {
-      const parsedVariables = await this.parseVariables()
-      this.variables = new Map([...parsedVariables, ...this.variables])
-      this.context.variables = this.variables
-    })
   }
 
-  clone ({ basePath, context, objectMode, variables, log }) {
-    return new Pipeline(this.node, {
-      basePath: basePath || this.basePath,
-      context: context || this.context,
-      variables: variables || this.variables,
-      loaderRegistry: this.loaderRegistry,
-      objectMode: objectMode || this.objectMode,
-      log
-    })
+  error (err) {
+    this.stream.emit('error', err)
   }
 
-  _read () {
-    this.init()
-  }
-
-  async _init () {
+  async init (stream) {
     this.context.log.info('initializing pipeline')
+
+    this.stream = stream
+    this.context.pipeline = this.stream
 
     await this.initVariables()
 
@@ -60,16 +48,55 @@ class Pipeline extends Readable {
 
         err.stack += `\nCaused by: ${cause.stack}`
 
-        this.emit('error', err)
+        this.error(err)
       })
     })
 
-    const lastStream = this.streams[this.streams.length - 1]
-
-    lastStream.on('data', chunk => this.push(chunk))
-    lastStream.on('end', () => this.push(null))
+    this.initStreamInterface()
 
     return this
+  }
+
+  initStreamInterface () {
+    this.firstStream = this.streams[0]
+    this.lastStream = this.streams[this.streams.length - 1]
+    this.destroyed = false
+
+    if (this.readable) {
+      this.lastStream.on('end', () => this.stream.push(null))
+    }
+
+    if (this.writable) {
+      this.stream.on('finish', () => this.firstStream.end())
+    }
+
+    this.read = async (size) => {
+      for (;;) {
+        if (this.destroyed) {
+          return
+        }
+
+        const chunk = this.lastStream.read(size)
+
+        if (!chunk) {
+          await nextLoop()
+        } else if (!this.stream.push(chunk)) {
+          return
+        }
+      }
+    }
+
+    this.write = (chunk, encoding, callback) => {
+      this.firstStream.write(chunk, encoding, callback)
+    }
+
+    this.destroy = (err, callback) => {
+      this.destroyed = true
+
+      this.context.log.end()
+
+      callback(err)
+    }
   }
 
   initSteps () {
@@ -124,7 +151,14 @@ class Pipeline extends Readable {
       log.info('step created', { name: 'afterStepInit' })
 
       return stream
-    }).catch(e => this.emit('error', e))
+    }).catch(e => this.error(e))
+  }
+
+  async initVariables () {
+    const parsedVariables = await this.parseVariables()
+
+    this.variables = new Map([...parsedVariables, ...this.variables])
+    this.context.variables = this.variables
   }
 
   parseVariables () {

@@ -4,16 +4,16 @@ const isWritable = require('isstream').isWritable
 const run = require('./run')
 const eventToPromise = require('./eventToPromise')
 
-class ObjectToReadable extends Readable {
-  constructor (content) {
-    super({
-      objectMode: true,
-      read: () => {}
-    })
+function objectToReadable (content, objectMode) {
+  const stream = new Readable({
+    objectMode,
+    read: () => {}
+  })
 
-    this.push(content)
-    this.push(null)
-  }
+  stream.push(content)
+  stream.push(null)
+
+  return stream
 }
 
 class ForEach extends Transform {
@@ -52,14 +52,13 @@ class ForEach extends Transform {
       this.handleChunk.call(undefined, pipeline, chunk)
     }
 
-    return pipeline.init().then(() => {
-      if (!isWritable(pipeline.streams[0])) {
-        return run(pipeline.streams[0])
-      } else {
-        const item = new ObjectToReadable(chunk)
-        return eventToPromise(item.pipe(pipeline.streams[0]), 'end')
-      }
-    })
+    if (isWritable(pipeline)) {
+      objectToReadable(chunk, pipeline._writableState.objectMode).pipe(pipeline)
+
+      return eventToPromise(pipeline, 'end')
+    } else {
+      return run(pipeline)
+    }
   }
 
   static create (pipeline, handleChunk) {
