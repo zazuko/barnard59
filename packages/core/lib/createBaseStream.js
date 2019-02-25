@@ -1,5 +1,6 @@
 const once = require('lodash/once')
 const DuplexPipeline = require('./DuplexPipeline')
+const PlainPipeline = require('./PlainPipeline')
 const ReadablePipeline = require('./ReadablePipeline')
 const WritablePipeline = require('./WritablePipeline')
 
@@ -15,7 +16,7 @@ function createBaseStream (pipeline) {
   }
 
   // use the readable interface just to get the readable event to init and process the pipeline
-  return new ReadablePipeline(pipeline, init)
+  return new PlainPipeline(pipeline, init)
 }
 
 module.exports = createBaseStream

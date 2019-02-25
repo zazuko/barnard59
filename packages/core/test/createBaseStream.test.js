@@ -6,7 +6,7 @@ const expect = require('expect')
 const { isReadable, isWritable, isDuplex } = require('isstream')
 
 describe('createBaseStream', () => {
-  describe('Readable wrapper', () => {
+  describe('Plain', () => {
     test('creates a Readable stream', async () => {
       // given
       const pipeline = createDummyPipeline()
@@ -35,6 +35,24 @@ describe('createBaseStream', () => {
 
       // then
       expect(touched).toBe(true)
+    })
+
+    test('doesn\'t call the pipeline read function', async () => {
+      // given
+      let touched = false
+      const read = () => {
+        touched = true
+      }
+      const pipeline = createDummyPipeline({ read })
+      const stream = createBaseStream(pipeline)
+
+      // when
+      stream.resume()
+      stream.destroy()
+      await eventToPromise(stream, 'close')
+
+      // then
+      expect(touched).toBe(false)
     })
   })
 
