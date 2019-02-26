@@ -16,6 +16,11 @@ class DuplexPipeline extends Duplex {
           pipeline.write(chunk, encoding, callback)
         }
       },
+      final: async callback => {
+        if (await init(this)) {
+          pipeline.final(callback)
+        }
+      },
       destroy: (err, callback) => {
         pipeline.destroy(err, callback)
       }

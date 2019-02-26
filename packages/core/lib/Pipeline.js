@@ -1,6 +1,7 @@
 const isStream = require('isstream')
 const { isReadable, isWritable } = require('isstream')
 const ns = require('./namespaces')
+const { finished } = require('readable-stream')
 const Logger = require('./logger')
 
 function nextLoop () {
@@ -29,6 +30,8 @@ class Pipeline {
   }
 
   destroy (err, callback) {
+    console.log('destroy')
+
     this.destroyed = true
 
     this.context.log.end()
@@ -101,13 +104,15 @@ class Pipeline {
     this.lastStream = this.streams[this.streams.length - 1]
     this.destroyed = false
 
-    if (this.readable) {
-      this.lastStream.on('end', () => this.stream.push(null))
-    }
+    finished(this.lastStream, err => {
+      if (err) {
+        return this.error(err)
+      }
 
-    if (this.writable) {
-      this.stream.on('finish', () => this.firstStream.end())
-    }
+      if (isReadable(this.stream)) {
+        this.stream.push(null)
+      }
+    })
 
     this.read = async (size) => {
       for (;;) {
@@ -127,6 +132,10 @@ class Pipeline {
 
     this.write = (chunk, encoding, callback) => {
       this.firstStream.write(chunk, encoding, callback)
+    }
+
+    this.final = (callback) => {
+      this.firstStream.end(callback)
     }
   }
 
@@ -176,7 +185,7 @@ class Pipeline {
       throw new Error(`${step.value} didn't return a stream`)
     }
 
-    stream.on('finish', () => {
+    stream.on('close', () => {
       log.info('step finished', { name: 'afterStep' })
     })
 

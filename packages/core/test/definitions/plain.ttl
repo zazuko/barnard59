@@ -1,0 +1,20 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<> a p:Pipeline ;
+  p:steps [
+    p:stepList ( <createContent> <null> )
+  ] .
+
+<createContent> a p:Step ;
+  code:implementedBy [ a code:EcmaScript ;
+    code:link <file:support/operations/args-to-stream>
+  ];
+  code:arguments ("t" "e" "s" "t") .
+
+<null> a p:Step ;
+  code:implementedBy [ a code:EcmaScript ;
+    code:link <file:support/operations/null>
+  ] .
