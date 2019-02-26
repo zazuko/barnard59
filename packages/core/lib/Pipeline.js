@@ -30,8 +30,6 @@ class Pipeline {
   }
 
   destroy (err, callback) {
-    console.log('destroy')
-
     this.destroyed = true
 
     this.context.log.end()
