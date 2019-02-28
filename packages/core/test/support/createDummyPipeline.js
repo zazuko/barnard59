@@ -1,7 +1,7 @@
 function createDummyPipeline ({
   readable = false,
   writable = false,
-  init = () => {},
+  init = () => true,
   read = () => {},
   write = () => {},
   destroy = (err, callback) => callback(err)

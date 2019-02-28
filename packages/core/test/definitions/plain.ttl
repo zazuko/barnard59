@@ -3,20 +3,16 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-<> a p:Pipeline, p:Writable ;
+<> a p:Pipeline ;
   p:steps [
-    p:stepList ( <toContext> <null> )
+    p:stepList ( <createContent> <null> )
   ] .
 
-<toContext> a p:Step ;
+<createContent> a p:Step ;
   code:implementedBy [ a code:EcmaScript ;
-    code:link <node:barnard59-base#map>
+    code:link <file:support/operations/args-to-stream>
   ];
-  code:arguments ("""input => {
-    this.content = input
-
-    return input
-  }"""^^code:EcmaScript) .
+  code:arguments ("t" "e" "s" "t") .
 
 <null> a p:Step ;
   code:implementedBy [ a code:EcmaScript ;

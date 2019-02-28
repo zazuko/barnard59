@@ -3,6 +3,7 @@ const clownface = require('clownface')
 const createLoaderRegistry = require('../lib/createLoaderRegistry')
 const createPipelineStream = require('../lib/createPipelineStream')
 const expect = require('expect')
+const eventToPromise = require('../lib/eventToPromise')
 const isStream = require('isstream')
 const load = require('./support/load-pipeline')
 const path = require('path')
@@ -102,7 +103,7 @@ describe('createPipelineStream', () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
-    const stream = createPipelineStream(node, { loaderRegistry: createLoaderRegistry() })
+    const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
 
     // when
     stream.end('test')
@@ -123,5 +124,84 @@ describe('createPipelineStream', () => {
 
     // then
     expect(content.toString()).toBe('test')
+  })
+
+  test('should handle step creating errors', async () => {
+    // given
+    const definition = await load('step-error.ttl')
+    const node = clownface(definition, pipelineTerm)
+    const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
+
+    // when
+    const promise = run(stream)
+
+    // then
+    expect(promise).rejects.toBeInstanceOf(Error)
+  })
+
+  describe('PlainPipeline', () => {
+    test('end event is emitted', async () => {
+      // given
+      const definition = await load('plain.ttl')
+      const node = clownface(definition, pipelineTerm)
+      const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
+
+      // when
+      stream.resume()
+      await eventToPromise(stream, 'end')
+
+      // then
+      // expect to reach this point
+    })
+  })
+
+  describe('ReadablePipeline', () => {
+    test('end event is emitted', async () => {
+      // given
+      const definition = await load('read.ttl')
+      const node = clownface(definition, pipelineTerm)
+      const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
+
+      // when
+      stream.resume()
+      await eventToPromise(stream, 'end')
+
+      // then
+      // expect to reach this point
+    })
+  })
+
+  describe('WriteablePipeline', () => {
+    test('finish event is emitted', async () => {
+      // given
+      const definition = await load('write.ttl')
+      const node = clownface(definition, pipelineTerm)
+      const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
+      const waitForFinish = eventToPromise(stream, 'finish')
+
+      // when
+      stream.end()
+      await waitForFinish
+
+      // then
+      // expect to reach this point
+    })
+
+    test('calling end is forwarded to the pipeline steps', async () => {
+      // given
+      const definition = await load('write.ttl')
+      const node = clownface(definition, pipelineTerm)
+      const stream = createPipelineStream(node, { basePath: path.resolve('test'), loaderRegistry: createLoaderRegistry() })
+      stream.write('test')
+      await stream._pipeline.init()
+      const waitForFinish = eventToPromise(stream._pipeline.streams[0], 'finish')
+
+      // when
+      stream.end()
+      await waitForFinish
+
+      // then
+      // expect to reach this point
+    })
   })
 })

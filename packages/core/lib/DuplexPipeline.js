@@ -7,14 +7,19 @@ class DuplexPipeline extends Duplex {
       readableObjectMode: pipeline.readableObjectMode,
       writableObjectMode: pipeline.writableObjectMode,
       read: async (size) => {
-        await init(this)
-
-        pipeline.read(size)
+        if (await init(this)) {
+          pipeline.read(size)
+        }
       },
       write: async (chunk, encoding, callback) => {
-        await init(this)
-
-        pipeline.write(chunk, encoding, callback)
+        if (await init(this)) {
+          pipeline.write(chunk, encoding, callback)
+        }
+      },
+      final: async callback => {
+        if (await init(this)) {
+          pipeline.final(callback)
+        }
       },
       destroy: (err, callback) => {
         pipeline.destroy(err, callback)
