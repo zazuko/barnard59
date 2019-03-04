@@ -9,9 +9,11 @@ function createBaseStream (pipeline) {
 
   if (pipeline.readable && pipeline.writable) {
     return new DuplexPipeline(pipeline, init)
-  } else if (pipeline.readable) {
+  }
+  if (pipeline.readable) {
     return new ReadablePipeline(pipeline, init)
-  } else if (pipeline.writable) {
+  }
+  if (pipeline.writable) {
     return new WritablePipeline(pipeline, init)
   }
 

@@ -76,24 +76,18 @@ class Pipeline {
   }
 
   validateStreams () {
-    if (this.readable) {
-      if (!isReadable(this.lastStream)) {
-        this.error(new Error(`Pipeline <${this.node.term.value}> is defined as Readable, but last stream doesn't have a Readable interface`))
-      }
-    } else {
-      if (isReadable(this.lastStream)) {
-        this.error(new Error(`Pipeline <${this.node.term.value}> is not defined as Readable, but last stream has a Readable interface`))
-      }
+    if (this.readable && !isReadable(this.lastStream)) {
+      this.error(new Error(`Pipeline <${this.node.term.value}> is defined as Readable, but last stream doesn't have a Readable interface`))
+    }
+    if (!this.readable && isReadable(this.lastStream)) {
+      this.error(new Error(`Pipeline <${this.node.term.value}> is not defined as Readable, but last stream has a Readable interface`))
     }
 
-    if (this.writable) {
-      if (!isWritable(this.firstStream)) {
-        this.error(new Error(`Pipeline <${this.node.term.value}> is defined as Writable, but first stream doesn't have a Writable interface`))
-      }
-    } else {
-      if (isWritable(this.firstStream)) {
-        this.error(new Error(`Pipeline <${this.node.term.value}> is not defined as Writable, but first stream has a Writable interface`))
-      }
+    if (this.writable && !isWritable(this.firstStream)) {
+      this.error(new Error(`Pipeline <${this.node.term.value}> is defined as Writable, but first stream doesn't have a Writable interface`))
+    }
+    if (!this.writable && isWritable(this.firstStream)) {
+      this.error(new Error(`Pipeline <${this.node.term.value}> is not defined as Writable, but first stream has a Writable interface`))
     }
   }
 

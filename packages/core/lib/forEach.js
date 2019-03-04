@@ -56,9 +56,8 @@ class ForEach extends Transform {
       objectToReadable(chunk, pipeline._writableState.objectMode).pipe(pipeline)
 
       return eventToPromise(pipeline, 'close')
-    } else {
-      return run(pipeline)
     }
+    return run(pipeline)
   }
 
   static create (pipeline, handleChunk) {
