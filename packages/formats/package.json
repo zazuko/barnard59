@@ -4,7 +4,9 @@
   "description": "Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "test": "standard && mocha"
+    "lint": "eslint lib/**/*.js test/**/*.js",
+    "pretest": "npm run lint",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   "homepage": "https://github.com/zazuko/barnard59-formats",
   "dependencies": {
     "@rdfjs/parser-jsonld": "^1.1.1",
+    "@rdfjs/parser-n3": "^1.1.2",
     "@rdfjs/serializer-jsonld": "^1.2.0",
     "@rdfjs/serializer-ntriples": "^1.0.1",
     "@rdfjs/sink-to-duplex": "git+https://github.com/rdfjs/sink-to-duplex.git#master",
@@ -26,7 +29,25 @@
     "rdf-parser-csvw": "git://github.com/rdf-ext/rdf-parser-csvw.git#develop"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
-    "standard": "^12.0.1"
+    "@types/expect": "^1.20.4",
+    "@types/mocha": "^5.2.6",
+    "eslint": "^5.15.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "expect": "^23.6.0",
+    "jest": "^24.1.0",
+    "jest-extended": "^0.11.1",
+    "rdf-ext": "^1.2.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "lib/**"
+    ],
+    "setupFilesAfterEnv": ["jest-extended"]
   }
 }

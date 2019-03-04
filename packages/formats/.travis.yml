@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - "6"
   - "8"
   - "10"
 addons:
@@ -11,3 +10,8 @@ addons:
       - g++-4.9
 before_install:
   - export CXX="g++-4.9" CC="gcc-4.9"
+  - npm install -g codecov
+after_success:
+  - codecov
+after_failure:
+  - codecov
