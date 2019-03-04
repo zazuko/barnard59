@@ -26,7 +26,8 @@
     "@rdfjs/serializer-ntriples": "^1.0.1",
     "@rdfjs/sink-to-duplex": "git+https://github.com/rdfjs/sink-to-duplex.git#master",
     "barnard59-base": "git+https://github.com/zazuko/barnard59-base.git#master",
-    "rdf-parser-csvw": "git://github.com/rdf-ext/rdf-parser-csvw.git#develop"
+    "rdf-parser-csvw": "git://github.com/rdf-ext/rdf-parser-csvw.git#develop",
+    "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
     "@types/expect": "^1.20.4",
@@ -48,6 +49,8 @@
     "collectCoverageFrom": [
       "lib/**"
     ],
-    "setupFilesAfterEnv": ["jest-extended"]
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ]
   }
 }
