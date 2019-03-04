@@ -33,10 +33,6 @@ class ForEach extends Transform {
       log: this.log
     })
 
-    this.runPipeline(chunk, current)
-      .then(() => callback())
-      .catch(err => callback(err))
-
     current.on('data', chunk => this.push(chunk))
     current.on('error', cause => {
       const err = new Error(`error in forEach sub-pipeline ${this.child.node.value}`)
@@ -45,6 +41,10 @@ class ForEach extends Transform {
 
       callback(err)
     })
+
+    this.runPipeline(chunk, current)
+      .then(() => callback())
+      .catch(err => callback(err))
   }
 
   runPipeline (chunk, pipeline) {
