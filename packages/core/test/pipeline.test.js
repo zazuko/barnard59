@@ -28,6 +28,17 @@ describe('pipeline', () => {
         Pipeline(definition)
       })
     })
+
+    test('throws when the pipeline is not found', async () => {
+      // given
+      const definition = await load('multiple.ttl')
+
+      // then
+      assert.throws(() => {
+        // when
+        Pipeline(definition, ns.pipeline('no-such-pipeline'))
+      })
+    })
   })
 
   describe('variables', () => {
