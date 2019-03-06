@@ -74,5 +74,21 @@ describe('pipeline', () => {
       expect(pipeline.variables.get('username')).toBe('tpluscode')
       expect(pipeline.variables.get('auth')).toBe('http://auth0.com/connect/token')
     })
+
+    test('should prefer variable from constructor over that from definition', async () => {
+      // given
+      const definition = await load('variables.ttl')
+      const variables = new Map()
+      variables.set('foo', 'boar')
+      const iri = ns.pipeline('inline')
+
+      // when
+      const pipeline = Pipeline(definition, iri, { variables })
+      await pipeline._pipeline.initVariables()
+
+      // then
+      expect(pipeline.variables.size).toBe(1)
+      expect(pipeline.variables.get('foo')).toBe('boar')
+    })
   })
 })
