@@ -8,7 +8,13 @@ function pipelineNode (definition, iri) {
     throw new Error('expected a pipeline IRI')
   }
 
-  return clownface(definition, rdf.namedNode(iri.value || iri.toString()))
+  const node = clownface(definition, rdf.namedNode(iri.value || iri.toString()))
+
+  if (node.out().values.length === 0) {
+    throw new Error(`<${iri.value}> was not found in the pipeline definition`)
+  }
+
+  return node
 }
 
 function create (definition, iri, { basePath, context, variables, additionalLoaders = [] } = {}) {
