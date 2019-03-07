@@ -24,7 +24,7 @@
   ];
   code:arguments ([
     a ex:PromisedUrl ;
-    ex:url "http://worldclockapi.com/api/json/cet/now"
+    ex:url "http://worldtimeapi.org/api/timezone/CET"
   ]).
 
 <jsonldStructure> a p:Step ;
@@ -32,7 +32,7 @@
     code:link <node:barnard59-base#map> ;
     a ex:DeferredEcmaScript
   ];
-  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': 'http://worldclockapi.com/api/json/cet/now', date: json.currentDateTime } }"^^code:EcmaScript) .
+  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': 'http://worldclockapi.com/api/json/cet/now', date: json.datetime } }"^^code:EcmaScript) .
 
 <serialize> a p:Step ;
   code:implementedBy [

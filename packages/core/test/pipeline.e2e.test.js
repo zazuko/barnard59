@@ -17,7 +17,7 @@ describe('Pipeline', () => {
     // then
     const outJson = JSON.parse(out)
     expect(outJson).toContainKey('date')
-    expect(outJson).toContainValue('http://worldclockapi.com/api/json/cet/now')
+    expect(outJson).toContainValue('http://worldtimeapi.org/api/timezone/CET')
   })
 
   test('can load code using file: scheme', async () => {
@@ -31,7 +31,7 @@ describe('Pipeline', () => {
     // then
     const outJson = JSON.parse(out)
     expect(outJson).toContainKey('date')
-    expect(outJson).toContainValue('http://worldclockapi.com/api/json/cet/now')
+    expect(outJson).toContainValue('http://worldtimeapi.org/api/timezone/CET')
   })
 
   test('can load code using async loaders', async () => {

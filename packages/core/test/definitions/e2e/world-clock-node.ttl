@@ -7,7 +7,7 @@
   [
     a p:Variable;
     p:name "url" ;
-    p:value "http://worldclockapi.com/api/json/cet/now"
+    p:value "http://worldtimeapi.org/api/timezone/CET"
   ], [
     a p:Variable;
     p:name "context" ;
@@ -32,7 +32,7 @@
     code:link <node:barnard59-base#map> ;
     a code:EcmaScript
   ];
-  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:EcmaScript) .
+  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"^^code:EcmaScript) .
 
 <serialize> a p:Step ;
   code:implementedBy [
