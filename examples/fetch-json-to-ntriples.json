@@ -26,7 +26,7 @@
       "variable": [{
         "@type": "Variable",
         "name": "url",
-        "value": "http://worldclockapi.com/api/json/utc/now"
+        "value": "http://worldtimeapi.org/api/timezone/UTC"
       }, {
         "@id": "dateContext"
       }]
@@ -39,7 +39,7 @@
       "variable": [{
         "@type": "Variable",
         "name": "url",
-        "value": "http://worldclockapi.com/api/json/cet/now"
+        "value": "http://worldtimeapi.org/api/timezone/CET"
       }, {
         "@id": "dateContext"
       }]
@@ -69,7 +69,7 @@
         "@type": "code:EcmaScript"
       },
       "code:arguments": [{
-        "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }",
+        "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }",
         "@type": "code:EcmaScript"
       }]
     }, {
