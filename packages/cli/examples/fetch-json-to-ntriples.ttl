@@ -8,18 +8,18 @@
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "http://worldclockapi.com/api/json/utc/now" ;
+      p:value "http://worldtimeapi.org/api/timezone/UTC" ;
     ] ,
     <dateContext>
   ] ;
   p:steps <steps> .
 
-<cet> a p:Pipeline ;
+<cet> a p:Pipeline, p:Readable ;
   p:variables [
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "http://worldclockapi.com/api/json/cet/now" ;
+      p:value "http://worldtimeapi.org/api/timezone/CET" ;
     ] ,
     <dateContext>
   ] ;
@@ -45,7 +45,7 @@
     code:link <file:../node_modules/barnard59-base#map> ;
     a code:EcmaScript
   ];
-  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.currentDateTime } }"^^code:EcmaScript) .
+  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"^^code:EcmaScript) .
 
 <parse> a p:Step ;
   code:implementedBy [
