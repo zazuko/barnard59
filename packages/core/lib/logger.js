@@ -19,7 +19,7 @@ class Logger extends Transform {
       stack: [this.node],
       level: level.toUpperCase(),
       name,
-      details: details,
+      details,
       message
     })
   }

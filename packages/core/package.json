@@ -4,7 +4,9 @@
   "description": "Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "test": "standard && jest"
+    "lint": "eslint --ext .js .",
+    "pretest": "npm run lint",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -31,9 +33,12 @@
     "@types/expect": "^1.20.3",
     "barnard59-base": "git+https://github.com/zazuko/barnard59-base.git#master",
     "barnard59-formats": "git+https://github.com/zazuko/barnard59-formats.git#master",
+    "eslint": "^5.15.1",
+    "eslint-plugin-jest": "^22.3.0",
     "expect": "^23.6.0",
     "jest": "^23.6.0",
     "jest-extended": "^0.11.0",
+    "jest-fetch-mock": "^2.1.1",
     "rdf-ext": "^1.1.2",
     "standard": "^12.0.1"
   },
