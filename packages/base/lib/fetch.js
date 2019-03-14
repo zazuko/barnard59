@@ -1,8 +1,14 @@
 const nodifyFetch = require('nodeify-fetch')
 const objectToReadable = require('./toReadable').object
 
-function fetch (url, options) {
-  return nodifyFetch(url, options).then(res => res.body)
+async function fetch (url, options = {}) {
+  const response = await nodifyFetch(url, options)
+
+  // patch the writable interface away
+  response.body._write = null
+  response.body._writableState = null
+
+  return response.body
 }
 
 fetch.json = (url, options = {}) => {
