@@ -8,15 +8,15 @@ class DuplexToReadable extends Readable {
   constructor (stream, options) {
     super(options)
 
-    this.pipe = new ReadableToReadable(stream, this)
+    this._pipe = new ReadableToReadable(stream, this)
   }
 
   async _read (size) {
-    this.pipe.read(size)
+    this._pipe.read(size)
   }
 
   _destroy (err, callback) {
-    this.pipe.destroy()
+    this._pipe.destroy()
 
     callback(err)
   }
