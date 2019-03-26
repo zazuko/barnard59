@@ -1,8 +1,11 @@
 const nodifyFetch = require('nodeify-fetch')
 const objectToReadable = require('./toReadable').object
+const DuplexToReadable = require('./DuplexToReadable')
 
-function fetch (url, options) {
-  return nodifyFetch(url, options).then(res => res.body)
+async function fetch (url, options = {}) {
+  const response = await nodifyFetch(url, options)
+
+  return new DuplexToReadable(response.body)
 }
 
 fetch.json = (url, options = {}) => {
