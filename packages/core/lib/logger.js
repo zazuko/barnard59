@@ -12,6 +12,12 @@ class Logger extends Transform {
     if (master) {
       this.pipe(master, { end: false })
     }
+
+    levels.forEach((lvl) => {
+      this[lvl] = (message, details) => {
+        this.writeLog(lvl, message, details)
+      }
+    })
   }
 
   writeLog (level, message, { name, ...details } = {}) {
@@ -30,11 +36,5 @@ class Logger extends Transform {
     next()
   }
 }
-
-levels.forEach((lvl) => {
-  Logger.prototype[lvl] = function (message, details) {
-    this.writeLog(lvl, message, details)
-  }
-})
 
 module.exports = Logger
