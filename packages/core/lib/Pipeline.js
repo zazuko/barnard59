@@ -139,6 +139,24 @@ class Pipeline {
     })
   }
 
+  async parseArguments (args) {
+    // is it a list?
+    if (args.out(ns.rdf.first).terms.length === 1) {
+      return Promise.all([...args.list()].map(arg => this.parseArgument(arg)))
+    }
+
+    // merge all key value pairs into an object
+    const argObject = await args.toArray().reduce(async (p, argNode) => {
+      const argsResolved = await p
+
+      argsResolved[argNode.out(ns.p.name).value] = await this.parseArgument(argNode.out(ns.p.value))
+
+      return argsResolved
+    }, Promise.resolve({}))
+
+    return [argObject]
+  }
+
   async parseArgument (arg) {
     const code = await this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
 
@@ -168,10 +186,8 @@ class Pipeline {
 
     log.info('step init', { name: 'beforeStepInit' })
     const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
-    const args = step.out(ns.code('arguments'))
-    const argsArray = (args.term ? [...args.list()] : []).map(arg => this.parseArgument(arg))
-    const argsResolved = await Promise.all(argsArray)
-    const stream = await operation.apply({ ...this.context, log }, argsResolved)
+    const args = await this.parseArguments(step.out(ns.code('arguments')))
+    const stream = await operation.apply({ ...this.context, log }, args)
 
     if (!stream || !isStream(stream)) {
       throw new Error(`${step.value} didn't return a stream`)

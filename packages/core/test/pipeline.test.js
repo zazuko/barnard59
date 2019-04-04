@@ -1,8 +1,10 @@
 const assert = require('assert')
 const expect = require('expect')
+const path = require('path')
 const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
 const ns = require('./support/namespaces')
+const streamToArray = require('./support/streamToArray')
 
 describe('pipeline', () => {
   describe('constructor', () => {
@@ -99,6 +101,36 @@ describe('pipeline', () => {
       // then
       expect(pipeline.variables.size).toBe(1)
       expect(pipeline.variables.get('foo')).toBe('boar')
+    })
+  })
+
+  describe('steps', () => {
+    describe('arguments', () => {
+      test('should accept arguments as rdf:List', async () => {
+        // given
+        const definition = await load('arguments.ttl')
+        const iri = ns.pipeline('list')
+
+        // when
+        const pipeline = Pipeline(definition, iri, { basePath: path.resolve('test') })
+        const content = await streamToArray(pipeline)
+
+        // then
+        expect(content).toEqual(['a', 'b'])
+      })
+
+      test('should accept arguments as key value pairs', async () => {
+        // given
+        const definition = await load('arguments.ttl')
+        const iri = ns.pipeline('key-values')
+
+        // when
+        const pipeline = Pipeline(definition, iri, { basePath: path.resolve('test') })
+        const content = await streamToArray(pipeline)
+
+        // then
+        expect(content).toEqual([{ a: '1', b: '2' }])
+      })
     })
   })
 })
