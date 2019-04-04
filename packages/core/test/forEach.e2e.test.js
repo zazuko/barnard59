@@ -1,4 +1,3 @@
-/* global describe, test */
 const expect = require('expect')
 const path = require('path')
 const Pipeline = require('../lib/pipelineFactory')

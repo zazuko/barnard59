@@ -1,4 +1,3 @@
-/* global describe, test */
 const clownface = require('clownface')
 const createLoaderRegistry = require('../lib/createLoaderRegistry')
 const createPipelineStream = require('../lib/createPipelineStream')

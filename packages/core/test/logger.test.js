@@ -1,4 +1,3 @@
-/* global describe, test */
 const clownface = require('clownface')
 const expect = require('expect')
 const rdf = require('rdf-ext')

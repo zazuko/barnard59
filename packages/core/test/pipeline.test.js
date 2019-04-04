@@ -1,4 +1,3 @@
-/* global describe, test */
 const assert = require('assert')
 const expect = require('expect')
 const Pipeline = require('../lib/pipelineFactory')

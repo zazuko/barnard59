@@ -1,4 +1,3 @@
-/* global describe, test */
 const createBaseStream = require('../lib/createBaseStream')
 const createDummyPipeline = require('./support/createDummyPipeline')
 const eventToPromise = require('../lib/eventToPromise')
