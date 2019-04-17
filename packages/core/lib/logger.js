@@ -21,18 +21,22 @@ class Logger extends Transform {
   }
 
   writeLog (level, message, { name, ...details } = {}) {
-    this.push({
-      stack: [this.node],
-      level: level.toUpperCase(),
-      name,
-      details,
-      message
-    })
+    if (this.readableFlowing) {
+      this.push({
+        stack: [this.node],
+        level: level.toUpperCase(),
+        name,
+        details,
+        message
+      })
+    }
   }
 
   _transform (chunk, encoding, next) {
     chunk.stack.push(this.node)
-    this.push(chunk)
+    if (this.readableFlowing) {
+      this.push(chunk)
+    }
     next()
   }
 }
