@@ -145,14 +145,17 @@ class Pipeline {
       return Promise.all([...args.list()].map(arg => this.parseArgument(arg)))
     }
 
+    // or an object?
+    const argNodes = args.toArray()
+    const promises = argNodes.map((argNode) => this.parseArgument(argNode.out(ns.p.value)))
+    const values = await Promise.all(promises)
+
     // merge all key value pairs into an object
-    const argObject = await args.toArray().reduce(async (p, argNode) => {
-      const argsResolved = await p
+    const argObject = argNodes.reduce((acc, argNode, idx) => {
+      acc[argNode.out(ns.p.name).value] = values[idx]
 
-      argsResolved[argNode.out(ns.p.name).value] = await this.parseArgument(argNode.out(ns.p.value))
-
-      return argsResolved
-    }, Promise.resolve({}))
+      return acc
+    }, {})
 
     return [argObject]
   }
