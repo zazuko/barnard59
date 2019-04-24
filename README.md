@@ -5,7 +5,7 @@
 ## Concept
 
 A barnard59 pipeline consists of one or more steps where each step returns a [Stream](https://nodejs.org/api/stream.html).
-The streams of all steps are combined via [.pipe](https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options).
+The streams of all steps are combined via [`.pipe`](https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options).
 The pipeline itself is also a stream.
 Depending on the stream types of the first and last stream, the pipeline can be writable or readable.
 If the pipeline is self-contained, a dummy readable interface is provided to handle events for end of processing and errors.
