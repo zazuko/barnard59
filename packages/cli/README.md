@@ -90,7 +90,9 @@ It's also possible to give the arguments as key value pairs like this:
   ] .
 ```
 
-The function in `customStreamCode.js` will be called with the following object:
+`customStreamCode.js` should export a function which returns a stream.
+During the initialization of the pipeline the function is called with the arguments built based on `code:arguments`.
+The built argument for this example would look like this: 
 
 ```js
 {
