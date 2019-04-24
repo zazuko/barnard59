@@ -43,7 +43,7 @@ To simplify handling of pipeline definitions without runtime data, the stream ty
 ### Step
 
 A pipeline consists of one or more steps, which are actually factories which return streams.
-Each step is linked with the previous one via [.pipe](https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options).
+Each step is linked with the previous one via [`.pipe`](https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options).
 As this requires to process the steps in order, the steps must be provided as an RDF List.
 This example shows a very simple pipeline which consists of two steps: 
 
