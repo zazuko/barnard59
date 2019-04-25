@@ -1,0 +1,31 @@
+{
+  "name": "barnard59-http",
+  "version": "0.0.0",
+  "description": "HTTP protocol support for Linked Data pipelines",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59-http.git"
+  },
+  "keywords": [],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59-http/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59-http",
+  "dependencies": {
+    "duplexify": "^4.0.0",
+    "express-as-promise": "0.0.1",
+    "node-fetch": "^2.3.0",
+    "readable-stream": "^3.3.0",
+    "readable-to-readable": "0.0.1"
+  },
+  "devDependencies": {
+    "isstream": "^0.1.2",
+    "jest": "^24.6.0"
+  }
+}

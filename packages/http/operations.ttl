@@ -1,0 +1,19 @@
+@base <http://barnard59.zazuko.com/operations/http/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<get> a p:Operation, p:Readable;
+  rdfs:label "HTTP GET request";
+  rdfs:comment "Makes a HTTP GET request and returns the body of the response as stream.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-http#get>
+  ].
+
+<post> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "HTTP POST request";
+  rdfs:comment "Makes a HTTP POST request, sends the written data as request body and returns the body of the response as stream.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-http#post>
+  ].
