@@ -1,0 +1,18 @@
+@base <http://barnard59.zazuko.com/operations/core/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<fs/createReadStream> a p:Operation, p:Readable;
+  rdfs:label "Read file";
+  rdfs:comment "Reads a file from the local file system.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:fs#createReadStream>
+  ].
+
+<fs/createWriteStream> a p:Operation, p:Writable;
+  rdfs:label "Write file";
+  rdfs:comment "Writes a file to the local file system.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:fs#createWriteStream>
+  ].
