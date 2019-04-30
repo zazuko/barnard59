@@ -3,6 +3,7 @@ const { isReadable, isWritable } = require('isstream')
 const ns = require('./namespaces')
 const { finished } = require('readable-stream')
 const Logger = require('./logger')
+const parseArguments = require('rdf-native-loader-code/arguments')
 
 function nextLoop () {
   return new Promise(resolve => setTimeout(resolve, 0))
@@ -140,42 +141,20 @@ class Pipeline {
   }
 
   async parseArguments (args) {
-    // is it a list?
-    if (args.out(ns.rdf.first).terms.length === 1) {
-      return Promise.all([...args.list()].map(arg => this.parseArgument(arg)))
-    }
-
-    // or an object?
-    const argNodes = args.toArray()
-    const promises = argNodes.map((argNode) => this.parseArgument(argNode.out(ns.p.value)))
-    const values = await Promise.all(promises)
-
-    // merge all key value pairs into an object
-    const argObject = argNodes.reduce((acc, argNode, idx) => {
-      acc[argNode.out(ns.p.name).value] = values[idx]
-
-      return acc
-    }, {})
-
-    return [argObject]
-  }
-
-  async parseArgument (arg) {
-    const code = await this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
-
-    if (code) {
-      return code
-    }
-
-    if (arg.term.termType === 'Literal') {
-      return arg.value
-    }
-
-    return arg
+    return parseArguments(args, this.node.dataset, {
+      loaderRegistry: this.loaderRegistry,
+      variables: this.variables,
+      basePath: this.basePath,
+      context: this.context
+    })
   }
 
   async parseOperation (operation) {
-    let result = await this.loaderRegistry.load(operation, this.context, this.variables, this.basePath)
+    let result = await this.loaderRegistry.load(operation, {
+      context: this.context,
+      variables: this.variables,
+      basePath: this.basePath
+    })
 
     if (!result) {
       throw new Error(`Failed to load operation ${operation.value}`)
@@ -217,7 +196,11 @@ class Pipeline {
 
     return variableNodes.toArray().reduce(async (p, variableNode) => {
       const variables = await p
-      const variable = await this.loaderRegistry.load(variableNode, this.context, new Map())
+      const variable = await this.loaderRegistry.load(variableNode, {
+        context: this.context,
+        variables: new Map()
+      })
+
       if (!variable) {
         throw new Error(`Failed to load variable ${variableNode}`)
       }
