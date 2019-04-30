@@ -161,7 +161,11 @@ class Pipeline {
   }
 
   async parseArgument (arg) {
-    const code = await this.loaderRegistry.load(arg, this.context, this.variables, this.basePath)
+    const code = await this.loaderRegistry.load(arg, {
+      context: this.context,
+      variables: this.variables,
+      basePath: this.basePath
+    })
 
     if (code) {
       return code
@@ -175,7 +179,11 @@ class Pipeline {
   }
 
   async parseOperation (operation) {
-    let result = await this.loaderRegistry.load(operation, this.context, this.variables, this.basePath)
+    let result = await this.loaderRegistry.load(operation, {
+      context: this.context,
+      variables: this.variables,
+      basePath: this.basePath
+    })
 
     if (!result) {
       throw new Error(`Failed to load operation ${operation.value}`)
@@ -217,7 +225,11 @@ class Pipeline {
 
     return variableNodes.toArray().reduce(async (p, variableNode) => {
       const variables = await p
-      const variable = await this.loaderRegistry.load(variableNode, this.context, new Map())
+      const variable = await this.loaderRegistry.load(variableNode, {
+        context: this.context,
+        variables: new Map()
+      })
+
       if (!variable) {
         throw new Error(`Failed to load variable ${variableNode}`)
       }
