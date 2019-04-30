@@ -19,11 +19,11 @@
         code:link <file:support/operations/args-to-stream>
       ];
       code:arguments [
-        p:name "a";
-        p:value "1"
+        code:name "a";
+        code:value "1"
       ], [
-        p:name "b";
-        p:value "2"
+        code:name "b";
+        code:value "2"
       ]
     ])
   ].

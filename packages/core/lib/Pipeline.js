@@ -3,6 +3,7 @@ const { isReadable, isWritable } = require('isstream')
 const ns = require('./namespaces')
 const { finished } = require('readable-stream')
 const Logger = require('./logger')
+const parseArguments = require('rdf-native-loader-code/arguments')
 
 function nextLoop () {
   return new Promise(resolve => setTimeout(resolve, 0))
@@ -140,42 +141,12 @@ class Pipeline {
   }
 
   async parseArguments (args) {
-    // is it a list?
-    if (args.out(ns.rdf.first).terms.length === 1) {
-      return Promise.all([...args.list()].map(arg => this.parseArgument(arg)))
-    }
-
-    // or an object?
-    const argNodes = args.toArray()
-    const promises = argNodes.map((argNode) => this.parseArgument(argNode.out(ns.p.value)))
-    const values = await Promise.all(promises)
-
-    // merge all key value pairs into an object
-    const argObject = argNodes.reduce((acc, argNode, idx) => {
-      acc[argNode.out(ns.p.name).value] = values[idx]
-
-      return acc
-    }, {})
-
-    return [argObject]
-  }
-
-  async parseArgument (arg) {
-    const code = await this.loaderRegistry.load(arg, {
-      context: this.context,
+    return parseArguments(args, this.node.dataset, {
+      loaderRegistry: this.loaderRegistry,
       variables: this.variables,
-      basePath: this.basePath
+      basePath: this.basePath,
+      context: this.context
     })
-
-    if (code) {
-      return code
-    }
-
-    if (arg.term.termType === 'Literal') {
-      return arg.value
-    }
-
-    return arg
   }
 
   async parseOperation (operation) {
