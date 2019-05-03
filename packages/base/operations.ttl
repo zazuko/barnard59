@@ -1,0 +1,60 @@
+@base <http://barnard59.zazuko.com/operations/base/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<filter> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Filter";
+  rdfs:comment "Forwards incoming chunks if they pass the filter function.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#filter>
+  ].
+
+<flatten> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Flatten";
+  rdfs:comment "Separates incoming arrays into their elements and emits each element as a single chunk.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#flatten>
+  ].
+
+<json/parse> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Parse JSON";
+  rdfs:comment "Converts each chunk to an object by calling JSON.parse().";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#json.parse>
+  ].
+
+<json/stringify> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Serialize JSON";
+  rdfs:comment "Converts each chunk to a JSON string by calling JSON.stringify().";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#json.parse>
+  ].
+
+<map> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Map";
+  rdfs:comment "Converts each chunk using the given function.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#map>
+  ].
+
+<nul> a p:Operation, p:Writable;
+  rdfs:label "/dev/null";
+  rdfs:comment "Dummy output stream, just like /dev/null.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#nul>
+  ].
+
+<stdout> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "stdout";
+  rdfs:comment "Writes the incoming data to stdout and also forwards the data to the stream output.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#stdout>
+  ].
+
+<toString> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "To String";
+  rdfs:comment "Converts each chunk to a string by calling .toString().";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#toString>
+  ].
