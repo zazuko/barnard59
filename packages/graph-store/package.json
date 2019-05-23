@@ -1,0 +1,34 @@
+{
+  "name": "barnard59-graph-store",
+  "version": "0.0.0",
+  "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59-graph-store.git"
+  },
+  "keywords": [],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59-graph-store/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59-graph-store",
+  "dependencies": {
+    "@rdfjs/data-model": "^1.1.1",
+    "@rdfjs/to-ntriples": "^1.0.1",
+    "lodash": "^4.17.11",
+    "node-fetch": "^2.6.0",
+    "readable-stream": "^3.3.0"
+  },
+  "devDependencies": {
+    "@rdfjs/namespace": "^1.0.0",
+    "express-as-promise": "0.0.1",
+    "isstream": "^0.1.2",
+    "jest": "^24.8.0",
+    "standard": "^12.0.1"
+  }
+}
