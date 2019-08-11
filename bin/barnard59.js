@@ -22,14 +22,14 @@ function createOutputStream (output) {
   return fs.createWriteStream(output)
 }
 
-function parseVariables (str) {
+function parseVariables (str, all) {
   return str
     .split(',')
     .reduce((vars, nameValue) => {
       const [name, value] = nameValue.split('=')
 
       return vars.set(name, value)
-    }, new Map())
+    }, all)
 }
 
 function guessPipeline (dataset) {
@@ -63,7 +63,7 @@ program
   .option('--format <mediaType>', 'media type of the pipeline description', 'application/ld+json')
   .option('--output [filename]', 'output file', '-')
   .option('--pipeline [iri]', 'IRI of the pipeline description')
-  .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables)
+  .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables, new Map())
   .option('-v, --verbose', 'enable diagnostic console output')
   .action((filename, { format, output, pipeline, variable, verbose } = {}) => {
     p.fileToDataset(format, filename)
@@ -72,10 +72,26 @@ program
           pipeline = guessPipeline(dataset)
         }
 
+        if (verbose) {
+          process.stdout.write('variables via CLI:\n')
+
+          for (const [key, value] of variable) {
+            process.stdout.write(`  ${key}: ${value}\n`)
+          }
+        }
+
         const stream = p.pipeline(dataset, pipeline, {
           basePath: path.resolve(path.dirname(filename)),
           variables: variable
         })
+
+        if (verbose) {
+          process.stdout.write('variables in pipeline instance:\n')
+
+          for (const [key, value] of stream.variables) {
+            process.stdout.write(`  ${key}: ${value}\n`)
+          }
+        }
 
         stream.on('error', err => console.error(err))
 
