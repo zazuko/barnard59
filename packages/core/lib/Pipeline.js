@@ -3,7 +3,7 @@ const { isReadable, isWritable } = require('isstream')
 const ns = require('./namespaces')
 const { finished } = require('readable-stream')
 const Logger = require('./logger')
-const parseArguments = require('rdf-native-loader-code/arguments')
+const parseArguments = require('rdf-loader-code/arguments')
 
 function nextLoop () {
   return new Promise(resolve => setTimeout(resolve, 0))
