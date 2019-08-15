@@ -1,7 +1,7 @@
 const expect = require('expect')
 const fs = require('fs')
 const path = require('path')
-const createParser = require('../lib/rdf-xml').parse
+const createParser = require('../rdf-xml').parse
 const { readDataset } = require('./helpers')
 
 describe('rdf/xml', () => {
