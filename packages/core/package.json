@@ -24,7 +24,7 @@
     "clownface": "^0.11.0",
     "isstream": "^0.1.2",
     "lodash": "^4.17.11",
-    "rdf-loader-code": "^0.1.0",
+    "rdf-loader-code": "^0.2.0",
     "rdf-loaders-registry": "^0.1.0",
     "readable-stream": "^3.0.6"
   },
@@ -33,7 +33,6 @@
     "@types/expect": "^1.20.3",
     "@types/sinon": "^7.0.11",
     "barnard59-base": "0.0.1",
-    "barnard59-formats": "0.0.2",
     "eslint": "^5.15.1",
     "eslint-plugin-jest": "^22.3.0",
     "expect": "^23.6.0",
