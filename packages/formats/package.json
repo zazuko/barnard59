@@ -4,7 +4,7 @@
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint lib/**/*.js test/**/*.js",
+    "lint": "eslint **/*.js",
     "pretest": "npm run lint",
     "test": "jest"
   },
