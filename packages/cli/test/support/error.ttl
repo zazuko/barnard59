@@ -1,0 +1,15 @@
+@base <http://example.org/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<pipeline> a p:Pipeline, p:Readable;
+  p:steps [
+    p:stepList (<error>)
+  ].
+
+<error> a p:Step;
+  code:implementedBy [
+    code:link <file:error.js>;
+    a code:EcmaScript
+  ].
