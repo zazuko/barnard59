@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - "6"
   - "8"
   - "10"
 addons:
@@ -11,7 +10,3 @@ addons:
       - g++-4.9
 before_install:
   - export CXX="g++-4.9" CC="gcc-4.9"
-script:
-  - node bin/barnard59.js run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet
-  - node bin/barnard59.js run examples/fetch-json-to-ntriples.ttl --format text/turtle --pipeline http://example.org/pipeline/utc
-  - node bin/barnard59.js run examples/parse-csvw.ttl --format=text/turtle --pipeline=http://example.org/pipeline/parseCsvw

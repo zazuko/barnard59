@@ -93,7 +93,10 @@ program
           }
         }
 
-        stream.on('error', err => console.error(err))
+        stream.on('error', err => {
+          console.error(err)
+          process.exit(1)
+        })
 
         stream.pipe(createOutputStream(output))
 
@@ -102,7 +105,10 @@ program
         }
 
         return p.run(stream)
-      }).catch(err => console.error(err))
+      }).catch(err => {
+        console.error(err)
+        process.exit(1)
+      })
   })
 
 program.parse(process.argv)
