@@ -1,7 +1,9 @@
 const FtpClient = require('./FtpClient')
+const SftpClient = require('./SftpClient')
 
 async function command (options, callback, keepAlive = false) {
-  const client = new FtpClient(options)
+  const ClientClass = getClientClass(options.protocol)
+  const client = new ClientClass(options)
   await client.connect()
 
   try {
@@ -15,6 +17,14 @@ async function command (options, callback, keepAlive = false) {
   } catch (err) {
     await client.disconnect()
     throw err
+  }
+}
+
+function getClientClass (protocol = 'ftp') {
+  switch (protocol) {
+    case 'ftp': return FtpClient
+    case 'sftp': return SftpClient
+    default: throw Error(`Invalid protocol ${protocol}`)
   }
 }
 
