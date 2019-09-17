@@ -21,15 +21,13 @@
     "@rdfjs/namespace": "^1.0.0",
     "barnard59-base": "0.0.1",
     "barnard59-core": "0.0.3",
-    "barnard59-formats": "0.0.3",
-    "barnard59-protocols": "0.0.1",
-    "barnard59-shell": "0.0.1",
     "clownface": "^0.11.0",
     "commander": "^2.19.0",
     "rdf-ext": "^1.1.2",
     "readable-stream": "^3.1.1"
   },
   "devDependencies": {
+    "barnard59-formats": "0.0.4",
     "jest": "^24.9.0",
     "shelljs": "^0.8.3",
     "standard": "^12.0.1"
