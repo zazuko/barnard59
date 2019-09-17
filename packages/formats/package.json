@@ -26,7 +26,7 @@
     "@rdfjs/serializer-ntriples": "^1.0.1",
     "@rdfjs/sink-to-duplex": "^1.0.0",
     "barnard59-base": "0.0.1",
-    "rdf-parser-csvw": "^0.11.0",
+    "rdf-parser-csvw": "^0.12.0",
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
