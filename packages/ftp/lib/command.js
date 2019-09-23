@@ -13,7 +13,8 @@ async function command (options, callback, keepAlive = false) {
 
     return result
   } catch (err) {
-    return client.disconnect()
+    await client.disconnect()
+    throw err
   }
 }
 
