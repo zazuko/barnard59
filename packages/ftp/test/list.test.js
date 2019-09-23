@@ -5,19 +5,30 @@ const FtpServer = require('./support/FtpServer')
 const SftpServer = require('./support/SftpServer')
 const { withServer } = require('./support/server')
 const getStream = require('get-stream')
-const each = require('jest-each').default
 
 describe('list', () => {
   it('is a function', () => {
     expect(typeof list).toBe('function')
   })
 
-  each([
-    [() => new FtpServer()],
-    [() => new FtpServer({ user: 'test', password: '1234' })],
-    [() => new SftpServer()],
-    [() => new SftpServer({ user: 'test', password: '1234' })]
-  ]).it('lists files from the given directory', async (serverFactory) => {
+  it.each([
+    [
+      'on a FTP server with anonymous user',
+      () => new FtpServer()
+    ],
+    [
+      'on a FTP server with username/password',
+      () => new FtpServer({ user: 'test', password: '1234' })
+    ],
+    [
+      'on a SFTP server with anonymous user',
+      () => new SftpServer()
+    ],
+    [
+      'on a SFTP server with username/password',
+      () => new SftpServer({ user: 'test', password: '1234' })
+    ]
+  ])('lists files from the given directory %s', async (label, serverFactory) => {
     await withServer(serverFactory, async (server) => {
       const stream = await list({ pathname: 'data', ...server.options })
       const filenames = await getStream.array(stream)

@@ -8,19 +8,30 @@ const { withServer } = require('./support/server')
 const getStream = require('get-stream')
 const { resolve } = require('path')
 const { Readable } = require('readable-stream')
-const each = require('jest-each').default
 
 describe('move', () => {
   it('is a function', () => {
     expect(typeof move).toBe('function')
   })
 
-  each([
-    [() => new FtpServer()],
-    [() => new FtpServer({ user: 'test', password: '1234' })],
-    [() => new SftpServer()],
-    [() => new SftpServer({ user: 'test', password: '1234' })]
-  ]).it('moves a file from the given place to another place', async (serverFactory) => {
+  it.each([
+    [
+      'on a FTP server with anonymous user',
+      () => new FtpServer()
+    ],
+    [
+      'on a FTP server with username/password',
+      () => new FtpServer({ user: 'test', password: '1234' })
+    ],
+    [
+      'on a SFTP server with anonymous user',
+      () => new SftpServer()
+    ],
+    [
+      'on a SFTP server with username/password',
+      () => new SftpServer({ user: 'test', password: '1234' })
+    ]
+  ])('moves a file from the given place to another place %s', async (label, serverFactory) => {
     await withServer(serverFactory, async (server) => {
       const root = resolve(__dirname, 'support/tmp/move')
       const original = resolve(__dirname, 'support/data/xyz.txt')
