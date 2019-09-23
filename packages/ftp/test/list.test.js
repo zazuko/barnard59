@@ -38,13 +38,10 @@ describe('list', () => {
   })
 
   it('throws proper error when file does not exist', async () => {
-    const server = new FtpServer()
-    await server.start()
-
-    await expect(list({ pathname: 'does-not-exist', ...server.options }))
-      .rejects
-      .toThrow('no such file or directory')
-
-    await server.stop()
+    await withServer(() => new FtpServer(), async (server) => {
+      await expect(list({ pathname: 'does-not-exist', ...server.options }))
+        .rejects
+        .toThrow('no such file or directory')
+    })
   })
 })
