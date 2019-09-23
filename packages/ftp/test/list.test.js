@@ -32,4 +32,15 @@ describe('list', () => {
 
     expect(filenames).toEqual(['data/abc.txt', 'data/xyz.txt'])
   })
+
+  it('throws proper error when file does not exist', async () => {
+    const server = new FtpServer()
+    await server.start()
+
+    await expect(list({ pathname: 'does-not-exist', ...server.options }))
+      .rejects
+      .toThrow('no such file or directory')
+
+    await server.stop()
+  })
 })
