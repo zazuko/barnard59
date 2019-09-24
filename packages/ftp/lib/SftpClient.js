@@ -1,5 +1,6 @@
 const SFTP = require('sftp-promises')
 const FileParser = require('ftp/lib/parser')
+const { PassThrough } = require('stream')
 
 class SftpClient {
   constructor ({ host, port = 21, user, password }) {
@@ -39,7 +40,10 @@ class SftpClient {
   }
 
   async read (path) {
-    return this.client.createReadStream(path, this.session)
+    // Using `getStream` because `createReadStream` causes issues on Linux
+    const stream = new PassThrough()
+    await this.client.getStream(path, stream, this.session)
+    return stream
   }
 
   async write (path) {
