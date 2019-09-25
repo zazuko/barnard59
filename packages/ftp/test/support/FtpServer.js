@@ -18,6 +18,7 @@ class FtpServer {
 
   get options () {
     return {
+      protocol: 'ftp',
       host: 'localhost',
       port: this.port,
       user: this.user || 'anonymous',

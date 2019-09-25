@@ -3,6 +3,8 @@
 const move = require('../move')
 const fs = require('./support/fs')
 const FtpServer = require('./support/FtpServer')
+const SftpServer = require('./support/SftpServer')
+const { withServer } = require('./support/server')
 const getStream = require('get-stream')
 const { resolve } = require('path')
 const { Readable } = require('readable-stream')
@@ -12,51 +14,43 @@ describe('move', () => {
     expect(typeof move).toBe('function')
   })
 
-  it('moves a file from the given place to another place with anonymous user', async () => {
-    const root = resolve(__dirname, 'support/tmp/move-anonymous')
-    const original = resolve(__dirname, 'support/data/xyz.txt')
-    const source = resolve(root, 'xyz.txt')
-    const target = resolve(root, 'xyz.moved')
-    await fs.rmdir(root)
-    await fs.mkdir(root, { recursive: true })
-    await fs.copyFile(original, source)
+  it.each([
+    [
+      'on a FTP server with anonymous user',
+      () => new FtpServer()
+    ],
+    [
+      'on a FTP server with username/password',
+      () => new FtpServer({ user: 'test', password: '1234' })
+    ],
+    [
+      'on a SFTP server with anonymous user',
+      () => new SftpServer()
+    ],
+    [
+      'on a SFTP server with username/password',
+      () => new SftpServer({ user: 'test', password: '1234' })
+    ]
+  ])('moves a file from the given place to another place %s', async (label, serverFactory) => {
+    await withServer(serverFactory, async (server) => {
+      const root = resolve(__dirname, 'support/tmp/move')
+      const original = resolve(__dirname, 'support/data/xyz.txt')
+      const source = resolve(root, 'xyz.txt')
+      const target = resolve(root, 'xyz.moved')
+      await fs.rmdir(root)
+      await fs.mkdir(root, { recursive: true })
+      await fs.copyFile(original, source)
 
-    const server = new FtpServer()
-    await server.start()
-    const input = new Readable({ read: () => input.push(null) })
+      const input = new Readable({ read: () => input.push(null) })
 
-    const stream = await move({ source: 'tmp/move-anonymous/xyz.txt', target: 'tmp/move-anonymous/xyz.moved', ...server.options })
-    input.pipe(stream)
-    await getStream(stream)
-    const content = await fs.readFile(target)
+      const stream = await move({ source: 'tmp/move/xyz.txt', target: 'tmp/move/xyz.moved', ...server.options })
+      input.pipe(stream)
+      await getStream(stream)
+      const content = await fs.readFile(target)
 
-    await server.stop()
-    await fs.rmdir(root)
+      await fs.rmdir(root)
 
-    expect(content.toString()).toBe('987\n654')
-  })
-
-  it('moves a file from the given place to another place with user/password', async () => {
-    const root = resolve(__dirname, 'support/tmp/move-user')
-    const original = resolve(__dirname, 'support/data/xyz.txt')
-    const source = resolve(root, 'xyz.txt')
-    const target = resolve(root, 'xyz.moved')
-    await fs.rmdir(root)
-    await fs.mkdir(root, { recursive: true })
-    await fs.copyFile(original, source)
-
-    const server = new FtpServer({ user: 'test', password: '1234' })
-    await server.start()
-    const input = new Readable({ read: () => input.push(null) })
-
-    const stream = await move({ source: 'tmp/move-user/xyz.txt', target: 'tmp/move-user/xyz.moved', ...server.options })
-    input.pipe(stream)
-    await getStream(stream)
-    const content = await fs.readFile(target)
-
-    await server.stop()
-    await fs.rmdir(root)
-
-    expect(content.toString()).toBe('987\n654')
+      expect(content.toString()).toBe('987\n654')
+    })
   })
 })
