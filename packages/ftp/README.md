@@ -1,5 +1,7 @@
 # barnard59-ftp
 
+[![Build Status](https://travis-ci.org/zazuko/barnard59-ftp.svg?branch=master)](https://travis-ci.org/zazuko/barnard59-ftp)
+
 FTP support for Linked Data pipelines.
 
 ## Examples
