@@ -1,7 +1,7 @@
 {
   "name": "barnard59-http",
   "version": "0.0.0",
-  "description": "HTTP protocol support for Linked Data pipelines",
+  "description": "HTTP protocol support for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "scripts": {
     "test": "standard && jest"
