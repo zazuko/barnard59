@@ -9,14 +9,20 @@ const ExpressAsPromise = require('express-as-promise')
 describe('post', () => {
   test('returns a duplex stream', async () => {
     const server = new ExpressAsPromise()
-    const baseUrl = await server.listen()
 
+    server.app.post('/', (req, res) => {
+      res.status(204).end()
+    })
+
+    const baseUrl = await server.listen()
     const stream = await post({ url: baseUrl })
 
     expect(isReadable(stream)).toBe(true)
     expect(isWritable(stream)).toBe(true)
 
     stream.end()
+
+    await streamToString(stream)
 
     await server.stop()
   })
