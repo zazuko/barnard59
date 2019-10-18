@@ -1,6 +1,6 @@
 /* global describe, expect, test */
 
-const { put } = require('..')
+const { post } = require('..')
 const { isReadable, isWritable } = require('isstream')
 const namespace = require('@rdfjs/namespace')
 const rdf = require('@rdfjs/data-model')
@@ -12,12 +12,12 @@ const ExpressAsPromise = require('express-as-promise')
 
 const ns = namespace('http://example.org/')
 
-describe('put', () => {
+describe('post', () => {
   test('returns a writable stream', async () => {
     const server = new ExpressAsPromise()
     const baseUrl = await server.listen()
 
-    const stream = await put({ endpoint: baseUrl })
+    const stream = await post({ endpoint: baseUrl })
 
     expect(isReadable(stream)).toBe(false)
     expect(isWritable(stream)).toBe(true)
@@ -27,20 +27,20 @@ describe('put', () => {
     await server.stop()
   })
 
-  test('sends a PUT request', async () => {
+  test('sends a POST request', async () => {
     let called = false
     const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
 
     const server = new ExpressAsPromise()
 
-    server.app.put('/', async (req, res) => {
+    server.app.post('/', async (req, res) => {
       called = true
 
       res.status(204).end()
     })
 
     const baseUrl = await server.listen()
-    const stream = await put({ endpoint: baseUrl })
+    const stream = await post({ endpoint: baseUrl })
 
     stream.write(quad)
     stream.end()
@@ -58,14 +58,14 @@ describe('put', () => {
 
     const server = new ExpressAsPromise()
 
-    server.app.put('/', async (req, res) => {
+    server.app.post('/', async (req, res) => {
       mediaType = req.get('content-type')
 
       res.status(204).end()
     })
 
     const baseUrl = await server.listen()
-    const stream = await put({ endpoint: baseUrl })
+    const stream = await post({ endpoint: baseUrl })
 
     stream.write(quad)
     stream.end()
@@ -91,14 +91,14 @@ describe('put', () => {
 
     const server = new ExpressAsPromise()
 
-    server.app.put('/', async (req, res) => {
+    server.app.post('/', async (req, res) => {
       content[req.query.graph] = await streamToString(req)
 
       res.status(204).end()
     })
 
     const baseUrl = await server.listen()
-    const stream = await put({ endpoint: baseUrl })
+    const stream = await post({ endpoint: baseUrl })
 
     quads.forEach(quad => {
       stream.write(quad)
@@ -128,7 +128,7 @@ describe('put', () => {
 
     const server = new ExpressAsPromise()
 
-    server.app.put('/', async (req, res) => {
+    server.app.post('/', async (req, res) => {
       graph = req.query.graph
       content = await streamToString(req)
 
@@ -136,7 +136,7 @@ describe('put', () => {
     })
 
     const baseUrl = await server.listen()
-    const stream = await put({ endpoint: baseUrl })
+    const stream = await post({ endpoint: baseUrl })
 
     quads.forEach(quad => {
       stream.write(quad)
@@ -173,14 +173,14 @@ describe('put', () => {
 
     const server = new ExpressAsPromise()
 
-    server.app.put('/', async (req, res) => {
+    server.app.post('/', async (req, res) => {
       content[typeof req.query.graph === 'string' ? req.query.graph : 'default'] = await streamToString(req)
 
       res.status(204).end()
     })
 
     const baseUrl = await server.listen()
-    const stream = await put({ endpoint: baseUrl })
+    const stream = await post({ endpoint: baseUrl })
 
     quads.forEach(quad => {
       stream.write(quad)
@@ -201,14 +201,14 @@ describe('put', () => {
 
     const server = new ExpressAsPromise()
 
-    server.app.put('/', async (req, res) => {
+    server.app.post('/', async (req, res) => {
       credentials = req.get('authorization')
 
       res.status(204).end()
     })
 
     const baseUrl = await server.listen()
-    const stream = await put({ endpoint: baseUrl, user: 'testuser', password: 'testpassword' })
+    const stream = await post({ endpoint: baseUrl, user: 'testuser', password: 'testpassword' })
 
     stream.write(quad)
     stream.end()
