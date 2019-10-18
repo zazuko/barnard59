@@ -130,4 +130,29 @@ describe('put', () => {
 
     await server.stop()
   })
+
+  test('sends basic authentication headers', async () => {
+    let credentials = null
+    const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
+
+    const server = new ExpressAsPromise()
+
+    server.app.put('/', async (req, res) => {
+      credentials = req.get('authorization')
+
+      res.status(204).end()
+    })
+
+    const baseUrl = await server.listen()
+    const stream = await put({ endpoint: baseUrl, user: 'testuser', password: 'testpassword' })
+
+    stream.write(quad)
+    stream.end()
+
+    await promisify(finished)(stream)
+
+    expect(credentials).toBe('Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
+
+    await server.stop()
+  })
 })

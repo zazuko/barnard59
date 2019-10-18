@@ -1,9 +1,11 @@
 const writableFetch = require('./lib/writableFetch')
 
-function put ({ endpoint }) {
+function put ({ endpoint, user, password }) {
   return writableFetch({
     endpoint,
-    method: 'PUT'
+    method: 'PUT',
+    user,
+    password
   })
 }
 
