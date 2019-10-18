@@ -62,7 +62,8 @@ class RequestStream extends Readable {
   static request (queue, endpoint, options, done) {
     setImmediate(async () => {
       const graph = queue.peek().graph
-      const url = `${endpoint}?graph=${encodeURIComponent(graph.value)}`
+      const graphParam = graph.termType === 'DefaultGraph' ? '' : `?graph=${encodeURIComponent(graph.value)}`
+      const url = `${endpoint}${graphParam}`
 
       options.headers = options.headers || new Map()
       options.headers.set('content-type', 'application/n-triples')
