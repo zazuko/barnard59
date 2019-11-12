@@ -23,7 +23,8 @@
     "duplexify": "^4.1.1",
     "isomorphic-fetch": "^2.2.1",
     "readable-stream": "^3.4.0",
-    "sparql-http-client": "^1.1.1"
+    "sparql-http-client": "^1.1.1",
+    "whatwg-url": "^7.1.0"
   },
   "devDependencies": {
     "get-stream": "^5.1.0",

@@ -1,10 +1,11 @@
 const defaultFetch = require('isomorphic-fetch')
 const resultParser = require('./resultParser')
 const SparqlHttpClient = require('sparql-http-client')
+const { URL } = require('whatwg-url')
 
 class SparqlClient {
   constructor ({ endpoint, fetch = defaultFetch, user, password } = {}) {
-    this.client = new SparqlHttpClient({ endpointUrl: endpoint, fetch })
+    this.client = new SparqlHttpClient({ endpointUrl: endpoint, fetch, URL })
     this.user = user
     this.password = password
   }
