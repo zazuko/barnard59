@@ -221,4 +221,24 @@ describe('post', () => {
 
     await server.stop()
   })
+
+  test('handles server errors', async () => {
+    const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
+
+    const server = new ExpressAsPromise()
+
+    server.app.post('/', async (req, res) => {
+      res.status(500).end()
+    })
+
+    const baseUrl = await server.listen()
+    const stream = await post({ endpoint: baseUrl })
+
+    stream.write(quad)
+    stream.end()
+
+    await expect(promisify(finished)(stream)).rejects.toThrow('500')
+
+    await server.stop()
+  })
 })
