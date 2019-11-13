@@ -9,7 +9,7 @@ async function fetch ({ endpoint, ...options } = {}) {
   const whenDone = new WhenDone()
 
   const makeRequest = once(() => {
-    RequestStream.request(queue, endpoint, options, () => whenDone.done())
+    RequestStream.request(queue, endpoint, options, err => whenDone.done(err))
   })
 
   const stream = new Writable({

@@ -1,14 +1,16 @@
 class WhenDone {
   constructor () {
     this.isDone = false
+    this.error = null
     this.todo = null
   }
 
-  done () {
+  done (error) {
     this.isDone = true
+    this.error = error
 
     if (this.todo) {
-      this.todo()
+      this.todo(this.error)
     }
   }
 
@@ -16,7 +18,7 @@ class WhenDone {
     this.todo = todo
 
     if (this.isDone) {
-      this.todo()
+      this.todo(this.error)
     }
   }
 }

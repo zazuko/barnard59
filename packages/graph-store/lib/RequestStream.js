@@ -78,6 +78,10 @@ class RequestStream extends Readable {
 
       const response = await nodeFetch(url, { body: outputStream, ...options })
 
+      if (!response.ok) {
+        return done(new Error(`http error ${response.status}: ${response.statusText}`))
+      }
+
       response.body.resume()
 
       finished(response.body, done)
