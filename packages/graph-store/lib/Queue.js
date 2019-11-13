@@ -14,9 +14,7 @@ class Queue {
       return undefined
     }
 
-    setImmediate(() => {
-      item.commit()
-    })
+    item.commit()
 
     return item.chunk
   }

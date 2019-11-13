@@ -33,7 +33,7 @@ class RequestStream extends Readable {
 
       // no quad in queue
       if (!quad) {
-        setImmediate(() => this._read())
+        setTimeout(() => this._read(), 0)
 
         return
       }
@@ -60,7 +60,7 @@ class RequestStream extends Readable {
   }
 
   static request (queue, endpoint, options, done) {
-    setImmediate(async () => {
+    setTimeout(async () => {
       const graph = queue.peek().graph
       const graphParam = graph.termType === 'DefaultGraph' ? '' : `?graph=${encodeURIComponent(graph.value)}`
       const url = `${endpoint}${graphParam}`
@@ -81,7 +81,7 @@ class RequestStream extends Readable {
       response.body.resume()
 
       finished(response.body, done)
-    })
+    }, 0)
   }
 }
 

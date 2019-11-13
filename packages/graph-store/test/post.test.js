@@ -190,7 +190,9 @@ describe('post', () => {
 
     await promisify(finished)(stream)
 
-    expect(content).toStrictEqual(expected)
+    Object.entries(content).forEach(([graphIri, graphContent]) => {
+      expect(graphContent).toStrictEqual(expected[graphIri])
+    })
 
     await server.stop()
   })
