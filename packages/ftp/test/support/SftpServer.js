@@ -51,11 +51,20 @@ class FileSystem extends ImplFileSystem {
   }
 
   async authenticate (session, request) {
-    if (request.method === 'none') {
-      return true
-    } else if (request.method !== 'password' ||
+    const validMethods = ['password', 'publickey', 'none']
+    const method = request.method
+
+    if (!validMethods.includes(method)) {
+      return validMethods
+    }
+
+    if (
+      (method === 'none' && this.username) ||
+      (method === 'password' && (
         request.username !== this.username ||
-        request.password !== this.password) {
+        request.password !== this.password
+      ))
+    ) {
       throw new PermissionDeniedError()
     }
   }
