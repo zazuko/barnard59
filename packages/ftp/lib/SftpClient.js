@@ -1,4 +1,3 @@
-const fs = require('fs-extra')
 const SFTP = require('sftp-promises')
 const FileParser = require('ftp/lib/parser')
 const { PassThrough } = require('stream')
@@ -21,7 +20,7 @@ class SftpClient {
       port: this.port,
       username: this.user,
       password: this.password,
-      privateKey: this.privateKey && await fs.readFile(this.privateKey),
+      privateKey: this.privateKey,
       passphrase: this.passphrase
     }
 

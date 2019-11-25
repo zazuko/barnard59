@@ -1,5 +1,6 @@
 /* global describe, expect, it */
 
+const fs = require('fs')
 const read = require('../read')
 const FtpServer = require('./support/FtpServer')
 const SftpServer = require('./support/SftpServer')
@@ -35,7 +36,7 @@ describe('read', () => {
     [
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: 'test/support/test.key' }
+      { password: undefined, privateKey: fs.readFileSync('test/support/test.key') }
     ]
   ])('read file from the given path %s', async (label, serverFactory, additionalOptions) => {
     await withServer(serverFactory, async (server) => {
