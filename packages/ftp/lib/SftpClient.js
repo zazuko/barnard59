@@ -3,7 +3,7 @@ const FileParser = require('ftp/lib/parser')
 const { PassThrough } = require('stream')
 
 class SftpClient {
-  constructor ({ host, port = 21, user, password }) {
+  constructor ({ host, port = 22, user, password }) {
     this.host = host
     this.port = port
     this.user = user
