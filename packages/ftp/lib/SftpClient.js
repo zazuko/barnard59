@@ -1,6 +1,5 @@
 const SFTP = require('sftp-promises')
 const FileParser = require('ftp/lib/parser')
-const { PassThrough } = require('stream')
 
 class SftpClient {
   constructor ({ host, port = 22, user, password, privateKey, passphrase }) {
@@ -46,10 +45,7 @@ class SftpClient {
   }
 
   async read (path) {
-    // Using `getStream` because `createReadStream` causes issues on Linux
-    const stream = new PassThrough()
-    await this.client.getStream(path, stream, this.session)
-    return stream
+    return createReadStream(this.client, path, this.session)
   }
 
   async write (path) {
@@ -58,3 +54,41 @@ class SftpClient {
 }
 
 module.exports = SftpClient
+
+// Copied from sftp-promises
+// Fixed to resolve the promise directly instead of waiting `on('readable')`.
+async function createReadStream (client, path, session) {
+  var createReadStreamCmd = function (resolve, reject, conn) {
+    return function (err, sftp) {
+      if (err) { return reject(err) }
+      sftp.stat(path, function (err, stat) {
+        if (err) { return reject(err) }
+        var bytes = stat.size
+        if (bytes > 0) {
+          bytes -= 1
+        }
+        try {
+          var stream = sftp.createReadStream(path, { start: 0, end: bytes })
+        } catch (err) {
+          return reject(err)
+        }
+        stream.on('close', function () {
+          // if there is no session we need to clean the connection
+          if (!session) {
+            conn.end()
+            conn.destroy()
+          }
+        })
+        stream.on('error', function () {
+          if (!session) {
+            conn.end()
+            conn.destroy()
+          }
+        })
+
+        resolve(stream)
+      })
+    }
+  }
+  return client.sftpCmd(createReadStreamCmd, session, true)
+}
