@@ -1,5 +1,6 @@
 /* global describe, expect, it */
 
+const fs = require('fs')
 const read = require('../read')
 const FtpServer = require('./support/FtpServer')
 const SftpServer = require('./support/SftpServer')
@@ -14,23 +15,34 @@ describe('read', () => {
   it.each([
     [
       'on a FTP server with anonymous user',
-      () => new FtpServer()
+      () => new FtpServer(),
+      {}
     ],
     [
       'on a FTP server with username/password',
-      () => new FtpServer({ user: 'test', password: '1234' })
+      () => new FtpServer({ user: 'test', password: '1234' }),
+      {}
     ],
     [
       'on a SFTP server with anonymous user',
-      () => new SftpServer()
+      () => new SftpServer(),
+      {}
     ],
     [
       'on a SFTP server with username/password',
-      () => new SftpServer({ user: 'test', password: '1234' })
+      () => new SftpServer({ user: 'test', password: '1234' }),
+      {}
+    ],
+    [
+      'on a SFTP server with private key',
+      () => new SftpServer({ user: 'test', password: '1234' }),
+      { password: undefined, privateKey: fs.readFileSync('test/support/test.key') }
     ]
-  ])('read file from the given path %s', async (label, serverFactory) => {
+  ])('read file from the given path %s', async (label, serverFactory, additionalOptions) => {
     await withServer(serverFactory, async (server) => {
-      const stream = await read({ filename: 'data/xyz.txt', ...server.options })
+      const options = { ...server.options, ...additionalOptions }
+
+      const stream = await read({ filename: 'data/xyz.txt', ...options })
       const content = await getStream(stream)
 
       expect(content).toBe('987\n654')

@@ -3,22 +3,28 @@ const FileParser = require('ftp/lib/parser')
 const { PassThrough } = require('stream')
 
 class SftpClient {
-  constructor ({ host, port = 21, user, password }) {
+  constructor ({ host, port = 22, user, password, privateKey, passphrase }) {
     this.host = host
     this.port = port
     this.user = user
     this.password = password
+    this.privateKey = privateKey
+    this.passphrase = passphrase
     this.client = new SFTP()
     this.session = null
   }
 
   async connect () {
-    this.session = await this.client.session({
+    const options = {
       host: this.host,
       port: this.port,
       username: this.user,
-      password: this.password
-    })
+      password: this.password,
+      privateKey: this.privateKey,
+      passphrase: this.passphrase
+    }
+
+    this.session = await this.client.session(options)
 
     return this.session
   }

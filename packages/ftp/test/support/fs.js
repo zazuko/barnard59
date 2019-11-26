@@ -9,6 +9,7 @@ const readFile = promisify(fs.readFile)
 const rmdir = promisify(rimraf)
 
 module.exports = {
+  ...fs,
   copyFile,
   createReadStream,
   mkdir,
