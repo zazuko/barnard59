@@ -1,7 +1,7 @@
 # barnard59-sparql
 
 SPARQL support for Barnard59 Linked Data pipelines.
-This package exports a operations to run SPARQL queries on endpoints that support the [SPARQL Protocol](https://www.w3.org/TR/sparql11-protocol/).
+This package exports operations to run SPARQL queries on endpoints that support the [SPARQL Protocol](https://www.w3.org/TR/sparql11-protocol/).
 
 ## Operations
 
