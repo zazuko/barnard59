@@ -16,6 +16,8 @@ barnard59 can be used for many different tasks, including, but not limited to
 
 barnard59 can be easily extended by providing additional functionality as plugin. We also work on user interfaces, so you do not have to write your pipelines in Turtle/RDF.
 
+We provide a list of all operations supported by barnard59 in our [primer](https://github.com/zazuko/barnard59/wiki/primer) in the wiki.
+
 ## Concept
 
 barnard59 runs pipelines which are described in RDF in the [pipeline](https://pipeline.described.at/) and [code](https://code.described.at/) ontology.
