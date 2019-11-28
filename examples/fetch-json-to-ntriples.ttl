@@ -35,26 +35,26 @@
 
 <fetch> a p:Step ;
   code:implementedBy [
-    code:link <file:../node_modules/barnard59-base#fetch.json> ;
+    code:link <node:barnard59-base#fetch.json> ;
     a code:EcmaScript
   ];
   code:arguments ("url"^^p:VariableName) .
 
 <jsonldStructure> a p:Step ;
   code:implementedBy [
-    code:link <file:../node_modules/barnard59-base#map> ;
+    code:link <node:barnard59-base#map> ;
     a code:EcmaScript
   ];
   code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"^^code:EcmaScript) .
 
 <parse> a p:Step ;
   code:implementedBy [
-    code:link <file:../node_modules/barnard59-formats#jsonld.parse.object> ;
+    code:link <node:barnard59-formats#jsonld.parse.object> ;
     a code:EcmaScript
   ] .
 
 <serialize> a p:Step ;
   code:implementedBy [
-    code:link <file:../node_modules/barnard59-formats#ntriples.serialize> ;
+    code:link <node:barnard59-formats#ntriples.serialize> ;
     a code:EcmaScript
   ] .
