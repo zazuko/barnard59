@@ -36,7 +36,7 @@
 
 <serialize> a p:Step;
   code:implementedBy [
-    code:link <file:../node_modules/barnard59-formats#ntriples.serialize> ;
+    code:link <node:barnard59-formats#ntriples.serialize> ;
     a code:EcmaScript
   ].
 
