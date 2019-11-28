@@ -8,7 +8,7 @@
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "http://worldtimeapi.org/api/timezone/UTC" ;
+      p:value "http://worldtimeapi.org/api/timezone/etc/UTC" ;
     ] ,
     <dateContext>
   ] ;
