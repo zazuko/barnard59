@@ -149,6 +149,12 @@ The variable from the previous example could be defined like this in the cli:
 
 `barnard59 run pipeline.json --pipeline http://example.org/#pipeline --variable filename=example.txt`    
 
+In a [CI/CD environment](https://github.com/zazuko/barnard59/wiki/automation) you might want to pass sensitive arguments like usernames and passwords via environment-variables. This can be done by referencing it like this:
+
+`barnard59 run pipeline.json --pipeline http://example.org/#pipeline --variable password=$PASSWORD` 
+
+where `$PASSWORD`is a valid environment-variable.
+
 #### Using Variables via Datatype
 
 The values of the variable can be use via a literal with a `p:VariableName` datatype.
