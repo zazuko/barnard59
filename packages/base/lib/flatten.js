@@ -2,11 +2,23 @@ const through = require('through2')
 
 function flatten () {
   return through.obj(function (chunk, encoding, callback) {
-    chunk.forEach((item) => {
-      this.push(item)
-    })
+    if (typeof chunk[Symbol.iterator] === 'function') {
+      for (const item of chunk) {
+        this.push(item)
+      }
 
-    callback()
+      return callback()
+    }
+
+    if (typeof chunk.forEach === 'function') {
+      chunk.forEach((item) => {
+        this.push(item)
+      })
+
+      return callback()
+    }
+
+    return callback(new Error('chunk doesn\'t implement Symbol.iterator or .forEach'))
   })
 }
 

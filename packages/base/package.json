@@ -4,7 +4,7 @@
   "description": "Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "test": "standard && mocha"
+    "test": "standard && nyc --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,10 @@
   },
   "devDependencies": {
     "express": "^4.16.4",
+    "get-stream": "^5.1.0",
     "isstream": "^0.1.2",
     "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
     "standard": "^14.3.1"
   }
 }
