@@ -1,24 +1,28 @@
-/* global describe, expect, test */
-
-const fetch = require('../lib/fetch')
+const { strictEqual } = require('assert')
 const { isReadable, isWritable } = require('isstream')
+const { describe, it } = require('mocha')
+const fetch = require('../lib/fetch')
 const streamToString = require('./support/streamToString')
 const ExpressServer = require('./support/ExpressServer')
 
 describe('fetch', () => {
-  test('returns only a readable stream', async () => {
+  it('should be a function', () => {
+    strictEqual(typeof fetch, 'function')
+  })
+
+  it('should return a readable stream', async () => {
     const server = new ExpressServer()
     const baseUrl = await server.start()
 
     const response = await fetch(baseUrl)
 
-    expect(isReadable(response)).toBe(true)
-    expect(isWritable(response)).toBe(false)
+    strictEqual(isReadable(response), true)
+    strictEqual(isWritable(response), false)
 
     await server.stop()
   })
 
-  test('forwards the chunks of the stream', async () => {
+  it('should forwards the chunks of the stream', async () => {
     const expectedChunks = []
 
     for (let i = 0; i < 1000; i++) {
@@ -40,7 +44,7 @@ describe('fetch', () => {
     const baseUrl = await server.start()
     const response = await fetch(baseUrl)
 
-    expect(await streamToString(response)).toBe(expectedContent)
+    strictEqual(await streamToString(response), expectedContent)
 
     await server.stop()
   })
