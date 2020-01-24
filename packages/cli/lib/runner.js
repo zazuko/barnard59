@@ -35,7 +35,7 @@ function guessPipeline (dataset) {
   return rootPipelines[0]
 }
 
-function create ({ basePath, outputStream, pipeline, variable, verbose, log }) {
+function create ({ basePath, outputStream, pipeline, variable, verbose, log } = {}) {
   return function runner (dataset) {
     if (!pipeline) {
       pipeline = guessPipeline(dataset)
