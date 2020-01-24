@@ -8,7 +8,7 @@ declare type Runner = {
 declare interface RunnerInit {
     basePath: string
     outputStream: Writable
-    pipeline?: string
+    pipeline: string
     variable?: Map<string, string>
     verbose?: boolean
     log?: (message: string) => void
