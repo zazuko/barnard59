@@ -27,6 +27,7 @@
     "readable-stream": "^3.1.1"
   },
   "devDependencies": {
+    "@types/rdf-js": "^2.0.9",
     "barnard59-formats": "0.0.4",
     "jest": "^24.9.0",
     "shelljs": "^0.8.3",
