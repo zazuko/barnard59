@@ -66,7 +66,10 @@ program
   .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables, new Map())
   .option('-v, --verbose', 'enable diagnostic console output')
   .action((filename, options = {}) => {
-    let { format, output, pipeline } = options
+    let { format, output, pipeline, verbose } = options
+
+    runner.log.enabled = verbose
+
     p.fileToDataset(format, filename)
       .then(dataset => {
         if (!pipeline) {
@@ -77,7 +80,6 @@ program
           ...options,
           pipeline,
           outputStream: createOutputStream(output),
-          log: process.stdout,
           basePath: path.resolve(path.dirname(filename))
         })
 
