@@ -7,7 +7,7 @@ const program = require('commander')
 const cf = require('clownface')
 const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
-const TextLogStream = require('../lib/TextLogStream')
+const runner = require('../lib/runner')
 
 const ns = {
   p: namespace('https://pipeline.described.at/'),
@@ -65,47 +65,27 @@ program
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables, new Map())
   .option('-v, --verbose', 'enable diagnostic console output')
-  .action((filename, { format, output, pipeline, variable, verbose } = {}) => {
+  .action((filename, options = {}) => {
+    let { format, output, pipeline, verbose } = options
+
+    runner.log.enabled = verbose
+
     p.fileToDataset(format, filename)
       .then(dataset => {
         if (!pipeline) {
           pipeline = guessPipeline(dataset)
         }
 
-        if (verbose) {
-          process.stdout.write('variables via CLI:\n')
-
-          for (const [key, value] of variable) {
-            process.stdout.write(`  ${key}: ${value}\n`)
-          }
-        }
-
-        const stream = p.pipeline(dataset, pipeline, {
-          basePath: path.resolve(path.dirname(filename)),
-          variables: variable
+        const run = runner.create({
+          ...options,
+          pipeline,
+          outputStream: createOutputStream(output),
+          basePath: path.resolve(path.dirname(filename))
         })
 
-        if (verbose) {
-          process.stdout.write('variables in pipeline instance:\n')
-
-          for (const [key, value] of stream.variables) {
-            process.stdout.write(`  ${key}: ${value}\n`)
-          }
-        }
-
-        stream.on('error', err => {
-          console.error(err)
-          process.exit(1)
-        })
-
-        stream.pipe(createOutputStream(output))
-
-        if (verbose) {
-          stream.context.log.pipe(new TextLogStream()).pipe(process.stdout)
-        }
-
-        return p.run(stream)
-      }).catch(err => {
+        return run(dataset)
+      })
+      .catch(err => {
         console.error(err)
         process.exit(1)
       })
