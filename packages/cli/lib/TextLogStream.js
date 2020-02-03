@@ -6,7 +6,7 @@ class TextLogStream extends Transform {
   }
 
   _transform (chunk, e, next) {
-    this.push(`${chunk.level} ${chunk.stack[0]} ${chunk.message}\r\n`)
+    this.push(`${chunk.level} ${chunk.stack[0]} ${chunk.message}`)
     next()
   }
 }
