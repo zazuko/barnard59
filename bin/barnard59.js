@@ -76,14 +76,12 @@ program
           pipeline = guessPipeline(dataset)
         }
 
-        const run = runner.create({
+        return runner.run(dataset, {
           ...options,
           pipeline,
           outputStream: createOutputStream(output),
           basePath: path.resolve(path.dirname(filename))
         })
-
-        return run(dataset)
       })
       .catch(err => {
         console.error(err)
