@@ -1,3 +1,4 @@
+const concat = require('./lib/concat')
 const combine = require('./lib/combine')
 const fetch = require('./lib/fetch')
 const filter = require('./lib/filter')
@@ -13,6 +14,7 @@ const toString = require('./lib/toString')
 const { fileToDataset, stringToDataset } = require('./lib/toDataset')
 
 module.exports = {
+  concat,
   combine,
   fetch,
   fileToDataset,
