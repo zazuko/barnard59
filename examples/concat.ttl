@@ -1,0 +1,49 @@
+#
+# Use the following command to run the pipeline:
+#
+# ./bin/barnard59.js run --format=text/turtle --pipeline=http://example.org/pipeline/concat examples/concat.ttl
+#
+
+@base <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<concat> a p:Pipeline, p:Readable;
+  p:steps [
+    p:stepList (<concatFiles>)
+  ].
+
+<concatFiles> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#concat>
+  ];
+  code:arguments (<readA> <readB>).
+
+<readA> a p:Pipeline, p:Readable;
+  p:variables [
+    p:variable [ a p:Variable;
+      p:name "filename";
+      p:value "examples/shell-before.ttl";
+    ]
+  ];
+  p:steps [
+    p:stepList (<readFile>)
+  ].
+
+<readB> a p:Pipeline, p:Readable;
+  p:variables [
+    p:variable [ a p:Variable;
+      p:name "filename";
+      p:value "examples/shell-after.ttl";
+    ]
+  ];
+  p:steps [
+    p:stepList (<readFile>)
+  ].
+
+<readFile> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:fs#createReadStream>
+  ];
+  code:arguments ("filename"^^p:VariableName).
