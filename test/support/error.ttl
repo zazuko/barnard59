@@ -5,11 +5,21 @@
 
 <pipeline> a p:Pipeline, p:Readable;
   p:steps [
-    p:stepList (<error>)
+    p:stepList (<read> <error> <passthrough>)
   ].
 
+<read> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:fs#createReadStream>
+  ];
+  code:arguments ("test/support/error.ttl").
+
 <error> a p:Step;
-  code:implementedBy [
-    code:link <file:error.js>;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScript;
+    code:link <file:error.js>
+  ].
+
+<passthrough> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:stream#PassThrough>
   ].
