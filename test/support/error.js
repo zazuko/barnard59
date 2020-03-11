@@ -3,7 +3,7 @@ const { Readable } = require('readable-stream')
 function error () {
   const stream = new Readable({
     read: () => {
-      stream.emit('error', new Error('test'))
+      stream.destroy(new Error('test'))
     }
   })
 
