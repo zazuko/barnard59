@@ -133,4 +133,31 @@ describe('pipeline', () => {
       })
     })
   })
+
+  describe('run', () => {
+    test('should forward stream errors to the logger', async () => {
+      // given
+      const definition = await load('stream-error.ttl')
+      const iri = ns.pipeline('')
+
+      // when
+      const errors = []
+      const pipeline = Pipeline(definition, iri, { basePath: path.resolve('test') })
+
+      pipeline.context.log.on('data', message => {
+        if (message.level === 'ERROR') {
+          errors.push(message)
+        }
+      })
+
+      try {
+        await streamToArray(pipeline)
+      } catch (err) {}
+
+      // then
+      assert.strictEqual(errors.length, 1)
+      assert.strictEqual(errors[0].message.includes('error in pipeline step http://example.org/pipeline/error'), true)
+      assert.strictEqual(errors[0].message.includes('at ReadStream'), true)
+    })
+  })
 })

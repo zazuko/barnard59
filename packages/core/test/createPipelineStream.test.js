@@ -26,6 +26,22 @@ describe('createPipelineStream', () => {
     expect(isStream(stream)).toBe(true)
   })
 
+  test('should handle stream errors', async () => {
+    // given
+    const definition = await load('stream-error.ttl')
+    const node = clownface(definition, pipelineTerm)
+    const stream = createPipelineStream(node, {
+      basePath: path.resolve('test'),
+      loaderRegistry: createLoaderRegistry()
+    })
+
+    // when
+    const promise = run(stream)
+
+    // then
+    await expect(promise).rejects.toBeInstanceOf(Error)
+  })
+
   test('inner pipeline is assigned to _pipeline property', async () => {
     // given
     const definition = await load('write.ttl')
@@ -135,7 +151,7 @@ describe('createPipelineStream', () => {
     const promise = run(stream)
 
     // then
-    expect(promise).rejects.toBeInstanceOf(Error)
+    await expect(promise).rejects.toBeInstanceOf(Error)
   })
 
   describe('PlainPipeline', () => {
