@@ -20,7 +20,7 @@
   "dependencies": {
     "@rdfjs/namespace": "^1.0.0",
     "barnard59-base": "0.0.3",
-    "barnard59-core": "0.0.3",
+    "barnard59-core": "0.0.4",
     "clownface": "^0.11.0",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
