@@ -27,11 +27,15 @@ class Pipeline {
   }
 
   error (err) {
-    this.stream.emit('error', err)
+    this.stream.destroy(err)
   }
 
   destroy (err, callback) {
     this.destroyed = true
+
+    if (err) {
+      this.context.log.error(err.stack)
+    }
 
     this.context.log.end()
 
@@ -48,6 +52,10 @@ class Pipeline {
       await this.initVariables()
 
       await this.initSteps()
+
+      if (this.streams.length === 0) {
+        throw new Error(`pipeline ${this.node.term.value} doesn't contain any steps`)
+      }
 
       for (let index = 0; index < this.streams.length - 1; index++) {
         this.streams[index].pipe(this.streams[index + 1])
@@ -97,11 +105,7 @@ class Pipeline {
     this.lastStream = this.streams[this.streams.length - 1]
     this.destroyed = false
 
-    finished(this.lastStream, err => {
-      if (err) {
-        return this.error(err)
-      }
-
+    finished(this.lastStream, () => {
       if (isReadable(this.stream)) {
         this.stream.push(null)
       }
@@ -167,9 +171,19 @@ class Pipeline {
     const log = new Logger(step, { master: this.context.log })
 
     log.info('step init', { name: 'beforeStepInit' })
-    const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
-    const args = await this.parseArguments(step.out(ns.code('arguments')))
-    const stream = await operation.apply({ ...this.context, log }, args)
+
+    let stream = null
+
+    try {
+      const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
+      const args = await this.parseArguments(step.out(ns.code('arguments')))
+      stream = await operation.apply({ ...this.context, log }, args)
+    } catch (cause) {
+      const err = new Error(`Failed to load step ${step.value}`)
+      err.stack += `\nCaused by: ${cause.stack}`
+
+      throw err
+    }
 
     if (!stream || !isStream(stream)) {
       throw new Error(`${step.value} didn't return a stream`)

@@ -1,0 +1,15 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<> a p:Pipeline, p:Readable ;
+  p:steps [
+    p:stepList ( <error> )
+  ] .
+
+<error> a p:Step ;
+  code:implementedBy [ a code:EcmaScript ;
+    code:link <node:fs#createReadStream>
+  ] ;
+  code:arguments ("does-not-exist.txt") .
