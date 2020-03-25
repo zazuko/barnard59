@@ -4,7 +4,8 @@
   "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "test": "standard && jest"
+    "coverage": "codecov",
+    "test": "standard && nyc --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
@@ -18,17 +19,25 @@
   },
   "homepage": "https://github.com/zazuko/barnard59-graph-store",
   "dependencies": {
-    "@rdfjs/data-model": "^1.1.1",
-    "@rdfjs/to-ntriples": "^1.0.1",
-    "lodash": "^4.17.11",
-    "node-fetch": "^2.6.0",
-    "readable-stream": "^3.3.0"
+    "duplex-to": "^1.0.0",
+    "lodash": "^4.17.15",
+    "promise-the-world": "^1.0.1",
+    "readable-stream": "^3.6.0",
+    "sparql-http-client": "^2.1.2"
   },
   "devDependencies": {
-    "@rdfjs/namespace": "^1.0.0",
+    "@rdfjs/data-model": "^1.1.2",
+    "@rdfjs/namespace": "^1.1.0",
+    "@rdfjs/to-ntriples": "^1.0.2",
+    "barnard59": "0.0.9",
+    "barnard59-base": "0.0.3",
+    "barnard59-formats": "0.0.6",
+    "codecov": "^3.6.5",
     "express-as-promise": "0.0.1",
+    "get-stream": "^5.1.0",
     "isstream": "^0.1.2",
-    "jest": "^24.8.0",
-    "standard": "^12.0.1"
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.0",
+    "standard": "^14.3.3"
   }
 }
