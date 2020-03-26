@@ -2,16 +2,44 @@
 
 [SPARQL Graph Store Protocol](https://www.w3.org/TR/sparql11-http-rdf-update/) support for Linked Data pipelines.
 
+This package provides operations to read and write from a SPARQL Graph Store.
+
 ## Operations
 
-The package provides operations matching the HTTP methods in lower case letters.
-`PUT` and `POST` automatically handle different graphs from the RDF/JS Quad Stream.
-Whenever the graph of the quad changes, the operation will make a new request.
-Only media type `application/n-triples` is used for sending and receiving data.
+The operation names match the HTTP methods in lower case.
+
+### get ({ endpoint, graph, user, password})
+
+This operation reads a named graph from the given SPARQL Graph Store.
+A `Readable` stream of RDF/JS `Quad` objects is returned.
+The following options are supported:
+
+- `endpoint`: The URL of the Graph Store endpoint as a string.
+- `graph`: The named graph which should be read as a string or RDF/JS Term.
+  The default graph will be read if an empty string is given or the option is not given at all.
+- `user`: User for basic authentication.
+- `password`: Password for basic authentication.
+
+### post ({ endpoint, user, password})
+
+This operation appends quads to the given SPARQL Graph store.
+A `Writable` stream of RDF/JS `Quad` objects is returned.
+The following options are supported:
+
+- `endpoint`: The URL of the graph store endpoint as a string.
+- `user`: User for basic authentication.
+- `password`: Password for basic authentication.
 
 ### put
 
-Makes one or more HTTP PUT requests based on the incoming RDF/JS Quad Stream.
+This operation appends quads to the given SPARQL Graph store.
+A `Writable` stream of RDF/JS `Quad` objects is returned.
+The following options are supported:
 
-Options:
-- endpoint: The URL of the SPARQL Update Endpoint as a string.
+- `endpoint`: The URL of the graph store endpoint as a string.
+- `user`: User for basic authentication.
+- `password`: Password for basic authentication.
+
+## Examples
+
+See the `examples` folder for working example pipelines. 
