@@ -12,13 +12,14 @@ describe('barnard59', () => {
       const pipelineFile = resolve(__dirname, 'support/error.ttl')
       const dataset = await fileToDataset('text/turtle', pipelineFile)
       const run = create({
-        pipeline: rdf.namedNode('http://example.org/pipeline'),
+        dataset,
+        term: rdf.namedNode('http://example.org/pipeline'),
         outputStream: process.stdout,
         basePath: dirname(pipelineFile)
       })
 
       try {
-        await run(dataset)
+        await run.promise
       } catch (err) {
         strictEqual(err.message, 'error in pipeline step http://example.org/error')
       }
