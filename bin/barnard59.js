@@ -7,6 +7,7 @@ const program = require('commander')
 const cf = require('clownface')
 const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
+const bufferDebug = require('../lib/bufferDebug')
 const runner = require('../lib/runner')
 
 const ns = {
@@ -65,30 +66,36 @@ program
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables, new Map())
   .option('-v, --verbose', 'enable diagnostic console output')
-  .action((filename, options = {}) => {
-    let { format, output, pipeline, verbose } = options
+  .option('--enable-buffer-monitor', 'enable histogram of buffer usage')
+  .action(async (filename, options = {}) => {
+    try {
+      let { format, output, pipeline, verbose, enableBufferMonitor } = options
 
-    runner.log.enabled = verbose
+      runner.log.enabled = verbose
 
-    p.fileToDataset(format, filename)
-      .then(dataset => {
-        if (!pipeline) {
-          pipeline = guessPipeline(dataset)
-        }
+      const dataset = await p.fileToDataset(format, filename)
 
-        const run = runner.create({
-          ...options,
-          pipeline,
-          outputStream: createOutputStream(output),
-          basePath: path.resolve(path.dirname(filename))
-        })
+      if (!pipeline) {
+        pipeline = guessPipeline(dataset)
+      }
 
-        return run(dataset)
+      const run = runner.create({
+        ...options,
+        dataset,
+        term: pipeline,
+        outputStream: createOutputStream(output),
+        basePath: path.resolve(path.dirname(filename))
       })
-      .catch(err => {
-        console.error(err)
-        process.exit(1)
-      })
+
+      if (enableBufferMonitor) {
+        bufferDebug(run.pipeline)
+      }
+
+      await run.promise
+    } catch (err) {
+      console.error(err)
+      process.exit(1)
+    }
   })
 
 program.parse(process.argv)

@@ -24,6 +24,7 @@
     "clownface": "^0.11.0",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
+    "lodash": "^4.17.15",
     "rdf-ext": "^1.1.2",
     "readable-stream": "^3.1.1"
   },
