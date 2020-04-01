@@ -66,10 +66,10 @@ program
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables, new Map())
   .option('-v, --verbose', 'enable diagnostic console output')
-  .option('--verbose-buffer', 'enable diagnostic buffer console output')
+  .option('--debug-buffer', 'enable histogram of buffer usage')
   .action(async (filename, options = {}) => {
     try {
-      let { format, output, pipeline, verbose, verboseBuffer } = options
+      let { format, output, pipeline, verbose, debugBuffer } = options
 
       runner.log.enabled = verbose
 
@@ -87,7 +87,7 @@ program
         basePath: path.resolve(path.dirname(filename))
       })
 
-      if (verboseBuffer) {
+      if (debugBuffer) {
         bufferDebug(run.pipeline)
       }
 
