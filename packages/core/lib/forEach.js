@@ -1,8 +1,7 @@
-const Readable = require('readable-stream').Readable
-const Transform = require('readable-stream').Transform
-const isWritable = require('isstream').isWritable
-const run = require('./run')
-const eventToPromise = require('./eventToPromise')
+const { promisify } = require('util')
+const { finished, Duplex, Readable } = require('readable-stream')
+const { isWritable } = require('isstream')
+const ReadableToReadable = require('readable-to-readable')
 
 function objectToReadable (content, objectMode) {
   const stream = new Readable({
@@ -16,7 +15,7 @@ function objectToReadable (content, objectMode) {
   return stream
 }
 
-class ForEach extends Transform {
+class ForEach extends Duplex {
   constructor (pipeline, master, log, handleChunk) {
     super({ objectMode: true })
 
@@ -24,40 +23,58 @@ class ForEach extends Transform {
     this.child = pipeline
     this.master = master
     this.handleChunk = handleChunk
+    this.readFrom = null
+    this.done = false
   }
 
-  _transform (chunk, encoding, callback) {
-    const current = this.child.clone({
-      ...this.master,
-      objectMode: true,
-      log: this.log
-    })
+  async _write (chunk, encoding, callback) {
+    try {
+      const current = this.child.clone({
+        ...this.master,
+        objectMode: true,
+        log: this.log
+      })
 
-    current.on('data', chunk => this.push(chunk))
-    current.on('error', cause => {
+      this.readFrom = ReadableToReadable.readFrom(current, { end: false })
+
+      if (this.handleChunk) {
+        this.handleChunk.call(undefined, current, chunk)
+      }
+
+      if (isWritable(current)) {
+        objectToReadable(chunk, current._writableState.objectMode).pipe(current)
+      }
+
+      await promisify(finished)(current)
+
+      this.readFrom = null
+
+      return callback()
+    } catch (cause) {
       const err = new Error(`error in forEach sub-pipeline ${this.child.node.value}`)
 
       err.stack += `\nCaused by: ${cause.stack}`
 
-      callback(err)
-    })
-
-    this.runPipeline(chunk, current)
-      .then(() => callback())
-      .catch(err => callback(err))
+      return callback(err)
+    }
   }
 
-  runPipeline (chunk, pipeline) {
-    if (this.handleChunk) {
-      this.handleChunk.call(undefined, pipeline, chunk)
+  async _read () {
+    if (this.done) {
+      return this.push(null)
     }
 
-    if (isWritable(pipeline)) {
-      objectToReadable(chunk, pipeline._writableState.objectMode).pipe(pipeline)
-
-      return eventToPromise(pipeline, 'close')
+    if (this.readFrom && !await this.readFrom()) {
+      return
     }
-    return run(pipeline)
+
+    setTimeout(() => this._read(), 0)
+  }
+
+  _final (callback) {
+    this.done = true
+
+    callback()
   }
 
   static create (pipeline, handleChunk) {

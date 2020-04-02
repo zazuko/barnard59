@@ -26,7 +26,8 @@
     "lodash": "^4.17.11",
     "rdf-loader-code": "^0.2.0",
     "rdf-loaders-registry": "^0.1.0",
-    "readable-stream": "^3.0.6"
+    "readable-stream": "^3.0.6",
+    "readable-to-readable": "^0.1.2"
   },
   "devDependencies": {
     "@rdfjs/parser-n3": "^1.1.2",
