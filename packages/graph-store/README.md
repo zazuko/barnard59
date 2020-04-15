@@ -8,7 +8,7 @@ This package provides operations to read and write from a SPARQL Graph Store.
 
 The operation names match the HTTP methods in lower case.
 
-### get ({ endpoint, graph, user, password})
+### get ({ endpoint, graph, user, password })
 
 This operation reads a named graph from the given SPARQL Graph Store.
 A `Readable` stream of RDF/JS `Quad` objects is returned.
@@ -20,7 +20,7 @@ The following options are supported:
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
 
-### post ({ endpoint, user, password})
+### post ({ endpoint, user, password, maxQuadsPerRequest })
 
 This operation appends quads to the given SPARQL Graph store.
 A `Writable` stream of RDF/JS `Quad` objects is returned.
@@ -29,8 +29,10 @@ The following options are supported:
 - `endpoint`: The URL of the graph store endpoint as a string.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
+- `maxQuadsPerRequest`: The maximum number of quads per request until a new request is made.
+  (default: 500000)
 
-### put
+### put ({ endpoint, user, password, maxQuadsPerRequest })
 
 This operation appends quads to the given SPARQL Graph store.
 A `Writable` stream of RDF/JS `Quad` objects is returned.
@@ -39,6 +41,8 @@ The following options are supported:
 - `endpoint`: The URL of the graph store endpoint as a string.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
+- `maxQuadsPerRequest`: The maximum number of quads per request until a new request is made.
+  (default: 500000)
 
 ## Examples
 

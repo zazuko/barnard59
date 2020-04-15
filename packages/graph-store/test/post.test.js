@@ -143,7 +143,7 @@ describe('post', () => {
     })
   })
 
-  it('should use multiple request to send multiple graphs', async () => {
+  it('should use multiple requests to send multiple graphs', async () => {
     await withServer(async server => {
       const content = {}
       const quads = [
