@@ -19,21 +19,23 @@ function get ({ endpoint, graph, user, password }) {
   return unpromiseReadable(client.store.get(graph))
 }
 
-function post ({ endpoint, user, password }) {
+function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
-    password
+    password,
+    maxQuadsPerRequest
   })
 
   return new SinkToWritable(readable => client.store.post(readable))
 }
 
-function put ({ endpoint, user, password }) {
+function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
-    password
+    password,
+    maxQuadsPerRequest
   })
 
   return new SinkToWritable(readable => client.store.put(readable))

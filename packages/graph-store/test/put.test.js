@@ -1,4 +1,4 @@
-const { strictEqual } = require('assert')
+const { deepStrictEqual, strictEqual } = require('assert')
 const { promisify } = require('util')
 const getStream = require('get-stream')
 const { isReadable, isWritable } = require('isstream')
@@ -143,7 +143,7 @@ describe('put', () => {
     })
   })
 
-  it('should use multiple request to send multiple graphs', async () => {
+  it('should use multiple requests to send multiple graphs', async () => {
     await withServer(async server => {
       const content = {}
       const quads = [
@@ -183,6 +183,47 @@ describe('put', () => {
       Object.entries(expected).forEach(([graphIri, graphContent]) => {
         strictEqual(graphContent, content[graphIri])
       })
+    })
+  })
+
+  it('should use PUT and POST methods to combine multiple requests split by maxQuadsPerRequest', async () => {
+    await withServer(async server => {
+      const contentPut = []
+      const contentPost = []
+      const quads = [
+        rdf.quad(ns.subject1, ns.predicate1, ns.object1),
+        rdf.quad(ns.subject2, ns.predicate2, ns.object2),
+        rdf.quad(ns.subject3, ns.predicate3, ns.object3),
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4)
+      ]
+      const expectedPut = [quadToNTriples(quads[0]) + '\n' + quadToNTriples(quads[1]) + '\n']
+      const expectedPost = [quadToNTriples(quads[2]) + '\n' + quadToNTriples(quads[3]) + '\n']
+
+      server.app.post('/', async (req, res) => {
+        contentPost.push(await getStream(req))
+
+        res.status(204).end()
+      })
+
+      server.app.put('/', async (req, res) => {
+        contentPut.push(await getStream(req))
+
+        res.status(204).end()
+      })
+
+      const baseUrl = await server.listen()
+      const stream = put({ endpoint: baseUrl, maxQuadsPerRequest: 2 })
+
+      quads.forEach(quad => {
+        stream.write(quad)
+      })
+
+      stream.end()
+
+      await promisify(finished)(stream)
+
+      deepStrictEqual(contentPut, expectedPut)
+      deepStrictEqual(contentPost, expectedPost)
     })
   })
 
