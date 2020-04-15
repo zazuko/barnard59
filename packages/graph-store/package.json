@@ -23,7 +23,7 @@
     "lodash": "^4.17.15",
     "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
-    "sparql-http-client": "^2.1.2"
+    "sparql-http-client": "^2.2.2"
   },
   "devDependencies": {
     "@rdfjs/data-model": "^1.1.2",
