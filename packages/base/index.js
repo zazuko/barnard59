@@ -20,6 +20,7 @@ module.exports = {
   fileToDataset,
   filter,
   flatten,
+  glob,
   json,
   limit,
   map,
