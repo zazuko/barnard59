@@ -1,16 +1,6 @@
 language: node_js
 node_js:
-  - "8"
   - "10"
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
-before_install:
-  - export CXX="g++-4.9" CC="gcc-4.9"
-  - npm install -g codecov
-script:
-  - npm test
-  - codecov
+  - "12"
+after_success:
+  - npm run coverage

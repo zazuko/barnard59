@@ -21,7 +21,7 @@ describe('variable loader', () => {
     const node = def.node(example('var'))
     node.addOut(ns.rdf('type'), ns.p('Variable'))
       .addOut(ns.p('name'), 'foo')
-    const variables = new Map([ [ 'foo', 'bar' ] ])
+    const variables = new Map([['foo', 'bar']])
 
     // when
     const result = loader(node, dataset, { variables })
@@ -63,7 +63,7 @@ describe('variable loader', () => {
   test('loads variable from a string', () => {
     // given
     const node = rdf.literal('foo', ns.p('VariableName'))
-    const variables = new Map([ [ 'foo', 'bar' ] ])
+    const variables = new Map([['foo', 'bar']])
 
     // when
     const result = loader(node, dataset, { variables })

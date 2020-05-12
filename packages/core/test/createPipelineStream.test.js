@@ -1,20 +1,21 @@
+const { rejects, strictEqual } = require('assert')
+const path = require('path')
 const clownface = require('clownface')
+const Clownface = require('clownface/lib/Clownface')
+const { describe, it } = require('mocha')
+const isStream = require('isstream')
+const rdf = require('rdf-ext')
 const createLoaderRegistry = require('../lib/createLoaderRegistry')
 const createPipelineStream = require('../lib/createPipelineStream')
-const expect = require('expect')
 const eventToPromise = require('../lib/eventToPromise')
-const isStream = require('isstream')
-const load = require('./support/load-pipeline')
-const path = require('path')
-const rdf = require('rdf-ext')
-const run = require('./support/run')
-const Clownface = require('clownface/lib/Clownface')
 const Pipeline = require('../lib/Pipeline')
+const load = require('./support/load-pipeline')
+const run = require('./support/run')
 
 const pipelineTerm = rdf.namedNode('http://example.org/pipeline/')
 
 describe('createPipelineStream', () => {
-  test('returns a stream', async () => {
+  it('should return a stream', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -23,10 +24,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(isStream(stream)).toBe(true)
+    strictEqual(isStream(stream), true)
   })
 
-  test('should handle stream errors', async () => {
+  it('should handle stream errors', async () => {
     // given
     const definition = await load('stream-error.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -39,10 +40,10 @@ describe('createPipelineStream', () => {
     const promise = run(stream)
 
     // then
-    await expect(promise).rejects.toBeInstanceOf(Error)
+    await rejects(promise)
   })
 
-  test('inner pipeline is assigned to _pipeline property', async () => {
+  it('should assign the inner pipeline to the _pipeline property', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -51,10 +52,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(stream._pipeline instanceof Pipeline).toBe(true)
+    strictEqual(stream._pipeline instanceof Pipeline, true)
   })
 
-  test('clone is a method', async () => {
+  it('should have a clone method', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -63,10 +64,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(typeof stream.clone).toBe('function')
+    strictEqual(typeof stream.clone, 'function')
   })
 
-  test('basePath is a string property', async () => {
+  it('should have a basePath string property', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -75,10 +76,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(typeof stream.basePath).toBe('string')
+    strictEqual(typeof stream.basePath, 'string')
   })
 
-  test('context is a object property', async () => {
+  it('should have a context object property', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -87,10 +88,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(typeof stream.context).toBe('object')
+    strictEqual(typeof stream.context, 'object')
   })
 
-  test('node is a clownface property', async () => {
+  it('should have a node clownface property', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -99,10 +100,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(stream.node instanceof Clownface).toBe(true)
+    strictEqual(stream.node instanceof Clownface, true)
   })
 
-  test('variables is a Map property', async () => {
+  it('should have a variables Map property', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -111,10 +112,10 @@ describe('createPipelineStream', () => {
     const stream = createPipelineStream(node)
 
     // then
-    expect(stream.variables instanceof Map).toBe(true)
+    strictEqual(stream.variables instanceof Map, true)
   })
 
-  test('write on pipeline is forwarded to stream', async () => {
+  it('should forward data from the last step to the pipeline stream', async () => {
     // given
     const definition = await load('write.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -125,10 +126,10 @@ describe('createPipelineStream', () => {
     await run(stream)
 
     // then
-    expect(stream.context.content.toString()).toBe('test')
+    strictEqual(stream.context.content.toString(), 'test')
   })
 
-  test('read on pipeline is forwarded to stream', async () => {
+  it('should forward data written to the pipeline stream to the first step', async () => {
     // given
     const definition = await load('read.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -138,10 +139,10 @@ describe('createPipelineStream', () => {
     const content = await run(stream)
 
     // then
-    expect(content.toString()).toBe('test')
+    strictEqual(content.toString(), 'test')
   })
 
-  test('should handle step creating errors', async () => {
+  it('should handle step creating errors', async () => {
     // given
     const definition = await load('step-error.ttl')
     const node = clownface(definition, pipelineTerm)
@@ -151,11 +152,11 @@ describe('createPipelineStream', () => {
     const promise = run(stream)
 
     // then
-    await expect(promise).rejects.toBeInstanceOf(Error)
+    await rejects(promise)
   })
 
   describe('PlainPipeline', () => {
-    test('end event is emitted', async () => {
+    it('should emit an end event', async () => {
       // given
       const definition = await load('plain.ttl')
       const node = clownface(definition, pipelineTerm)
@@ -171,7 +172,7 @@ describe('createPipelineStream', () => {
   })
 
   describe('ReadablePipeline', () => {
-    test('end event is emitted', async () => {
+    it('should emit an end event', async () => {
       // given
       const definition = await load('read.ttl')
       const node = clownface(definition, pipelineTerm)
@@ -187,7 +188,7 @@ describe('createPipelineStream', () => {
   })
 
   describe('WriteablePipeline', () => {
-    test('finish event is emitted', async () => {
+    it('should emit a finish event', async () => {
       // given
       const definition = await load('write.ttl')
       const node = clownface(definition, pipelineTerm)
@@ -202,7 +203,7 @@ describe('createPipelineStream', () => {
       // expect to reach this point
     })
 
-    test('calling end is forwarded to the pipeline steps', async () => {
+    it('should forward the end of stream event to the step', async () => {
       // given
       const definition = await load('write.ttl')
       const node = clownface(definition, pipelineTerm)

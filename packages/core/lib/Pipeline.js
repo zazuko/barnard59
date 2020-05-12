@@ -154,7 +154,7 @@ class Pipeline {
   }
 
   async parseOperation (operation) {
-    let result = await this.loaderRegistry.load(operation, {
+    const result = await this.loaderRegistry.load(operation, {
       context: this.context,
       variables: this.variables,
       basePath: this.basePath
@@ -219,7 +219,7 @@ class Pipeline {
         throw new Error(`Failed to load variable ${variableNode}`)
       }
 
-      variables.push([ variable.name, variable.value ])
+      variables.push([variable.name, variable.value])
       return variables
     }, Promise.resolve([]))
   }

@@ -1,12 +1,13 @@
-const createBaseStream = require('../lib/createBaseStream')
-const createDummyPipeline = require('./support/createDummyPipeline')
-const eventToPromise = require('../lib/eventToPromise')
-const expect = require('expect')
+const { strictEqual } = require('assert')
+const { describe, it } = require('mocha')
 const { isReadable, isWritable, isDuplex } = require('isstream')
+const createBaseStream = require('../lib/createBaseStream')
+const eventToPromise = require('../lib/eventToPromise')
+const createDummyPipeline = require('./support/createDummyPipeline')
 
 describe('createBaseStream', () => {
   describe('Plain', () => {
-    test('creates a Readable stream', async () => {
+    it('should create a Readable stream', async () => {
       // given
       const pipeline = createDummyPipeline()
       const init = () => {}
@@ -15,10 +16,10 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline, { init })
 
       // then
-      expect(isReadable(stream)).toBe(true)
+      strictEqual(isReadable(stream), true)
     })
 
-    test('calls the init function on read', async () => {
+    it('should call the init function on read', async () => {
       // given
       let touched = false
       const init = () => {
@@ -33,10 +34,10 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
 
-    test('doesn\'t call the pipeline read function', async () => {
+    it('should not call the pipeline read function', async () => {
       // given
       let touched = false
       const read = () => {
@@ -51,12 +52,12 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(false)
+      strictEqual(touched, false)
     })
   })
 
   describe('Duplex', () => {
-    test('creates a Duplex stream', async () => {
+    it('should create a Duplex stream', async () => {
       // given
       const pipeline = createDummyPipeline({ readable: true, writable: true })
 
@@ -64,10 +65,10 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline)
 
       // then
-      expect(isDuplex(stream)).toBe(true)
+      strictEqual(isDuplex(stream), true)
     })
 
-    test('calls the init function when read is called first', async () => {
+    it('should call the init function when read is called first', async () => {
       // given
       let touched = false
       const init = () => {
@@ -82,10 +83,10 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
 
-    test('calls the init function when write is called first', async () => {
+    it('should call the init function when write is called first', async () => {
       // given
       let touched = false
       const init = () => {
@@ -100,10 +101,10 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
 
-    test('calls the read function on read', async () => {
+    it('should call the read function on read', async () => {
       // given
       let touched = false
       const read = () => {
@@ -118,10 +119,10 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
 
-    test('calls the write function on write', async () => {
+    it('should call the write function on write', async () => {
       // given
       let touched = false
       const write = () => {
@@ -136,12 +137,12 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
   })
 
   describe('Readable', () => {
-    test('creates a Readable stream', async () => {
+    it('should create a Readable stream', async () => {
       // given
       const pipeline = createDummyPipeline({ readable: true })
 
@@ -149,10 +150,10 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline)
 
       // then
-      expect(isReadable(stream)).toBe(true)
+      strictEqual(isReadable(stream), true)
     })
 
-    test('calls the init function when read is called', async () => {
+    it('should call the init function when read is called', async () => {
       // given
       let touched = false
       const init = () => {
@@ -167,10 +168,10 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
 
-    test('calls the read function on read', async () => {
+    it('should call the read function on read', async () => {
       // given
       let touched = false
       const read = () => {
@@ -185,12 +186,12 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
   })
 
   describe('Writable', () => {
-    test('creates a Writable stream', async () => {
+    it('should create a Writable stream', async () => {
       // given
       const pipeline = createDummyPipeline({ writable: true })
 
@@ -198,10 +199,10 @@ describe('createBaseStream', () => {
       const stream = createBaseStream(pipeline)
 
       // then
-      expect(isWritable(stream)).toBe(true)
+      strictEqual(isWritable(stream), true)
     })
 
-    test('calls the init function when write is called', async () => {
+    it('should call the init function when write is called', async () => {
       // given
       let touched = false
       const init = () => {
@@ -216,10 +217,10 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
 
-    test('calls the write function on write', async () => {
+    it('should call the write function on write', async () => {
       // given
       let touched = false
       const write = () => {
@@ -234,7 +235,7 @@ describe('createBaseStream', () => {
       await eventToPromise(stream, 'close')
 
       // then
-      expect(touched).toBe(true)
+      strictEqual(touched, true)
     })
   })
 })

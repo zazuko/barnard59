@@ -1,6 +1,6 @@
-const assert = require('assert')
-const expect = require('expect')
+const { deepStrictEqual, strictEqual, throws } = require('assert')
 const path = require('path')
+const { describe, it } = require('mocha')
 const Pipeline = require('../lib/pipelineFactory')
 const load = require('./support/load-pipeline')
 const ns = require('./support/namespaces')
@@ -8,7 +8,7 @@ const streamToArray = require('./support/streamToArray')
 
 describe('pipeline', () => {
   describe('constructor', () => {
-    test('loads selected pipeline when there are multiple', async () => {
+    it('should load the selected pipeline when there are multiple', async () => {
       // given
       const definition = await load('multiple.ttl')
 
@@ -16,26 +16,26 @@ describe('pipeline', () => {
       const pipeline = Pipeline(definition, ns.pipeline('pipelineB'))
 
       // then
-      assert.ok(pipeline)
+      strictEqual(Boolean(pipeline), true)
     })
 
-    test('throws when the iri is missing', async () => {
+    it('should throw an error when the iri is missing', async () => {
       // given
       const definition = await load('multiple.ttl')
 
       // then
-      assert.throws(() => {
+      throws(() => {
         // when
         Pipeline(definition)
       })
     })
 
-    test('throws when the pipeline is not found', async () => {
+    it('should throw an error when the pipeline is not found', async () => {
       // given
       const definition = await load('multiple.ttl')
 
       // then
-      assert.throws(() => {
+      throws(() => {
         // when
         Pipeline(definition, ns.pipeline('no-such-pipeline'))
       })
@@ -43,7 +43,7 @@ describe('pipeline', () => {
   })
 
   describe('variables', () => {
-    test('should be parsed from definition', async () => {
+    it('should be parsed from definition', async () => {
       // given
       const definition = await load('variables.ttl')
       const iri = ns.pipeline('inline')
@@ -53,10 +53,10 @@ describe('pipeline', () => {
       await pipeline._pipeline.initVariables()
 
       // then
-      expect(pipeline.variables.get('foo')).toBe('bar')
+      strictEqual(pipeline.variables.get('foo'), 'bar')
     })
 
-    test('should combine values from definition and constructor call', async () => {
+    it('should combine values from definition and constructor call', async () => {
       // given
       const definition = await load('variables.ttl')
       const variables = new Map()
@@ -68,11 +68,11 @@ describe('pipeline', () => {
       await pipeline._pipeline.initVariables()
 
       // then
-      expect(pipeline.variables.size).toBe(2)
-      expect(pipeline.variables.get('hello')).toBe('world')
+      strictEqual(pipeline.variables.size, 2)
+      strictEqual(pipeline.variables.get('hello'), 'world')
     })
 
-    test('should get combined from multiple sets', async () => {
+    it('should get combined from multiple sets', async () => {
       // given
       const definition = await load('variables.ttl')
       const iri = ns.pipeline('multiset')
@@ -82,12 +82,12 @@ describe('pipeline', () => {
       await pipeline._pipeline.initVariables()
 
       // then
-      expect(pipeline.variables.size).toBe(2)
-      expect(pipeline.variables.get('username')).toBe('tpluscode')
-      expect(pipeline.variables.get('auth')).toBe('http://auth0.com/connect/token')
+      strictEqual(pipeline.variables.size, 2)
+      strictEqual(pipeline.variables.get('username'), 'tpluscode')
+      strictEqual(pipeline.variables.get('auth'), 'http://auth0.com/connect/token')
     })
 
-    test('should prefer variable from constructor over that from definition', async () => {
+    it('should prefer variable from constructor over that from definition', async () => {
       // given
       const definition = await load('variables.ttl')
       const variables = new Map()
@@ -99,14 +99,14 @@ describe('pipeline', () => {
       await pipeline._pipeline.initVariables()
 
       // then
-      expect(pipeline.variables.size).toBe(1)
-      expect(pipeline.variables.get('foo')).toBe('boar')
+      strictEqual(pipeline.variables.size, 1)
+      strictEqual(pipeline.variables.get('foo'), 'boar')
     })
   })
 
   describe('steps', () => {
     describe('arguments', () => {
-      test('should accept arguments as rdf:List', async () => {
+      it('should accept arguments as rdf:List', async () => {
         // given
         const definition = await load('arguments.ttl')
         const iri = ns.pipeline('list')
@@ -116,10 +116,10 @@ describe('pipeline', () => {
         const content = await streamToArray(pipeline)
 
         // then
-        expect(content).toEqual(['a', 'b'])
+        deepStrictEqual(content, ['a', 'b'])
       })
 
-      test('should accept arguments as key value pairs', async () => {
+      it('should accept arguments as key value pairs', async () => {
         // given
         const definition = await load('arguments.ttl')
         const iri = ns.pipeline('key-values')
@@ -129,13 +129,13 @@ describe('pipeline', () => {
         const content = await streamToArray(pipeline)
 
         // then
-        expect(content).toEqual([{ a: '1', b: '2' }])
+        deepStrictEqual(content, [{ a: '1', b: '2' }])
       })
     })
   })
 
   describe('run', () => {
-    test('should forward stream errors to the logger', async () => {
+    it('should forward stream errors to the logger', async () => {
       // given
       const definition = await load('stream-error.ttl')
       const iri = ns.pipeline('')
@@ -155,9 +155,9 @@ describe('pipeline', () => {
       } catch (err) {}
 
       // then
-      assert.strictEqual(errors.length, 1)
-      assert.strictEqual(errors[0].message.includes('error in pipeline step http://example.org/pipeline/error'), true)
-      assert.strictEqual(errors[0].message.includes('at ReadStream'), true)
+      strictEqual(errors.length, 1)
+      strictEqual(errors[0].message.includes('error in pipeline step http://example.org/pipeline/error'), true)
+      strictEqual(errors[0].message.includes('at ReadStream'), true)
     })
   })
 })

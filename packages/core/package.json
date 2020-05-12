@@ -4,9 +4,8 @@
   "description": "Core component of Barnard59 Linked Data pipelines",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ext .js .",
-    "pretest": "npm run lint",
-    "test": "jest"
+    "coverage": "codecov",
+    "test": "standard && mocha"
   },
   "repository": {
     "type": "git",
@@ -31,25 +30,12 @@
   },
   "devDependencies": {
     "@rdfjs/parser-n3": "^1.1.2",
-    "@types/expect": "^1.20.3",
-    "@types/sinon": "^7.0.11",
     "barnard59-base": "0.0.1",
-    "eslint": "^5.15.1",
-    "eslint-plugin-jest": "^22.3.0",
-    "expect": "^23.6.0",
-    "jest": "^23.6.0",
-    "jest-extended": "^0.11.0",
-    "jest-fetch-mock": "^2.1.1",
+    "codecov": "^3.6.5",
+    "mocha": "^7.1.2",
+    "nock": "^12.0.3",
     "rdf-ext": "^1.1.2",
     "sinon": "^7.3.1",
-    "standard": "^12.0.1"
-  },
-  "jest": {
-    "automock": false,
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "lib/**"
-    ],
-    "setupTestFrameworkScriptFile": "jest-extended"
+    "standard": "^14.3.4"
   }
 }

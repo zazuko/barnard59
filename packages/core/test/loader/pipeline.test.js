@@ -24,8 +24,8 @@ describe('pipeline loader', () => {
     const node = def.node(example('sub-pipeline'))
       .addOut(ns.rdf('type'), ns.p('Pipeline'))
     const variables = new Map([
-      [ 'foo', 'bar' ],
-      [ 'hello', 'world' ]
+      ['foo', 'bar'],
+      ['hello', 'world']
     ])
 
     // when
