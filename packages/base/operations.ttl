@@ -17,6 +17,13 @@
     code:link <node:barnard59-base#flatten>
   ].
 
+<glob> a p:Operation, p:Readable;
+  rdfs:label "Glob";
+  rdfs:comment "Match files using the given pattern and emits each filename as a single chunk.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#glob>
+  ].
+
 <json/parse> a p:Operation, p:Writable, p:Readable;
   rdfs:label "Parse JSON";
   rdfs:comment "Converts each chunk to an object by calling JSON.parse().";
