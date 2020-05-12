@@ -1,13 +1,14 @@
+const { strictEqual } = require('assert')
 const clownface = require('clownface')
-const expect = require('expect')
+const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
+const { Writable } = require('readable-stream')
+const sinon = require('sinon')
 const run = require('../lib/run')
 const Logger = require('../lib/logger')
-const sinon = require('sinon')
-const { Writable } = require('readable-stream')
 
 describe('Logger', () => {
-  test('should unpipe itself from master at end', async () => {
+  it('should unpipe itself from master at end', async () => {
     // given
     const masterNode = clownface(rdf.dataset(), rdf.namedNode('http://example.org/master'))
     const master = new Logger(masterNode)
@@ -19,10 +20,10 @@ describe('Logger', () => {
     await run(child)
 
     // then
-    expect(child._readableState.pipesCount).toBe(0)
+    strictEqual(child._readableState.pipesCount, 0)
   })
 
-  test('should not push forwarded logs if has not been piped', () => {
+  it('should not push forwarded logs if has not been piped', () => {
     // given
     const masterNode = clownface(rdf.dataset(), rdf.namedNode('http://example.org/master'))
     const master = new Logger(masterNode)
@@ -34,10 +35,10 @@ describe('Logger', () => {
     child.debug('test', 'message')
 
     // then
-    expect(pushSpy.notCalled).toBeTruthy()
+    strictEqual(pushSpy.notCalled, true)
   })
 
-  test('should not push direct log if has not been piped', () => {
+  it('should not push direct log if has not been piped', () => {
     // given
     const masterNode = clownface(rdf.dataset(), rdf.namedNode('http://example.org/master'))
     const master = new Logger(masterNode)
@@ -47,10 +48,10 @@ describe('Logger', () => {
     master.debug('test', 'message')
 
     // then
-    expect(pushSpy.notCalled).toBeTruthy()
+    strictEqual(pushSpy.notCalled, true)
   })
 
-  test('should push forwarded logs when piped', () => {
+  it('should push forwarded logs when piped', () => {
     // given
     const masterNode = clownface(rdf.dataset(), rdf.namedNode('http://example.org/master'))
     const master = new Logger(masterNode)
@@ -63,10 +64,10 @@ describe('Logger', () => {
     master.debug('test', 'message')
 
     // then
-    expect(pushSpy.called).toBeTruthy()
+    strictEqual(pushSpy.called, true)
   })
 
-  test('should push direct logs when piped', () => {
+  it('should push direct logs when piped', () => {
     // given
     const masterNode = clownface(rdf.dataset(), rdf.namedNode('http://example.org/master'))
     const master = new Logger(masterNode)
@@ -81,6 +82,6 @@ describe('Logger', () => {
     child.debug('test', 'message')
 
     // then
-    expect(pushSpy.called).toBeTruthy()
+    strictEqual(pushSpy.called, true)
   })
 })

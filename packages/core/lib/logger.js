@@ -1,6 +1,6 @@
 const Transform = require('readable-stream').Transform
 
-const levels = [ 'trace', 'debug', 'info', 'warn', 'error', 'fatal' ]
+const levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal']
 
 class Logger extends Transform {
   constructor (node, { master } = {}) {

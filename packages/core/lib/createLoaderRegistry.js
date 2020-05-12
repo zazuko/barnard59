@@ -12,7 +12,7 @@ const defaultLoaders = [
 ]
 
 function createLoaderRegistry (additionalLoaders = []) {
-  const loaders = [ ...defaultLoaders, ...additionalLoaders ]
+  const loaders = [...defaultLoaders, ...additionalLoaders]
 
   return loaders.reduce((registry, loader) => {
     loader.register(registry)

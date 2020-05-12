@@ -32,7 +32,7 @@
     code:link <node:barnard59-base#map> ;
     a ex:DeferredEcmaScript
   ];
-  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': 'http://worldclockapi.com/api/json/cet/now', date: json.datetime } }"^^code:EcmaScript) .
+  code:arguments ("json => { return { abc: 'dfg' } }"^^code:EcmaScript) .
 
 <serialize> a p:Step ;
   code:implementedBy [
