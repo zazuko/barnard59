@@ -23,10 +23,10 @@
     "readable-stream": "^3.4.0"
   },
   "devDependencies": {
-    "barnard59": "0.0.2",
+    "barnard59": "^0.1.0",
     "ftp-srv": "^4.2.0",
     "get-stream": "^5.1.0",
-    "jest": "^24.9.0",
+    "jest": "^26.0.1",
     "rimraf": "^3.0.0",
     "sftp-fs": "^0.0.7",
     "standard": "^14.1.0"
