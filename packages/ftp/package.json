@@ -28,7 +28,7 @@
     "get-stream": "^5.1.0",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
-    "sftp-fs": "github:martinmaillard/sftp-fs#master",
+    "sftp-fs": "^0.0.7",
     "standard": "^14.1.0"
   }
 }
