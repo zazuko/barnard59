@@ -3,6 +3,7 @@ const combine = require('./lib/combine')
 const fetch = require('./lib/fetch')
 const filter = require('./lib/filter')
 const flatten = require('./lib/flatten')
+const glob = require('./lib/glob')
 const json = require('./lib/json')
 const limit = require('./lib/limit')
 const map = require('./lib/map')
@@ -20,6 +21,7 @@ module.exports = {
   fileToDataset,
   filter,
   flatten,
+  glob,
   json,
   limit,
   map,
