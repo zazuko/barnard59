@@ -1,53 +1,51 @@
 const { promisify } = require('util')
-const { finished, Duplex, Readable } = require('readable-stream')
+const { finished, Duplex } = require('readable-stream')
 const { isWritable } = require('isstream')
 const ReadableToReadable = require('readable-to-readable')
 
-function objectToReadable (content, objectMode) {
-  const stream = new Readable({
-    objectMode,
-    read: () => {}
-  })
-
-  stream.push(content)
-  stream.push(null)
-
-  return stream
-}
-
 class ForEach extends Duplex {
-  constructor (pipeline, master, log, handleChunk) {
+  constructor ({ pipeline, master, log, variable }) {
     super({ objectMode: true })
 
     this.log = log
     this.child = pipeline
     this.master = master
-    this.handleChunk = handleChunk
-    this.readFrom = null
+    this.variable = variable
+    this.pull = null
     this.done = false
   }
 
   async _write (chunk, encoding, callback) {
     try {
-      const current = this.child.clone({
-        ...this.master,
+      const subPipeline = this.child.clone({
+        basePath: this.master.basePath,
+        context: this.master.context,
         objectMode: true,
+        variables: this.master.variables,
         log: this.log
       })
 
-      this.readFrom = ReadableToReadable.readFrom(current, { end: false })
+      this.pull = ReadableToReadable.readFrom(subPipeline, { end: false })
 
-      if (this.handleChunk) {
-        this.handleChunk.call(undefined, current, chunk)
+      if (this.variable) {
+        // if the argument is a function, call it with the chunk as argument
+        if (typeof this.variable === 'function') {
+          this.variable.call(undefined, subPipeline, chunk)
+        }
+
+        // if the argument is a string, assign the chunk to the variable with the argument as key
+        if (typeof this.variable === 'string' && subPipeline.variables) {
+          subPipeline.variables.set(this.variable, chunk)
+        }
       }
 
-      if (isWritable(current)) {
-        objectToReadable(chunk, current._writableState.objectMode).pipe(current)
+      if (isWritable(subPipeline)) {
+        subPipeline.end(chunk)
       }
 
-      await promisify(finished)(current)
+      await promisify(finished)(subPipeline)
 
-      this.readFrom = null
+      this.pull = null
 
       return callback()
     } catch (cause) {
@@ -64,11 +62,11 @@ class ForEach extends Duplex {
       return this.push(null)
     }
 
-    if (this.readFrom && !await this.readFrom()) {
+    if (this.pull && !await this.pull()) {
       return
     }
 
-    setTimeout(() => this._read(), 0)
+    setImmediate(() => this._read())
   }
 
   _final (callback) {
@@ -76,10 +74,15 @@ class ForEach extends Duplex {
 
     callback()
   }
-
-  static create (pipeline, handleChunk) {
-    return new ForEach(pipeline, this.pipeline, this.log, handleChunk)
-  }
 }
 
-module.exports = ForEach.create
+function factory (pipeline, variable) {
+  return new ForEach({
+    pipeline,
+    master: this.pipeline,
+    log: this.log,
+    variable
+  })
+}
+
+module.exports = factory
