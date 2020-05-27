@@ -1,0 +1,11 @@
+@base <http://barnard59.zazuko.com/operations/rdf/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<mapMatch> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Map only matches";
+  rdfs:comment "Calls a map function only for quads matching the SPOG pattern.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/mapMatch>
+  ].
