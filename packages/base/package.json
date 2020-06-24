@@ -22,6 +22,7 @@
     "duplexify": "^3.6.1",
     "lodash": "^4.17.15",
     "nodeify-fetch": "^2.0.0",
+    "parallel-transform": "^1.2.0",
     "rdf-ext": "^1.1.2",
     "rdf-transform-triple-to-quad": "^1.0.1",
     "readable-stream": "^3.0.6",
@@ -33,6 +34,7 @@
     "isstream": "^0.1.2",
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
-    "standard": "^14.3.1"
+    "standard": "^14.3.1",
+    "into-stream": "^5.1.1"
   }
 }
