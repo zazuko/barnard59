@@ -100,7 +100,11 @@ class ToObservation extends Transform {
     }
 
     if (observations) {
-      this.options.observations = asTermObject(observations)
+      if (typeof observations === 'function') {
+        this.options.observations = observations
+      } else {
+        this.options.observations = asTermObject(observations)
+      }
     }
 
     if (observation) {

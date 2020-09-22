@@ -297,6 +297,25 @@ describe('cube.toObservation', () => {
   })
 
   describe('observations', () => {
+    it('should use the given observations function to generate the observations term', async () => {
+      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+        .addOut(ns.ex.property, 'value')
+        .dataset
+
+      const transform = toObservation({
+        observations: () => {
+          return ns.ex('observation/')
+        }
+      })
+
+      intoStream.object([dataset]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation = findObservation(result)
+
+      strictEqual(ns.ex('observation/').equals(observation.in(ns.cube.observation).term), true)
+    })
+
     it('should use the given observations IRI string as observation set', async () => {
       const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
         .addOut(ns.ex.property, 'value')
