@@ -1,4 +1,4 @@
-const { strictEqual } = require('assert')
+const { rejects, strictEqual } = require('assert')
 const clownface = require('clownface')
 const getStream = require('get-stream')
 const intoStream = require('into-stream')
@@ -6,7 +6,7 @@ const { isDuplex } = require('isstream')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
-const TermSet = require('@rdfjs/term-set')
+const { termToNTriples: toNT } = require('@rdfjs/to-ntriples')
 const dateToId = require('../../lib/dateToId')
 const toObservation = require('../../lib/cube/toObservation')
 
@@ -15,6 +15,10 @@ const ns = {
   ex: namespace('http://example.org/'),
   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
   xsd: namespace('http://www.w3.org/2001/XMLSchema#')
+}
+
+function createMeasure ({ term = ns.ex('topic/a') } = {}) {
+  return clownface({ dataset: rdf.dataset(), term })
 }
 
 function findObservation (result) {
@@ -33,9 +37,7 @@ describe('cube.toObservation', () => {
   })
 
   it('should create an observation with default values', async () => {
-    const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-      .addOut(ns.ex.property, 'value')
-      .dataset
+    const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
     const transform = toObservation()
 
@@ -44,36 +46,16 @@ describe('cube.toObservation', () => {
     const result = await getStream.array(transform)
     const observation = findObservation(result)
 
-    strictEqual(ns.ex('measure/observation/0').equals(observation.term), true) // observation IRI
-    strictEqual(rdf.literal('value').equals(observation.out(ns.ex.property).term), true) // data
-    strictEqual(ns.ex.measure.equals(observation.out(ns.cube.observedBy).term), true) // observer
-    strictEqual(ns.cube.Observation.equals(observation.out(ns.rdf.type).term), true) // type
-    strictEqual(ns.ex('measure/observation').equals(observation.in(ns.cube.observation).term), true) // observation set
-  })
-
-  it('should use the index to create observation IRIs', async () => {
-    const dataset1 = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-      .addOut(ns.ex.property, 'value')
-      .dataset
-    const dataset2 = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-      .addOut(ns.ex.property, 'value')
-      .dataset
-
-    const transform = toObservation()
-
-    intoStream.object([dataset1, dataset2]).pipe(transform)
-
-    const result = await getStream.array(transform)
-    const observation1 = findObservation([result[0]])
-    const observation2 = findObservation([result[1]])
-
-    strictEqual(ns.ex('measure/observation/0').equals(observation1.term), true)
-    strictEqual(ns.ex('measure/observation/1').equals(observation2.term), true)
+    strictEqual(toNT(ns.ex('topic/observation/a')), toNT(observation.term)) // observation IRI
+    strictEqual(toNT(rdf.literal('value')), toNT(observation.out(ns.ex.property).term)) // data
+    strictEqual(toNT(ns.ex('')), toNT(observation.out(ns.cube.observedBy).term)) // observer
+    strictEqual(toNT(ns.cube.Observation), toNT(observation.out(ns.rdf.type).term)) // type
+    strictEqual(toNT(ns.ex('topic/observation/')), toNT(observation.in(ns.cube.observation).term)) // observation set
   })
 
   describe('observer', () => {
     it('should not touch an existing observer', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+      const dataset = createMeasure()
         .addOut(ns.cube.observedBy, ns.ex.observer)
         .addOut(ns.ex.property, 'value')
         .dataset
@@ -85,13 +67,11 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex.observer.equals(observation.out(ns.cube.observedBy).term), true)
+      strictEqual(toNT(ns.ex.observer), toNT(observation.out(ns.cube.observedBy).term))
     })
 
     it('should use the given observer IRI given as string', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({ observer: ns.ex.observer.value })
 
@@ -100,13 +80,11 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex.observer.equals(observation.out(ns.cube.observedBy).term), true)
+      strictEqual(toNT(ns.ex.observer), toNT(observation.out(ns.cube.observedBy).term))
     })
 
     it('should use the given observer given as NamedNode', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({ observer: ns.ex.observer })
 
@@ -115,96 +93,130 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex.observer.equals(observation.out(ns.cube.observedBy).term), true)
+      strictEqual(toNT(ns.ex.observer), toNT(observation.out(ns.cube.observedBy).term))
+    })
+  })
+
+  describe('index', () => {
+    it('should use an IRI with an index to generate the observation term', async () => {
+      const dataset1 = createMeasure().addOut(ns.ex.property, 'value').dataset
+      const dataset2 = createMeasure().addOut(ns.ex.property, 'value').dataset
+
+      const transform = toObservation({
+        useIndex: true
+      })
+
+      intoStream.object([dataset1, dataset2]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation1 = findObservation([result[0]])
+      const observation2 = findObservation([result[1]])
+
+      strictEqual(toNT(ns.ex('topic/observation/0')), toNT(observation1.term))
+      strictEqual(toNT(ns.ex('topic/observation/1')), toNT(observation2.term))
     })
   })
 
   describe('date', () => {
-    it('should find the date by datatype', async () => {
+    it('should find the date by datatype if useDate is boolean true', async () => {
       const date = new Date('2020-01-01T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+      const dataset = createMeasure()
         .addOut(ns.ex.property, 'value')
         .addOut(ns.ex.date, rdf.literal(date.toISOString(), ns.xsd.dateTime))
         .dataset
 
-      const transform = toObservation()
+      const transform = toObservation({ useDate: true })
 
       intoStream.object([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex(`measure/observation/${dateToId(date)}`).equals(observation.term), true)
+      strictEqual(toNT(ns.ex(`topic/observation/${dateToId(date)}`)), toNT(observation.term))
     })
 
-    it('should ignore multiple values with dateTime datatype', async () => {
+    it('should find the date by datatype if useDate is string true', async () => {
       const date = new Date('2020-01-01T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+      const dataset = createMeasure()
+        .addOut(ns.ex.property, 'value')
+        .addOut(ns.ex.date, rdf.literal(date.toISOString(), ns.xsd.dateTime))
+        .dataset
+
+      const transform = toObservation({ useDate: 'true' })
+
+      intoStream.object([dataset]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation = findObservation(result)
+
+      strictEqual(toNT(ns.ex(`topic/observation/${dateToId(date)}`)), toNT(observation.term))
+    })
+
+    it('should throw an error if multiple objects with a data datatype are found', async () => {
+      const date = new Date('2020-01-01T00:00:00.000Z')
+      const dataset = createMeasure()
         .addOut(ns.ex.property, 'value')
         .addOut(ns.ex.date1, rdf.literal(date.toISOString(), ns.xsd.dateTime))
         .addOut(ns.ex.date2, rdf.literal(date.toISOString(), ns.xsd.dateTime))
         .dataset
 
-      const transform = toObservation()
+      const transform = toObservation({ useDate: true })
 
       intoStream.object([dataset]).pipe(transform)
 
-      const result = await getStream.array(transform)
-      const observation = findObservation(result)
-
-      strictEqual(ns.ex('measure/observation/0').equals(observation.term), true)
+      await rejects(async () => {
+        await getStream.array(transform)
+      })
     })
 
     it('should find the date using the given property IRI string', async () => {
       const date1 = new Date('2020-01-01T00:00:00.000Z')
       const date2 = new Date('2020-01-02T00:00:00.000Z')
       const date3 = new Date('2020-01-03T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+      const dataset = createMeasure()
         .addOut(ns.ex.property, 'value')
         .addOut(ns.ex.date1, rdf.literal(date1.toISOString(), ns.xsd.dateTime))
         .addOut(ns.ex.date2, rdf.literal(date2.toISOString(), ns.xsd.dateTime))
         .addOut(ns.ex.date3, rdf.literal(date3.toISOString(), ns.xsd.dateTime))
         .dataset
 
-      const transform = toObservation({ date: ns.ex.date2.value })
+      const transform = toObservation({ useDate: ns.ex.date2.value })
 
       intoStream.object([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex(`measure/observation/${dateToId(date2)}`).equals(observation.term), true)
+      strictEqual(toNT(ns.ex(`topic/observation/${dateToId(date2)}`)), toNT(observation.term))
     })
 
     it('should find the date using the given property', async () => {
       const date1 = new Date('2020-01-01T00:00:00.000Z')
       const date2 = new Date('2020-01-02T00:00:00.000Z')
       const date3 = new Date('2020-01-03T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+      const dataset = createMeasure()
         .addOut(ns.ex.property, 'value')
         .addOut(ns.ex.date1, rdf.literal(date1.toISOString(), ns.xsd.dateTime))
         .addOut(ns.ex.date2, rdf.literal(date2.toISOString(), ns.xsd.dateTime))
         .addOut(ns.ex.date3, rdf.literal(date3.toISOString(), ns.xsd.dateTime))
         .dataset
 
-      const transform = toObservation({ date: ns.ex.date2 })
+      const transform = toObservation({ useDate: ns.ex.date2 })
 
       intoStream.object([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex(`measure/observation/${dateToId(date2)}`).equals(observation.term), true)
+      strictEqual(toNT(ns.ex(`topic/observation/${dateToId(date2)}`)), toNT(observation.term))
     })
 
     it('should use the given function to generate the date', async () => {
       const date = new Date('2020-01-01T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({
-        date: () => {
+        useDate: () => {
           return rdf.literal(date.toISOString(), ns.xsd.dateTime)
         }
       })
@@ -214,93 +226,26 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex(`measure/observation/${dateToId(date)}`).equals(observation.term), true)
+      strictEqual(toNT(ns.ex(`topic/observation/${dateToId(date)}`)), toNT(observation.term))
     })
 
-    it('should use the current date if date is true', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+    it('should use the current date if useDate is now', async () => {
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
-      const transform = toObservation({ date: true })
+      const transform = toObservation({ useDate: 'now' })
 
       intoStream.object([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex(`measure/observation/${dateToId(new Date())}`).value.slice(0, -4), observation.value.slice(0, -4))
-    })
-
-    it('should use the current date if date has the string value true', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
-
-      const transform = toObservation({ date: 'true' })
-
-      intoStream.object([dataset]).pipe(transform)
-
-      const result = await getStream.array(transform)
-      const observation = findObservation(result)
-
-      strictEqual(ns.ex(`measure/observation/${dateToId(new Date())}`).value.slice(0, -4), observation.value.slice(0, -4))
-    })
-  })
-
-  describe('dateProperty', () => {
-    it('should use the given dateProperty IRI string to add a date property', async () => {
-      const date = new Date('2020-01-01T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
-
-      const transform = toObservation({
-        date: () => {
-          return rdf.literal(date.toISOString(), ns.xsd.dateTime)
-        },
-        dateProperty: ns.ex.date.value
-      })
-
-      intoStream.object([dataset]).pipe(transform)
-
-      const result = await getStream.array(transform)
-      const observation = findObservation(result)
-      const dateTerm = observation.out(ns.ex.date).term
-
-      strictEqual(dateTerm.value, date.toISOString())
-      strictEqual(dateTerm.datatype.equals(ns.xsd.dateTime), true)
-    })
-
-    it('should use the given dateProperty to add a date property', async () => {
-      const date = new Date('2020-01-01T00:00:00.000Z')
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
-
-      const transform = toObservation({
-        date: () => {
-          return rdf.literal(date.toISOString(), ns.xsd.dateTime)
-        },
-        dateProperty: ns.ex.date
-      })
-
-      intoStream.object([dataset]).pipe(transform)
-
-      const result = await getStream.array(transform)
-      const observation = findObservation(result)
-      const dateTerm = observation.out(ns.ex.date).term
-
-      strictEqual(dateTerm.value, date.toISOString())
-      strictEqual(dateTerm.datatype.equals(ns.xsd.dateTime), true)
+      strictEqual(ns.ex(`topic/observation/${dateToId(new Date())}`).value.slice(0, -4), observation.value.slice(0, -4))
     })
   })
 
   describe('observations', () => {
     it('should use the given observations function to generate the observations term', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({
         observations: () => {
@@ -313,13 +258,11 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex('observation/').equals(observation.in(ns.cube.observation).term), true)
+      strictEqual(toNT(ns.ex('observation/')), toNT(observation.in(ns.cube.observation).term))
     })
 
     it('should use the given observations IRI string as observation set', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({ observations: ns.ex.observation.value })
 
@@ -328,13 +271,11 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex.observation.equals(observation.in(ns.cube.observation).term), true)
+      strictEqual(toNT(ns.ex.observation), toNT(observation.in(ns.cube.observation).term))
     })
 
     it('should use the given observations observation set', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({ observations: ns.ex.observation })
 
@@ -343,15 +284,13 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex.observation.equals(observation.in(ns.cube.observation).term), true)
+      strictEqual(toNT(ns.ex.observation), toNT(observation.in(ns.cube.observation).term))
     })
   })
 
   describe('observation', () => {
     it('should use the given observation function to generate the observation term', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
-        .addOut(ns.ex.property, 'value')
-        .dataset
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({
         observation: () => {
@@ -364,13 +303,13 @@ describe('cube.toObservation', () => {
       const result = await getStream.array(transform)
       const observation = findObservation(result)
 
-      strictEqual(ns.ex('observation/123').equals(observation.term), true)
+      strictEqual(toNT(ns.ex('observation/123')), toNT(observation.term))
     })
   })
 
   describe('blacklist', () => {
     it('should delete properties given as Array of strings in the blacklist', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+      const dataset = createMeasure()
         .addOut(ns.ex.property1, 'value1')
         .addOut(ns.ex.property2, 'value2')
         .addOut(ns.ex.property3, 'value3')
@@ -388,14 +327,16 @@ describe('cube.toObservation', () => {
       strictEqual(observation.out(ns.ex.property3).terms.length, 0)
     })
 
-    it('should delete properties given as TermSet in the blacklist', async () => {
-      const dataset = clownface({ dataset: rdf.dataset(), term: ns.ex.measure })
+    it('should delete properties given as of graph pointers in the blacklist', async () => {
+      const dataset = createMeasure()
         .addOut(ns.ex.property1, 'value1')
         .addOut(ns.ex.property2, 'value2')
         .addOut(ns.ex.property3, 'value3')
         .dataset
 
-      const transform = toObservation({ blacklist: new TermSet([ns.ex.property1, ns.ex.property3]) })
+      const transform = toObservation({
+        blacklist: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })]
+      })
 
       intoStream.object([dataset]).pipe(transform)
 
@@ -405,6 +346,44 @@ describe('cube.toObservation', () => {
       strictEqual(observation.out(ns.ex.property1).terms.length, 0)
       strictEqual(observation.out(ns.ex.property2).terms.length, 1)
       strictEqual(observation.out(ns.ex.property3).terms.length, 0)
+    })
+  })
+
+  describe('dimensions', () => {
+    it('should fill properties given as Array of strings in dimensions with NaN if there is no value', async () => {
+      const dataset = createMeasure()
+        .addOut(ns.ex.property2, 'value2')
+        .dataset
+
+      const transform = toObservation({ dimensions: [ns.ex.property1.value, ns.ex.property3.value] })
+
+      intoStream.object([dataset]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation = findObservation(result)
+
+      strictEqual(toNT(observation.out(ns.ex.property1).term), toNT(rdf.literal('NaN', ns.xsd.double)))
+      strictEqual(toNT(observation.out(ns.ex.property2).term), toNT(rdf.literal('value2')))
+      strictEqual(toNT(observation.out(ns.ex.property3).term), toNT(rdf.literal('NaN', ns.xsd.double)))
+    })
+
+    it('should fill properties given as Array of graph pointers in dimensions with NaN if there is no value', async () => {
+      const dataset = createMeasure()
+        .addOut(ns.ex.property2, 'value2')
+        .dataset
+
+      const transform = toObservation({
+        dimensions: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })]
+      })
+
+      intoStream.object([dataset]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation = findObservation(result)
+
+      strictEqual(toNT(observation.out(ns.ex.property1).term), toNT(rdf.literal('NaN', ns.xsd.double)))
+      strictEqual(toNT(observation.out(ns.ex.property2).term), toNT(rdf.literal('value2')))
+      strictEqual(toNT(observation.out(ns.ex.property3).term), toNT(rdf.literal('NaN', ns.xsd.double)))
     })
   })
 })

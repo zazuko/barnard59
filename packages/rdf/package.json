@@ -19,12 +19,14 @@
   "homepage": "https://github.com/zazuko/barnard59-rdf",
   "dependencies": {
     "@rdfjs/namespace": "^1.1.0",
+    "@rdfjs/term-map": "^1.0.0",
     "@rdfjs/term-set": "^1.0.1",
     "clownface": "^1.0.0",
     "rdf-ext": "^1.3.0",
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
+    "@rdfjs/to-ntriples": "^1.0.2",
     "get-stream": "^5.1.0",
     "into-stream": "^5.1.1",
     "isstream": "^0.1.2",
