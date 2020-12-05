@@ -30,6 +30,8 @@ class ConcatStream extends Readable {
     this.current = this.streams.shift()
 
     if (this.current) {
+      this.current.on('error', err => this.destroy(err))
+
       finished(this.current, () => this.next())
     }
   }

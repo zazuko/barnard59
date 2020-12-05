@@ -1,4 +1,4 @@
-const { deepStrictEqual, strictEqual } = require('assert')
+const { deepStrictEqual, strictEqual, rejects } = require('assert')
 const getStream = require('get-stream')
 const { isReadable, isWritable } = require('isstream')
 const { describe, it } = require('mocha')
@@ -68,6 +68,26 @@ describe('concat', () => {
     strictEqual(result, 'abcd')
   })
 
+  it('should forward error events', async () => {
+    const stream0 = new Readable({
+      read: () => {
+        stream0.destroy(new Error('test'))
+      }
+    })
+
+    const stream1 = new Readable({
+      read: () => {
+        stream1.push('c')
+        stream1.push('d')
+        stream1.push(null)
+      }
+    })
+
+    const s = concat(stream0, stream1)
+
+    await rejects(() => getStream(s))
+  })
+
   describe('object', () => {
     it('should be a function', () => {
       strictEqual(typeof concat.object, 'function')
@@ -131,6 +151,28 @@ describe('concat', () => {
       const result = await getStream.array(s)
 
       deepStrictEqual(result, ['a', 'b', 'c', 'd'])
+    })
+
+    it('should forward error events', async () => {
+      const stream0 = new Readable({
+        objectMode: true,
+        read: () => {
+          stream0.destroy(new Error('test'))
+        }
+      })
+
+      const stream1 = new Readable({
+        objectMode: true,
+        read: () => {
+          stream1.push('c')
+          stream1.push('d')
+          stream1.push(null)
+        }
+      })
+
+      const s = concat.object(stream0, stream1)
+
+      await rejects(() => getStream.array(s))
     })
   })
 })
