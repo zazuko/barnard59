@@ -12,23 +12,10 @@ const ns = {
 
 const pipelineFile = 'sample-pipelines/fetch-json-to-ntriples.ttl'
 
-async function streamToArray (stream) {
-    const chunks = []
-    return new Promise((resolve, reject) => {
-      stream.on('data', chunk => chunks.push(chunk))
-      stream.on('end', () => resolve(chunks))
-      stream.on('error', error => {
-        console.error(error);
-        reject(error);
-      })
-    })
-  }
-
 async function readGraph(file) {
 
   const stream = await fromFile(file)
-  const quads = await streamToArray(stream)
-  const dataset = rdf.dataset(quads)
+  const dataset = await rdf.dataset().import(stream)
 
   const clownfaceObj = cf({ dataset })
 
@@ -49,7 +36,7 @@ async function getPipelines(graph) {
 
 async function getIdentifiers(graph) {
 
-  var pipeline2identifier = {};
+  const pipeline2identifier = {};
 
   graph
     .has(ns.rdf.type, ns.p.Pipeline)
