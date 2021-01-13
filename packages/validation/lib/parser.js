@@ -15,9 +15,7 @@ const ns = {
   code: namespace('https://code.described.at/')
 }
 
-const errors = []
-
-async function readGraph (file) {
+async function readGraph (file, errors = []) {
   const quadStream = fromFile(file)
   const parserPromise = new Promise((resolve, reject) => {
     quadStream.on('error', reject)
@@ -31,13 +29,7 @@ async function readGraph (file) {
   }
   catch (err) {
     const error = await parseError(file, err)
-    errors.push(error)
-  }
-
-  if (errors.length) {
-    const error = errors[0]
-    console.error(`${error.message} Line ${error.context.line}: \n${error.context.lineContent}`)
-    throw error
+    errors.push(`Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`)
   }
 
   const clownfaceObj = cf({ dataset })
@@ -119,13 +111,13 @@ function getModuleOperationProperties (graph, identifiers) {
   return operation2properties
 }
 
-function validateDependencies (dependencies) {
+function validateDependencies (dependencies, errors = []) {
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
       const modulePath = removeFilePart(require.resolve(module))
 
       if (!(fs.existsSync(modulePath))) {
-        throw ReferenceError(`Cannot find package ${module}. Did you install it?`)
+        errors.push(`Missing package ${module}.`)
       }
     }
   }
@@ -157,21 +149,21 @@ function getDependencies (codelinks) {
   return dependencies
 }
 
-async function getAllOperationProperties (dependencies) {
-  let results = {}
+async function getAllOperationProperties (dependencies, errors = []) {
+  const results = {}
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
       const modulePath = removeFilePart(require.resolve(module))
       const operationsPath = `${modulePath}/operations.ttl`
 
       if (fs.existsSync(operationsPath)) {
-        const graph = await readGraph(operationsPath)
+        const graph = await readGraph(operationsPath, errors)
         const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
-        results = Object.assign({}, results, tempResults)
+        Object.assign(results, tempResults)
       }
       else {
-        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join(', ')
-        process.emitWarning(`Operations.ttl file doesn't exist for ${module}. The following steps cannot be validated: ${codelinksWithMissingMetadata}`)
+        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
+        errors.push(`Missing metadata file ${operationsPath}\n  The following steps cannot be validated:\n  * "${codelinksWithMissingMetadata}"`)
 
         for (const codelink of dependencies[env][module]) {
           results[codelink] = null
@@ -182,11 +174,84 @@ async function getAllOperationProperties (dependencies) {
   return results
 }
 
+function validateSteps ({ pipelines, properties }, errors) {
+  Object.entries(pipelines).forEach(([pipeline, steps]) => {
+    const pipelineErrors = []
+    errors.push([pipeline, pipelineErrors])
+
+    steps.reduce((lastStep, step, idx) => {
+      const lastStepProperties = properties[lastStep]
+      const stepProperties = properties[step]
+
+      if (stepProperties === null) {
+        pipelineErrors.push(`Cannot validate step "${step}": no metadata`)
+        return step
+      }
+      if (!stepProperties.includes('Operation')) {
+        pipelineErrors.push(`Invalid step "${step}": it is not a ${ns.p.Operation.value}`)
+      }
+      // first step must be either Readable or ReadableObjectMode
+      else if (idx === 0 && !stepProperties.includes('Readable') && !stepProperties.includes('ReadableObjectMode')) {
+        pipelineErrors.push(`Invalid step "${step}": it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`)
+        return step
+      }
+
+      if (lastStep) {
+        if (lastStepProperties === null) {
+          pipelineErrors.push(`Cannot validate step "${step}": previous step does not have metadata`)
+        }
+        else {
+          // a writable step must always be preceded by a readable step
+          if (stepProperties.includes('Writable')) {
+            if (!lastStepProperties.includes('Readable')) {
+              pipelineErrors.push(`Invalid step "${step}": previous step is not Readable`)
+            }
+          }
+          if (stepProperties.includes('WritableObjectMode')) {
+            if (!lastStepProperties.includes('ReadableObjectMode')) {
+              pipelineErrors.push(`Invalid step "${step}": previous step is not ReadableObjectMode`)
+            }
+          }
+          // a readable step must always be followed by a writable step
+          if (lastStepProperties.includes('Readable')) {
+            if (!stepProperties.includes('Writable')) {
+              pipelineErrors.push(`Invalid step "${step}": step is not Writable`)
+            }
+          }
+          if (lastStepProperties.includes('WritableObjectMode')) {
+            if (!stepProperties.includes('ReadableObjectMode')) {
+              pipelineErrors.push(`Invalid step "${step}": step is not WritableObjectMode`)
+            }
+          }
+        }
+      }
+      return step
+    }, '')
+  })
+}
+
+function printErrors (errors) {
+  errors.forEach((error, i) => {
+    if (typeof error === 'string') {
+      console.error(`${i + 1}. ${error}`)
+    }
+    else if (Array.isArray(error)) {
+      const [pipeline, pipelineErrors] = error
+      console.error(`${i + 1}. Errors in pipeline ${pipeline}`)
+      pipelineErrors.forEach((error, j) => {
+        console.error(`${i + 1}.${j + 1}. ${error}`)
+      })
+    }
+  })
+}
+
 module.exports = {
   readGraph,
   getIdentifiers,
   getAllCodeLinks,
   getDependencies,
   validateDependencies,
-  getAllOperationProperties
+  getAllOperationProperties,
+  printErrors,
+  validateSteps
 }
