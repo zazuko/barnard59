@@ -2,8 +2,11 @@ const cf = require('clownface')
 const fromFile = require('rdf-utils-fs/fromFile')
 const fs = require('fs')
 const namespace = require('@rdfjs/namespace')
+const path = require('path')
 const rdf = require('rdf-ext')
 const readline = require('readline')
+const iriResolve = require('rdf-loader-code/lib/iriResolve')
+const removeFilePart = dirname => path.parse(dirname).dir
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -13,6 +16,7 @@ const ns = {
 }
 
 const pipelineFile = 'sample-pipelines/fetch-json-to-ntriples.ttl'
+
 const errors = []
 
 async function readGraph (file) {
@@ -43,7 +47,7 @@ async function readGraph (file) {
   return clownfaceObj
 }
 
-async function parseError (path, error) {
+function parseError (path, error) {
   const { line, token: _token } = error.context
   if (typeof line === 'number') {
     const rl = readline.createInterface({
@@ -64,18 +68,7 @@ async function parseError (path, error) {
   }
 }
 
-async function getPipelines (graph) {
-  const pipelines = []
-  graph
-    .has(ns.rdf.type, ns.p.Pipeline)
-    .forEach(pipeline => {
-      pipelines.push(pipeline.term.value)
-    })
-
-  return pipelines
-}
-
-async function getIdentifiers (graph) {
+function getIdentifiers (graph) {
   const pipeline2identifier = {}
 
   graph
@@ -100,12 +93,108 @@ async function getIdentifiers (graph) {
   return pipeline2identifier
 }
 
+function getModuleOperationProperties (graph, identifiers) {
+  const operation2properties = {}
+
+  for (const id of identifiers) {
+    operation2properties[id] = []
+
+    graph
+      .namedNode(id)
+      .in(ns.code.link)
+      .in(ns.code.implementedBy)
+      .out(ns.rdf.type)
+      .forEach(node => {
+        const nodeComponents = node.term.value.split('/')
+        const property = nodeComponents[nodeComponents.length - 1]
+
+        operation2properties[id].push(property)
+      })
+  }
+
+  for (const key in operation2properties) {
+    if (operation2properties[key].length === 0) {
+      operation2properties[key] = null
+    }
+  }
+
+  return operation2properties
+}
+
+function validateDependencies (dependencies) {
+  for (const env in dependencies) {
+    for (const module in dependencies[env]) {
+      const modulePath = removeFilePart(require.resolve(module))
+
+      if (!(fs.existsSync(modulePath))) {
+        throw ReferenceError(`Cannot find package ${module}. Did you install it?`)
+      }
+    }
+  }
+}
+
+function getAllCodeLinks (pipelines) {
+  const codelinks = new Set()
+  for (const key in pipelines) {
+    pipelines[key].forEach(step => codelinks.add(step))
+  }
+  return codelinks
+}
+
+function getDependencies (codelinks) {
+  const dependencies = {}
+
+  codelinks.forEach(codelink => {
+    const { protocol, filename } = iriResolve(codelink, process.cwd())
+
+    if (!dependencies[protocol]) {
+      dependencies[protocol] = {}
+    }
+    if (!dependencies[protocol][filename]) {
+      dependencies[protocol][filename] = new Set()
+    }
+    dependencies[protocol][filename].add(codelink)
+  })
+
+  return dependencies
+}
+
+async function getAllOperationProperties (dependencies) {
+  let results = {}
+  for (const env in dependencies) {
+    for (const module in dependencies[env]) {
+      const modulePath = removeFilePart(require.resolve(module))
+      const operationsPath = `${modulePath}/operations.ttl`
+
+      if (fs.existsSync(operationsPath)) {
+        const graph = await readGraph(operationsPath)
+        const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
+        results = Object.assign({}, results, tempResults)
+      }
+      else {
+        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join(', ')
+        process.emitWarning(`Operations.ttl file doesn't exist for ${module}. The following steps cannot be validated: ${codelinksWithMissingMetadata}`)
+
+        for (const codelink of dependencies[env][module]) {
+          results[codelink] = null
+        }
+      }
+    }
+  }
+  return results
+}
+
 async function main () {
   try {
-    const graph = await readGraph(pipelineFile)
-    const steps = getIdentifiers(graph)
+    const pipelineGraph = await readGraph(pipelineFile)
+    const pipelines = getIdentifiers(pipelineGraph)
+    const codelinks = getAllCodeLinks(pipelines)
+    const dependencies = getDependencies(codelinks)
+    validateDependencies(dependencies)
 
-    console.log(steps)
+    const stepProperties = await getAllOperationProperties(dependencies)
+    console.log(pipelines)
+    console.log(stepProperties)
   }
   catch (_err) {}
 }
