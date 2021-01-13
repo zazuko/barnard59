@@ -187,6 +187,7 @@ module.exports = {
   getIdentifiers,
   getAllCodeLinks,
   getDependencies,
+  getModuleOperationProperties,
   validateDependencies,
   getAllOperationProperties
 }

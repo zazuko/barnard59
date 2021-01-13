@@ -24,6 +24,7 @@
     "rdf-ext": "^1.3.0",
     "rdf-loader-code": "^0.3.2",
     "rdf-utils-fs": "^2.1.0",
-    "rdfjs": "0.0.1"
+    "rdfjs": "0.0.1",
+    "sinon": "^9.2.3"
   }
 }
