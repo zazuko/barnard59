@@ -1,0 +1,9 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+
+<serialize> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-formats#ntriples.serialize> ;
+    a code:EcmaScript
+  ] .

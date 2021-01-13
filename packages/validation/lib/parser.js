@@ -15,8 +15,6 @@ const ns = {
   code: namespace('https://code.described.at/')
 }
 
-const pipelineFile = 'sample-pipelines/fetch-json-to-ntriples.ttl'
-
 const errors = []
 
 async function readGraph (file) {
@@ -184,18 +182,11 @@ async function getAllOperationProperties (dependencies) {
   return results
 }
 
-async function main () {
-  try {
-    const pipelineGraph = await readGraph(pipelineFile)
-    const pipelines = getIdentifiers(pipelineGraph)
-    const codelinks = getAllCodeLinks(pipelines)
-    const dependencies = getDependencies(codelinks)
-    validateDependencies(dependencies)
-
-    const stepProperties = await getAllOperationProperties(dependencies)
-    console.log(pipelines)
-    console.log(stepProperties)
-  }
-  catch (_err) {}
+module.exports = {
+  readGraph,
+  getIdentifiers,
+  getAllCodeLinks,
+  getDependencies,
+  validateDependencies,
+  getAllOperationProperties
 }
-main()

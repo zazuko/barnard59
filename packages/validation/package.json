@@ -17,8 +17,12 @@
   },
   "dependencies": {
     "@rdfjs/fetch": "^2.1.0",
+    "barnard59-base": "0.0.5",
+    "barnard59-formats": "0.0.8",
     "clownface": "^1.2.0",
+    "mocha": "^8.2.1",
     "rdf-ext": "^1.3.0",
+    "rdf-loader-code": "^0.3.2",
     "rdf-utils-fs": "^2.1.0",
     "rdfjs": "0.0.1"
   }
