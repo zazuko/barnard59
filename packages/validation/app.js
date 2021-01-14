@@ -17,6 +17,11 @@ async function main () {
   }
   catch (_err) {}
 
-  parser.printErrors(errors)
+  if (process.stdout.isTTY) {
+    parser.printErrors(errors)
+  }
+  else {
+    console.log(JSON.stringify(errors))
+  }
 }
 main()
