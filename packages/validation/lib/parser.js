@@ -6,6 +6,8 @@ const path = require('path')
 const rdf = require('rdf-ext')
 const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
+const Issue = require('./issue')
+
 const removeFilePart = dirname => path.parse(dirname).dir
 
 const ns = {
@@ -29,7 +31,10 @@ async function readGraph (file, errors = []) {
   }
   catch (err) {
     const error = await parseError(file, err)
-    errors.push(`Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`)
+    const issue = Issue.error({
+      message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
+    })
+    errors.push(issue)
   }
 
   const clownfaceObj = cf({ dataset })
@@ -117,7 +122,10 @@ function validateDependencies (dependencies, errors = []) {
       const modulePath = removeFilePart(require.resolve(module))
 
       if (!(fs.existsSync(modulePath))) {
-        errors.push(`Missing package ${module}.`)
+        const issue = Issue.error({
+          message: `Missing package ${module}.`
+        })
+        errors.push(issue)
       }
     }
   }
@@ -163,7 +171,10 @@ async function getAllOperationProperties (dependencies, errors = []) {
       }
       else {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
-        errors.push(`Missing metadata file ${operationsPath}\n  The following steps cannot be validated:\n  * "${codelinksWithMissingMetadata}"`)
+        const issue = Issue.warning({
+          message: `Missing metadata file ${operationsPath}\n  The following operations cannot be validated:\n  * "${codelinksWithMissingMetadata}"`
+        })
+        errors.push(issue)
 
         for (const codelink of dependencies[env][module]) {
           results[codelink] = null
@@ -175,72 +186,104 @@ async function getAllOperationProperties (dependencies, errors = []) {
 }
 
 function validateSteps ({ pipelines, properties }, errors) {
-  Object.entries(pipelines).forEach(([pipeline, steps]) => {
+  Object.entries(pipelines).forEach(([pipeline, operations]) => {
     const pipelineErrors = []
     errors.push([pipeline, pipelineErrors])
 
-    steps.reduce((lastStep, step, idx) => {
-      const lastStepProperties = properties[lastStep]
-      const stepProperties = properties[step]
+    operations.reduce((lastOp, operation, idx) => {
+      const lastOpProperties = properties[lastOp]
+      const operationProperties = properties[operation]
 
-      if (stepProperties === null) {
-        pipelineErrors.push(`Cannot validate step "${step}": no metadata`)
-        return step
+      if (operationProperties === null) {
+        const issue = Issue.warning({
+          operation,
+          message: 'Cannot validate operation: no metadata'
+        })
+        pipelineErrors.push(issue)
+        return operation
       }
-      if (!stepProperties.includes('Operation')) {
-        pipelineErrors.push(`Invalid step "${step}": it is not a ${ns.p.Operation.value}`)
+      if (!operationProperties.includes('Operation')) {
+        const issue = Issue.error({
+          operation,
+          message: `Invalid operation: it is not a ${ns.p.Operation.value}`
+        })
+        pipelineErrors.push(issue)
       }
-      // first step must be either Readable or ReadableObjectMode
-      else if (idx === 0 && !stepProperties.includes('Readable') && !stepProperties.includes('ReadableObjectMode')) {
-        pipelineErrors.push(`Invalid step "${step}": it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`)
-        return step
+      // first operation must be either Readable or ReadableObjectMode
+      else if (idx === 0 && !operationProperties.includes('Readable') && !operationProperties.includes('ReadableObjectMode')) {
+        const issue = Issue.error({
+          operation,
+          message: `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
+        })
+        pipelineErrors.push(issue)
+        return operation
       }
 
-      if (lastStep) {
-        if (lastStepProperties === null) {
-          pipelineErrors.push(`Cannot validate step "${step}": previous step does not have metadata`)
+      if (lastOp) {
+        if (lastOpProperties === null) {
+          const issue = Issue.warning({
+            operation,
+            message: 'Cannot validate operation: previous operation does not have metadata'
+          })
+          pipelineErrors.push(issue)
         }
         else {
-          // a writable step must always be preceded by a readable step
-          if (stepProperties.includes('Writable')) {
-            if (!lastStepProperties.includes('Readable')) {
-              pipelineErrors.push(`Invalid step "${step}": previous step is not Readable`)
+          // a writable operation must always be preceded by a readable operation
+          if (operationProperties.includes('Writable')) {
+            if (!lastOpProperties.includes('Readable')) {
+              const issue = Issue.error({
+                operation,
+                message: 'Invalid operation: previous operation is not Readable'
+              })
+              pipelineErrors.push(issue)
             }
           }
-          if (stepProperties.includes('WritableObjectMode')) {
-            if (!lastStepProperties.includes('ReadableObjectMode')) {
-              pipelineErrors.push(`Invalid step "${step}": previous step is not ReadableObjectMode`)
+          if (operationProperties.includes('WritableObjectMode')) {
+            if (!lastOpProperties.includes('ReadableObjectMode')) {
+              const issue = Issue.error({
+                operation,
+                message: 'Invalid operation: previous operation is not ReadableObjectMode'
+              })
+              pipelineErrors.push(issue)
             }
           }
-          // a readable step must always be followed by a writable step
-          if (lastStepProperties.includes('Readable')) {
-            if (!stepProperties.includes('Writable')) {
-              pipelineErrors.push(`Invalid step "${step}": step is not Writable`)
+          // a readable operation must always be followed by a writable operation
+          if (lastOpProperties.includes('Readable')) {
+            if (!operationProperties.includes('Writable')) {
+              const issue = Issue.error({
+                operation,
+                message: 'Invalid operation: operation is not Writable'
+              })
+              pipelineErrors.push(issue)
             }
           }
-          if (lastStepProperties.includes('WritableObjectMode')) {
-            if (!stepProperties.includes('ReadableObjectMode')) {
-              pipelineErrors.push(`Invalid step "${step}": step is not WritableObjectMode`)
+          if (lastOpProperties.includes('ReadableObjectMode')) {
+            if (!operationProperties.includes('WritableObjectMode')) {
+              const issue = Issue.error({
+                operation,
+                message: 'Invalid operation: operation is not WritableObjectMode'
+              })
+              pipelineErrors.push(issue)
             }
           }
         }
       }
-      return step
+      return operation
     }, '')
   })
 }
 
 function printErrors (errors) {
   errors.forEach((error, i) => {
-    if (typeof error === 'string') {
-      console.error(`${i + 1}. ${error}`)
-    }
-    else if (Array.isArray(error)) {
+    if (Array.isArray(error)) {
       const [pipeline, pipelineErrors] = error
-      console.error(`${i + 1}. Errors in pipeline ${pipeline}`)
+      console.error(`${i + 1}. In pipeline ${pipeline}`)
       pipelineErrors.forEach((error, j) => {
         console.error(`${i + 1}.${j + 1}. ${error}`)
       })
+    }
+    else {
+      console.error(`${i + 1}. ${error}`)
     }
   })
 }
