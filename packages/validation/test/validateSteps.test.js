@@ -9,6 +9,17 @@ const properties = {
   orw: ['Operation', 'Readable', 'Writable'],
   ow: ['Operation', 'Writable'],
   rw: ['Readable', 'Writable'],
+
+  oR: ['Operation', 'ReadableObjectMode'],
+  oRW: ['Operation', 'ReadableObjectMode', 'WritableObjectMode'],
+  oW: ['Operation', 'WritableObjectMode'],
+  RW: ['ReadableObjectMode', 'WritableObjectMode'],
+
+  oRw: ['Operation', 'ReadableObjectMode', 'Writable'],
+  orW: ['Operation', 'Readable', 'WritableObjectMode'],
+  Rw: ['ReadableObjectMode', 'Writable'],
+  rW: ['Readable', 'WritableObjectMode'],
+
   e: [],
   n: null
 }
@@ -31,6 +42,19 @@ describe('parser.validateSteps', () => {
       p3: ['or'],
       p4: ['orw'],
       p5: ['o']
+    }
+    parser.validateSteps({ pipelines, properties }, errors)
+    Object.keys(pipelines).forEach((pipeline) => {
+      assert.deepStrictEqual(errorsForPipeline(errors, pipeline), [])
+    })
+  })
+
+  it('should accept valid pipelines -- object mode', () => {
+    const pipelines = {
+      p1: ['oR', 'oRW', 'oW'],
+      p2: ['oR', 'oRW', 'oRW', 'oRW', 'oRW', 'oW'],
+      p3: ['oR'],
+      p4: ['oRW']
     }
     parser.validateSteps({ pipelines, properties }, errors)
     Object.keys(pipelines).forEach((pipeline) => {
