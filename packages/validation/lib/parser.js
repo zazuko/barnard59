@@ -186,13 +186,15 @@ async function getAllOperationProperties (dependencies, errors = []) {
 }
 
 function validateSteps ({ pipelines, properties }, errors) {
-  Object.entries(pipelines).forEach(([pipeline, operations]) => {
+  Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const pipelineErrors = []
     errors.push([pipeline, pipelineErrors])
 
-    operations.reduce((lastOp, operation, idx) => {
+    steps.reduce((lastOp, operation, idx) => {
       const lastOpProperties = properties[lastOp]
       const operationProperties = properties[operation]
+      const isFirstStep = idx === 0
+      const isOnlyStep = steps.length === 1
 
       if (operationProperties === null) {
         const issue = Issue.warning({
@@ -209,8 +211,8 @@ function validateSteps ({ pipelines, properties }, errors) {
         })
         pipelineErrors.push(issue)
       }
-      // first operation must be either Readable or ReadableObjectMode
-      else if (idx === 0 && !operationProperties.includes('Readable') && !operationProperties.includes('ReadableObjectMode')) {
+      // first operation must be either Readable or ReadableObjectMode, except when only one step
+      else if ((isFirstStep && !isOnlyStep) && !operationProperties.includes('Readable') && !operationProperties.includes('ReadableObjectMode')) {
         const issue = Issue.error({
           operation,
           message: `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
