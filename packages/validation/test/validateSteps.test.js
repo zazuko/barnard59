@@ -36,11 +36,18 @@ describe('parser.validateSteps', () => {
         'orw',
         'orw',
         'ow'
+      ],
+      p3: [
+        'or'
+      ],
+      p4: [
+        'orw'
       ]
     }
     parser.validateSteps({ pipelines, properties }, errors)
-    assert.deepStrictEqual(errorsForPipeline(errors, 'p1'), [])
-    assert.deepStrictEqual(errorsForPipeline(errors, 'p2'), [])
+    Object.keys(pipelines).forEach((pipeline) => {
+      assert.deepStrictEqual(errorsForPipeline(errors, pipeline), [])
+    })
   })
 
   it('should report missing metadata', () => {
