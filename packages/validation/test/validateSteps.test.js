@@ -3,6 +3,8 @@ const { describe, it } = require('mocha')
 const assert = require('assert')
 
 const properties = {
+  o: ['Operation'],
+
   or: ['Operation', 'Readable'],
   orw: ['Operation', 'Readable', 'Writable'],
   ow: ['Operation', 'Writable'],
@@ -24,25 +26,11 @@ describe('parser.validateSteps', () => {
 
   it('should accept valid pipelines', () => {
     const pipelines = {
-      p1: [
-        'or',
-        'orw',
-        'ow'
-      ],
-      p2: [
-        'or',
-        'orw',
-        'orw',
-        'orw',
-        'orw',
-        'ow'
-      ],
-      p3: [
-        'or'
-      ],
-      p4: [
-        'orw'
-      ]
+      p1: ['or', 'orw', 'ow'],
+      p2: ['or', 'orw', 'orw', 'orw', 'orw', 'ow'],
+      p3: ['or'],
+      p4: ['orw'],
+      p5: ['o']
     }
     parser.validateSteps({ pipelines, properties }, errors)
     Object.keys(pipelines).forEach((pipeline) => {
