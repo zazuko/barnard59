@@ -1,0 +1,25 @@
+{
+  "name": "barnard59-csvw",
+  "version": "0.0.0",
+  "description": "Simplifies loading CSV sources from CSVW mapping documents",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "standard": "^16.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zazuko/barnard59-csvw.git"
+  },
+  "author": "Zazuko GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59-csvw/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59-csvw#readme"
+}
