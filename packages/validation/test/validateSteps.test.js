@@ -122,4 +122,43 @@ describe('parser.validateSteps', () => {
     assert.strictEqual(errs[0].operation, 'ow')
     assert.strictEqual(errs[0].message, 'Invalid operation: it is neither https://pipeline.described.at/Readable nor https://pipeline.described.at/ReadableObjectMode')
   })
+
+  it('should report bad mix of normal streams and object-mode streams', () => {
+    const pipelines = {
+      p1: [
+        'or',
+        'orW'
+      ],
+      p2: [
+        'oR',
+        'orw'
+      ],
+      p3: [
+        'oR',
+        'oRw'
+      ],
+      p4: [
+        'or',
+        'orw',
+        'orW'
+      ]
+    }
+    parser.validateSteps({ pipelines, properties }, errors)
+
+    const expectedErrors = {
+      p1: ['orW', 'Invalid operation: previous operation is not ReadableObjectMode'],
+      p2: ['orw', 'Invalid operation: previous operation is not Readable'],
+      p3: ['oRw', 'Invalid operation: previous operation is not Readable'],
+      p4: ['orW', 'Invalid operation: previous operation is not ReadableObjectMode']
+    }
+
+    Object.keys(pipelines).forEach((pipeline) => {
+      const [erroredOp, errorMessage] = expectedErrors[pipeline]
+      const errs = errorsForPipeline(errors, pipeline)
+      assert.strictEqual(errs.length, 2, pipeline)
+      assert.strictEqual(errs[0].level, 'error', pipeline)
+      assert.strictEqual(errs[0].operation, erroredOp, pipeline)
+      assert.strictEqual(errs[0].message, errorMessage, pipeline)
+    })
+  })
 })
