@@ -5,11 +5,14 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '13', '14' ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: ['10', '12', '14']
+          node-version: ${{ matrix.node }}
       - run: yarn
       - run: yarn test
       - name: Codecov
