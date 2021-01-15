@@ -1,0 +1,12 @@
+base   <urn:barnard59-csvw:test>
+prefix :     <https://pipeline.described.at/>
+prefix code: <https://code.described.at/>
+
+<#LocalCsvw-HttpCsv>
+    a      :Pipeline, :Readable ;
+    :steps [ :stepList ( [ a                  :Step ;
+                           code:implementedBy [ code:link <file:index.js#fetch> ;
+                                                a         code:EcmaScript ] ;
+                           code:arguments     [ code:name "csvw" ;
+                                                code:value
+                                                          "file:${basePath}/test/mappings/remote.csvw.json"^^code:EcmaScriptTemplateLiteral ; ] ] ) ] .
