@@ -6,7 +6,7 @@ const path = require('path')
 const rdf = require('rdf-ext')
 const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
-const removeFilePart = dirname => path.parse(dirname).dir
+const utils = require('./utils')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -122,7 +122,7 @@ function getModuleOperationProperties (graph, identifiers) {
 function validateDependencies (dependencies) {
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      const modulePath = removeFilePart(require.resolve(module))
+      const modulePath = utils.removeFilePart(require.resolve(module))
 
       if (!(fs.existsSync(modulePath))) {
         throw ReferenceError(`Cannot find package ${module}. Did you install it?`)
@@ -159,14 +159,16 @@ function getDependencies (codelinks) {
 
 async function getAllOperationProperties (dependencies) {
   let results = {}
+
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      const modulePath = removeFilePart(require.resolve(module))
+      const modulePath = utils.removeFilePart(require.resolve(module))
       const operationsPath = `${modulePath}/operations.ttl`
 
       if (fs.existsSync(operationsPath)) {
         const graph = await readGraph(operationsPath)
         const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
+
         results = Object.assign({}, results, tempResults)
       }
       else {

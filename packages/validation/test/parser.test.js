@@ -4,6 +4,7 @@ const assert = require('assert')
 const path = require('path')
 const sinon = require('sinon')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
+const proxyquire = require('proxyquire')
 class ClownfaceMock {
   namedNode () {
     return null
@@ -18,6 +19,10 @@ class ClownfaceMock {
   }
 
   out () {
+    return null
+  }
+
+  list () {
     return null
   }
 }
@@ -127,6 +132,128 @@ describe('parser.getModuleOperationProperties', () => {
       'Johnny Bravo': ['narcissist', 'womanizer'],
       Pikachu: null
     }
+    assert.deepStrictEqual(actual, expected)
+  })
+})
+
+function generateGraphMock () {
+  const pizzaSteps = sinon.createStubInstance(ClownfaceMock, {
+    out: sinon.stub().returnsThis()
+  })
+  pizzaSteps.term = { value: null }
+  const steps = ['Turn on the oven', 'Put there frozen pizza', 'Wait 30 min', 'Enjoy!']
+  sinon.stub(pizzaSteps, 'term').get(function getterFn () {
+    return { value: steps.shift() }
+  })
+
+  const pancakeSteps = sinon.createStubInstance(ClownfaceMock, {
+    out: sinon.stub().returnsThis()
+  })
+  pancakeSteps.term = { value: null }
+  const steps2 = ['Find a French chef', 'Ask him/her to make you pancakes']
+  sinon.stub(pancakeSteps, 'term').get(function getterFn () {
+    return { value: steps2.shift() }
+  })
+
+  const pancakesPipeline = sinon.createStubInstance(ClownfaceMock, {
+    out: sinon.stub().returnsThis(),
+    list: [pancakeSteps, pancakeSteps]
+  })
+  pancakesPipeline.term = { value: 'pancakes' }
+
+  const pizzaPipeline = sinon.createStubInstance(ClownfaceMock, {
+    out: sinon.stub().returnsThis(),
+    list: [pizzaSteps, pizzaSteps, pizzaSteps, pizzaSteps]
+  })
+  pizzaPipeline.term = { value: 'pizza' }
+
+  const graph = sinon.createStubInstance(ClownfaceMock, {
+    has: [pizzaPipeline, pancakesPipeline]
+  })
+  return graph
+}
+describe('parser.getIdentifiers', () => {
+  it('should create pipelines list', () => {
+    const input = generateGraphMock()
+    const expected = {
+      pizza:
+        ['Turn on the oven',
+          'Put there frozen pizza',
+          'Wait 30 min',
+          'Enjoy!'],
+      pancakes: ['Find a French chef', 'Ask him/her to make you pancakes']
+    }
+    const actual = parser.getIdentifiers(input)
+    assert.deepStrictEqual(actual, expected)
+  })
+})
+
+describe('parser.getAllOperationProperties', () => {
+  const mock = {}
+  const mockedParser = proxyquire('../lib/parser', {
+    './utils': mock
+  })
+  it('should get operation properties from operations.ttl file', async () => {
+    mock.removeFilePart = sinon.stub().returns('test')
+
+    const input = {
+      'node:':
+        {
+          sinon: // name of any installed modue
+            new Set(['node:party-module#dance', 'node:party-module#drink'])
+        }
+    }
+    const expected = {
+      'node:party-module#dance': null,
+      'node:party-module#drink': ['Operation', 'Writable', 'Readable']
+    }
+
+    const actual = await mockedParser.getAllOperationProperties(input)
+    assert.deepStrictEqual(actual, expected)
+  }
+  )
+  it("should return nulls if operation.ttl doesn't exist", async () => {
+    mock.removeFilePart = sinon.stub().returns('inexistent-folder')
+
+    const input = {
+      'node:': {
+        sinon:
+         new Set(['node:party-module#dance', 'node:party-module#drink']),
+        mocha:
+         new Set(['node:work-module#code', 'node:work-module#sleep'])
+      }
+    }
+
+    const expected = {
+      'node:party-module#dance': null,
+      'node:party-module#drink': null,
+      'node:work-module#code': null,
+      'node:work-module#sleep': null
+    }
+
+    const actual = await mockedParser.getAllOperationProperties(input)
+    assert.deepStrictEqual(actual, expected)
+  })
+  it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
+    mock.removeFilePart = sinon.stub().returns('test')
+
+    const input = {
+      'node:': {
+        sinon:
+       new Set(['node:party-module#dance', 'node:party-module#drink']),
+        mocha:
+       new Set(['node:work-module#code', 'node:work-module#sleep'])
+      }
+    }
+
+    const expected = {
+      'node:party-module#dance': null,
+      'node:party-module#drink': ['Operation', 'Writable', 'Readable'],
+      'node:work-module#code': null,
+      'node:work-module#sleep': null
+    }
+
+    const actual = await mockedParser.getAllOperationProperties(input)
     assert.deepStrictEqual(actual, expected)
   })
 })
