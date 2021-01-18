@@ -81,7 +81,11 @@ function getIdentifiers (graph) {
           .out(ns.code.implementedBy)
           .out(ns.code.link)
           .term
-        pipeline2identifier[pipeline.term.value].push(identifier.value)
+
+        pipeline2identifier[pipeline.term.value].push({
+          stepName: step.term.value,
+          stepOperation: identifier.value
+        })
       }
     })
 
@@ -142,7 +146,7 @@ function getAllCodeLinks (pipelines) {
 function getDependencies (codelinks) {
   const dependencies = {}
 
-  codelinks.forEach(codelink => {
+  codelinks.forEach(({ stepOperation: codelink }) => {
     const { protocol, filename } = iriResolve(codelink, process.cwd())
 
     if (!dependencies[protocol]) {
@@ -190,7 +194,7 @@ function validateSteps ({ pipelines, properties }, errors) {
     const pipelineErrors = []
     errors.push([pipeline, pipelineErrors])
 
-    steps.reduce((lastOp, operation, idx) => {
+    steps.reduce((lastOp, { stepName: step, stepOperation: operation }, idx) => {
       const lastOpProperties = properties[lastOp]
       const operationProperties = properties[operation]
       const isFirstStep = idx === 0
@@ -198,6 +202,7 @@ function validateSteps ({ pipelines, properties }, errors) {
 
       if (operationProperties === null) {
         const issue = Issue.warning({
+          step,
           operation,
           message: 'Cannot validate operation: no metadata'
         })
@@ -206,6 +211,7 @@ function validateSteps ({ pipelines, properties }, errors) {
       }
       if (!operationProperties.includes('Operation')) {
         const issue = Issue.error({
+          step,
           operation,
           message: `Invalid operation: it is not a ${ns.p.Operation.value}`
         })
@@ -214,6 +220,7 @@ function validateSteps ({ pipelines, properties }, errors) {
       // first operation must be either Readable or ReadableObjectMode, except when only one step
       else if ((isFirstStep && !isOnlyStep) && !operationProperties.includes('Readable') && !operationProperties.includes('ReadableObjectMode')) {
         const issue = Issue.error({
+          step,
           operation,
           message: `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
         })
@@ -224,6 +231,7 @@ function validateSteps ({ pipelines, properties }, errors) {
       if (lastOp) {
         if (lastOpProperties === null) {
           const issue = Issue.warning({
+            step,
             operation,
             message: 'Cannot validate operation: previous operation does not have metadata'
           })
@@ -234,6 +242,7 @@ function validateSteps ({ pipelines, properties }, errors) {
           if (operationProperties.includes('Writable')) {
             if (!lastOpProperties.includes('Readable')) {
               const issue = Issue.error({
+                step,
                 operation,
                 message: 'Invalid operation: previous operation is not Readable'
               })
@@ -243,6 +252,7 @@ function validateSteps ({ pipelines, properties }, errors) {
           if (operationProperties.includes('WritableObjectMode')) {
             if (!lastOpProperties.includes('ReadableObjectMode')) {
               const issue = Issue.error({
+                step,
                 operation,
                 message: 'Invalid operation: previous operation is not ReadableObjectMode'
               })
@@ -253,6 +263,7 @@ function validateSteps ({ pipelines, properties }, errors) {
           if (lastOpProperties.includes('Readable')) {
             if (!operationProperties.includes('Writable')) {
               const issue = Issue.error({
+                step,
                 operation,
                 message: 'Invalid operation: operation is not Writable'
               })
@@ -262,6 +273,7 @@ function validateSteps ({ pipelines, properties }, errors) {
           if (lastOpProperties.includes('ReadableObjectMode')) {
             if (!operationProperties.includes('WritableObjectMode')) {
               const issue = Issue.error({
+                step,
                 operation,
                 message: 'Invalid operation: operation is not WritableObjectMode'
               })
@@ -279,7 +291,7 @@ function printErrors (errors) {
   errors.forEach((error, i) => {
     if (Array.isArray(error)) {
       const [pipeline, pipelineErrors] = error
-      console.error(`${i + 1}. In pipeline ${pipeline}`)
+      console.error(`${i + 1}. In pipeline <${pipeline}>`)
       pipelineErrors.forEach((error, j) => {
         console.error(`${i + 1}.${j + 1}. ${error}`)
       })

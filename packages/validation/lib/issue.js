@@ -14,7 +14,14 @@ class Issue {
   }
 
   toString () {
-    return colors[this.level](this.message)
+    let msg = this.message
+    if (this.step) {
+      msg += ` at step <${this.step}>`
+    }
+    if (this.operation) {
+      msg += ` (${this.operation})`
+    }
+    return colors[this.level](msg)
   }
 
   static warning ({ step, operation, message }) {

@@ -5,11 +5,12 @@ const path = require('path')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 
 describe('parser.getDependencies', () => {
-  it('should create tree structre for codelinks', () => {
-    const input = ['node:barnard59-base#fetch.json',
-      'node:barnard59-base#map',
-      'node:barnard59-formats#ntriples.serialize',
-      'file:awesomeModule#awesomeFunction'
+  it('should create tree structure for codelinks', () => {
+    const input = [
+      { stepName: 'a', stepOperation: 'node:barnard59-base#fetch.json' },
+      { stepName: 'b', stepOperation: 'node:barnard59-base#map' },
+      { stepName: 'c', stepOperation: 'node:barnard59-formats#ntriples.serialize' },
+      { stepName: 'd', stepOperation: 'file:awesomeModule#awesomeFunction' }
     ]
     const expected = {
       'node:': {
@@ -30,9 +31,9 @@ describe('parser.getDependencies', () => {
   })
 
   it('should forward iriResolve error', () => {
-    const input = ['abc']
+    const input = [{ stepOperation: 'abc' }]
     try {
-      iriResolve(input[0], process.cwd())
+      iriResolve(input[0].stepOperation, process.cwd())
       assert.fail('The input is invalid')
     }
     catch (expectedError) {
