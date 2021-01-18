@@ -25,6 +25,10 @@ async function main (file, options) {
   else {
     console.log(JSON.stringify(errors))
   }
+
+  if (typeof errors !== 'undefined') {
+    process.exit(1)
+  }
 }
 
 program
