@@ -2,7 +2,7 @@
 Pipeline validation enables you to verify the consistency of your RDF pipelines. It ensures that all pipeline steps are consistent, and can be executed one after another.
 It is a programmatic reflection of (principles behind barnard59)[https://github.com/zazuko/barnard59/wiki/Validation]
 
-This script will help you understand what is wrong in with your pipeline. Documentation behing (barnard59)[https://github.com/zazuko/barnard59] will guide you how to build a valid one.
+This script will help you understand what is wrong with your pipeline. Documentation behind (barnard59)[https://github.com/zazuko/barnard59] will guide you how to build a valid one.
 
 ## Setup
 
