@@ -289,23 +289,6 @@ function validateSteps ({ pipelines, properties }, errors, verbose = true) {
   })
 }
 
-function printErrors (errors) {
-  errors.forEach((error, i) => {
-    if (Array.isArray(error)) {
-      const [pipeline, pipelineErrors] = error
-      if (pipelineErrors.length > 0) {
-        console.error(`${i + 1}. In pipeline <${pipeline}>`)
-        pipelineErrors.forEach((error, j) => {
-          console.error(`${i + 1}.${j + 1}. ${error}`)
-        })
-      }
-    }
-    else {
-      console.error(`${i + 1}. ${error}`)
-    }
-  })
-}
-
 module.exports = {
   readGraph,
   getIdentifiers,
@@ -314,6 +297,5 @@ module.exports = {
   getModuleOperationProperties,
   validateDependencies,
   getAllOperationProperties,
-  printErrors,
   validateSteps
 }
