@@ -161,7 +161,7 @@ function getDependencies (codelinks) {
   return dependencies
 }
 
-async function getAllOperationProperties (dependencies, errors = []) {
+async function getAllOperationProperties (dependencies, errors = [], verbose = true) {
   const results = {}
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
@@ -174,11 +174,13 @@ async function getAllOperationProperties (dependencies, errors = []) {
         Object.assign(results, tempResults)
       }
       else {
-        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
-        const issue = Issue.warning({
-          message: `Missing metadata file ${operationsPath}\n  The following operations cannot be validated:\n  * "${codelinksWithMissingMetadata}"`
-        })
-        errors.push(issue)
+        if (verbose) {
+          const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
+          const issue = Issue.warning({
+            message: `Missing metadata file ${operationsPath}\n  The following operations cannot be validated:\n  * "${codelinksWithMissingMetadata}"`
+          })
+          errors.push(issue)
+        }
 
         for (const codelink of dependencies[env][module]) {
           results[codelink] = null
@@ -189,7 +191,7 @@ async function getAllOperationProperties (dependencies, errors = []) {
   return results
 }
 
-function validateSteps ({ pipelines, properties }, errors) {
+function validateSteps ({ pipelines, properties }, errors, verbose = true) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const pipelineErrors = []
     errors.push([pipeline, pipelineErrors])
@@ -200,7 +202,7 @@ function validateSteps ({ pipelines, properties }, errors) {
       const isFirstStep = idx === 0
       const isOnlyStep = steps.length === 1
 
-      if (operationProperties === null) {
+      if (operationProperties === null && verbose) {
         const issue = Issue.warning({
           step,
           operation,
@@ -229,7 +231,7 @@ function validateSteps ({ pipelines, properties }, errors) {
       }
 
       if (lastOp) {
-        if (lastOpProperties === null) {
+        if (lastOpProperties === null && verbose) {
           const issue = Issue.warning({
             step,
             operation,
@@ -291,10 +293,12 @@ function printErrors (errors) {
   errors.forEach((error, i) => {
     if (Array.isArray(error)) {
       const [pipeline, pipelineErrors] = error
-      console.error(`${i + 1}. In pipeline <${pipeline}>`)
-      pipelineErrors.forEach((error, j) => {
-        console.error(`${i + 1}.${j + 1}. ${error}`)
-      })
+      if (pipelineErrors.length > 0) {
+        console.error(`${i + 1}. In pipeline <${pipeline}>`)
+        pipelineErrors.forEach((error, j) => {
+          console.error(`${i + 1}.${j + 1}. ${error}`)
+        })
+      }
     }
     else {
       console.error(`${i + 1}. ${error}`)

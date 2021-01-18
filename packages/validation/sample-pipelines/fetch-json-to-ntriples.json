@@ -1,0 +1,115 @@
+{
+    "@context": {
+        "@base": "http://example.org/pipeline/",
+        "@vocab": "https://pipeline.described.at/",
+        "code": "https://code.described.at/",
+        "code:arguments": {
+            "@container": "@list"
+        },
+        "code:link": {
+            "@type": "@id"
+        },
+        "operation": {
+            "@type": "@id"
+        },
+        "steps": {
+            "@type": "@id"
+        },
+        "stepList": {
+            "@container": "@list"
+        }
+    },
+    "@graph": [
+        {
+            "@id": "utc",
+            "@type": [
+                "Pipeline",
+                "Readable"
+            ],
+            "variables": {
+                "variable": [
+                    {
+                        "@type": "Variable",
+                        "name": "url",
+                        "value": "http://worldtimeapi.org/api/timezone/UTC"
+                    },
+                    {
+                        "@id": "dateContext"
+                    }
+                ]
+            },
+            "steps": "steps"
+        },
+        {
+            "@id": "cet",
+            "@type": [
+                "Pipeline",
+                "Readable"
+            ],
+            "variables": {
+                "variable": [
+                    {
+                        "@type": "Variable",
+                        "name": "url",
+                        "value": "http://worldtimeapi.org/api/timezone/CET"
+                    },
+                    {
+                        "@id": "dateContext"
+                    }
+                ]
+            },
+            "steps": "steps"
+        },
+        {
+            "@id": "dateContext",
+            "@type": "Variable",
+            "name": "context",
+            "value": "{\"date\":\"http://purl.org/dc/elements/1.1/date\"}"
+        },
+        {
+            "@id": "steps",
+            "stepList": [
+                {
+                    "@id": "fetch",
+                    "code:implementedBy": {
+                        "code:link": "node:barnard59-base#fetch.json",
+                        "@type": "code:EcmaScript"
+                    },
+                    "code:arguments": [
+                        {
+                            "@value": "${url}",
+                            "@type": "code:EcmaScriptTemplateLiteral"
+                        }
+                    ]
+                },
+                {
+                    "@id": "jsonldStructure",
+                    "code:implementedBy": {
+                        "code:link": "node:barnard59-base#map",
+                        "@type": "code:EcmaScript"
+                    },
+                    "code:arguments": [
+                        {
+                            "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }",
+                            "@type": "code:EcmaScript"
+                        }
+                    ]
+                },
+                {
+                    "@id": "parse",
+                    "code:implementedBy": {
+                        "code:link": "node:barnard59-formats#jsonld.parse.object",
+                        "@type": "code:EcmaScript"
+                    }
+                },
+                {
+                    "@id": "serialize",
+                    "code:implementedBy": {
+                        "code:link": "node:barnard59-formats#ntriples.serialize",
+                        "@type": "code:EcmaScript"
+                    }
+                }
+            ]
+        }
+    ]
+}
