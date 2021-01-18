@@ -1,6 +1,6 @@
-const parser = require('../lib/parser')
 const { describe, it } = require('mocha')
 const assert = require('assert')
+const parser = require('../lib/parser')
 
 const properties = {
   o: ['Operation'],

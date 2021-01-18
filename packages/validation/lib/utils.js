@@ -1,5 +1,9 @@
 const path = require('path')
 
-module.exports.removeFilePart = function (dirname) {
+function removeFilePart (dirname) {
   return path.parse(dirname).dir
+}
+
+module.exports = {
+  removeFilePart
 }
