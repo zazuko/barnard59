@@ -1,0 +1,89 @@
+@base <http://ld.admin.ch/pipeline/metadata/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+
+_:vars p:variable
+  [ a p:Variable; p:name "organizations"; p:value "metadata/organizations.ttl" ] ,
+  [ a p:Variable; p:name "namespaces"; p:value "metadata/namespaces.ttl" ] ,
+  [ a p:Variable; p:name "graph"; p:value "https://lindas.admin.ch/ontologies" ] .
+
+
+<mainCreateFile> a p:Pipeline, p:Readable;
+  p:variables _:vars ;
+  p:steps [
+    p:stepList (<concatFiles><serialize>)
+  ].
+
+<mainUpload> a p:Pipeline;
+  p:variables _:vars ;
+  p:steps [
+    p:stepList (<concatFiles><setGraph><upload>)
+  ].
+
+
+<concatFiles> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#concat.object>
+  ];
+  code:arguments (<parseNames><parseOrgs>).
+
+
+<parseNames> a p:Pipeline, p:ReadableObjectMode;
+  p:variables _:namespaces ;
+  p:steps [
+    p:stepList ( <readFileNames> <parseTurtle> )
+  ].
+
+<parseOrgs> a p:Pipeline, p:ReadableObjectMode;
+  p:variables _:vars;
+  p:steps [
+    p:stepList ( <readFileOrgs> <parseTurtle> )
+  ].
+
+<readFileNames> a p:Step;
+  code:implementedBy [
+    code:link <node:fs#createReadStream>;
+    a code:EcmaScript
+  ];
+  code:arguments ("namespaces"^^p:VariableName).
+
+<readFileOrgs> a p:Step;
+  code:implementedBy [
+    code:link <node:fs#createReadStream>;
+    a code:EcmaScript
+  ];
+  code:arguments ("organizations"^^p:VariableName).
+
+
+<parseTurtle> a p:Step;
+  code:implementedBy [
+    code:link <node:barnard59-formats#n3.parse>;
+    a code:EcmaScript
+  ].
+
+<serialize> a p:Step;
+  code:implementedBy [
+    code:link <node:barnard59-formats#ntriples.serialize> ;
+    a code:EcmaScript
+  ].
+
+<setGraph> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#setGraph>
+  ];
+  code:arguments ( "graph"^^p:VariableName ).
+
+<upload> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-graph-store#put>
+  ];
+  code:arguments [
+    code:name "endpoint";
+    code:value "endpoint"^^p:VariableName
+  ], [
+    code:name "user";
+    code:value "user"^^p:VariableName
+  ], [
+    code:name "password";
+    code:value "password"^^p:VariableName
+  ].

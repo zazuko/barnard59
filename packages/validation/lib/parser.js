@@ -7,6 +7,7 @@ const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
+const { Console } = require('console')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -123,13 +124,15 @@ function getModuleOperationProperties (graph, identifiers) {
 function validateDependencies (dependencies, errors = []) {
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      const modulePath = utils.removeFilePart(require.resolve(module))
-
-      if (!(fs.existsSync(modulePath))) {
+      try {
+        require.resolve(module)
+      }
+      catch (_err) {
         const issue = Issue.error({
           message: `Missing package ${module}.`
         })
         errors.push(issue)
+        continue
       }
     }
   }
@@ -159,6 +162,31 @@ function getDependencies (codelinks) {
   })
 
   return dependencies
+}
+
+function getPipelineProperties (graph, pipelines) {
+  const pipeline2properties = {}
+
+  for (const id of pipelines) {
+    pipeline2properties[id] = []
+
+    graph
+      .namedNode(id)
+      .out(ns.rdf.type)
+      .forEach(node => {
+        const nodeComponents = node.term.value.split('/')
+        const property = nodeComponents[nodeComponents.length - 1]
+
+        pipeline2properties[id].push(property)
+      })
+  }
+
+  for (const key in pipeline2properties) {
+    if (pipeline2properties[key].length === 0) {
+      pipeline2properties[key] = null
+    }
+  }
+  return pipeline2properties
 }
 
 async function getAllOperationProperties (dependencies, errors = [], verbose = true) {
@@ -315,5 +343,6 @@ module.exports = {
   validateDependencies,
   getAllOperationProperties,
   printErrors,
-  validateSteps
+  validateSteps,
+  getPipelineProperties
 }
