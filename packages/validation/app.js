@@ -1,6 +1,7 @@
-const parser = require('./lib/parser')
 const { Command } = require('commander')
 const { version } = require('.')
+const parser = require('./lib/parser')
+const { countValidationIssues } = require('./lib/utils')
 
 const program = new Command()
 program.version(version)
@@ -24,6 +25,10 @@ async function main (file, options) {
   }
   else {
     console.log(JSON.stringify(errors))
+  }
+
+  if (countValidationIssues(errors, options.verbose)) {
+    process.exit(-1)
   }
 }
 
