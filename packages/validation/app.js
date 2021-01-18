@@ -1,9 +1,9 @@
-/* eslint-disable prefer-const */
 const parser = require('./lib/parser')
 const { Command } = require('commander')
+const { version } = require('.')
 
 const program = new Command()
-program.version('0.1')
+program.version(version)
 
 async function main (file, options) {
   const errors = []
