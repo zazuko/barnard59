@@ -61,14 +61,13 @@ function parseError (path, error) {
   }
 }
 
-function getIdentifiers (graph) {
+function getIdentifiers (graph, pipeline2find = null) {
   const pipeline2identifier = {}
 
   graph
     .has(ns.rdf.type, ns.p.Pipeline)
     .forEach(pipeline => {
-      if (1 === 1) {
-      // if (pipeline2find === null || pipeline2find === pipeline) {
+      if (pipeline2find === null || pipeline2find === pipeline.term.value) {
         const steps = pipeline
           .out(ns.p.steps)
           .out(ns.p.stepList)

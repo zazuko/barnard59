@@ -201,6 +201,23 @@ describe('parser.getIdentifiers', () => {
     const actual = parser.getIdentifiers(input)
     assert.deepStrictEqual(actual, expected)
   })
+  it('should return only requested pipeline', () => {
+    const input = generateGraphMock()
+    const expected = {
+      pancakes: [
+        { stepName: 'Find a French chef', stepOperation: 'operation1' },
+        { stepName: 'Ask them to make you pancakes', stepOperation: 'operation2' }
+      ]
+    }
+    const actual = parser.getIdentifiers(input, 'pancakes')
+    assert.deepStrictEqual(actual, expected)
+  })
+  it('should return empty dict if pipeline does not exist', () => {
+    const input = generateGraphMock()
+    const expected = {}
+    const actual = parser.getIdentifiers(input, 'inexistentPipeline')
+    assert.deepStrictEqual(actual, expected)
+  })
 })
 
 describe('parser.getAllOperationProperties', () => {
