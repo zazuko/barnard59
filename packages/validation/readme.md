@@ -6,7 +6,7 @@ This script will help you understand what is wrong with your pipeline. Documenta
 
 ## Setup
 
-Install all dependencies with
+Install all dependencies with  
 ```npm install```
 
 ## Execute
