@@ -6,6 +6,7 @@ const path = require('path')
 const rdf = require('rdf-ext')
 const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
+const utils = require('./utils')
 const Issue = require('./issue')
 
 const removeFilePart = dirname => path.parse(dirname).dir
@@ -17,7 +18,7 @@ const ns = {
   code: namespace('https://code.described.at/')
 }
 
-async function readGraph (file, errors = []) {
+async function readGraph(file, errors = []) {
   const quadStream = fromFile(file)
   const parserPromise = new Promise((resolve, reject) => {
     quadStream.on('error', reject)
@@ -42,7 +43,7 @@ async function readGraph (file, errors = []) {
   return clownfaceObj
 }
 
-function parseError (path, error) {
+function parseError(path, error) {
   const { line, token: _token } = error.context
   if (typeof line === 'number') {
     const rl = readline.createInterface({
@@ -63,7 +64,7 @@ function parseError (path, error) {
   }
 }
 
-function getIdentifiers (graph) {
+function getIdentifiers(graph) {
   const pipeline2identifier = {}
 
   graph
@@ -88,7 +89,7 @@ function getIdentifiers (graph) {
   return pipeline2identifier
 }
 
-function getModuleOperationProperties (graph, identifiers) {
+function getModuleOperationProperties(graph, identifiers) {
   const operation2properties = {}
 
   for (const id of identifiers) {
@@ -116,10 +117,10 @@ function getModuleOperationProperties (graph, identifiers) {
   return operation2properties
 }
 
-function validateDependencies (dependencies, errors = []) {
+function validateDependencies(dependencies, errors = []) {
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      const modulePath = removeFilePart(require.resolve(module))
+      const modulePath = utils.removeFilePart(require.resolve(module))
 
       if (!(fs.existsSync(modulePath))) {
         const issue = Issue.error({
@@ -131,7 +132,7 @@ function validateDependencies (dependencies, errors = []) {
   }
 }
 
-function getAllCodeLinks (pipelines) {
+function getAllCodeLinks(pipelines) {
   const codelinks = new Set()
   for (const key in pipelines) {
     pipelines[key].forEach(step => codelinks.add(step))
@@ -139,7 +140,7 @@ function getAllCodeLinks (pipelines) {
   return codelinks
 }
 
-function getDependencies (codelinks) {
+function getDependencies(codelinks) {
   const dependencies = {}
 
   codelinks.forEach(codelink => {
@@ -157,11 +158,11 @@ function getDependencies (codelinks) {
   return dependencies
 }
 
-async function getAllOperationProperties (dependencies, errors = []) {
+async function getAllOperationProperties(dependencies, errors = []) {
   const results = {}
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      const modulePath = removeFilePart(require.resolve(module))
+      const modulePath = utils.removeFilePart(require.resolve(module))
       const operationsPath = `${modulePath}/operations.ttl`
 
       if (fs.existsSync(operationsPath)) {
@@ -185,7 +186,7 @@ async function getAllOperationProperties (dependencies, errors = []) {
   return results
 }
 
-function validateSteps ({ pipelines, properties }, errors) {
+function validateSteps({ pipelines, properties }, errors) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const pipelineErrors = []
     errors.push([pipeline, pipelineErrors])
@@ -275,7 +276,7 @@ function validateSteps ({ pipelines, properties }, errors) {
   })
 }
 
-function printErrors (errors) {
+function printErrors(errors) {
   errors.forEach((error, i) => {
     if (Array.isArray(error)) {
       const [pipeline, pipelineErrors] = error
@@ -295,6 +296,7 @@ module.exports = {
   getIdentifiers,
   getAllCodeLinks,
   getDependencies,
+  getModuleOperationProperties,
   validateDependencies,
   getAllOperationProperties,
   printErrors,
