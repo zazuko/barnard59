@@ -1,0 +1,1 @@
+node app.js sample-pipelines/fetch-json-to-ntriples.ttl -v -p abc | cat
