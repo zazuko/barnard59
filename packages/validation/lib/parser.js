@@ -2,14 +2,11 @@ const cf = require('clownface')
 const fromFile = require('rdf-utils-fs/fromFile')
 const fs = require('fs')
 const namespace = require('@rdfjs/namespace')
-const path = require('path')
 const rdf = require('rdf-ext')
 const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
-
-const removeFilePart = dirname => path.parse(dirname).dir
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -64,7 +61,7 @@ function parseError (path, error) {
   }
 }
 
-function getIdentifiers (graph, pipeline2find = null) {
+function getIdentifiers (graph) {
   const pipeline2identifier = {}
 
   graph
