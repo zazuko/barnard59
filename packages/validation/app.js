@@ -1,19 +1,21 @@
 const parser = require('./lib/parser')
+const { Command } = require('commander')
+const { version } = require('.')
 
-const pipelineFile = 'sample-pipelines/fetch-json-to-ntriples.ttl'
-// const pipelineFile = 'sample-pipelines/invalid.ttl'
+const program = new Command()
+program.version(version)
 
-async function main () {
+async function main (file, options) {
   const errors = []
   try {
-    const pipelineGraph = await parser.readGraph(pipelineFile, errors)
-    const pipelines = parser.getIdentifiers(pipelineGraph)
+    const pipelineGraph = await parser.readGraph(file, errors)
+    const pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)
     parser.validateDependencies(dependencies, errors)
 
-    const stepProperties = await parser.getAllOperationProperties(dependencies, errors)
-    parser.validateSteps({ pipelines, properties: stepProperties }, errors)
+    const stepProperties = await parser.getAllOperationProperties(dependencies, errors, options.verbose)
+    parser.validateSteps({ pipelines, properties: stepProperties }, errors, options.verbose)
   }
   catch (_err) {}
 
@@ -24,4 +26,12 @@ async function main () {
     console.log(JSON.stringify(errors))
   }
 }
-main()
+
+program
+  .arguments('<pipelineFile>')
+  .option('-p, --pipeline <pipelineIRI>', 'pipeline iri', null)
+  .option('-v, --verbose', 'show all warning messages', false)
+  .action((pipelineFile, options) => {
+    main(pipelineFile, options)
+  })
+program.parse()

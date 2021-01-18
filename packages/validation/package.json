@@ -24,6 +24,7 @@
     "barnard59-formats": "0.0.8",
     "chalk": "^4.1.0",
     "clownface": "^1.2.0",
+    "commander": "^7.0.0",
     "rdf-ext": "^1.3.0",
     "rdf-loader-code": "^0.3.2",
     "rdf-utils-fs": "^2.1.0"
