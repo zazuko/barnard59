@@ -9,12 +9,10 @@ async function main (file) {
   const dependencies = parser.getDependencies(codelinks)
   parser.validateDependencies(dependencies, errors)
 
-  const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
   const operationProperties = await parser.getAllOperationProperties(dependencies, errors)
   parser.validateSteps({ pipelines, properties: operationProperties }, errors)
 
-  console.log(pipelines)
-  console.log(pipelineProperties)
-  console.log(operationProperties)
+  const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
+  parser.validatePipelines(pipelines, operationProperties, pipelineProperties)
 }
 main(file)

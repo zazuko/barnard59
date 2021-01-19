@@ -8,6 +8,8 @@ const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
 const { Console } = require('console')
+const { pipeline } = require('stream')
+const { warning } = require('./issue')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -219,6 +221,56 @@ async function getAllOperationProperties (dependencies, errors = [], verbose = t
   return results
 }
 
+function validatePipelineProperty (opProperties, pipelineProperties, mode, errors) {
+  const canStreamBeWritable = opProperties.includes('Writable') || opProperties.includes('WritableObjectMode')
+  const canStreamBeReadable = opProperties.includes('Readable') || opProperties.includes('ReadableObjectMode')
+  const isStreamReadableOnly = canStreamBeReadable && !canStreamBeWritable
+  const isStreamWritableOnly = canStreamBeWritable && !canStreamBeReadable
+
+  let pipelineIsOfRightType = true
+  if ((mode === 'first') && isStreamWritableOnly) {
+    pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
+  }
+  if ((mode === 'last') && isStreamReadableOnly) {
+    pipelineIsOfRightType = pipelineProperties.includes('Readbale') || pipelineProperties.includes('ReadableObjectMode')
+  }
+
+  if (!pipelineIsOfRightType) {
+    const issue = Issue.error({
+      step,
+      operation,
+      message: 'Invalid operation: previous operation is not ReadableObjectMode'
+    })
+    errors.push(issue)
+  }
+}
+
+function validatePipelines (pipelines, operation2properties, pipeline2properties, errors, verbose = true) {
+  Object.entries(pipelines).forEach(([pipeline, steps]) => {
+    const firstOpProperties = operation2properties[steps[0].stepOperation]
+    const lastOpProperties = operation2properties[steps[steps.length - 1].stepOperation]
+    const pipelineProperties = pipeline2properties[pipeline]
+
+    if (pipelineProperties !== null) {
+      if (firstOpProperties !== null) {
+        validatePipelineProperty(firstOpProperties, pipelineProperties, 'first')
+      }
+      if (lastOpProperties !== null) {
+        validatePipelineProperty(lastOpProperties, pipelineProperties, 'last')
+      }
+    }
+    else if (verbose) {
+      const operation = null
+      const issue = Issue.warning({
+        operation,
+        operation,
+        message: 'Cannot validate pipeline: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined'
+      })
+      errors.push([pipeline, issue])
+    }
+  })
+}
+
 function validateSteps ({ pipelines, properties }, errors, verbose = true) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const pipelineErrors = []
@@ -326,5 +378,6 @@ module.exports = {
   validateDependencies,
   getAllOperationProperties,
   getPipelineProperties,
-  validateSteps
+  validateSteps,
+  validatePipelines
 }
