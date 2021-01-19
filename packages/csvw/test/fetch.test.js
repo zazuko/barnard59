@@ -51,4 +51,49 @@ describe('fetch', function () {
     expect(result).to.eq('foo,bar,baz\n10,20,30')
     expect(proto.fetch).to.have.been.calledWith('http://example.com/test.csv')
   })
+
+  it('emits error if CSV fails to load ', async () => {
+    // given
+    const pipeline = await clownface().namedNode(pipelinesPath).fetch()
+    const run = Runner.create({
+      outputStream,
+      variable,
+      basePath,
+      dataset: pipeline.dataset,
+      term: namedNode('urn:barnard59-csvw:test#LocalCsvw-HttpCsv')
+    })
+    proto.fetch.rejects(new Error('Not Found'))
+
+    // when
+    const result = new Promise((resolve, reject) => {
+      run.pipeline.on('end', resolve)
+      run.pipeline.on('error', reject)
+    })
+    run.pipeline.on('data', () => {})
+
+    // then
+    await expect(result).to.have.been.rejected
+  })
+
+  it('emits error if CSVW fails to load ', async () => {
+    // given
+    const pipeline = await clownface().namedNode(pipelinesPath).fetch()
+    const run = Runner.create({
+      outputStream,
+      variable,
+      basePath,
+      dataset: pipeline.dataset,
+      term: namedNode('urn:barnard59-csvw:test#MissingCsvw')
+    })
+
+    // when
+    const result = new Promise((resolve, reject) => {
+      run.pipeline.on('end', resolve)
+      run.pipeline.on('error', reject)
+    })
+    run.pipeline.on('data', () => {})
+
+    // then
+    await expect(result).to.have.been.rejected
+  })
 })
