@@ -1,7 +1,9 @@
+#!/usr/bin/env node
+const path = require('path')
 const { Command } = require('commander')
-const { version } = require('.')
 const parser = require('./lib/parser')
-const { countValidationIssues } = require('./lib/utils')
+const { printErrors, countValidationIssues } = require('./lib/utils')
+const { version } = require(path.join(__dirname, 'package.json'))
 
 const program = new Command()
 program.version(version)
@@ -21,22 +23,26 @@ async function main (file, options) {
   catch (_err) {}
 
   if (process.stdout.isTTY) {
-    parser.printErrors(errors)
+    printErrors(errors)
   }
   else {
     console.log(JSON.stringify(errors))
   }
 
-  if (countValidationIssues(errors, options.verbose)) {
+  if (countValidationIssues(errors, options.strict)) {
     process.exit(-1)
   }
 }
 
 program
   .arguments('<pipelineFile>')
-  .option('-p, --pipeline <pipelineIRI>', 'pipeline iri', null)
+  .option('-p, --pipeline <pipelineIRI>', 'pipeline IRI', null)
+  .option('-s, --strict', 'warnings also produce an error exit status', false)
   .option('-v, --verbose', 'show all warning messages', false)
   .action((pipelineFile, options) => {
+    if (options.strict) {
+      options.verbose = true
+    }
     main(pipelineFile, options)
   })
 program.parse()
