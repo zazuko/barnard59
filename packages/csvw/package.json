@@ -13,8 +13,7 @@
     "barnard59": "^0.1.1",
     "clownface-io": "github:zazuko/clownface-io#tpluscode-proposals",
     "duplex-to": "^1.0.0",
-    "file-fetch": "^1.4.1",
-    "mime-types": "^2.1.28",
+    "file-fetch": "^1.5",
     "nodeify-fetch": "^2.2.1",
     "proto-fetch": "^1.0.0"
   },

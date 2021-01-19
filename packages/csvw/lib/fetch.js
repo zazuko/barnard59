@@ -1,5 +1,4 @@
 const clownface = require('clownface-io')
-const { contentType } = require('mime-types')
 const { PassThrough } = require('stream')
 const { readable } = require('duplex-to')
 const ns = require('@tpluscode/rdf-ns-builders')
@@ -13,7 +12,7 @@ function fetchCsv ({ csvw }) {
   Promise.resolve().then(async () => {
     const mappings = await clownface().namedNode(csvw).fetch({
       contentTypeLookup: (ext) => {
-        return json.test(ext) ? 'application/ld+json' : contentType(ext)
+        return json.test(ext) ? 'application/ld+json' : undefined
       }
     })
 
