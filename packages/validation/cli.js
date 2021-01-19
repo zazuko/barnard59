@@ -29,7 +29,7 @@ async function main (file, options) {
     console.log(JSON.stringify(errors))
   }
 
-  if (countValidationIssues(errors, options.verbose)) {
+  if (countValidationIssues(errors, options.strict)) {
     process.exit(-1)
   }
 }
@@ -37,8 +37,12 @@ async function main (file, options) {
 program
   .arguments('<pipelineFile>')
   .option('-p, --pipeline <pipelineIRI>', 'pipeline IRI', null)
+  .option('-s, --strict', 'warnings also produce an error exit status', false)
   .option('-v, --verbose', 'show all warning messages', false)
   .action((pipelineFile, options) => {
+    if (options.strict) {
+      options.verbose = true
+    }
     main(pipelineFile, options)
   })
 program.parse()
