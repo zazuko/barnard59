@@ -2,7 +2,10 @@
   "name": "barnard59-validation",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "cli.js",
+  "bin": {
+    "barnard59-validate": "./cli.js"
+  },
   "scripts": {
     "lint": "eslint .",
     "test": "mocha"

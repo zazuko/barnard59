@@ -1,30 +1,34 @@
+# barnard59-validation
+![CI status](https://github.com/zazuko/barnard59-validation/workflows/Node.js%20CI/badge.svg)
+
+
 ### Pipeline validation
+
 Pipeline validation enables you to verify the consistency of your RDF pipelines. It ensures that all pipeline steps are consistent, and can be executed one after another.
 It is a programmatic reflection of [principles behind barnard59](https://github.com/zazuko/barnard59/wiki/Validation)
 
 This script will help you understand what is wrong with your pipeline. Documentation behind [barnard59](https://github.com/zazuko/barnard59) will guide you how to build a valid one.
 
-## Setup
+## Usage
 
-Install all dependencies with  
-```npm install```
+Install globally:  
+`npm install -g barnard59-validation`
 
-## Execute
-Validate your pipeline with  
-```node app.js your-pipeline-file```  
-For an example, try:  
-```node app.js sample-pipelines/fetch-json-to-ntriples.ttl```  
+CLI help:  
+`barnard59-validate -h`
 
-The following options are available:  
-* To execute only one pipeline from your file:  
-```node app.js your-pipeline-file -p your-pipeline-iri```  
-For an example, try:  
-```node app.js sample-pipelines/fetch-json-to-ntriples.json -p http://example.org/pipeline/utc```  
+Validating a pipeline definition:  
+`barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.ttl`
 
-* To print all warnings:  
-```node app.js your-pipeline-file -v```  
-For an example, try:  
-```node app.js sample-pipelines/fetch-json-to-ntriples.json -v```  
+### Available Options
 
-* To return error messages in ```.json``` format:  
-```node app.js your-pipeline-file | cat```  
+* Validating a single pipeline by its IRI:  
+    `barnard59-validate your-pipeline-file -p your-pipeline-iri`  
+    For an example, try:  
+    `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -p http://example.org/pipeline/utc`
+* Printing all warnings:  
+    `barnard59-validate your-pipeline-file -v`  
+    For an example, try:  
+    `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -v`
+* To return error messages in `.json` format:  
+    `barnard59-validate your-pipeline-file | cat`
