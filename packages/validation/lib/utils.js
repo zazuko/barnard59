@@ -26,7 +26,7 @@ function countValidationIssues (errors, verbose = false) {
   errors.forEach((error) => {
     if (Array.isArray(error)) {
       const [, pipelineErrors] = error
-      pipelineErrors.forEach((error, j) => {
+      pipelineErrors.forEach((error) => {
         collectedIssues.push(error.level)
       })
     }
