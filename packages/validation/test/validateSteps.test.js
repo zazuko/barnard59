@@ -25,7 +25,8 @@ const properties = {
 }
 
 function errorsForPipeline (errors, pipeline) {
-  return errors.filter(([p]) => p === pipeline).map(([_p, errs]) => errs)[0]
+  const [_p, errs] = errors.find(([p]) => p === pipeline)
+  return errs.filter(error => error.level !== 'info')
 }
 
 function opToStep (operation) {
