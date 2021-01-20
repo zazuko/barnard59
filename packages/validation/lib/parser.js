@@ -180,10 +180,7 @@ async function getAllOperationProperties (dependencies, errors = []) {
         Object.assign(results, tempResults)
 
         for (const codelink of dependencies[env][module]) {
-          const issue = Issue.info({
-            operation: codelink,
-            message: `Found metadata file ${operationsPath}`
-          })
+          const issue = Issue.info({ operation: codelink, message: `Found metadata file ${operationsPath}` })
           errors.push(issue)
         }
       }
@@ -223,114 +220,70 @@ function validateSteps ({ pipelines, properties }, errors) {
       const lastIsReadableObjectMode = (lastOperationProperties || []).includes('ReadableObjectMode')
 
       if (operationProperties === null) {
-        const issue = Issue.warning({
-          step,
-          operation,
-          message: 'Cannot validate operation: no metadata'
-        })
-        pipelineErrors.push(issue)
+        const message = 'Cannot validate operation: no metadata'
+        pipelineErrors.push(Issue.warning({ message, step, operation }))
         return operation
       }
       else {
-        const issue = Issue.info({
-          step,
-          operation,
-          message: 'Found metadata'
-        })
-        pipelineErrors.push(issue)
+        const message = 'Found metadata'
+        pipelineErrors.push(Issue.info({ message, step, operation }))
       }
 
       if (!isOperation) {
-        const issue = Issue.error({
-          step,
-          operation,
-          message: `Invalid operation: it is not a ${ns.p.Operation.value}`
-        })
-        pipelineErrors.push(issue)
+        const message = `Invalid operation: it is not a ${ns.p.Operation.value}`
+        pipelineErrors.push(Issue.error({ message, step, operation }))
         return operation
       }
       else {
-        const issue = Issue.info({
-          step,
-          operation,
-          message: `Found ${ns.p.Operation.value}`
-        })
-        pipelineErrors.push(issue)
+        const message = `Found ${ns.p.Operation.value}`
+        pipelineErrors.push(Issue.info({ message, step, operation }))
       }
 
       const issuesCount = pipelineErrors.length
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
       if (isFirstStep && !isOnlyStep && !isReadableOrReadableObjectMode) {
-        const issue = Issue.error({
-          step,
-          operation,
-          message: `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
-        })
-        pipelineErrors.push(issue)
+        const message = `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
+        pipelineErrors.push(Issue.error({ message, step, operation }))
         return operation
       }
 
       if (lastOp) {
         if (lastOperationProperties === null) {
-          const issue = Issue.warning({
-            step,
-            operation,
-            message: 'Cannot validate operation: previous operation does not have metadata'
-          })
-          pipelineErrors.push(issue)
+          const message = 'Cannot validate operation: previous operation does not have metadata'
+          pipelineErrors.push(Issue.warning({ message, step, operation }))
         }
         else {
           // a writable operation must always be preceded by a readable operation
           if (isWritable) {
             if (!lastIsReadable) {
-              const issue = Issue.error({
-                step,
-                operation,
-                message: 'Invalid operation: previous operation is not Readable'
-              })
-              pipelineErrors.push(issue)
+              const message = 'Invalid operation: previous operation is not Readable'
+              pipelineErrors.push(Issue.error({ message, step, operation }))
             }
           }
           if (isWritableObjectMode) {
             if (!lastIsReadableObjectMode) {
-              const issue = Issue.error({
-                step,
-                operation,
-                message: 'Invalid operation: previous operation is not ReadableObjectMode'
-              })
-              pipelineErrors.push(issue)
+              const message = 'Invalid operation: previous operation is not ReadableObjectMode'
+              pipelineErrors.push(Issue.error({ message, step, operation }))
             }
           }
           // a readable operation must always be followed by a writable operation
           if (lastIsReadable) {
             if (!isWritable) {
-              const issue = Issue.error({
-                step,
-                operation,
-                message: 'Invalid operation: operation is not Writable'
-              })
-              pipelineErrors.push(issue)
+              const message = 'Invalid operation: operation is not Writable'
+              pipelineErrors.push(Issue.error({ message, step, operation }))
             }
           }
           if (lastIsReadableObjectMode) {
             if (!isWritableObjectMode) {
-              const issue = Issue.error({
-                step,
-                operation,
-                message: 'Invalid operation: operation is not WritableObjectMode'
-              })
-              pipelineErrors.push(issue)
+              const message = 'Invalid operation: operation is not WritableObjectMode'
+              pipelineErrors.push(Issue.error({ message, step, operation }))
             }
           }
         }
         if (issuesCount === pipelineErrors.length) {
-          const issue = Issue.info({
-            step,
-            operation,
-            message: `Valid step ${lastOperationProperties.find(op => op.startsWith('Readable'))} -> ${operationProperties.find(op => op.startsWith('Writable'))}`
-          })
-          pipelineErrors.push(issue)
+          const message = `Valid step ${lastOperationProperties.find(op => op.startsWith('Readable'))} -> ${operationProperties.find(op => op.startsWith('Writable'))}`
+          pipelineErrors.push(Issue.info({ message, step, operation }))
         }
       }
 
