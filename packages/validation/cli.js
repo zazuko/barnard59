@@ -17,13 +17,11 @@ async function main (file, options) {
     const dependencies = parser.getDependencies(codelinks)
     parser.validateDependencies(dependencies, errors)
 
-    const pipelineProperties = parser.getPipelineProperties(pipelineGraph, pipelines.keys())
-    console.log(pipelineProperties)
+    const operationProperties = await parser.getAllOperationProperties(dependencies, errors, options.verbose)
+    parser.validateSteps({ pipelines, properties: operationProperties }, errors, options.verbose)
 
-    const stepProperties = await parser.getAllOperationProperties(dependencies, errors, options.verbose)
-    console.log(stepProperties)
-    parser.validateSteps({ pipelines, properties: stepProperties }, errors, options.verbose)
-    console.log('Hello')
+    const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
+    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, errors, options.verbose)
   }
   catch (_err) { }
 
