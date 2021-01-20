@@ -1,5 +1,5 @@
-# barnard59-validation
-![CI status](https://github.com/zazuko/barnard59-validation/workflows/Node.js%20CI/badge.svg)
+# barnard59-pipeline-validation
+![CI status](https://github.com/zazuko/barnard59-pipeline-validation/workflows/Node.js%20CI/badge.svg)
 
 
 ### Pipeline validation
@@ -12,7 +12,7 @@ This script will help you understand what is wrong with your pipeline. Documenta
 ## Usage
 
 Install globally:  
-`npm install -g barnard59-validation`
+`npm install -g barnard59-pipeline-validation`
 
 CLI help:  
 `barnard59-validate -h`
