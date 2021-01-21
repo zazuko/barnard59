@@ -1,5 +1,5 @@
-# barnard59-validation
-![CI status](https://github.com/zazuko/barnard59-validation/workflows/Node.js%20CI/badge.svg)
+# barnard59-pipeline-validation
+![CI status](https://github.com/zazuko/barnard59-pipeline-validation/workflows/Node.js%20CI/badge.svg)
 
 
 ### Pipeline validation
@@ -12,7 +12,7 @@ This script will help you understand what is wrong with your pipeline. Documenta
 ## Usage
 
 Install globally:  
-`npm install -g barnard59-validation`
+`npm install -g barnard59-pipeline-validation`
 
 CLI help:  
 `barnard59-validate -h`
@@ -26,9 +26,17 @@ Validating a pipeline definition:
     `barnard59-validate your-pipeline-file -p your-pipeline-iri`  
     For an example, try:  
     `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -p http://example.org/pipeline/utc`
-* Printing all warnings:  
-    `barnard59-validate your-pipeline-file -v`  
+* Exclude warnings from output:  
+    `barnard59-validate your-pipeline-file --quiet`  
+    For an example, try:  
+    `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -q`
+* Show successful validation checks:  
+    `barnard59-validate your-pipeline-file --verbose`  
     For an example, try:  
     `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -v`
-* To return error messages in `.json` format:  
-    `barnard59-validate your-pipeline-file | cat`
+* Produce an error exit status on warnings (you might want the warnings to show in CI without failing the CI or vice versa):  
+    `barnard59-validate your-pipeline-file --strict`  
+    For an example, try:  
+    `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -s`
+* To return error messages in JSON, don't output to a TTY:  
+    `barnard59-validate your-pipeline-file | jq`

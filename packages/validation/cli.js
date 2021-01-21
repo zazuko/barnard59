@@ -10,23 +10,29 @@ program.version(version)
 
 async function main (file, options) {
   const errors = []
+  let pipelines
   try {
     const pipelineGraph = await parser.readGraph(file, errors)
-    const pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
+    pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
+
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)
     parser.validateDependencies(dependencies, errors)
 
-    const operationProperties = await parser.getAllOperationProperties(dependencies, errors, options.verbose)
-    parser.validateSteps({ pipelines, properties: operationProperties }, errors, options.verbose)
+    const operationProperties = await parser.getAllOperationProperties(dependencies, errors)
+    parser.validateSteps({ pipelines, properties: operationProperties }, errors)
 
     const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
-    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, errors, options.verbose)
+    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, errors)
   }
-  catch (_err) { }
+  catch (err) {
+    if (options.debug) {
+      console.error(err)
+    }
+  }
 
   if (process.stdout.isTTY) {
-    printErrors(errors)
+    printErrors(pipelines, errors, options.levels)
   }
   else {
     console.log(JSON.stringify(errors))
@@ -39,10 +45,19 @@ async function main (file, options) {
 
 program
   .arguments('<pipelineFile>')
-  .option('-p, --pipeline <pipelineIRI>', 'pipeline IRI', null)
-  .option('-s, --strict', 'warnings also produce an error exit status', false)
-  .option('-v, --verbose', 'show all warning messages', false)
+  .option('-d, --debug', 'Shows debug information', false)
+  .option('-p, --pipeline <pipelineIRI>', 'Pipeline IRI', null)
+  .option('-q, --quiet', 'Report errors only', false)
+  .option('-s, --strict', 'Produce an error exit status on warnings', false)
+  .option('-v, --verbose', 'Include successful validation checks in output', false)
   .action((pipelineFile, options) => {
+    options.levels = ['error']
+    if (!options.quiet) {
+      options.levels.push('warning')
+    }
+    if (options.verbose) {
+      options.levels.push('info')
+    }
     if (options.strict) {
       options.verbose = true
     }

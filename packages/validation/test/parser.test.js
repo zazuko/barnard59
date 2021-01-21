@@ -366,18 +366,7 @@ describe('parser.validatePipelines', () => {
     const expectedErrors = [['pizza', pizzaIssue], ['pancakes', pancakesIssue]]
     const actualErrors = []
 
-    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors, true)
-    assert.deepStrictEqual(actualErrors, expectedErrors)
-  })
-  it('should issue no warning if pipeline has no readable/writable property, and warning mode is false', () => {
-    const pipeline2properties = {
-      pancakes: null,
-      pizza: ['Pipeline', 'crunchy']
-    }
-    const expectedErrors = []
-    const actualErrors = []
-
-    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors, false)
+    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors)
     assert.deepStrictEqual(actualErrors, expectedErrors)
   })
   it('should validate pipeline property if first/last operation property exists', () => {
@@ -385,14 +374,14 @@ describe('parser.validatePipelines', () => {
     mock.validatePipelineProperty = sinon.stub().callsFake(() => actualErrors.push('it is burning!'))
 
     const pipeline2properties = {
-      pancakes: ['soft'],
-      pizza: ['crunchy']
+      pancakes: ['soft', 'Readable'],
+      pizza: ['crunchy', 'Writable']
     }
     const expectedErrors = ['it is burning!']
 
-    for (const pipeline of ['pizza', 'pancakes']) {
+    for (const pipelineID of ['pizza', 'pancakes']) {
       actualErrors = []
-      mockedParser.validatePipelines({ pipeline: pipelines[pipeline] }, operation2properties, pipeline2properties, actualErrors, false)
+      mockedParser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, actualErrors)
       assert.deepStrictEqual(actualErrors, expectedErrors)
     }
   })
@@ -404,24 +393,10 @@ describe('parser.validatePipelines', () => {
     operation2properties['with friends'] = null
 
     const pipeline2properties = {
-      pancakes: ['soft'],
-      pizza: ['crunchy']
+      pancakes: ['soft', 'Readable'],
+      pizza: ['crunchy', 'Readable']
     }
-    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors, false)
-    assert.deepStrictEqual(actualErrors, expectedErrors)
-  })
-  it("should do nothing it pipeline property doesn't exist", () => {
-    const actualErrors = []
-    const expectedErrors = []
-
-    operation2properties['Find a French chef'] = null
-    operation2properties['with friends'] = null
-
-    const pipeline2properties = {
-      pancakes: null,
-      pizza: null
-    }
-    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors, false)
+    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors)
     assert.deepStrictEqual(actualErrors, expectedErrors)
   })
 })

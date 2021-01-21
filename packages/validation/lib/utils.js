@@ -5,24 +5,39 @@ function removeFilePart (dirname) {
   return path.parse(dirname).dir
 }
 
-function printErrors (errors) {
-  errors.forEach((error, i) => {
-    if (Array.isArray(error)) {
-      const [pipeline, pipelineErrors] = error
+function printErrors (pipelines, errors, levels) {
+  errors.filter(issue => !Array.isArray(issue))
+    .filter(issue => levels.includes(issue.level))
+    .forEach((issue) => {
+      console.error(`- ${issue}`)
+    })
+
+  if (!pipelines) {
+    return
+  }
+
+  Object.entries(pipelines)
+    .forEach(([pipelineIRI, _steps], i) => {
+      // TODO: group output per step
+      const pipelineErrors = errorsForPipeline(pipelineIRI, errors, levels)
       if (pipelineErrors.length > 0) {
-        console.error(`${i + 1}. In pipeline <${pipeline}>`)
-        pipelineErrors.forEach((error, j) => {
-          console.error(`${i + 1}.${j + 1}. ${error}`)
+        console.error(`${i + 1}. In pipeline <${pipelineIRI}>`)
+        pipelineErrors.forEach((issue, j) => {
+          console.error(`${i + 1}.${j + 1}. ${issue}`)
         })
       }
-    }
-    else {
-      console.error(`${i + 1}. ${error}`)
-    }
-  })
+    })
 }
 
-function countValidationIssues (errors, verbose = false) {
+function errorsForPipeline (pipelineIRI, errors, levels) {
+  const [_pipelineIRI, issues] = errors
+    .filter(issue => Array.isArray(issue))
+    .find(([pipeline, _pipelineErrors]) => pipeline === pipelineIRI)
+
+  return issues.filter(issue => levels.includes(issue.level))
+}
+
+function countValidationIssues (errors, strict = false) {
   const collectedIssues = []
   errors.forEach((error) => {
     if (Array.isArray(error)) {
@@ -35,8 +50,10 @@ function countValidationIssues (errors, verbose = false) {
       collectedIssues.push(error.level)
     }
   })
-  if (verbose) {
-    return collectedIssues.length
+  if (strict) {
+    return collectedIssues
+      .filter(level => ['warning', 'error'].includes(level))
+      .length
   }
   return collectedIssues.filter(level => level === 'error').length
 }

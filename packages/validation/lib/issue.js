@@ -1,6 +1,7 @@
 const chalk = require('chalk')
 
 const colors = {
+  info: chalk.grey,
   warning: chalk.yellow,
   error: chalk.red
 }
@@ -22,6 +23,10 @@ class Issue {
       msg += ` (${this.operation})`
     }
     return colors[this.level](msg)
+  }
+
+  static info ({ step, operation, message }) {
+    return new Issue({ step, operation, message, level: 'info' })
   }
 
   static warning ({ step, operation, message }) {
