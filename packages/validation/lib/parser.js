@@ -257,7 +257,7 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
   })
 }
 
-function validateSteps ({ pipelines, properties }, errors, verbose = true) {
+function validateSteps ({ pipelines, properties }, errors) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const pipelineErrors = []
     errors.push([pipeline, pipelineErrors])
