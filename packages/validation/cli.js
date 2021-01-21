@@ -21,7 +21,11 @@ async function main (file, options) {
     const stepProperties = await parser.getAllOperationProperties(dependencies, errors)
     parser.validateSteps({ pipelines, properties: stepProperties }, errors)
   }
-  catch (_err) {}
+  catch (err) {
+    if (options.debug) {
+      console.error(err)
+    }
+  }
 
   if (process.stdout.isTTY) {
     printErrors(pipelines, errors, options.levels)
@@ -37,6 +41,7 @@ async function main (file, options) {
 
 program
   .arguments('<pipelineFile>')
+  .option('-d, --debug', 'Shows debug information', false)
   .option('-p, --pipeline <pipelineIRI>', 'Pipeline IRI', null)
   .option('-q, --quiet', 'Report errors only', false)
   .option('-s, --strict', 'Produce an error exit status on warnings', false)
