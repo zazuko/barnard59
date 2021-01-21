@@ -7,6 +7,7 @@ const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
+const { Writable } = require('stream')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -14,6 +15,7 @@ const ns = {
   p: namespace('https://pipeline.described.at/'),
   code: namespace('https://code.described.at/')
 }
+const acceptedPipelineProperties = ['Readable', 'ReadableObjectMode', 'Writable', 'WritableObjectMode']
 
 async function readGraph (file, errors = []) {
   const quadStream = fromFile(file)
@@ -218,30 +220,6 @@ async function getAllOperationProperties (dependencies, errors = [], verbose = t
   return results
 }
 
-function validatePipelineProperty (pipeline, step, pipelineProperties, opProperties, mode, errors) {
-  const canStreamBeWritable = opProperties.includes('Writable') || opProperties.includes('WritableObjectMode')
-  const canStreamBeReadable = opProperties.includes('Readable') || opProperties.includes('ReadableObjectMode')
-  const isStreamReadableOnly = canStreamBeReadable && !canStreamBeWritable
-  const isStreamWritableOnly = canStreamBeWritable && !canStreamBeReadable
-
-  let pipelineIsOfRightType = true
-  if ((mode === 'first') && isStreamWritableOnly) {
-    pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
-    const mssg = 'The pipeline must be of type Writable or WritableObjectMode'
-  }
-  if ((mode === 'last') && isStreamReadableOnly) {
-    pipelineIsOfRightType = pipelineProperties.includes('Readbale') || pipelineProperties.includes('ReadableObjectMode')
-    const mssg = 'The pipeline must be of type Readable or ReadableObjectMode'
-  }
-
-  if (!pipelineIsOfRightType) {
-    const issue = Issue.error({
-      message: `Invalid pipeline type for ${pipeline}. ${mssg}`
-    })
-    errors.push([pipeline, issue])
-  }
-}
-
 function validatePipelines (pipelines, operation2properties, pipeline2properties, errors, verbose = true) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const firstOpProperties = operation2properties[steps[0].stepOperation]
@@ -250,17 +228,20 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
 
     if (pipelineProperties !== null) {
       if (firstOpProperties !== null) {
-        validatePipelineProperty(firstOpProperties, pipelineProperties, 'first', errors)
+        utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', errors)
       }
       if (lastOpProperties !== null) {
-        validatePipelineProperty(lastOpProperties, pipelineProperties, 'last', errors)
+        utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', errors)
       }
     }
-    else if (verbose) {
-      const issue = Issue.warning({
-        message: `Cannot validate pipeline ${pipeline}: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined`
-      })
-      errors.push([pipeline, issue])
+    if (verbose) {
+      const hasDefinedMode = (pipelineProperties !== null) && (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
+      if (!hasDefinedMode) {
+        const issue = Issue.warning({
+          message: `Cannot validate pipeline ${pipeline}: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined`
+        })
+        errors.push([pipeline, issue])
+      }
     }
   })
 }

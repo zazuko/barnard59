@@ -1,4 +1,5 @@
 const path = require('path')
+const Issue = require('../lib/issue')
 
 function removeFilePart (dirname) {
   return path.parse(dirname).dir
@@ -40,8 +41,33 @@ function countValidationIssues (errors, verbose = false) {
   return collectedIssues.filter(level => level === 'error').length
 }
 
+function validatePipelineProperty (pipeline, pipelineProperties, opProperties, mode, errors) {
+  const canStreamBeWritable = opProperties.includes('Writable') || opProperties.includes('WritableObjectMode')
+  const canStreamBeReadable = opProperties.includes('Readable') || opProperties.includes('ReadableObjectMode')
+  const isStreamReadableOnly = canStreamBeReadable && !canStreamBeWritable
+  const isStreamWritableOnly = canStreamBeWritable && !canStreamBeReadable
+
+  let pipelineIsOfRightType = true
+  let mssg = ''
+  if ((mode === 'first') && isStreamWritableOnly) {
+    pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
+    mssg = 'The pipeline must be of type Writable or WritableObjectMode'
+  }
+  if ((mode === 'last') && isStreamReadableOnly) {
+    pipelineIsOfRightType = pipelineProperties.includes('Readbale') || pipelineProperties.includes('ReadableObjectMode')
+    mssg = 'The pipeline must be of type Readable or ReadableObjectMode'
+  }
+
+  if (!pipelineIsOfRightType) {
+    const issue = Issue.error({
+      message: `Invalid pipeline type for ${pipeline}. ${mssg}`
+    })
+    errors.push([pipeline, issue])
+  }
+}
 module.exports = {
   removeFilePart,
   printErrors,
-  countValidationIssues
+  countValidationIssues,
+  validatePipelineProperty
 }
