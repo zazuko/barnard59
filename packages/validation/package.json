@@ -16,6 +16,8 @@
   "devDependencies": {
     "@jsdevtools/chai-exec": "^2.1.1",
     "babel-eslint": "^10.1.0",
+    "barnard59-base": "0.0.5",
+    "barnard59-formats": "0.0.8",
     "chai": "^4.2.0",
     "eslint": "^7.17.0",
     "mocha": "^8.2.1",
@@ -24,9 +26,6 @@
     "standard": "^16.0.3"
   },
   "dependencies": {
-    "@rdfjs/fetch": "^2.1.0",
-    "barnard59-base": "0.0.5",
-    "barnard59-formats": "0.0.8",
     "chalk": "^4.1.0",
     "clownface": "^1.2.0",
     "commander": "^7.0.0",
