@@ -1,0 +1,13 @@
+name: Publish
+
+on:
+  push:
+    tags: '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: JS-DevTools/npm-publish@v1
