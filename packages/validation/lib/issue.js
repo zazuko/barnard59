@@ -7,11 +7,12 @@ const colors = {
 }
 
 class Issue {
-  constructor ({ step, operation, message, level } = {}) {
+  constructor ({ step, operation, message, level, id } = {}) {
     this.step = step
     this.operation = operation
     this.message = message
     this.level = level
+    this.id = id
   }
 
   toString () {

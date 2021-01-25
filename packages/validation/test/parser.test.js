@@ -6,6 +6,7 @@ const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const proxyquire = require('proxyquire')
 const parser = require('../lib/parser')
 const Issue = require('../lib/issue')
+const checks = require('../lib/schema')
 
 const mock = {}
 const mockedParser = proxyquire('../lib/parser', {
@@ -376,15 +377,15 @@ describe('parser.validatePipelines', () => {
     'Enjoy!': ['with friends']
   }
   const pizzaIssue = Issue.warning({
-    message: 'Cannot validate pipeline pizza: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined'
+    message: checks.pipelinePropertiesExist.messageFailure('pizza')
   })
   const pancakesIssue = Issue.warning({
-    message: 'Cannot validate pipeline pancakes: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined'
+    message: checks.pipelinePropertiesExist.messageFailure('pancakes')
   })
 
   it('should issue a warning if pipeline has no readable/writable property', () => {
     const pipeline2properties = {
-      pancakes: null,
+      pancakes: ['Pipeline'],
       pizza: ['Pipeline', 'crunchy']
     }
     const expectedErrors = [['pizza', pizzaIssue], ['pancakes', pancakesIssue]]
@@ -401,17 +402,17 @@ describe('parser.validatePipelines', () => {
       pancakes: ['soft', 'Readable'],
       pizza: ['crunchy', 'Writable']
     }
-    const expectedErrors = ['it is burning!']
 
     for (const pipelineID of ['pizza', 'pancakes']) {
       actualErrors = []
+      const expectedErrors = ['it is burning!', [pipelineID, Issue.info({ message: `Validated: property for pipeline ${pipelineID} is defined` })]]
       mockedParser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, actualErrors)
       assert.deepStrictEqual(actualErrors, expectedErrors)
     }
   })
-  it("should do nothing it first/last operation property doesn't exist", () => {
+  it("should return infos it first/last operation property doesn't exist", () => {
+    const expectedErrors = [['pizza', Issue.info({ message: checks.pipelinePropertiesExist.messageSuccess('pizza') })], ['pancakes', Issue.info({ message: checks.pipelinePropertiesExist.messageSuccess('pancakes') })]]
     const actualErrors = []
-    const expectedErrors = []
 
     operation2properties['Find a French chef'] = null
     operation2properties['with friends'] = null

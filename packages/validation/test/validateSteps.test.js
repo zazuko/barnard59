@@ -1,6 +1,7 @@
 const { describe, it } = require('mocha')
 const assert = require('assert')
 const parser = require('../lib/parser')
+const checks = require('../lib/schema')
 
 const properties = {
   o: ['Operation'],
@@ -27,6 +28,11 @@ const properties = {
 function errorsForPipeline (errors, pipeline) {
   const [_p, errs] = errors.find(([p]) => p === pipeline)
   return errs.filter(error => error.level !== 'info')
+}
+
+function infoForPipeline (errors, pipeline) {
+  const [_p, errs] = errors.find(([p]) => p === pipeline)
+  return errs.filter(error => error.level === 'info')
 }
 
 function opToStep (operation) {
@@ -86,7 +92,18 @@ describe('parser.validateSteps', () => {
     const errs = errorsForPipeline(errors, 'p1')
     assert.strictEqual(errs.length, 1)
     assert.strictEqual(errs[0].level, 'warning')
-    assert.strictEqual(errs[0].message, 'Cannot validate operation: no metadata')
+    assert.strictEqual(errs[0].message, checks.operationPropertiesExist.messageFailure('n'))
+  })
+  it('should report found metadata', () => {
+    const pipelines = pipelinesToSteps({
+      p1: [
+        'rw'
+      ]
+    })
+    parser.validateSteps({ pipelines, properties }, errors)
+
+    const errs = infoForPipeline(errors, 'p1')
+    assert.strictEqual(errs[0].message, checks.operationPropertiesExist.messageSuccess('rw'))
   })
 
   it('should report operations missing p:Operation', () => {

@@ -7,6 +7,7 @@ const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
+const checks = require('./schema')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -24,18 +25,20 @@ async function readGraph (file, errors = []) {
   })
   const datasetPromise = rdf.dataset().import(quadStream)
 
-  let dataset, _err
+  let issue, dataset, _err
   try {
     [_err, dataset] = await Promise.all([parserPromise, datasetPromise])
+    issue = Issue.info({
+      message: checks.parser.messageSuccess(file)
+    })
   }
   catch (err) {
     const error = await parseError(file, err)
-    const issue = Issue.error({
-      message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
+    issue = Issue.error({
+      message: checks.parser.messageFailure(file, error)
     })
-    errors.push(issue)
   }
-
+  errors.push(issue)
   const clownfaceObj = cf({ dataset })
 
   return clownfaceObj
@@ -181,37 +184,37 @@ async function getAllOperationProperties (dependencies, errors = []) {
         const modulePath = utils.removeFilePart(require.resolve(module))
         operationsPath = `${modulePath}/operations.ttl`
 
-        const issue = Issue.info({ message: `Found package ${module}` })
+        const issue = Issue.info({ message: checks.dependencies.messageSuccess(module) })
         errors.push(issue)
       }
       catch (err) {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
         const issue = Issue.error({
-          message: `Missing package ${module}\n  The following operations cannot be validated:\n  * "${codelinksWithMissingMetadata}"`
+          message: checks.dependencies.messageFailure(module, codelinksWithMissingMetadata)
         })
         errors.push(issue)
         continue
       }
 
+      let issue
       if (fs.existsSync(operationsPath)) {
         const graph = await readGraph(operationsPath, errors)
         const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
         Object.assign(results, tempResults)
 
-        const issue = Issue.info({ message: `Found metadata file ${operationsPath}` })
-        errors.push(issue)
+        issue = Issue.info({ message: checks.operations.messageSuccess(module) })
       }
       else {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
-        const issue = Issue.warning({
-          message: `Missing metadata file ${operationsPath}\n  The following operations cannot be validated:\n  * "${codelinksWithMissingMetadata}"`
+        issue = Issue.warning({
+          message: checks.operations.messageFailure(module, codelinksWithMissingMetadata)
         })
-        errors.push(issue)
 
         for (const codelink of dependencies[env][module]) {
           results[codelink] = null
         }
       }
+      errors.push(issue)
     }
   }
   return results
@@ -223,22 +226,26 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
     const lastOpProperties = operation2properties[steps[steps.length - 1].stepOperation]
     const pipelineProperties = pipeline2properties[pipeline]
 
-    if (pipelineProperties !== null) {
-      if (firstOpProperties !== null) {
-        utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', errors)
-      }
-      if (lastOpProperties !== null) {
-        utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', errors)
-      }
+    if (firstOpProperties !== null) {
+      utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', errors)
+    }
+    if (lastOpProperties !== null) {
+      utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', errors)
     }
 
-    const hasDefinedMode = (pipelineProperties !== null) && (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
+    let issue
+    const hasDefinedMode = (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
     if (!hasDefinedMode) {
-      const issue = Issue.warning({
-        message: `Cannot validate pipeline ${pipeline}: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined`
+      issue = Issue.warning({
+        message: checks.pipelinePropertiesExist.messageFailure(pipeline)
       })
-      errors.push([pipeline, issue])
     }
+    else {
+      issue = Issue.info({
+        message: checks.pipelinePropertiesExist.messageSuccess(pipeline)
+      })
+    }
+    errors.push([pipeline, issue])
   })
 }
 
@@ -262,13 +269,15 @@ function validateSteps ({ pipelines, properties }, errors) {
       const lastIsReadableObjectMode = (lastOperationProperties || []).includes('ReadableObjectMode')
 
       if (operationProperties === null) {
-        const message = 'Cannot validate operation: no metadata'
-        pipelineErrors.push(Issue.warning({ message, step, operation }))
+        const message = checks.operationPropertiesExist.messageFailure(operation)
+        const issue = Issue.warning({ message, step, operation })
+        pipelineErrors.push(issue)
         return operation
       }
       else {
-        const message = 'Found metadata'
-        pipelineErrors.push(Issue.info({ message, step, operation }))
+        const message = checks.operationPropertiesExist.messageSuccess(operation)
+        const issue = Issue.info({ message, step, operation })
+        pipelineErrors.push(issue)
       }
 
       if (!isOperation) {
@@ -284,10 +293,16 @@ function validateSteps ({ pipelines, properties }, errors) {
       const issuesCount = pipelineErrors.length
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
-      if (isFirstStep && !isOnlyStep && !isReadableOrReadableObjectMode) {
-        const message = `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
-        pipelineErrors.push(Issue.error({ message, step, operation }))
-        return operation
+      if (isFirstStep && !isOnlyStep) {
+        if (!isReadableOrReadableObjectMode) {
+          const message = `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
+          pipelineErrors.push(Issue.error({ message, step, operation }))
+          return operation
+        }
+        else {
+          const message = 'Validated: first operation must be either Readable or ReadableObjectMode'
+          pipelineErrors.push(Issue.info({ message, step, operation }))
+        }
       }
 
       if (lastOp) {
@@ -302,11 +317,19 @@ function validateSteps ({ pipelines, properties }, errors) {
               const message = 'Invalid operation: previous operation is not Readable'
               pipelineErrors.push(Issue.error({ message, step, operation }))
             }
+            else {
+              const message = 'Validated: a writable operation must always be preceded by a readable operation'
+              pipelineErrors.push(Issue.info({ message, step, operation }))
+            }
           }
           if (isWritableObjectMode) {
             if (!lastIsReadableObjectMode) {
               const message = 'Invalid operation: previous operation is not ReadableObjectMode'
               pipelineErrors.push(Issue.error({ message, step, operation }))
+            }
+            else {
+              const message = 'Validated: a writable operation must always be preceded by a readable operation'
+              pipelineErrors.push(Issue.info({ message, step, operation }))
             }
           }
           // a readable operation must always be followed by a writable operation
@@ -315,14 +338,23 @@ function validateSteps ({ pipelines, properties }, errors) {
               const message = 'Invalid operation: operation is not Writable'
               pipelineErrors.push(Issue.error({ message, step, operation }))
             }
+            else {
+              const message = 'Validated: a readable operation must always be followed by a writable operation'
+              pipelineErrors.push(Issue.info({ message, step, operation }))
+            }
           }
           if (lastIsReadableObjectMode) {
             if (!isWritableObjectMode) {
               const message = 'Invalid operation: operation is not WritableObjectMode'
               pipelineErrors.push(Issue.error({ message, step, operation }))
             }
+            else {
+              const message = 'Validated: a readable operation must always be followed by a writable operation'
+              pipelineErrors.push(Issue.info({ message, step, operation }))
+            }
           }
         }
+
         if (issuesCount === pipelineErrors.length) {
           const message = `Valid step ${lastOperationProperties.find(op => op.startsWith('Readable'))} -> ${operationProperties.find(op => op.startsWith('Writable'))}`
           pipelineErrors.push(Issue.info({ message, step, operation }))

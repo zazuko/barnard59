@@ -37,6 +37,7 @@ async function main (file, options) {
     console.log(JSON.stringify(errors))
   }
 
+  console.log(errors)
   if (countValidationIssues(errors, options.strict)) {
     process.exit(-1)
   }

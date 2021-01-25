@@ -1,5 +1,6 @@
 const path = require('path')
 const Issue = require('../lib/issue')
+const checks = require('./schema')
 
 function removeFilePart (dirname) {
   return path.parse(dirname).dir
@@ -42,9 +43,9 @@ function countValidationIssues (errors, strict = false) {
   errors.forEach((error) => {
     if (Array.isArray(error)) {
       const [, pipelineErrors] = error
-      pipelineErrors.forEach((error) => {
-        collectedIssues.push(error.level)
-      })
+      // pipelineErrors.forEach((error) => {
+      //  collectedIssues.push(error.level)
+      // })
     }
     else {
       collectedIssues.push(error.level)
@@ -61,25 +62,34 @@ function countValidationIssues (errors, strict = false) {
 function validatePipelineProperty (pipeline, pipelineProperties, opProperties, mode, errors) {
   const canStreamBeWritable = opProperties.includes('Writable') || opProperties.includes('WritableObjectMode')
   const canStreamBeReadable = opProperties.includes('Readable') || opProperties.includes('ReadableObjectMode')
-  const isStreamReadableOnly = canStreamBeReadable && !canStreamBeWritable
-  const isStreamWritableOnly = canStreamBeWritable && !canStreamBeReadable
 
-  let pipelineIsOfRightType = true
-  let mssg = ''
-  if ((mode === 'first') && isStreamWritableOnly) {
-    pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
-    mssg = 'The pipeline must be of type Writable or WritableObjectMode'
-  }
-  if ((mode === 'last') && isStreamReadableOnly) {
-    pipelineIsOfRightType = pipelineProperties.includes('Readbale') || pipelineProperties.includes('ReadableObjectMode')
-    mssg = 'The pipeline must be of type Readable or ReadableObjectMode'
+  let issue
+  if (mode === 'first') {
+    const isStreamWritableOnly = canStreamBeWritable && !canStreamBeReadable
+    if (isStreamWritableOnly) {
+      const pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
+      if (!pipelineIsOfRightType) {
+        issue = Issue.error({ message: checks.pipelinePropertiesMatchFirst.messageFailure(pipeline) })
+      }
+      else {
+        issue = Issue.info({ message: checks.pipelinePropertiesMatchFirst.messageSuccess(pipeline) })
+      }
+      errors.push([pipeline, issue])
+    }
   }
 
-  if (!pipelineIsOfRightType) {
-    const issue = Issue.error({
-      message: `Invalid pipeline type for ${pipeline}. ${mssg}`
-    })
-    errors.push([pipeline, issue])
+  if (mode === 'last') {
+    const isStreamReadableOnly = canStreamBeReadable && !canStreamBeWritable
+    if (isStreamReadableOnly) {
+      const pipelineIsOfRightType = pipelineProperties.includes('Readable') || pipelineProperties.includes('ReadableObjectMode')
+      if (!pipelineIsOfRightType) {
+        issue = Issue.error({ message: checks.pipelinePropertiesMatchLast.messageFailure(pipeline) })
+      }
+      else {
+        issue = Issue.info({ message: checks.pipelinePropertiesMatchLast.messageSuccess(pipeline) })
+      }
+      errors.push([pipeline, issue])
+    }
   }
 }
 module.exports = {
