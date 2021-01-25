@@ -7,6 +7,10 @@
     "lint": "standard",
     "test": "mocha"
   },
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "dependencies": {
     "@rdfjs/data-model": "^1.2.0",
     "@tpluscode/rdf-ns-builders": "^0.4.0",
