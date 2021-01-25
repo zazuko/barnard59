@@ -136,7 +136,7 @@ describe('parser.getAllCodeLinks', () => {
 
 describe('parser.readGraph', () => {
   it('should read .ttl file and create DatasetCore object', async () => {
-    const input = path.join(__dirname, 'example.ttl')
+    const input = path.join(__dirname, 'fixtures/example.ttl')
     const graph = await parser.readGraph(input)
 
     assert.strictEqual(graph.dataset.size, 4)
@@ -234,7 +234,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should get operation properties from operations.ttl file', async () => {
-    mock.removeFilePart = sinon.stub().returns('test')
+    mock.removeFilePart = sinon.stub().returns('test/fixtures')
 
     const input = {
       'node:': {
@@ -273,7 +273,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
-    mock.removeFilePart = sinon.stub().returns('test')
+    mock.removeFilePart = sinon.stub().returns('test/fixtures')
 
     const input = {
       'node:': {

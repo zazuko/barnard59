@@ -37,7 +37,7 @@ describe('barnard59-validate', function () {
   })
 
   it('should report parsing errors', () => {
-    const strict = chaiExec('./sample-pipelines/invalid.ttl')
+    const strict = chaiExec('./test/fixtures/invalid.ttl')
     assert.exitCode(strict, 255)
 
     const errors = JSON.parse(strict.stdout)
