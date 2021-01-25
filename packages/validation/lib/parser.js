@@ -14,6 +14,7 @@ const ns = {
   p: namespace('https://pipeline.described.at/'),
   code: namespace('https://code.described.at/')
 }
+const acceptedPipelineProperties = ['Readable', 'ReadableObjectMode', 'Writable', 'WritableObjectMode']
 
 async function readGraph (file, errors = []) {
   const quadStream = fromFile(file)
@@ -146,6 +147,31 @@ function getDependencies (codelinks) {
   return dependencies
 }
 
+function getPipelineProperties (graph, pipelines) {
+  const pipeline2properties = {}
+
+  for (const id of pipelines) {
+    pipeline2properties[id] = []
+
+    graph
+      .namedNode(id)
+      .out(ns.rdf.type)
+      .forEach(node => {
+        const nodeComponents = node.term.value.split('/')
+        const property = nodeComponents[nodeComponents.length - 1]
+
+        pipeline2properties[id].push(property)
+      })
+  }
+
+  for (const key in pipeline2properties) {
+    if (pipeline2properties[key].length === 0) {
+      pipeline2properties[key] = null
+    }
+  }
+  return pipeline2properties
+}
+
 async function getAllOperationProperties (dependencies, errors = []) {
   const results = {}
   for (const env in dependencies) {
@@ -189,6 +215,31 @@ async function getAllOperationProperties (dependencies, errors = []) {
     }
   }
   return results
+}
+
+function validatePipelines (pipelines, operation2properties, pipeline2properties, errors) {
+  Object.entries(pipelines).forEach(([pipeline, steps]) => {
+    const firstOpProperties = operation2properties[steps[0].stepOperation]
+    const lastOpProperties = operation2properties[steps[steps.length - 1].stepOperation]
+    const pipelineProperties = pipeline2properties[pipeline]
+
+    if (pipelineProperties !== null) {
+      if (firstOpProperties !== null) {
+        utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', errors)
+      }
+      if (lastOpProperties !== null) {
+        utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', errors)
+      }
+    }
+
+    const hasDefinedMode = (pipelineProperties !== null) && (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
+    if (!hasDefinedMode) {
+      const issue = Issue.warning({
+        message: `Cannot validate pipeline ${pipeline}: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined`
+      })
+      errors.push([pipeline, issue])
+    }
+  })
 }
 
 function validateSteps ({ pipelines, properties }, errors) {
@@ -290,5 +341,7 @@ module.exports = {
   getDependencies,
   getModuleOperationProperties,
   getAllOperationProperties,
-  validateSteps
+  getPipelineProperties,
+  validateSteps,
+  validatePipelines
 }

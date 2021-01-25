@@ -14,11 +14,15 @@ async function main (file, options) {
   try {
     const pipelineGraph = await parser.readGraph(file, errors)
     pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
+
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)
 
-    const stepProperties = await parser.getAllOperationProperties(dependencies, errors)
-    parser.validateSteps({ pipelines, properties: stepProperties }, errors)
+    const operationProperties = await parser.getAllOperationProperties(dependencies, errors)
+    parser.validateSteps({ pipelines, properties: operationProperties }, errors)
+
+    const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
+    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, errors)
   }
   catch (err) {
     if (options.debug) {

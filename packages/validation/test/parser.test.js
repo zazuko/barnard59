@@ -5,7 +5,12 @@ const sinon = require('sinon')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const proxyquire = require('proxyquire')
 const parser = require('../lib/parser')
+const Issue = require('../lib/issue')
 
+const mock = {}
+const mockedParser = proxyquire('../lib/parser', {
+  './utils': mock
+})
 class ClownfaceMock {
   namedNode () {
     return null
@@ -303,5 +308,119 @@ describe('parser.getAllOperationProperties', () => {
     const issue = errors.find((issue) => issue.level === 'error')
     assert.ok(issue.message.includes('Missing package'))
     assert.ok(issue.message.includes('foo-bar'))
+  })
+})
+
+describe('parser.getPipelineProperties', () => {
+  const pipeline = {
+    term: {
+      value: null
+    }
+  }
+  const pipelinesProperties = [
+    'https://pipeline.described.at/Pipeline',
+    'https://pipeline.described.at/Crunchy',
+    'https://pipeline.described.at/Pipeline',
+    'https://pipeline.described.at/Soft'
+
+  ]
+  sinon.stub(pipeline, 'term').get(function getterFn () {
+    return { value: pipelinesProperties.shift() }
+  })
+
+  const graph = sinon.createStubInstance(ClownfaceMock, {
+    namedNode: sinon.stub().returnsThis()
+  })
+
+  const pipelinesIDs = ['pizza', 'pancakes']
+  it('should extract pipeline properties', () => {
+    graph.out.onCall(0).returns([pipeline, pipeline])
+    graph.out.onCall(1).returns([pipeline, pipeline])
+
+    const actual = parser.getPipelineProperties(graph, pipelinesIDs)
+    const expected = {
+      pizza: ['Pipeline', 'Crunchy'],
+      pancakes: ['Pipeline', 'Soft']
+    }
+    assert.deepStrictEqual(actual, expected)
+  })
+  it('should return null when no properties exist', () => {
+    graph.out.onCall(2).returns([])
+    graph.out.onCall(3).returns([])
+    const actual = parser.getPipelineProperties(graph, pipelinesIDs)
+    const expected = {
+      pizza: null,
+      pancakes: null
+    }
+    assert.deepStrictEqual(actual, expected)
+  })
+})
+
+describe('parser.validatePipelines', () => {
+  const pipelines = {
+    pizza:
+  [{ stepOperation: 'Turn on the oven' },
+    { stepOperation: 'Put there frozen pizza' },
+    { stepOperation: 'Wait 30 min' },
+    { stepOperation: 'Enjoy!' }],
+    pancakes:
+  [{ stepOperation: 'Find a French chef' },
+    { stepOperation: 'Ask them to make you pancakes' }]
+  }
+  const operation2properties = {
+    'Find a French chef': ['quickly'],
+    'Ask them to make you pancakes': null,
+    'Turn on the oven': null,
+    'Put there frozen pizza': null,
+    'Wait 30 min': null,
+    'Enjoy!': ['with friends']
+  }
+  const pizzaIssue = Issue.warning({
+    message: 'Cannot validate pipeline pizza: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined'
+  })
+  const pancakesIssue = Issue.warning({
+    message: 'Cannot validate pipeline pancakes: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined'
+  })
+
+  it('should issue a warning if pipeline has no readable/writable property', () => {
+    const pipeline2properties = {
+      pancakes: null,
+      pizza: ['Pipeline', 'crunchy']
+    }
+    const expectedErrors = [['pizza', pizzaIssue], ['pancakes', pancakesIssue]]
+    const actualErrors = []
+
+    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors)
+    assert.deepStrictEqual(actualErrors, expectedErrors)
+  })
+  it('should validate pipeline property if first/last operation property exists', () => {
+    let actualErrors = []
+    mock.validatePipelineProperty = sinon.stub().callsFake(() => actualErrors.push('it is burning!'))
+
+    const pipeline2properties = {
+      pancakes: ['soft', 'Readable'],
+      pizza: ['crunchy', 'Writable']
+    }
+    const expectedErrors = ['it is burning!']
+
+    for (const pipelineID of ['pizza', 'pancakes']) {
+      actualErrors = []
+      mockedParser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, actualErrors)
+      assert.deepStrictEqual(actualErrors, expectedErrors)
+    }
+  })
+  it("should do nothing it first/last operation property doesn't exist", () => {
+    const actualErrors = []
+    const expectedErrors = []
+
+    operation2properties['Find a French chef'] = null
+    operation2properties['with friends'] = null
+
+    const pipeline2properties = {
+      pancakes: ['soft', 'Readable'],
+      pizza: ['crunchy', 'Readable']
+    }
+    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors)
+    assert.deepStrictEqual(actualErrors, expectedErrors)
   })
 })
