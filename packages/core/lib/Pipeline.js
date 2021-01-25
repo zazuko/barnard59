@@ -132,7 +132,9 @@ class Pipeline {
     }
 
     this.final = (callback) => {
-      this.firstStream.end(callback)
+      finished(this.lastStream, callback)
+
+      this.firstStream.end()
     }
   }
 
