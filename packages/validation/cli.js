@@ -30,11 +30,10 @@ async function main (file, options) {
     }
   }
 
-  if (process.stdout.isTTY) {
-    printErrors(pipelines, errors, options.levels)
-  }
-  else {
-    console.log(JSON.stringify(errors))
+  printErrors(pipelines, errors, options.levels)
+
+  if (!process.stdout.isTTY) {
+    console.log(JSON.stringify(errors.filter(issue => options.levels.includes(issue.level))))
   }
 
   if (countValidationIssues(errors, options.strict)) {

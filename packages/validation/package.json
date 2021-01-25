@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "nyc --reporter=lcov mocha"
+    "test": "mocha",
+    "coverage": "nyc --reporter=lcov mocha"
   },
   "keywords": [],
   "author": "",
