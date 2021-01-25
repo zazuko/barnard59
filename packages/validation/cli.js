@@ -13,7 +13,7 @@ async function main (file, options) {
   let pipelines
   try {
     const pipelineGraph = await parser.readGraph(file, errors)
-    pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
+    pipelines = parser.getIdentifiers(pipelineGraph, errors, options.pipeline)
 
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)

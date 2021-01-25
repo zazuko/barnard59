@@ -62,7 +62,7 @@ function parseError (path, error) {
   }
 }
 
-function getIdentifiers (graph, pipeline2find = null) {
+function getIdentifiers (graph, errors, pipeline2find = null) {
   const pipeline2identifier = {}
 
   graph
@@ -77,15 +77,22 @@ function getIdentifiers (graph, pipeline2find = null) {
         pipeline2identifier[pipeline.term.value] = []
 
         for (const step of steps) {
-          const identifier = step
-            .out(ns.code.implementedBy)
-            .out(ns.code.link)
-            .term
+          const implementedBy = step.out(ns.code.implementedBy)
+          const codeLink = implementedBy.out(ns.code.link)
+          const identifier = codeLink.term
 
-          pipeline2identifier[pipeline.term.value].push({
-            stepName: step.term.value,
-            stepOperation: identifier.value
-          })
+          if (identifier) {
+            pipeline2identifier[pipeline.term.value].push({
+              stepName: step.term.value,
+              stepOperation: identifier.value
+            })
+            const issue = Issue.info({ message: 'Defined with both code.implementedBy & code.link', step: step.term.value })
+            errors.push(issue)
+          }
+          else if (!implementedBy.term || !codeLink.term) {
+            const issue = Issue.error({ message: 'Missing code.implementedBy/code.link', step: step.term.value })
+            errors.push(issue)
+          }
         }
       }
     })
