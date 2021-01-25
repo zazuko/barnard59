@@ -1,6 +1,6 @@
 {
   "name": "barnard59-csvw",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Simplifies handling CSVW mapping documents in barnard59 pipelines",
   "main": "index.js",
   "scripts": {
