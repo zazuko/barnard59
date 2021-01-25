@@ -1,16 +1,31 @@
 {
   "name": "barnard59-csvw",
   "version": "0.0.0",
-  "description": "Simplifies loading CSV sources from CSVW mapping documents",
+  "description": "Simplifies handling CSVW mapping documents in barnard59 pipelines",
   "main": "index.js",
   "scripts": {
     "lint": "standard",
     "test": "mocha"
   },
+  "dependencies": {
+    "@rdfjs/data-model": "^1.2.0",
+    "@tpluscode/rdf-ns-builders": "^0.4.0",
+    "barnard59": "^0.1.1",
+    "clownface-io": "github:zazuko/clownface-io#tpluscode-proposals",
+    "duplex-to": "^1.0.0",
+    "file-fetch": "^1.5",
+    "nodeify-fetch": "^2.2.1",
+    "proto-fetch": "^1.0.0"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^8.2.1",
-    "standard": "^16.0.3"
+    "sinon": "^9.2.3",
+    "sinon-chai": "^3.5.0",
+    "standard": "^16.0.3",
+    "stream-to-string": "^1.2.0",
+    "string-to-stream": "^3.0.1"
   },
   "repository": {
     "type": "git",
@@ -21,5 +36,11 @@
   "bugs": {
     "url": "https://github.com/zazuko/barnard59-csvw/issues"
   },
-  "homepage": "https://github.com/zazuko/barnard59-csvw#readme"
+  "homepage": "https://github.com/zazuko/barnard59-csvw#readme",
+  "engines": {
+    "node": ">=13"
+  },
+  "mocha": {
+    "require": "test/setup-mocha.js"
+  }
 }

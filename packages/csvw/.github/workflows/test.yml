@@ -5,13 +5,16 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '13', '14' ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: ['10', '12', '14']
-      - run: yarn
-      - run: yarn test
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm test
       - name: Codecov
         uses: codecov/codecov-action@v1.0.5
         with:
@@ -24,5 +27,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '13'
-      - run: yarn
-      - run: yarn lint
+      - run: npm ci
+      - run: npm run lint
