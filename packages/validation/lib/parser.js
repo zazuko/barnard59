@@ -120,27 +120,6 @@ function getModuleOperationProperties (graph, identifiers) {
   return operation2properties
 }
 
-function validateDependencies (dependencies, errors = []) {
-  for (const env in dependencies) {
-    for (const module in dependencies[env]) {
-      const modulePath = utils.removeFilePart(require.resolve(module))
-
-      let issue
-      if (fs.existsSync(modulePath)) {
-        issue = Issue.info({
-          message: `Found package ${module}.`
-        })
-      }
-      else {
-        issue = Issue.error({
-          message: `Missing package ${module}.`
-        })
-      }
-      errors.push(issue)
-    }
-  }
-}
-
 function getAllCodeLinks (pipelines) {
   const codelinks = new Set()
   for (const key in pipelines) {
@@ -171,18 +150,30 @@ async function getAllOperationProperties (dependencies, errors = []) {
   const results = {}
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      const modulePath = utils.removeFilePart(require.resolve(module))
-      const operationsPath = `${modulePath}/operations.ttl`
+      let operationsPath
+      try {
+        const modulePath = utils.removeFilePart(require.resolve(module))
+        operationsPath = `${modulePath}/operations.ttl`
+
+        const issue = Issue.info({ message: `Found package ${module}` })
+        errors.push(issue)
+      }
+      catch (err) {
+        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
+        const issue = Issue.error({
+          message: `Missing package ${module}\n  The following operations cannot be validated:\n  * "${codelinksWithMissingMetadata}"`
+        })
+        errors.push(issue)
+        continue
+      }
 
       if (fs.existsSync(operationsPath)) {
         const graph = await readGraph(operationsPath, errors)
         const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
         Object.assign(results, tempResults)
 
-        for (const codelink of dependencies[env][module]) {
-          const issue = Issue.info({ operation: codelink, message: `Found metadata file ${operationsPath}` })
-          errors.push(issue)
-        }
+        const issue = Issue.info({ message: `Found metadata file ${operationsPath}` })
+        errors.push(issue)
       }
       else {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
@@ -298,7 +289,6 @@ module.exports = {
   getAllCodeLinks,
   getDependencies,
   getModuleOperationProperties,
-  validateDependencies,
   getAllOperationProperties,
   validateSteps
 }
