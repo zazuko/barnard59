@@ -206,6 +206,7 @@ describe('parser.getIdentifiers', () => {
     const actual = parser.getIdentifiers(input)
     assert.deepStrictEqual(actual, expected)
   })
+
   it('should return only requested pipeline', () => {
     const input = generateGraphMock()
     const expected = {
@@ -217,6 +218,7 @@ describe('parser.getIdentifiers', () => {
     const actual = parser.getIdentifiers(input, 'pancakes')
     assert.deepStrictEqual(actual, expected)
   })
+
   it('should return empty dict if pipeline does not exist', () => {
     const input = generateGraphMock()
     const expected = {}
@@ -226,6 +228,11 @@ describe('parser.getIdentifiers', () => {
 })
 
 describe('parser.getAllOperationProperties', () => {
+  const mock = {}
+  const mockedParser = proxyquire('../lib/parser', {
+    './utils': mock
+  })
+
   it('should get operation properties from operations.ttl file', async () => {
     mock.removeFilePart = sinon.stub().returns('test')
 
@@ -284,6 +291,23 @@ describe('parser.getAllOperationProperties', () => {
 
     const actual = await mockedParser.getAllOperationProperties(input)
     assert.deepStrictEqual(actual, expected)
+  })
+
+  it('should report missing packages', async () => {
+    const errors = []
+    const input = {
+      'node:': {
+        'foo-bar': new Set(['node:foo-bar#fn'])
+      }
+    }
+    const expected = {}
+
+    const actual = await mockedParser.getAllOperationProperties(input, errors)
+    assert.deepStrictEqual(actual, expected)
+
+    const issue = errors.find((issue) => issue.level === 'error')
+    assert.ok(issue.message.includes('Missing package'))
+    assert.ok(issue.message.includes('foo-bar'))
   })
 })
 

@@ -17,7 +17,6 @@ async function main (file, options) {
 
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)
-    parser.validateDependencies(dependencies, errors)
 
     const operationProperties = await parser.getAllOperationProperties(dependencies, errors)
     parser.validateSteps({ pipelines, properties: operationProperties }, errors)
