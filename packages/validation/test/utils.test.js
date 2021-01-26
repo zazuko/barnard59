@@ -2,7 +2,8 @@ const { describe, it } = require('mocha')
 const assert = require('assert')
 const utils = require('../lib/utils')
 const Issue = require('../lib/issue')
-const checks = require('../lib/schema')
+const rules = require('../lib/schema')
+const ChecksCollection = require('../lib/checksCollection')
 
 describe('utils.validatePipelineProperty', () => {
   const pipeline = 'pancakes'
@@ -11,40 +12,38 @@ describe('utils.validatePipelineProperty', () => {
     const pipelineProperties = ['Pipeline', 'Readable']
     const possibleOpProperties = [['Writable'], ['WritableObjectMode'], ['Writable', 'WritableObjectMode']]
     const mode = 'first'
-    const issue = Issue.error({ message: checks.pipelinePropertiesMatchFirst.messageFailure(pipeline) })
-    const expectedErrors = [[pipeline, issue]]
+    const issue = Issue.error({ message: rules.pipelinePropertiesMatchFirst.messageFailure(pipeline) })
 
     for (const opProperties of possibleOpProperties) {
-      const actualErrors = []
-      utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, actualErrors)
-      assert.deepStrictEqual(actualErrors, expectedErrors)
+      const checks = new ChecksCollection()
+      utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
+
+      assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
     }
   })
   it('should produce an error if last stream is readable, but pipeline is not', () => {
     const pipelineProperties = ['Pipeline', 'Writable']
     const possibleOpProperties = [['Readable'], ['ReadableObjectMode'], ['Readable', 'ReadableObjectMode']]
     const mode = 'last'
-    const issue = Issue.error({ message: checks.pipelinePropertiesMatchLast.messageFailure(pipeline) })
-    const expectedErrors = [[pipeline, issue]]
+    const issue = Issue.error({ message: rules.pipelinePropertiesMatchLast.messageFailure(pipeline) })
 
     for (const opProperties of possibleOpProperties) {
-      const actualErrors = []
-      utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, actualErrors)
-      assert.deepStrictEqual(actualErrors, expectedErrors)
+      const checks = new ChecksCollection()
+      utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
+      assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
     }
   })
   it('should produce an info if first stream is writable, and pipeline is', () => {
     const possiblePipelineProperties = [['Pipeline', 'Writable'], ['Pipeline', 'WritableObjectMode']]
     const possibleOpProperties = [['Writable'], ['WritableObjectMode'], ['Writable', 'WritableObjectMode']]
     const mode = 'first'
-    const issue = Issue.info({ message: checks.pipelinePropertiesMatchFirst.messageSuccess(pipeline) })
-    const expectedErrors = [[pipeline, issue]]
+    const issue = Issue.info({ message: rules.pipelinePropertiesMatchFirst.messageSuccess(pipeline) })
 
     for (const pipelineProperties of possiblePipelineProperties) {
       for (const opProperties of possibleOpProperties) {
-        const actualErrors = []
-        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, actualErrors)
-        assert.deepStrictEqual(actualErrors, expectedErrors)
+        const checks = new ChecksCollection()
+        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
+        assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
       }
     }
   })
@@ -52,14 +51,13 @@ describe('utils.validatePipelineProperty', () => {
     const possiblePipelineProperties = [['Pipeline', 'Readable'], ['Pipeline', 'ReadableObjectMode']]
     const possibleOpProperties = [['Readable'], ['ReadableObjectMode'], ['Readable', 'ReadableObjectMode']]
     const mode = 'last'
-    const issue = Issue.info({ message: checks.pipelinePropertiesMatchLast.messageSuccess(pipeline) })
-    const expectedErrors = [[pipeline, issue]]
+    const issue = Issue.info({ message: rules.pipelinePropertiesMatchLast.messageSuccess(pipeline) })
 
     for (const pipelineProperties of possiblePipelineProperties) {
       for (const opProperties of possibleOpProperties) {
-        const actualErrors = []
-        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, actualErrors)
-        assert.deepStrictEqual(actualErrors, expectedErrors)
+        const checks = new ChecksCollection()
+        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
+        assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
       }
     }
   })
@@ -67,12 +65,12 @@ describe('utils.validatePipelineProperty', () => {
     const possiblePipelineProperties = [['soft'], ['readable'], ['writable']]
     const possibleOpProperties = [['Writable', 'Readable'], ['WritableObjectMode', 'Readable'], ['Writable', 'ReadableObjectMode'], ['WritableObjectMode', 'ReadableObjectMode']]
 
-    const expectedErrors = []
     for (const pipelineProperties of possiblePipelineProperties) {
       for (const opProperties of possibleOpProperties) {
-        const actualErrors = []
-        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, 'first', actualErrors)
-        assert.deepStrictEqual(actualErrors, expectedErrors)
+        const checks = new ChecksCollection()
+        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, 'first', checks)
+        const pipelineHasIssues = pipeline in checks.pipelines
+        assert(!pipelineHasIssues)
       }
     }
   })
@@ -80,12 +78,12 @@ describe('utils.validatePipelineProperty', () => {
     const possiblePipelineProperties = [['soft'], ['readable'], ['writable']]
     const possibleOpProperties = [['Writable', 'Readable'], ['WritableObjectMode', 'Readable'], ['Writable', 'ReadableObjectMode'], ['WritableObjectMode', 'ReadableObjectMode']]
 
-    const expectedErrors = []
     for (const pipelineProperties of possiblePipelineProperties) {
       for (const opProperties of possibleOpProperties) {
-        const actualErrors = []
-        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, 'last', actualErrors)
-        assert.deepStrictEqual(actualErrors, expectedErrors)
+        const checks = new ChecksCollection()
+        utils.validatePipelineProperty(pipeline, pipelineProperties, opProperties, 'last', checks)
+        const pipelineHasIssues = pipeline in checks.pipelines
+        assert(!pipelineHasIssues)
       }
     }
   })
