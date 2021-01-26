@@ -6,6 +6,7 @@ const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const proxyquire = require('proxyquire')
 const parser = require('../lib/parser')
 const Issue = require('../lib/issue')
+const { turtleToCF } = require('./helpers')
 
 const mock = {}
 const mockedParser = proxyquire('../lib/parser', {
@@ -136,7 +137,7 @@ describe('parser.getAllCodeLinks', () => {
 
 describe('parser.readGraph', () => {
   it('should read .ttl file and create DatasetCore object', async () => {
-    const input = path.join(__dirname, 'example.ttl')
+    const input = path.join(__dirname, 'fixtures/example.ttl')
     const graph = await parser.readGraph(input)
 
     assert.strictEqual(graph.dataset.size, 4)
@@ -203,7 +204,8 @@ describe('parser.getIdentifiers', () => {
         { stepName: 'Ask them to make you pancakes', stepOperation: 'operation2' }
       ]
     }
-    const actual = parser.getIdentifiers(input)
+
+    const actual = parser.getIdentifiers(input, [])
     assert.deepStrictEqual(actual, expected)
   })
 
@@ -215,15 +217,44 @@ describe('parser.getIdentifiers', () => {
         { stepName: 'Ask them to make you pancakes', stepOperation: 'operation2' }
       ]
     }
-    const actual = parser.getIdentifiers(input, 'pancakes')
+    const actual = parser.getIdentifiers(input, [], 'pancakes')
     assert.deepStrictEqual(actual, expected)
   })
 
   it('should return empty dict if pipeline does not exist', () => {
     const input = generateGraphMock()
     const expected = {}
-    const actual = parser.getIdentifiers(input, 'inexistentPipeline')
+    const actual = parser.getIdentifiers(input, [], 'inexistentPipeline')
     assert.deepStrictEqual(actual, expected)
+  })
+
+  it('should not crash on invalid steps', async () => {
+    const input = await turtleToCF(`
+      @prefix p: <https://pipeline.described.at/> .
+
+      <mainCreateFile> a p:Pipeline, p:Readable;
+        p:variables _:vars ;
+        p:steps [
+          p:stepList (<mainUpload>)
+        ].
+
+      <mainUpload> a p:Pipeline;
+        p:variables _:vars ;
+        p:steps [].
+    `)
+
+    const errors = []
+    const expected = {
+      mainCreateFile: [],
+      mainUpload: []
+    }
+    const actual = parser.getIdentifiers(input, errors)
+    assert.deepStrictEqual(actual, expected)
+    assert.strictEqual(errors.length, 1)
+    const error = errors[0]
+    assert.strictEqual(error.level, 'error')
+    assert.strictEqual(error.message, 'Missing code.implementedBy/code.link')
+    assert.strictEqual(error.step, 'mainUpload')
   })
 })
 
@@ -234,7 +265,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should get operation properties from operations.ttl file', async () => {
-    mock.removeFilePart = sinon.stub().returns('test')
+    mock.removeFilePart = sinon.stub().returns('test/fixtures')
 
     const input = {
       'node:': {
@@ -273,7 +304,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
-    mock.removeFilePart = sinon.stub().returns('test')
+    mock.removeFilePart = sinon.stub().returns('test/fixtures')
 
     const input = {
       'node:': {
