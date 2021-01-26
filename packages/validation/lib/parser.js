@@ -290,8 +290,6 @@ function validateSteps ({ pipelines, properties }, errors) {
         pipelineErrors.push(Issue.info({ message, step, operation }))
       }
 
-      const issuesCount = pipelineErrors.length
-
       // first operation must be either Readable or ReadableObjectMode, except when only one step
       if (isFirstStep && !isOnlyStep) {
         if (!isReadableOrReadableObjectMode) {
@@ -365,11 +363,6 @@ function validateSteps ({ pipelines, properties }, errors) {
             }
             pipelineErrors.push(issue)
           }
-        }
-
-        if (issuesCount === pipelineErrors.length) {
-          const message = `Valid step ${lastOperationProperties.find(op => op.startsWith('Readable'))} -> ${operationProperties.find(op => op.startsWith('Writable'))}`
-          pipelineErrors.push(Issue.info({ message, step, operation }))
         }
       }
 
