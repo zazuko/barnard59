@@ -1,6 +1,7 @@
 const path = require('path')
 const Issue = require('../lib/issue')
-const checks = require('./schema')
+const rules = require('./schema')
+const deepEqual = require('deep-equal')
 
 function removeFilePart (dirname) {
   return path.parse(dirname).dir
@@ -59,7 +60,7 @@ function countValidationIssues (errors, strict = false) {
   return collectedIssues.filter(level => level === 'error').length
 }
 
-function validatePipelineProperty (pipeline, pipelineProperties, opProperties, mode, errors) {
+function validatePipelineProperty (pipeline, pipelineProperties, opProperties, mode, checks) {
   const canStreamBeWritable = opProperties.includes('Writable') || opProperties.includes('WritableObjectMode')
   const canStreamBeReadable = opProperties.includes('Readable') || opProperties.includes('ReadableObjectMode')
 
@@ -69,12 +70,12 @@ function validatePipelineProperty (pipeline, pipelineProperties, opProperties, m
     if (isStreamWritableOnly) {
       const pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
       if (!pipelineIsOfRightType) {
-        issue = Issue.error({ message: checks.pipelinePropertiesMatchFirst.messageFailure(pipeline) })
+        issue = Issue.error({ message: rules.pipelinePropertiesMatchFirst.messageFailure(pipeline) })
       }
       else {
-        issue = Issue.info({ message: checks.pipelinePropertiesMatchFirst.messageSuccess(pipeline) })
+        issue = Issue.info({ message: rules.pipelinePropertiesMatchFirst.messageSuccess(pipeline) })
       }
-      errors.push([pipeline, issue])
+      checks.addPipelineCheck(issue, pipeline)
     }
   }
 
@@ -83,18 +84,42 @@ function validatePipelineProperty (pipeline, pipelineProperties, opProperties, m
     if (isStreamReadableOnly) {
       const pipelineIsOfRightType = pipelineProperties.includes('Readable') || pipelineProperties.includes('ReadableObjectMode')
       if (!pipelineIsOfRightType) {
-        issue = Issue.error({ message: checks.pipelinePropertiesMatchLast.messageFailure(pipeline) })
+        issue = Issue.error({ message: rules.pipelinePropertiesMatchLast.messageFailure(pipeline) })
       }
       else {
-        issue = Issue.info({ message: checks.pipelinePropertiesMatchLast.messageSuccess(pipeline) })
+        issue = Issue.info({ message: rules.pipelinePropertiesMatchLast.messageSuccess(pipeline) })
       }
-      errors.push([pipeline, issue])
+      checks.addPipelineCheck(issue, pipeline)
     }
   }
+}
+
+function checkArrayContainsMessage (array, mssg) {
+  let found = false
+  for (let issue = 0; issue < array.length; issue++) {
+    if (array[issue].message === mssg) {
+      found = true
+      break
+    }
+  }
+  return found
+}
+
+function checkArrayContainsObject (array, obj) {
+  let found = false
+  for (let i = 0; i < array.length; i++) {
+    if (deepEqual(array[i], obj)) {
+      found = true
+      break
+    }
+  }
+  return found
 }
 module.exports = {
   removeFilePart,
   printErrors,
   countValidationIssues,
-  validatePipelineProperty
+  validatePipelineProperty,
+  checkArrayContainsMessage,
+  checkArrayContainsObject
 }

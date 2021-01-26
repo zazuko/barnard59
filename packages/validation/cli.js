@@ -4,25 +4,26 @@ const { Command } = require('commander')
 const parser = require('./lib/parser')
 const { printErrors, countValidationIssues } = require('./lib/utils')
 const { version } = require(path.join(__dirname, 'package.json'))
+const ChecksCollection = require('./lib/checksCollection.js')
 
 const program = new Command()
 program.version(version)
 
 async function main (file, options) {
-  const errors = []
+  const checks = new ChecksCollection()
   let pipelines
   try {
-    const pipelineGraph = await parser.readGraph(file, errors)
+    const pipelineGraph = await parser.readGraph(file, checks)
     pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
 
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)
 
-    const operationProperties = await parser.getAllOperationProperties(dependencies, errors)
-    parser.validateSteps({ pipelines, properties: operationProperties }, errors)
+    const operationProperties = await parser.getAllOperationProperties(dependencies, checks)
+    parser.validateSteps({ pipelines, properties: operationProperties }, checks)
 
     const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
-    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, errors)
+    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, checks)
   }
   catch (err) {
     if (options.debug) {
@@ -30,15 +31,16 @@ async function main (file, options) {
     }
   }
 
+  console.log(checks)
   if (process.stdout.isTTY) {
-    printErrors(pipelines, errors, options.levels)
+    printErrors(pipelines, checks, options.levels)
   }
   else {
-    console.log(JSON.stringify(errors))
+    console.log(JSON.stringify(checks))
   }
 
-  console.log(errors)
-  if (countValidationIssues(errors, options.strict)) {
+  console.log(checks)
+  if (countValidationIssues(checks, options.strict)) {
     process.exit(-1)
   }
 }

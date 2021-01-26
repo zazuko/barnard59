@@ -1,5 +1,5 @@
 
-const checks =
+const rules =
   {
     parser: {
       id: 1,
@@ -155,4 +155,4 @@ const checks =
     }
   }
 
-module.exports = checks
+module.exports = rules

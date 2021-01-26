@@ -6,7 +6,9 @@ const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const proxyquire = require('proxyquire')
 const parser = require('../lib/parser')
 const Issue = require('../lib/issue')
-const checks = require('../lib/schema')
+const rules = require('../lib/schema')
+const utils = require('../lib/utils')
+const ChecksCollection = require('../lib/checksCollection.js')
 
 const mock = {}
 const mockedParser = proxyquire('../lib/parser', {
@@ -138,7 +140,7 @@ describe('parser.getAllCodeLinks', () => {
 describe('parser.readGraph', () => {
   it('should read .ttl file and create DatasetCore object', async () => {
     const input = path.join(__dirname, 'example.ttl')
-    const graph = await parser.readGraph(input)
+    const graph = await parser.readGraph(input, new ChecksCollection())
 
     assert.strictEqual(graph.dataset.size, 4)
   })
@@ -233,6 +235,7 @@ describe('parser.getAllOperationProperties', () => {
   const mockedParser = proxyquire('../lib/parser', {
     './utils': mock
   })
+  const checks = new ChecksCollection()
 
   it('should get operation properties from operations.ttl file', async () => {
     mock.removeFilePart = sinon.stub().returns('test')
@@ -248,7 +251,7 @@ describe('parser.getAllOperationProperties', () => {
       'node:party-module#drink': ['Operation', 'Writable', 'Readable']
     }
 
-    const actual = await mockedParser.getAllOperationProperties(input)
+    const actual = await mockedParser.getAllOperationProperties(input, checks)
     assert.deepStrictEqual(actual, expected)
   })
 
@@ -269,7 +272,7 @@ describe('parser.getAllOperationProperties', () => {
       'node:work-module#sleep': null
     }
 
-    const actual = await mockedParser.getAllOperationProperties(input)
+    const actual = await mockedParser.getAllOperationProperties(input, checks)
     assert.deepStrictEqual(actual, expected)
   })
 
@@ -290,25 +293,23 @@ describe('parser.getAllOperationProperties', () => {
       'node:work-module#sleep': null
     }
 
-    const actual = await mockedParser.getAllOperationProperties(input)
+    const actual = await mockedParser.getAllOperationProperties(input, checks)
     assert.deepStrictEqual(actual, expected)
   })
 
   it('should report missing packages', async () => {
-    const errors = []
     const input = {
       'node:': {
         'foo-bar': new Set(['node:foo-bar#fn'])
       }
     }
-    const expected = {}
 
-    const actual = await mockedParser.getAllOperationProperties(input, errors)
+    const expected = {}
+    const actual = await mockedParser.getAllOperationProperties(input, checks)
     assert.deepStrictEqual(actual, expected)
 
-    const issue = errors.find((issue) => issue.level === 'error')
-    assert.ok(issue.message.includes('Missing package'))
-    assert.ok(issue.message.includes('foo-bar'))
+    const expectedMssg = rules.dependencies.messageFailure('foo-bar', 'node:foo-bar#fn')
+    assert(checks.genericContainsMessage(expectedMssg))
   })
 })
 
@@ -376,11 +377,11 @@ describe('parser.validatePipelines', () => {
     'Wait 30 min': null,
     'Enjoy!': ['with friends']
   }
-  const pizzaIssue = Issue.warning({
-    message: checks.pipelinePropertiesExist.messageFailure('pizza')
+  const expectedPizzaIssue = Issue.warning({
+    message: rules.pipelinePropertiesExist.messageFailure('pizza')
   })
-  const pancakesIssue = Issue.warning({
-    message: checks.pipelinePropertiesExist.messageFailure('pancakes')
+  const expectedPancakesIssue = Issue.warning({
+    message: rules.pipelinePropertiesExist.messageFailure('pancakes')
   })
 
   it('should issue a warning if pipeline has no readable/writable property', () => {
@@ -388,40 +389,28 @@ describe('parser.validatePipelines', () => {
       pancakes: ['Pipeline'],
       pizza: ['Pipeline', 'crunchy']
     }
-    const expectedErrors = [['pizza', pizzaIssue], ['pancakes', pancakesIssue]]
-    const actualErrors = []
+    const checks = new ChecksCollection()
 
-    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors)
-    assert.deepStrictEqual(actualErrors, expectedErrors)
+    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, checks)
+    const actualPizzaIssues = checks.getPipelineWarnings('pizza')
+    const actualPancakesIssues = checks.getPipelineWarnings('pancakes')
+
+    assert(utils.checkArrayContainsObject(actualPizzaIssues, expectedPizzaIssue))
+    assert(utils.checkArrayContainsObject(actualPancakesIssues, expectedPancakesIssue))
   })
-  it('should validate pipeline property if first/last operation property exists', () => {
-    let actualErrors = []
-    mock.validatePipelineProperty = sinon.stub().callsFake(() => actualErrors.push('it is burning!'))
 
+  it('should issue an info if pipeline has readable/writable property', () => {
     const pipeline2properties = {
       pancakes: ['soft', 'Readable'],
       pizza: ['crunchy', 'Writable']
     }
 
     for (const pipelineID of ['pizza', 'pancakes']) {
-      actualErrors = []
-      const expectedErrors = ['it is burning!', [pipelineID, Issue.info({ message: `Validated: property for pipeline ${pipelineID} is defined` })]]
-      mockedParser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, actualErrors)
-      assert.deepStrictEqual(actualErrors, expectedErrors)
-    }
-  })
-  it("should return infos it first/last operation property doesn't exist", () => {
-    const expectedErrors = [['pizza', Issue.info({ message: checks.pipelinePropertiesExist.messageSuccess('pizza') })], ['pancakes', Issue.info({ message: checks.pipelinePropertiesExist.messageSuccess('pancakes') })]]
-    const actualErrors = []
+      const checks = new ChecksCollection()
 
-    operation2properties['Find a French chef'] = null
-    operation2properties['with friends'] = null
-
-    const pipeline2properties = {
-      pancakes: ['soft', 'Readable'],
-      pizza: ['crunchy', 'Readable']
+      const expectedIssue = Issue.info({ message: rules.pipelinePropertiesExist.messageSuccess(pipelineID) })
+      parser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, checks)
+      assert(utils.checkArrayContainsObject(checks.pipelines[[pipelineID]], expectedIssue))
     }
-    parser.validatePipelines(pipelines, operation2properties, pipeline2properties, actualErrors)
-    assert.deepStrictEqual(actualErrors, expectedErrors)
   })
 })

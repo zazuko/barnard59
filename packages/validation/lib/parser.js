@@ -7,7 +7,7 @@ const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
-const checks = require('./schema')
+const rules = require('./schema')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -17,7 +17,7 @@ const ns = {
 }
 const acceptedPipelineProperties = ['Readable', 'ReadableObjectMode', 'Writable', 'WritableObjectMode']
 
-async function readGraph (file, errors = []) {
+async function readGraph (file, checks) {
   const quadStream = fromFile(file)
   const parserPromise = new Promise((resolve, reject) => {
     quadStream.on('error', reject)
@@ -29,16 +29,16 @@ async function readGraph (file, errors = []) {
   try {
     [_err, dataset] = await Promise.all([parserPromise, datasetPromise])
     issue = Issue.info({
-      message: checks.parser.messageSuccess(file)
+      message: rules.parser.messageSuccess(file)
     })
   }
   catch (err) {
     const error = await parseError(file, err)
     issue = Issue.error({
-      message: checks.parser.messageFailure(file, error)
+      message: rules.parser.messageFailure(file, error)
     })
   }
-  errors.push(issue)
+  checks.addGenericCheck(issue)
   const clownfaceObj = cf({ dataset })
 
   return clownfaceObj
@@ -175,7 +175,7 @@ function getPipelineProperties (graph, pipelines) {
   return pipeline2properties
 }
 
-async function getAllOperationProperties (dependencies, errors = []) {
+async function getAllOperationProperties (dependencies, checks) {
   const results = {}
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
@@ -184,76 +184,73 @@ async function getAllOperationProperties (dependencies, errors = []) {
         const modulePath = utils.removeFilePart(require.resolve(module))
         operationsPath = `${modulePath}/operations.ttl`
 
-        const issue = Issue.info({ message: checks.dependencies.messageSuccess(module) })
-        errors.push(issue)
+        const issue = Issue.info({ message: rules.dependencies.messageSuccess(module) })
+        checks.addGenericCheck(issue)
       }
       catch (err) {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
         const issue = Issue.error({
-          message: checks.dependencies.messageFailure(module, codelinksWithMissingMetadata)
+          message: rules.dependencies.messageFailure(module, codelinksWithMissingMetadata)
         })
-        errors.push(issue)
+        checks.addGenericCheck(issue)
         continue
       }
 
       let issue
       if (fs.existsSync(operationsPath)) {
-        const graph = await readGraph(operationsPath, errors)
+        const graph = await readGraph(operationsPath, checks)
         const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
         Object.assign(results, tempResults)
 
-        issue = Issue.info({ message: checks.operations.messageSuccess(module) })
+        issue = Issue.info({ message: rules.operations.messageSuccess(module) })
       }
       else {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
         issue = Issue.warning({
-          message: checks.operations.messageFailure(module, codelinksWithMissingMetadata)
+          message: rules.operations.messageFailure(module, codelinksWithMissingMetadata)
         })
 
         for (const codelink of dependencies[env][module]) {
           results[codelink] = null
         }
       }
-      errors.push(issue)
+      checks.addGenericCheck(issue)
     }
   }
   return results
 }
 
-function validatePipelines (pipelines, operation2properties, pipeline2properties, errors) {
+function validatePipelines (pipelines, operation2properties, pipeline2properties, checks) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const firstOpProperties = operation2properties[steps[0].stepOperation]
     const lastOpProperties = operation2properties[steps[steps.length - 1].stepOperation]
     const pipelineProperties = pipeline2properties[pipeline]
 
     if (firstOpProperties !== null) {
-      utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', errors)
+      utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', checks)
     }
     if (lastOpProperties !== null) {
-      utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', errors)
+      utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', checks)
     }
 
     let issue
     const hasDefinedMode = (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
     if (!hasDefinedMode) {
       issue = Issue.warning({
-        message: checks.pipelinePropertiesExist.messageFailure(pipeline)
+        message: rules.pipelinePropertiesExist.messageFailure(pipeline)
       })
     }
     else {
       issue = Issue.info({
-        message: checks.pipelinePropertiesExist.messageSuccess(pipeline)
+        message: rules.pipelinePropertiesExist.messageSuccess(pipeline)
       })
     }
-    errors.push([pipeline, issue])
+    checks.addPipelineCheck(issue, pipeline)
   })
 }
 
-function validateSteps ({ pipelines, properties }, errors) {
+function validateSteps ({ pipelines, properties }, checks) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
-    const pipelineErrors = []
-    errors.push([pipeline, pipelineErrors])
-
     steps.reduce((lastOp, { stepName: step, stepOperation: operation }, idx) => {
       const lastOperationProperties = properties[lastOp]
       const operationProperties = properties[operation]
@@ -269,99 +266,104 @@ function validateSteps ({ pipelines, properties }, errors) {
       const lastIsReadableObjectMode = (lastOperationProperties || []).includes('ReadableObjectMode')
 
       if (operationProperties === null) {
-        const message = checks.operationPropertiesExist.messageFailure(operation)
+        const message = rules.operationPropertiesExist.messageFailure(operation)
         const issue = Issue.warning({ message, step, operation })
-        pipelineErrors.push(issue)
+        checks.addPipelineCheck(issue, pipeline)
         return operation
       }
       else {
-        const message = checks.operationPropertiesExist.messageSuccess(operation)
+        const message = rules.operationPropertiesExist.messageSuccess(operation)
         const issue = Issue.info({ message, step, operation })
-        pipelineErrors.push(issue)
+        checks.addPipelineCheck(issue, pipeline)
       }
 
       if (!isOperation) {
-        const message = checks.operationHasOperationProperty.messageFailure(operation)
-        pipelineErrors.push(Issue.error({ message, step, operation }))
+        const message = rules.operationHasOperationProperty.messageFailure(operation)
+        const issue = Issue.error({ message, step, operation })
+        checks.addPipelineCheck(issue, pipeline)
         return operation
       }
       else {
-        const message = checks.operationHasOperationProperty.messageSuccess(operation)
-        pipelineErrors.push(Issue.info({ message, step, operation }))
+        const message = rules.operationHasOperationProperty.messageSuccess(operation)
+        const issue = Issue.info({ message, step, operation })
+        checks.addPipelineCheck(issue, pipeline)
       }
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
       if (isFirstStep && !isOnlyStep) {
         if (!isReadableOrReadableObjectMode) {
-          const message = checks.firstOperationIsReadable.messageFailure(operation)
-          pipelineErrors.push(Issue.error({ message, step, operation }))
+          const message = rules.firstOperationIsReadable.messageFailure(operation)
+          const issue = Issue.error({ message, step, operation })
+          checks.addPipelineCheck(issue, pipeline)
           return operation
         }
         else {
-          const message = checks.firstOperationIsReadable.messageFailure(operation)
-          pipelineErrors.push(Issue.info({ message, step, operation }))
+          const message = rules.firstOperationIsReadable.messageFailure(operation)
+          const issue = Issue.info({ message, step, operation })
+          checks.addPipelineCheck(issue, pipeline)
         }
       }
 
       if (lastOp) {
         if (lastOperationProperties === null) {
-          const message = checks.previousOperationHasMetadata.messageFailure(operation)
-          pipelineErrors.push(Issue.warning({ message, step, operation }))
+          const message = rules.previousOperationHasMetadata.messageFailure(operation)
+          const issue = Issue.warning({ message, step, operation })
+          checks.addPipelineCheck(issue, pipeline)
         }
         else {
-          const message = checks.previousOperationHasMetadata.messageSuccess(operation)
-          pipelineErrors.push(Issue.info({ message, step, operation }))
+          const message = rules.previousOperationHasMetadata.messageSuccess(operation)
+          checks.addPipelineCheck(Issue.info({ message, step, operation }), pipeline)
 
           // a writable operation must always be preceded by a readable operation
           if (isWritable) {
             let issue
             if (!lastIsReadable) {
-              const message = checks.readableBeforeWritable.messageFailure(operation)
+              const message = rules.readableBeforeWritable.messageFailure(operation)
               issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = checks.readableBeforeWritable.messageSuccess(operation)
+              const message = rules.readableBeforeWritable.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            pipelineErrors.push(issue)
+            checks.addPipelineCheck(issue, pipeline)
           }
           if (isWritableObjectMode) {
             let issue
             if (!lastIsReadableObjectMode) {
-              const message = checks.readableObjectModeBeforeWritableObjectMode.messageFailure(operation)
+              const message = rules.readableObjectModeBeforeWritableObjectMode.messageFailure(operation)
               issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = checks.readableObjectModeBeforeWritableObjectMode.messageSuccess(operation)
+              const message = rules.readableObjectModeBeforeWritableObjectMode.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            pipelineErrors.push(issue)
+            checks.addPipelineCheck(issue, pipeline)
           }
 
           // a readable operation must always be followed by a writable operation
           if (lastIsReadable) {
             let issue
             if (!isWritable) {
-              const message = checks.writableAfterReadable.messageFailure(operation)
+              const message = rules.writableAfterReadable.messageFailure(operation)
               issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = checks.writableAfterReadable.messageSuccess(operation)
+              const message = rules.writableAfterReadable.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            pipelineErrors.push(issue)
+            checks.addPipelineCheck(issue, pipeline)
           }
           if (lastIsReadableObjectMode) {
             let issue
             if (!isWritableObjectMode) {
-              const message = checks.writableObjectModeAfterReadableObjectMode.messageFailure(operation)
+              const message = rules.writableObjectModeAfterReadableObjectMode.messageFailure(operation)
               issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = checks.writableObjectModeAfterReadableObjectMode.messageSuccess(operation)
+              const message = rules.writableObjectModeAfterReadableObjectMode.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            pipelineErrors.push(issue)
+            checks.addPipelineCheck(issue, pipeline)
           }
         }
       }
