@@ -35,15 +35,30 @@ class ChecksCollection {
   }
 
   getPipelineWarnings (pipeline) {
-    return this.pipelines[[pipeline]].filter((issue) => issue.level === 'warning')
+    if (pipeline in this.pipelines) {
+      return this.pipelines[[pipeline]].filter((issue) => issue.level === 'warning')
+    }
+    else {
+      return []
+    }
   }
 
   getPipelineErrors (pipeline) {
-    return this.pipelines[[pipeline]].filter((issue) => issue.level === 'error')
+    if (pipeline in this.pipelines) {
+      return this.pipelines[[pipeline]].filter((issue) => issue.level === 'error')
+    }
+    else {
+      return []
+    }
   }
 
   getPipelineInfos (pipeline) {
-    return this.pipelines[[pipeline]].filter((issue) => issue.level === 'info')
+    if (pipeline in this.pipelines) {
+      return this.pipelines[[pipeline]].filter((issue) => issue.level === 'info')
+    }
+    else {
+      return []
+    }
   }
 
   genericContainsMessage (mssg) {

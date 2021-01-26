@@ -231,10 +231,6 @@ describe('parser.getIdentifiers', () => {
 })
 
 describe('parser.getAllOperationProperties', () => {
-  const mock = {}
-  const mockedParser = proxyquire('../lib/parser', {
-    './utils': mock
-  })
   const checks = new ChecksCollection()
 
   it('should get operation properties from operations.ttl file', async () => {

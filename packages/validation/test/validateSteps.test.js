@@ -1,7 +1,10 @@
 const { describe, it } = require('mocha')
 const assert = require('assert')
 const parser = require('../lib/parser')
-const checks = require('../lib/schema')
+const rules = require('../lib/schema')
+const ChecksCollection = require('../lib/checksCollection.js')
+const Issue = require('../lib/issue')
+const utils = require('../lib/utils')
 
 const properties = {
   o: ['Operation'],
@@ -25,16 +28,6 @@ const properties = {
   n: null
 }
 
-function errorsForPipeline (errors, pipeline) {
-  const [_p, errs] = errors.find(([p]) => p === pipeline)
-  return errs.filter(error => error.level !== 'info')
-}
-
-function infoForPipeline (errors, pipeline) {
-  const [_p, errs] = errors.find(([p]) => p === pipeline)
-  return errs.filter(error => error.level === 'info')
-}
-
 function opToStep (operation) {
   return { stepName: `${operation}-step`, stepOperation: operation }
 }
@@ -47,11 +40,11 @@ function pipelinesToSteps (pipelines) {
   return pipelinesWithSteps
 }
 
-let errors
+let checks
 
 describe('parser.validateSteps', () => {
   beforeEach(() => {
-    errors = []
+    checks = new ChecksCollection()
   })
 
   it('should accept valid pipelines', () => {
@@ -62,9 +55,10 @@ describe('parser.validateSteps', () => {
       p4: ['orw'],
       p5: ['o']
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+
     Object.keys(pipelines).forEach((pipeline) => {
-      assert.deepStrictEqual(errorsForPipeline(errors, pipeline), [])
+      assert.deepStrictEqual(checks.getPipelineErrors(pipeline), [])
+      assert.deepStrictEqual(checks.getPipelineWarnings(pipeline), [])
     })
   })
 
@@ -75,9 +69,10 @@ describe('parser.validateSteps', () => {
       p3: ['oR'],
       p4: ['oRW']
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
     Object.keys(pipelines).forEach((pipeline) => {
-      assert.deepStrictEqual(errorsForPipeline(errors, pipeline), [])
+      assert.deepStrictEqual(checks.getPipelineErrors(pipeline), [])
+      assert.deepStrictEqual(checks.getPipelineWarnings(pipeline), [])
     })
   })
 
@@ -87,12 +82,16 @@ describe('parser.validateSteps', () => {
         'n'
       ]
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
 
-    const errs = errorsForPipeline(errors, 'p1')
-    assert.strictEqual(errs.length, 1)
-    assert.strictEqual(errs[0].level, 'warning')
-    assert.strictEqual(errs[0].message, checks.operationPropertiesExist.messageFailure('n'))
+    const expectedMessage = rules.operationPropertiesExist.messageFailure('n')
+    const expIssue = Issue.warning({
+      step: 'n-step',
+      operation: 'n',
+      message: expectedMessage
+    })
+
+    assert(utils.checkArrayContainsObject(checks.pipelines[['p1']], expIssue))
   })
   it('should report found metadata', () => {
     const pipelines = pipelinesToSteps({
@@ -100,10 +99,14 @@ describe('parser.validateSteps', () => {
         'rw'
       ]
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
 
-    const errs = infoForPipeline(errors, 'p1')
-    assert.strictEqual(errs[0].message, checks.operationPropertiesExist.messageSuccess('rw'))
+    const expIssue = Issue.info({
+      step: 'rw-step',
+      operation: 'rw',
+      message: rules.operationPropertiesExist.messageSuccess('rw')
+    })
+    assert(utils.checkArrayContainsObject(checks.pipelines[['p1']], expIssue))
   })
 
   it('should report operations missing p:Operation', () => {
@@ -112,12 +115,14 @@ describe('parser.validateSteps', () => {
         'e'
       ]
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
 
-    const errs = errorsForPipeline(errors, 'p1')
-    assert.strictEqual(errs.length, 1)
-    assert.strictEqual(errs[0].level, 'error')
-    assert.strictEqual(errs[0].message, checks.operationHasOperationProperty.messageFailure('e'))
+    const expIssue = Issue.error({
+      step: 'e-step',
+      operation: 'e',
+      message: rules.operationHasOperationProperty.messageFailure('e')
+    })
+    assert(utils.checkArrayContainsObject(checks.pipelines[['p1']], expIssue))
   })
 
   it('should report non-writable operation being written into', () => {
@@ -128,14 +133,15 @@ describe('parser.validateSteps', () => {
         'or'
       ]
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
 
-    const errs = errorsForPipeline(errors, 'p1')
-    assert.strictEqual(errs.length, 1)
-    assert.strictEqual(errs[0].level, 'error')
-    assert.strictEqual(errs[0].step, 'or-step')
-    assert.strictEqual(errs[0].operation, 'or')
-    assert.strictEqual(errs[0].message, checks.writableAfterReadable.messageFailure('or'))
+    const expIssue = Issue.error({
+      step: 'or-step',
+      operation: 'or',
+      message: rules.writableAfterReadable.messageFailure('or')
+    })
+
+    assert(utils.checkArrayContainsObject(checks.pipelines[['p1']], expIssue))
   })
 
   it('should report error if first operation is writable', () => {
@@ -145,14 +151,15 @@ describe('parser.validateSteps', () => {
         'orw'
       ]
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
 
-    const errs = errorsForPipeline(errors, 'p1')
-    assert.strictEqual(errs.length, 2)
-    assert.strictEqual(errs[0].level, 'error')
-    assert.strictEqual(errs[0].step, 'ow-step')
-    assert.strictEqual(errs[0].operation, 'ow')
-    assert.strictEqual(errs[0].message, checks.firstOperationIsReadable.messageFailure('ow'))
+    const expIssue = Issue.error({
+      step: 'ow-step',
+      operation: 'ow',
+      message: rules.firstOperationIsReadable.messageFailure('ow')
+    })
+
+    assert(utils.checkArrayContainsObject(checks.pipelines[['p1']], expIssue))
   })
   it('should report bad mix of normal streams and object-mode streams', () => {
     const pipelines = pipelinesToSteps({
@@ -174,22 +181,18 @@ describe('parser.validateSteps', () => {
         'orW'
       ]
     })
-    parser.validateSteps({ pipelines, properties }, errors)
+    parser.validateSteps({ pipelines, properties }, checks)
 
     const expectedErrors = {
-      p1: ['orW', checks.readableObjectModeBeforeWritableObjectMode.messageFailure('orW')],
-      p2: ['orw', checks.readableBeforeWritable.messageFailure('orw')],
-      p3: ['oRw', checks.readableBeforeWritable.messageFailure('oRw')],
-      p4: ['orW', checks.readableObjectModeBeforeWritableObjectMode.messageFailure('orW')]
+      p1: ['orW', rules.readableObjectModeBeforeWritableObjectMode.messageFailure('orW')],
+      p2: ['orw', rules.readableBeforeWritable.messageFailure('orw')],
+      p3: ['oRw', rules.readableBeforeWritable.messageFailure('oRw')],
+      p4: ['orW', rules.readableObjectModeBeforeWritableObjectMode.messageFailure('orW')]
     }
 
     Object.keys(pipelines).forEach((pipeline) => {
       const [erroredOp, errorMessage] = expectedErrors[pipeline]
-      const errs = errorsForPipeline(errors, pipeline)
-      assert.strictEqual(errs.length, 2, pipeline)
-      assert.strictEqual(errs[0].level, 'error', pipeline)
-      assert.strictEqual(errs[0].operation, erroredOp, pipeline)
-      assert.strictEqual(errs[0].message, errorMessage, pipeline)
+      checks.pipelineContainsMessage(errorMessage, pipeline)
     })
   })
 })
