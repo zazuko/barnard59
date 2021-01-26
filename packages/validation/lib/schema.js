@@ -75,6 +75,83 @@ const checks =
       messageFailure (operation) {
         return `Cannot validate operation ${operation}: no metadata.`
       }
+    },
+    operationHasOperationProperty: {
+      id: 8,
+      dependsOn: [7],
+      rule: "Operation has property 'Operation'",
+      messageSuccess (operation) {
+        return `Validated: operation ${operation} is of 'Operation' type.`
+      },
+      messageFailure (operation) {
+        return `Invalid operation: ${operation} is not of 'Operation' type.`
+      }
+    },
+    firstOperationIsReadable: {
+      id: 9,
+      dependsOn: [8],
+      rule: 'If there exists more than one step, first step must be either Readable or ReadableObjectMode',
+      messageSuccess (operation) {
+        return `Validated operation ${operation}: first operation must be either Readable or ReadableObjectMode`
+      },
+      messageFailure (operation) {
+        return `Invalid operation ${operation}: it is neither Readable or ReadableObjectMode`
+      }
+    },
+    previousOperationHasMetadata: {
+      id: 100,
+      dependsOn: [8],
+      rule: 'Previous operation should have metadata',
+      messageSuccess (operation) {
+        return `Validation can be performed for operation ${operation}: previous operation has metadata`
+      },
+      messageFailure (operation) {
+        return `Cannot validate operation ${operation}: previous operation does not have metadata`
+      }
+    },
+    readableBeforeWritable: {
+      id: 10,
+      dependsOn: [8, 100],
+      rule: 'Writable operation must always be preceded by a readable operation',
+      messageSuccess (operation) {
+        return `Validated operation ${operation}: a writable operation must always be preceded by a readable operation`
+      },
+      messageFailure (operation) {
+        return `Invalid operation ${operation}: previous operation is not Readable`
+      }
+    },
+    readableObjectModeBeforeWritableObjectMode: {
+      id: 11,
+      dependsOn: [8, 100],
+      rule: 'WritableObjectMode operation must always be preceded by a ReadableObjectMode operation',
+      messageSuccess (operation) {
+        return `Validated operation ${operation}: a writableObjectMode operation must always be preceded by a readableObjectMode operation`
+      },
+      messageFailure (operation) {
+        return `Invalid operation ${operation}: previous operation is not readableObjectMode`
+      }
+    },
+    writableAfterReadable: {
+      id: 12,
+      dependsOn: [8, 100],
+      rule: 'Readable operation must always be followed by a writable operation',
+      messageSuccess (operation) {
+        return `Validated operation ${operation}: a readable operation must always be followed by a writable operation`
+      },
+      messageFailure (operation) {
+        return `Invalid operation ${operation}: next operation is not writable`
+      }
+    },
+    writableObjectModeAfterReadableObjectMode: {
+      id: 13,
+      dependsOn: [8, 100],
+      rule: 'ReadableObjectMode operation must always be followed by a writableObjectMode operation',
+      messageSuccess (operation) {
+        return `Validated operation ${operation}: a readableObjectMode operation must always be followed by a writableObjectMode operation`
+      },
+      messageFailure (operation) {
+        return `Invalid operation ${operation}: next operation is not writableObjectMode`
+      }
     }
   }
 

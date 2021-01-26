@@ -281,12 +281,12 @@ function validateSteps ({ pipelines, properties }, errors) {
       }
 
       if (!isOperation) {
-        const message = `Invalid operation: it is not a ${ns.p.Operation.value}`
+        const message = checks.operationHasOperationProperty.messageFailure(operation)
         pipelineErrors.push(Issue.error({ message, step, operation }))
         return operation
       }
       else {
-        const message = `Found ${ns.p.Operation.value}`
+        const message = checks.operationHasOperationProperty.messageSuccess(operation)
         pipelineErrors.push(Issue.info({ message, step, operation }))
       }
 
@@ -295,63 +295,75 @@ function validateSteps ({ pipelines, properties }, errors) {
       // first operation must be either Readable or ReadableObjectMode, except when only one step
       if (isFirstStep && !isOnlyStep) {
         if (!isReadableOrReadableObjectMode) {
-          const message = `Invalid operation: it is neither ${ns.p.Readable.value} nor ${ns.p.ReadableObjectMode.value}`
+          const message = checks.firstOperationIsReadable.messageFailure(operation)
           pipelineErrors.push(Issue.error({ message, step, operation }))
           return operation
         }
         else {
-          const message = 'Validated: first operation must be either Readable or ReadableObjectMode'
+          const message = checks.firstOperationIsReadable.messageFailure(operation)
           pipelineErrors.push(Issue.info({ message, step, operation }))
         }
       }
 
       if (lastOp) {
         if (lastOperationProperties === null) {
-          const message = 'Cannot validate operation: previous operation does not have metadata'
+          const message = checks.previousOperationHasMetadata.messageFailure(operation)
           pipelineErrors.push(Issue.warning({ message, step, operation }))
         }
         else {
+          const message = checks.previousOperationHasMetadata.messageSuccess(operation)
+          pipelineErrors.push(Issue.info({ message, step, operation }))
+
           // a writable operation must always be preceded by a readable operation
           if (isWritable) {
+            let issue
             if (!lastIsReadable) {
-              const message = 'Invalid operation: previous operation is not Readable'
-              pipelineErrors.push(Issue.error({ message, step, operation }))
+              const message = checks.readableBeforeWritable.messageFailure(operation)
+              issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = 'Validated: a writable operation must always be preceded by a readable operation'
-              pipelineErrors.push(Issue.info({ message, step, operation }))
+              const message = checks.readableBeforeWritable.messageSuccess(operation)
+              issue = Issue.info({ message, step, operation })
             }
+            pipelineErrors.push(issue)
           }
           if (isWritableObjectMode) {
+            let issue
             if (!lastIsReadableObjectMode) {
-              const message = 'Invalid operation: previous operation is not ReadableObjectMode'
-              pipelineErrors.push(Issue.error({ message, step, operation }))
+              const message = checks.readableObjectModeBeforeWritableObjectMode.messageFailure(operation)
+              issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = 'Validated: a writable operation must always be preceded by a readable operation'
-              pipelineErrors.push(Issue.info({ message, step, operation }))
+              const message = checks.readableObjectModeBeforeWritableObjectMode.messageSuccess(operation)
+              issue = Issue.info({ message, step, operation })
             }
+            pipelineErrors.push(issue)
           }
+
           // a readable operation must always be followed by a writable operation
           if (lastIsReadable) {
+            let issue
             if (!isWritable) {
-              const message = 'Invalid operation: operation is not Writable'
-              pipelineErrors.push(Issue.error({ message, step, operation }))
+              const message = checks.writableAfterReadable.messageFailure(operation)
+              issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = 'Validated: a readable operation must always be followed by a writable operation'
-              pipelineErrors.push(Issue.info({ message, step, operation }))
+              const message = checks.writableAfterReadable.messageSuccess(operation)
+              issue = Issue.info({ message, step, operation })
             }
+            pipelineErrors.push(issue)
           }
           if (lastIsReadableObjectMode) {
+            let issue
             if (!isWritableObjectMode) {
-              const message = 'Invalid operation: operation is not WritableObjectMode'
-              pipelineErrors.push(Issue.error({ message, step, operation }))
+              const message = checks.writableObjectModeAfterReadableObjectMode.messageFailure(operation)
+              issue = Issue.error({ message, step, operation })
             }
             else {
-              const message = 'Validated: a readable operation must always be followed by a writable operation'
-              pipelineErrors.push(Issue.info({ message, step, operation }))
+              const message = checks.writableObjectModeAfterReadableObjectMode.messageSuccess(operation)
+              issue = Issue.info({ message, step, operation })
             }
+            pipelineErrors.push(issue)
           }
         }
 

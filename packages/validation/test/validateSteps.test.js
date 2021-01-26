@@ -117,7 +117,7 @@ describe('parser.validateSteps', () => {
     const errs = errorsForPipeline(errors, 'p1')
     assert.strictEqual(errs.length, 1)
     assert.strictEqual(errs[0].level, 'error')
-    assert.strictEqual(errs[0].message, 'Invalid operation: it is not a https://pipeline.described.at/Operation')
+    assert.strictEqual(errs[0].message, checks.operationHasOperationProperty.messageFailure('e'))
   })
 
   it('should report non-writable operation being written into', () => {
@@ -135,10 +135,10 @@ describe('parser.validateSteps', () => {
     assert.strictEqual(errs[0].level, 'error')
     assert.strictEqual(errs[0].step, 'or-step')
     assert.strictEqual(errs[0].operation, 'or')
-    assert.strictEqual(errs[0].message, 'Invalid operation: operation is not Writable')
+    assert.strictEqual(errs[0].message, checks.writableAfterReadable.messageFailure('or'))
   })
 
-  it('should report first operation not writable', () => {
+  it('should report error if first operation is writable', () => {
     const pipelines = pipelinesToSteps({
       p1: [
         'ow',
@@ -152,9 +152,8 @@ describe('parser.validateSteps', () => {
     assert.strictEqual(errs[0].level, 'error')
     assert.strictEqual(errs[0].step, 'ow-step')
     assert.strictEqual(errs[0].operation, 'ow')
-    assert.strictEqual(errs[0].message, 'Invalid operation: it is neither https://pipeline.described.at/Readable nor https://pipeline.described.at/ReadableObjectMode')
+    assert.strictEqual(errs[0].message, checks.firstOperationIsReadable.messageFailure('ow'))
   })
-
   it('should report bad mix of normal streams and object-mode streams', () => {
     const pipelines = pipelinesToSteps({
       p1: [
@@ -178,10 +177,10 @@ describe('parser.validateSteps', () => {
     parser.validateSteps({ pipelines, properties }, errors)
 
     const expectedErrors = {
-      p1: ['orW', 'Invalid operation: previous operation is not ReadableObjectMode'],
-      p2: ['orw', 'Invalid operation: previous operation is not Readable'],
-      p3: ['oRw', 'Invalid operation: previous operation is not Readable'],
-      p4: ['orW', 'Invalid operation: previous operation is not ReadableObjectMode']
+      p1: ['orW', checks.readableObjectModeBeforeWritableObjectMode.messageFailure('orW')],
+      p2: ['orw', checks.readableBeforeWritable.messageFailure('orw')],
+      p3: ['oRw', checks.readableBeforeWritable.messageFailure('oRw')],
+      p4: ['orW', checks.readableObjectModeBeforeWritableObjectMode.messageFailure('orW')]
     }
 
     Object.keys(pipelines).forEach((pipeline) => {
