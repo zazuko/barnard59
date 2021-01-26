@@ -190,7 +190,7 @@ describe('parser.getModuleOperationProperties', () => {
 })
 
 describe('parser.getIdentifiers', () => {
-  it.skip('should create pipelines list', () => {
+  it('should create pipelines list', () => {
     const input = generateGraphMock()
     const expected = {
       pizza: [
@@ -204,11 +204,12 @@ describe('parser.getIdentifiers', () => {
         { stepName: 'Ask them to make you pancakes', stepOperation: 'operation2' }
       ]
     }
+
     const actual = parser.getIdentifiers(input, [])
     assert.deepStrictEqual(actual, expected)
   })
 
-  it.skip('should return only requested pipeline', () => {
+  it('should return only requested pipeline', () => {
     const input = generateGraphMock()
     const expected = {
       pancakes: [

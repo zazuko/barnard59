@@ -82,11 +82,12 @@ function getIdentifiers (graph, errors, pipeline2find = null) {
           const identifier = codeLink.term
 
           if (identifier) {
+            const currStepName = step.term.value
             pipeline2identifier[pipeline.term.value].push({
-              stepName: step.term.value,
+              stepName: currStepName,
               stepOperation: identifier.value
             })
-            const issue = Issue.info({ message: 'Defined with both code.implementedBy & code.link', step: step.term.value })
+            const issue = Issue.info({ message: 'Defined with both code.implementedBy & code.link', step: currStepName })
             errors.push(issue)
           }
           else if (!implementedBy.term || !codeLink.term) {
