@@ -44,9 +44,9 @@ class ChecksCollection {
   }
 
   getChecks (level = null) {
-    const checks = this.getGenericChecks(level)
+    let checks = this.getGenericChecks(level)
     for (const pipeline of Object.keys(this.pipelines)) {
-      checks.concat(this.getPipelineChecks(pipeline, level))
+      checks = checks.concat(this.getPipelineChecks(pipeline, level))
     }
     return checks
   }

@@ -11,8 +11,20 @@ const rules =
         return `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
       }
     },
+    codelinks: {
+      id: 76,
+      dependsOn: [1],
+      rule: 'All codelinks are described by code.implementedBy/code.link',
+      messageSuccess () {
+        return 'Defined with both code.implementedBy & code.link'
+      },
+      messageFailure () {
+        return 'Missing code.implementedBy/code.link'
+      }
+    },
     dependencies: {
       id: 2,
+      dependsOn: [1, 76],
       rule: 'Each dependency must be installed',
       messageSuccess (module) {
         return `Package ${module} found successfully`

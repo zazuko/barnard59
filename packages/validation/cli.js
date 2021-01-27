@@ -14,7 +14,7 @@ async function main (file, options) {
   let pipelines
   try {
     const pipelineGraph = await parser.readGraph(file, checks)
-    pipelines = parser.getIdentifiers(pipelineGraph, options.pipeline)
+    pipelines = parser.getIdentifiers(pipelineGraph, checks, options.pipeline)
 
     const codelinks = parser.getAllCodeLinks(pipelines)
     const dependencies = parser.getDependencies(codelinks)
@@ -31,11 +31,14 @@ async function main (file, options) {
     }
   }
 
-  if (process.stdout.isTTY) {
-    printErrors(checks, options.levels, true)
-  }
-  else {
-    console.log(JSON.stringify(checks))
+  printErrors(checks, options.levels, true)
+
+  if (!process.stdout.isTTY) {
+    let arr1 = []
+    for (const level of options.levels) {
+      arr1 = arr1.concat(checks.getChecks(level))
+    }
+    console.log(JSON.stringify(arr1))
   }
 
   if (countValidationIssues(checks, options.strict)) {

@@ -9,11 +9,14 @@ const Issue = require('../lib/issue')
 const rules = require('../lib/schema')
 const utils = require('../lib/utils')
 const ChecksCollection = require('../lib/checksCollection.js')
+const { turtleToCF } = require('./helpers')
 
 const mock = {}
 const mockedParser = proxyquire('../lib/parser', {
   './utils': mock
 })
+
+let checks
 class ClownfaceMock {
   namedNode () {
     return null
@@ -139,7 +142,7 @@ describe('parser.getAllCodeLinks', () => {
 
 describe('parser.readGraph', () => {
   it('should read .ttl file and create DatasetCore object', async () => {
-    const input = path.join(__dirname, 'example.ttl')
+    const input = path.join(__dirname, 'fixtures/example.ttl')
     const graph = await parser.readGraph(input, new ChecksCollection())
 
     assert.strictEqual(graph.dataset.size, 4)
@@ -192,6 +195,10 @@ describe('parser.getModuleOperationProperties', () => {
 })
 
 describe('parser.getIdentifiers', () => {
+  beforeEach(() => {
+    checks = new ChecksCollection()
+  })
+
   it('should create pipelines list', () => {
     const input = generateGraphMock()
     const expected = {
@@ -206,7 +213,8 @@ describe('parser.getIdentifiers', () => {
         { stepName: 'Ask them to make you pancakes', stepOperation: 'operation2' }
       ]
     }
-    const actual = parser.getIdentifiers(input)
+
+    const actual = parser.getIdentifiers(input, checks)
     assert.deepStrictEqual(actual, expected)
   })
 
@@ -218,23 +226,55 @@ describe('parser.getIdentifiers', () => {
         { stepName: 'Ask them to make you pancakes', stepOperation: 'operation2' }
       ]
     }
-    const actual = parser.getIdentifiers(input, 'pancakes')
+    const actual = parser.getIdentifiers(input, checks, 'pancakes')
     assert.deepStrictEqual(actual, expected)
   })
 
   it('should return empty dict if pipeline does not exist', () => {
     const input = generateGraphMock()
     const expected = {}
-    const actual = parser.getIdentifiers(input, 'inexistentPipeline')
+    const actual = parser.getIdentifiers(input, checks, 'inexistentPipeline')
     assert.deepStrictEqual(actual, expected)
+  })
+
+  it('should not crash on invalid steps', async () => {
+    const input = await turtleToCF(`
+      @prefix p: <https://pipeline.described.at/> .
+
+      <mainCreateFile> a p:Pipeline, p:Readable;
+        p:variables _:vars ;
+        p:steps [
+          p:stepList (<mainUpload>)
+        ].
+
+      <mainUpload> a p:Pipeline;
+        p:variables _:vars ;
+        p:steps [].
+    `)
+
+    const expected = {
+      mainCreateFile: [],
+      mainUpload: []
+    }
+    const actual = parser.getIdentifiers(input, checks)
+    assert.deepStrictEqual(actual, expected)
+
+    const errors = checks.getPipelineChecks('mainCreateFile', 'error')
+    assert.strictEqual(errors.length, 1)
+    const error = errors[0]
+    assert.strictEqual(error.level, 'error')
+    assert.strictEqual(error.message, 'Missing code.implementedBy/code.link')
+    assert.strictEqual(error.step, 'mainUpload')
   })
 })
 
 describe('parser.getAllOperationProperties', () => {
-  const checks = new ChecksCollection()
+  beforeEach(() => {
+    checks = new ChecksCollection()
+  })
 
   it('should get operation properties from operations.ttl file', async () => {
-    mock.removeFilePart = sinon.stub().returns('test')
+    mock.removeFilePart = sinon.stub().returns('test/fixtures')
 
     const input = {
       'node:': {
@@ -273,7 +313,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
-    mock.removeFilePart = sinon.stub().returns('test')
+    mock.removeFilePart = sinon.stub().returns('test/fixtures')
 
     const input = {
       'node:': {
@@ -385,7 +425,7 @@ describe('parser.validatePipelines', () => {
       pancakes: ['Pipeline'],
       pizza: ['Pipeline', 'crunchy']
     }
-    const checks = new ChecksCollection()
+    checks = new ChecksCollection()
 
     parser.validatePipelines(pipelines, operation2properties, pipeline2properties, checks)
     const actualPizzaIssues = checks.getPipelineChecks('pizza', 'warning')
@@ -402,7 +442,7 @@ describe('parser.validatePipelines', () => {
     }
 
     for (const pipelineID of ['pizza', 'pancakes']) {
-      const checks = new ChecksCollection()
+      checks = new ChecksCollection()
 
       const expectedIssue = Issue.info({ message: rules.pipelinePropertiesExist.messageSuccess(pipelineID) })
       parser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, checks)
