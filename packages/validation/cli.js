@@ -2,7 +2,7 @@
 const path = require('path')
 const { Command } = require('commander')
 const parser = require('./lib/parser')
-const { printErrors, countValidationIssues } = require('./lib/utils')
+const { countValidationIssues } = require('./lib/utils')
 const { version } = require(path.join(__dirname, 'package.json'))
 const ChecksCollection = require('./lib/checksCollection.js')
 
@@ -31,17 +31,13 @@ async function main (file, options) {
     }
   }
 
-  printErrors(checks, options.levels, true)
+  checks.print(options.levels)
 
   if (!process.stdout.isTTY) {
-    let arr1 = []
-    for (const level of options.levels) {
-      arr1 = arr1.concat(checks.getChecks(level))
-    }
-    console.log(JSON.stringify(arr1))
+    console.log(checks.filterAndJsonify(options.levels))
   }
 
-  if (countValidationIssues(checks, options.strict)) {
+  if (checks.countIssues(options.strict)) {
     process.exit(-1)
   }
 }

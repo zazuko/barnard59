@@ -20,19 +20,19 @@ class ChecksCollection {
     }
   }
 
-  getGenericChecks (level = null) {
-    if (level !== null) {
-      return this.generic.filter((issue) => issue.level === level)
+  getGenericChecks (levels = null) {
+    if (levels !== null) {
+      return this.generic.filter((issue) => levels.includes(issue.level))
     }
     else {
       return this.generic
     }
   }
 
-  getPipelineChecks (pipeline, level = null) {
+  getPipelineChecks (pipeline, levels = null) {
     if (pipeline in this.pipelines) {
-      if (level !== null) {
-        return this.pipelines[[pipeline]].filter((issue) => issue.level === level)
+      if (levels !== null) {
+        return this.pipelines[[pipeline]].filter((issue) => levels.includes(issue.level))
       }
       else {
         return this.pipelines[[pipeline]]
@@ -43,10 +43,10 @@ class ChecksCollection {
     }
   }
 
-  getChecks (level = null) {
-    let checks = this.getGenericChecks(level)
+  getChecks (levels = null) {
+    let checks = this.getGenericChecks(levels)
     for (const pipeline of Object.keys(this.pipelines)) {
-      checks = checks.concat(this.getPipelineChecks(pipeline, level))
+      checks = checks.concat(this.getPipelineChecks(pipeline, levels))
     }
     return checks
   }
@@ -71,8 +71,39 @@ class ChecksCollection {
     }
   }
 
-  countChecks (level) {
-    this.generic.filter((issue) => issue.level === level)
+  countChecks (levels) {
+    return this.getChecks(levels).length
+  }
+
+  countIssues (strict = false) {
+    if (strict) {
+      return this.countChecks(['error', 'warning'])
+    }
+    else {
+      return this.countChecks('error')
+    }
+  }
+
+  print (levels) {
+    for (const issue of this.getGenericChecks(levels)) {
+      console.error(`- ${issue}`)
+    }
+
+    for (const pipeline of Object.keys(this.pipelines)) {
+      let i = 0
+      const issues = this.getPipelineChecks(pipeline, levels)
+      if (issues.length > 0) {
+        console.error(`${i + 1}. In pipeline <${pipeline}>`)
+        issues.forEach((issue, j) => {
+          console.error(`${i + 1}.${j + 1}. ${issue}`)
+        })
+      }
+      i++
+    }
+  }
+
+  filterAndJsonify (levels) {
+    return JSON.stringify(this.getChecks(levels))
   }
 }
 
