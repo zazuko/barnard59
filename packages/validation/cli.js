@@ -31,15 +31,13 @@ async function main (file, options) {
     }
   }
 
-  console.log(checks)
   if (process.stdout.isTTY) {
-    printErrors(pipelines, checks, options.levels)
+    printErrors(checks, options.levels, true)
   }
   else {
     console.log(JSON.stringify(checks))
   }
 
-  console.log(checks)
   if (countValidationIssues(checks, options.strict)) {
     process.exit(-1)
   }

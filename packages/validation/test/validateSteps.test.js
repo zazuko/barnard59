@@ -57,8 +57,8 @@ describe('parser.validateSteps', () => {
     })
 
     Object.keys(pipelines).forEach((pipeline) => {
-      assert.deepStrictEqual(checks.getPipelineErrors(pipeline), [])
-      assert.deepStrictEqual(checks.getPipelineWarnings(pipeline), [])
+      assert.deepStrictEqual(checks.getPipelineChecks(pipeline, 'error'), [])
+      assert.deepStrictEqual(checks.getPipelineChecks(pipeline, 'warning'), [])
     })
   })
 
@@ -71,8 +71,8 @@ describe('parser.validateSteps', () => {
     })
     parser.validateSteps({ pipelines, properties }, checks)
     Object.keys(pipelines).forEach((pipeline) => {
-      assert.deepStrictEqual(checks.getPipelineErrors(pipeline), [])
-      assert.deepStrictEqual(checks.getPipelineWarnings(pipeline), [])
+      assert.deepStrictEqual(checks.getPipelineChecks(pipeline, 'error'), [])
+      assert.deepStrictEqual(checks.getPipelineChecks(pipeline, 'warning'), [])
     })
   })
 

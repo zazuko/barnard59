@@ -388,8 +388,8 @@ describe('parser.validatePipelines', () => {
     const checks = new ChecksCollection()
 
     parser.validatePipelines(pipelines, operation2properties, pipeline2properties, checks)
-    const actualPizzaIssues = checks.getPipelineWarnings('pizza')
-    const actualPancakesIssues = checks.getPipelineWarnings('pancakes')
+    const actualPizzaIssues = checks.getPipelineChecks('pizza', 'warning')
+    const actualPancakesIssues = checks.getPipelineChecks('pancakes', 'warning')
 
     assert(utils.checkArrayContainsObject(actualPizzaIssues, expectedPizzaIssue))
     assert(utils.checkArrayContainsObject(actualPancakesIssues, expectedPancakesIssue))

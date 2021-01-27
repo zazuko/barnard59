@@ -38,7 +38,7 @@ async function readGraph (file, checks) {
       message: rules.parser.messageFailure(file, error)
     })
   }
-  checks.addGenericCheck(issue)
+  checks.setGenericCheck(issue)
   const clownfaceObj = cf({ dataset })
 
   return clownfaceObj
@@ -185,14 +185,14 @@ async function getAllOperationProperties (dependencies, checks) {
         operationsPath = `${modulePath}/operations.ttl`
 
         const issue = Issue.info({ message: rules.dependencies.messageSuccess(module) })
-        checks.addGenericCheck(issue)
+        checks.setGenericCheck(issue)
       }
       catch (err) {
         const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
         const issue = Issue.error({
           message: rules.dependencies.messageFailure(module, codelinksWithMissingMetadata)
         })
-        checks.addGenericCheck(issue)
+        checks.setGenericCheck(issue)
         continue
       }
 
@@ -214,7 +214,7 @@ async function getAllOperationProperties (dependencies, checks) {
           results[codelink] = null
         }
       }
-      checks.addGenericCheck(issue)
+      checks.setGenericCheck(issue)
     }
   }
   return results
@@ -245,7 +245,7 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
         message: rules.pipelinePropertiesExist.messageSuccess(pipeline)
       })
     }
-    checks.addPipelineCheck(issue, pipeline)
+    checks.setPipelineCheck(issue, pipeline)
   })
 }
 
@@ -268,25 +268,25 @@ function validateSteps ({ pipelines, properties }, checks) {
       if (operationProperties === null) {
         const message = rules.operationPropertiesExist.messageFailure(operation)
         const issue = Issue.warning({ message, step, operation })
-        checks.addPipelineCheck(issue, pipeline)
+        checks.setPipelineCheck(issue, pipeline)
         return operation
       }
       else {
         const message = rules.operationPropertiesExist.messageSuccess(operation)
         const issue = Issue.info({ message, step, operation })
-        checks.addPipelineCheck(issue, pipeline)
+        checks.setPipelineCheck(issue, pipeline)
       }
 
       if (!isOperation) {
         const message = rules.operationHasOperationProperty.messageFailure(operation)
         const issue = Issue.error({ message, step, operation })
-        checks.addPipelineCheck(issue, pipeline)
+        checks.setPipelineCheck(issue, pipeline)
         return operation
       }
       else {
         const message = rules.operationHasOperationProperty.messageSuccess(operation)
         const issue = Issue.info({ message, step, operation })
-        checks.addPipelineCheck(issue, pipeline)
+        checks.setPipelineCheck(issue, pipeline)
       }
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
@@ -294,13 +294,13 @@ function validateSteps ({ pipelines, properties }, checks) {
         if (!isReadableOrReadableObjectMode) {
           const message = rules.firstOperationIsReadable.messageFailure(operation)
           const issue = Issue.error({ message, step, operation })
-          checks.addPipelineCheck(issue, pipeline)
+          checks.setPipelineCheck(issue, pipeline)
           return operation
         }
         else {
           const message = rules.firstOperationIsReadable.messageFailure(operation)
           const issue = Issue.info({ message, step, operation })
-          checks.addPipelineCheck(issue, pipeline)
+          checks.setPipelineCheck(issue, pipeline)
         }
       }
 
@@ -308,11 +308,11 @@ function validateSteps ({ pipelines, properties }, checks) {
         if (lastOperationProperties === null) {
           const message = rules.previousOperationHasMetadata.messageFailure(operation)
           const issue = Issue.warning({ message, step, operation })
-          checks.addPipelineCheck(issue, pipeline)
+          checks.setPipelineCheck(issue, pipeline)
         }
         else {
           const message = rules.previousOperationHasMetadata.messageSuccess(operation)
-          checks.addPipelineCheck(Issue.info({ message, step, operation }), pipeline)
+          checks.setPipelineCheck(Issue.info({ message, step, operation }), pipeline)
 
           // a writable operation must always be preceded by a readable operation
           if (isWritable) {
@@ -325,7 +325,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.readableBeforeWritable.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.addPipelineCheck(issue, pipeline)
+            checks.setPipelineCheck(issue, pipeline)
           }
           if (isWritableObjectMode) {
             let issue
@@ -337,7 +337,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.readableObjectModeBeforeWritableObjectMode.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.addPipelineCheck(issue, pipeline)
+            checks.setPipelineCheck(issue, pipeline)
           }
 
           // a readable operation must always be followed by a writable operation
@@ -351,7 +351,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.writableAfterReadable.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.addPipelineCheck(issue, pipeline)
+            checks.setPipelineCheck(issue, pipeline)
           }
           if (lastIsReadableObjectMode) {
             let issue
@@ -363,7 +363,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.writableObjectModeAfterReadableObjectMode.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.addPipelineCheck(issue, pipeline)
+            checks.setPipelineCheck(issue, pipeline)
           }
         }
       }

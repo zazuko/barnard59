@@ -7,66 +7,56 @@ class ChecksCollection {
     this.pipelines = {}
   }
 
-  addGenericCheck (error) {
+  setGenericCheck (error) {
     this.generic.push(error)
-    return this
   }
 
-  addPipelineCheck (error, pipeline) {
+  setPipelineCheck (error, pipeline) {
     if (pipeline in this.pipelines) {
       this.pipelines[[pipeline]].push(error)
     }
     else {
       this.pipelines[[pipeline]] = [error]
     }
-    return this
   }
 
-  getGenericWarnings () {
-    return this.generic.filter((issue) => issue.level === 'warning')
+  getGenericChecks (level = null) {
+    if (level !== null) {
+      return this.generic.filter((issue) => issue.level === level)
+    }
+    else {
+      return this.generic
+    }
   }
 
-  getGenericErrors () {
-    return this.generic.filter((issue) => issue.level === 'error')
-  }
-
-  getGenericInfos () {
-    return this.generic.filter((issue) => issue.level === 'info')
-  }
-
-  getPipelineWarnings (pipeline) {
+  getPipelineChecks (pipeline, level = null) {
     if (pipeline in this.pipelines) {
-      return this.pipelines[[pipeline]].filter((issue) => issue.level === 'warning')
+      if (level !== null) {
+        return this.pipelines[[pipeline]].filter((issue) => issue.level === level)
+      }
+      else {
+        return this.pipelines[[pipeline]]
+      }
     }
     else {
       return []
     }
   }
 
-  getPipelineErrors (pipeline) {
-    if (pipeline in this.pipelines) {
-      return this.pipelines[[pipeline]].filter((issue) => issue.level === 'error')
+  getChecks (level = null) {
+    const checks = this.getGenericChecks(level)
+    for (const pipeline of Object.keys(this.pipelines)) {
+      checks.concat(this.getPipelineChecks(pipeline, level))
     }
-    else {
-      return []
-    }
-  }
-
-  getPipelineInfos (pipeline) {
-    if (pipeline in this.pipelines) {
-      return this.pipelines[[pipeline]].filter((issue) => issue.level === 'info')
-    }
-    else {
-      return []
-    }
+    return checks
   }
 
   genericContainsMessage (mssg) {
-    return utils.checkArrayContainsMessage(this.generic, mssg)
+    return utils.checkArrayContainsField(this.generic, 'message', mssg)
   }
 
   pipelineContainsMessage (mssg, pipeline) {
-    return utils.checkArrayContainsMessage(this.pipelines[[pipeline]], mssg)
+    return utils.checkArrayContainsField(this.pipelines[[pipeline]], 'message', mssg)
   }
 
   containsMessage (mssg) {
@@ -79,6 +69,10 @@ class ChecksCollection {
         return true
       }
     }
+  }
+
+  countChecks (level) {
+    this.generic.filter((issue) => issue.level === level)
   }
 }
 
