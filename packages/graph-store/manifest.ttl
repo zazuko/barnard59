@@ -1,0 +1,25 @@
+@base <http://barnard59.zazuko.com/operations/graph-store/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<get> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "Read RDF/JS Quads (Graph Store)";
+  rdfs:comment "Reads RDF/JS Quads from the given named graph using the SPARQL Graph Store Protocol.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-graph-store#get>
+  ].
+
+<post> a p:Operation, p:WritableObjectMode;
+  rdfs:label "Append RDF/JS Quads (Graph Store)";
+  rdfs:comment "Appends RDF/JS Quads to the given named graph using the SPARQL Graph Store Protocol.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-graph-store#post>
+  ].
+
+<put> a p:Operation, p:WritableObjectMode;
+  rdfs:label "Write RDF/JS Quads (Graph Store)";
+  rdfs:comment "Writes RDF/JS Quads to the given named graph using the SPARQL Graph Store Protocol.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-graph-store#put>
+  ].
