@@ -18,12 +18,14 @@ class Issue {
   toString () {
     let msg = this.message
     if (this.step) {
-      msg += ` at step <${this.step}>`
+      msg += ` [at step <${this.step}>]`
     }
-    if (this.operation) {
-      msg += ` (${this.operation})`
+    if (this.id) {
+      return chalk.blue(`[${String(this.id).padStart(4, '0')}]  ` + colors[this.level](msg))
     }
-    return colors[this.level](msg)
+    else {
+      return colors[this.level](msg)
+    }
   }
 
   static info ({ step, operation, message }) {

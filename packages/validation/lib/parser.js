@@ -276,12 +276,14 @@ function validateSteps ({ pipelines, properties }, checks) {
       if (operationProperties === null) {
         const message = rules.operationPropertiesExist.messageFailure(operation)
         const issue = Issue.warning({ message, step, operation })
+        // issue.id = rules.operationPropertiesExist.id
         checks.setPipelineCheck(issue, pipeline)
         return operation
       }
       else {
         const message = rules.operationPropertiesExist.messageSuccess(operation)
         const issue = Issue.info({ message, step, operation })
+        // issue.id = rules.operationPropertiesExist.id
         checks.setPipelineCheck(issue, pipeline)
       }
 
@@ -316,11 +318,14 @@ function validateSteps ({ pipelines, properties }, checks) {
         if (lastOperationProperties === null) {
           const message = rules.previousOperationHasMetadata.messageFailure(operation)
           const issue = Issue.warning({ message, step, operation })
+          // issue.id = rules.previousOperationHasMetadata.id
           checks.setPipelineCheck(issue, pipeline)
         }
         else {
           const message = rules.previousOperationHasMetadata.messageSuccess(operation)
-          checks.setPipelineCheck(Issue.info({ message, step, operation }), pipeline)
+          const issue = Issue.info({ message, step, operation })
+          // issue.id = rules.previousOperationHasMetadata.id
+          checks.setPipelineCheck(issue, pipeline)
 
           // a writable operation must always be preceded by a readable operation
           if (isWritable) {

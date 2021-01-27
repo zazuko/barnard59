@@ -86,16 +86,16 @@ class ChecksCollection {
 
   print (levels) {
     for (const issue of this.getGenericChecks(levels)) {
-      console.error(`- ${issue}`)
+      console.error(`${issue}`)
     }
 
+    let i = 0
     for (const pipeline of Object.keys(this.pipelines)) {
-      let i = 0
       const issues = this.getPipelineChecks(pipeline, levels)
       if (issues.length > 0) {
         console.error(`${i + 1}. In pipeline <${pipeline}>`)
-        issues.forEach((issue, j) => {
-          console.error(`${i + 1}.${j + 1}. ${issue}`)
+        issues.forEach((issue) => {
+          console.error(`${issue}`)
         })
       }
       i++
