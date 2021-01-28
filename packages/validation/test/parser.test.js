@@ -10,6 +10,7 @@ const rules = require('../lib/schema')
 const utils = require('../lib/utils')
 const ChecksCollection = require('../lib/checksCollection.js')
 const { turtleToCF } = require('./helpers')
+const validators = require('../lib/validators')
 
 const mock = {}
 const mockedParser = proxyquire('../lib/parser', {
@@ -47,12 +48,16 @@ function generateGraphMock () {
   const steps = [
     'operation1',
     'Turn on the oven',
+    '1',
     'operation2',
     'Put there frozen pizza',
+    '2',
     'operation3',
     'Wait 30 min',
+    '3',
     'operation4',
-    'Enjoy!'
+    'Enjoy!',
+    '4'
   ]
   sinon.stub(pizzaSteps, 'term').get(function getterFn () {
     return { value: steps.shift() }
@@ -65,8 +70,10 @@ function generateGraphMock () {
   const steps2 = [
     'operation1',
     'Find a French chef',
+    '11',
     'operation2',
-    'Ask them to make you pancakes'
+    'Ask them to make you pancakes',
+    '12'
   ]
   sinon.stub(pancakeSteps, 'term').get(function getterFn () {
     return { value: steps2.shift() }
@@ -259,11 +266,11 @@ describe('parser.getIdentifiers', () => {
     const actual = parser.getIdentifiers(input, checks)
     assert.deepStrictEqual(actual, expected)
 
-    const errors = checks.getPipelineChecks('mainCreateFile', 'error')
+    const errors = checks.getPipelineChecks('mainCreateFile', ['error'])
     assert.strictEqual(errors.length, 1)
     const error = errors[0]
     assert.strictEqual(error.level, 'error')
-    assert.strictEqual(error.message, 'Missing code.implementedBy/code.link')
+    assert.strictEqual(error.message, validators.codelink.messageFailureTemplate())
     assert.strictEqual(error.step, 'mainUpload')
   })
 })
@@ -274,11 +281,11 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should get operation properties from operations.ttl file', async () => {
-    mock.removeFilePart = sinon.stub().returns('test/fixtures')
+    mock.getManifestPath = sinon.stub().returns('test/fixtures/operations.ttl')
+    mock.isModuleInstalled = sinon.stub().returns(true)
 
     const input = {
       'node:': {
-        // name of any installed module
         sinon: new Set(['node:party-module#dance', 'node:party-module#drink'])
       }
     }
@@ -291,8 +298,8 @@ describe('parser.getAllOperationProperties', () => {
     assert.deepStrictEqual(actual, expected)
   })
 
-  it("should return nulls if operation.ttl doesn't exist", async () => {
-    mock.removeFilePart = sinon.stub().returns('inexistent-folder')
+  it("should return nulls if manifest.ttl doesn't exist", async () => {
+    mock.getManifestPath = sinon.stub().returns(null)
 
     const input = {
       'node:': {
@@ -313,7 +320,8 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
-    mock.removeFilePart = sinon.stub().returns('test/fixtures')
+    mock.getManifestPath = sinon.stub().returns('test/fixtures/operations.ttl')
+    mock.isModuleInstalled = sinon.stub().returns(true)
 
     const input = {
       'node:': {
@@ -334,6 +342,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should report missing packages', async () => {
+    mock.isModuleInstalled = sinon.stub().returns(false)
     const input = {
       'node:': {
         'foo-bar': new Set(['node:foo-bar#fn'])
@@ -344,7 +353,7 @@ describe('parser.getAllOperationProperties', () => {
     const actual = await mockedParser.getAllOperationProperties(input, checks)
     assert.deepStrictEqual(actual, expected)
 
-    const expectedMssg = rules.dependencies.messageFailure('foo-bar', 'node:foo-bar#fn')
+    const expectedMssg = validators.dependency.messageFailureTemplate({ package: 'foo-bar', operations: 'node:foo-bar#fn' })
     assert(checks.genericContainsMessage(expectedMssg))
   })
 })

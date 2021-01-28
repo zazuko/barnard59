@@ -1,6 +1,5 @@
 const cf = require('clownface')
 const fromFile = require('rdf-utils-fs/fromFile')
-const fs = require('fs')
 const namespace = require('@rdfjs/namespace')
 const rdf = require('rdf-ext')
 const readline = require('readline')
@@ -8,6 +7,8 @@ const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
 const rules = require('./schema')
+const fs = require('fs')
+const validators = require('./validators')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -15,7 +16,6 @@ const ns = {
   p: namespace('https://pipeline.described.at/'),
   code: namespace('https://code.described.at/')
 }
-const acceptedPipelineProperties = ['Readable', 'ReadableObjectMode', 'Writable', 'WritableObjectMode']
 
 async function readGraph (file, checks) {
   const quadStream = fromFile(file)
@@ -29,16 +29,17 @@ async function readGraph (file, checks) {
   try {
     [_err, dataset] = await Promise.all([parserPromise, datasetPromise])
     issue = Issue.info({
-      message: rules.parser.messageSuccess(file)
+      message: `File ${file} parsed successfully`
     })
   }
   catch (err) {
     const error = await parseError(file, err)
     issue = Issue.error({
-      message: rules.parser.messageFailure(file, error)
+      message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
     })
   }
-  checks.setGenericCheck(issue)
+
+  checks.addGenericCheck(issue)
   const clownfaceObj = cf({ dataset })
 
   return clownfaceObj
@@ -84,18 +85,17 @@ function getIdentifiers (graph, checks, pipeline2find = null) {
           const codeLink = implementedBy.out(ns.code.link)
           const identifier = codeLink.term
 
-          if (identifier) {
-            const currStepName = step.term.value
+          const currStepName = step.term.value
+          const ib = implementedBy.term
+
+          const issue = validators.codelink.validate(ib, identifier, currStepName)
+          checks.addPipelineCheck(issue, pipeline)
+
+          if (ib && identifier) {
             pipeline2identifier[pipeline.term.value].push({
               stepName: currStepName,
               stepOperation: identifier.value
             })
-            const issue = Issue.info({ message: rules.codelinks.messageSuccess, step: currStepName })
-            checks.setPipelineCheck(issue, pipeline)
-          }
-          else if (!implementedBy.term || !codeLink.term) {
-            const issue = Issue.error({ message: rules.codelinks.messageFailure(), step: step.term.value })
-            checks.setPipelineCheck(issue, pipeline)
           }
         }
       }
@@ -187,42 +187,29 @@ async function getAllOperationProperties (dependencies, checks) {
   const results = {}
   for (const env in dependencies) {
     for (const module in dependencies[env]) {
-      let operationsPath
-      try {
-        const modulePath = utils.removeFilePart(require.resolve(module))
-        operationsPath = `${modulePath}/operations.ttl`
+      let issue
+      const currOperations = Array.from(dependencies[env][module]).join('"\n  * "')
+      issue = validators.dependency.validate(module, currOperations)
+      checks.addGenericCheck(issue)
 
-        const issue = Issue.info({ message: rules.dependencies.messageSuccess(module) })
-        checks.setGenericCheck(issue)
-      }
-      catch (err) {
-        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
-        const issue = Issue.error({
-          message: rules.dependencies.messageFailure(module, codelinksWithMissingMetadata)
-        })
-        checks.setGenericCheck(issue)
+      if (!utils.isModuleInstalled(module)) {
         continue
       }
+      const operationsPath = utils.getManifestPath(module)
 
-      let issue
-      if (fs.existsSync(operationsPath)) {
+      issue = validators.operation.validate(operationsPath, module, currOperations)
+      checks.addGenericCheck(issue)
+
+      if (operationsPath) {
         const graph = await readGraph(operationsPath, checks)
         const tempResults = getModuleOperationProperties(graph, dependencies[env][module].values())
         Object.assign(results, tempResults)
-
-        issue = Issue.info({ message: rules.operations.messageSuccess(module) })
       }
       else {
-        const codelinksWithMissingMetadata = Array.from(dependencies[env][module]).join('"\n  * "')
-        issue = Issue.warning({
-          message: rules.operations.messageFailure(module, codelinksWithMissingMetadata)
-        })
-
         for (const codelink of dependencies[env][module]) {
           results[codelink] = null
         }
       }
-      checks.setGenericCheck(issue)
     }
   }
   return results
@@ -241,19 +228,8 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
       utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', checks)
     }
 
-    let issue
-    const hasDefinedMode = (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
-    if (!hasDefinedMode) {
-      issue = Issue.warning({
-        message: rules.pipelinePropertiesExist.messageFailure(pipeline)
-      })
-    }
-    else {
-      issue = Issue.info({
-        message: rules.pipelinePropertiesExist.messageSuccess(pipeline)
-      })
-    }
-    checks.setPipelineCheck(issue, pipeline)
+    const issue = validators.pipelinePropertiesExist.validate(pipeline, pipelineProperties)
+    checks.addPipelineCheck(issue, pipeline)
   })
 }
 
@@ -277,26 +253,26 @@ function validateSteps ({ pipelines, properties }, checks) {
         const message = rules.operationPropertiesExist.messageFailure(operation)
         const issue = Issue.warning({ message, step, operation })
         // issue.id = rules.operationPropertiesExist.id
-        checks.setPipelineCheck(issue, pipeline)
+        checks.addPipelineCheck(issue, pipeline)
         return operation
       }
       else {
         const message = rules.operationPropertiesExist.messageSuccess(operation)
         const issue = Issue.info({ message, step, operation })
         // issue.id = rules.operationPropertiesExist.id
-        checks.setPipelineCheck(issue, pipeline)
+        checks.addPipelineCheck(issue, pipeline)
       }
 
       if (!isOperation) {
         const message = rules.operationHasOperationProperty.messageFailure(operation)
         const issue = Issue.error({ message, step, operation })
-        checks.setPipelineCheck(issue, pipeline)
+        checks.addPipelineCheck(issue, pipeline)
         return operation
       }
       else {
         const message = rules.operationHasOperationProperty.messageSuccess(operation)
         const issue = Issue.info({ message, step, operation })
-        checks.setPipelineCheck(issue, pipeline)
+        checks.addPipelineCheck(issue, pipeline)
       }
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
@@ -304,13 +280,13 @@ function validateSteps ({ pipelines, properties }, checks) {
         if (!isReadableOrReadableObjectMode) {
           const message = rules.firstOperationIsReadable.messageFailure(operation)
           const issue = Issue.error({ message, step, operation })
-          checks.setPipelineCheck(issue, pipeline)
+          checks.addPipelineCheck(issue, pipeline)
           return operation
         }
         else {
           const message = rules.firstOperationIsReadable.messageFailure(operation)
           const issue = Issue.info({ message, step, operation })
-          checks.setPipelineCheck(issue, pipeline)
+          checks.addPipelineCheck(issue, pipeline)
         }
       }
 
@@ -319,13 +295,13 @@ function validateSteps ({ pipelines, properties }, checks) {
           const message = rules.previousOperationHasMetadata.messageFailure(operation)
           const issue = Issue.warning({ message, step, operation })
           // issue.id = rules.previousOperationHasMetadata.id
-          checks.setPipelineCheck(issue, pipeline)
+          checks.addPipelineCheck(issue, pipeline)
         }
         else {
           const message = rules.previousOperationHasMetadata.messageSuccess(operation)
           const issue = Issue.info({ message, step, operation })
           // issue.id = rules.previousOperationHasMetadata.id
-          checks.setPipelineCheck(issue, pipeline)
+          checks.addPipelineCheck(issue, pipeline)
 
           // a writable operation must always be preceded by a readable operation
           if (isWritable) {
@@ -338,7 +314,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.readableBeforeWritable.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.setPipelineCheck(issue, pipeline)
+            checks.addPipelineCheck(issue, pipeline)
           }
           if (isWritableObjectMode) {
             let issue
@@ -350,7 +326,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.readableObjectModeBeforeWritableObjectMode.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.setPipelineCheck(issue, pipeline)
+            checks.addPipelineCheck(issue, pipeline)
           }
 
           // a readable operation must always be followed by a writable operation
@@ -364,7 +340,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.writableAfterReadable.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.setPipelineCheck(issue, pipeline)
+            checks.addPipelineCheck(issue, pipeline)
           }
           if (lastIsReadableObjectMode) {
             let issue
@@ -376,7 +352,7 @@ function validateSteps ({ pipelines, properties }, checks) {
               const message = rules.writableObjectModeAfterReadableObjectMode.messageSuccess(operation)
               issue = Issue.info({ message, step, operation })
             }
-            checks.setPipelineCheck(issue, pipeline)
+            checks.addPipelineCheck(issue, pipeline)
           }
         }
       }
@@ -395,5 +371,6 @@ module.exports = {
   getAllOperationProperties,
   getPipelineProperties,
   validateSteps,
-  validatePipelines
+  validatePipelines,
+  parseError
 }

@@ -2,7 +2,6 @@
 const path = require('path')
 const { Command } = require('commander')
 const parser = require('./lib/parser')
-const { countValidationIssues } = require('./lib/utils')
 const { version } = require(path.join(__dirname, 'package.json'))
 const ChecksCollection = require('./lib/checksCollection.js')
 

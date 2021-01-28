@@ -28,16 +28,16 @@ class Issue {
     }
   }
 
-  static info ({ step, operation, message }) {
-    return new Issue({ step, operation, message, level: 'info' })
+  static info ({ step, operation, message, id }) {
+    return new Issue({ step, operation, message, id, level: 'info' })
   }
 
-  static warning ({ step, operation, message }) {
-    return new Issue({ step, operation, message, level: 'warning' })
+  static warning ({ step, operation, message, id }) {
+    return new Issue({ step, operation, message, id, level: 'warning' })
   }
 
-  static error ({ step, operation, message }) {
-    return new Issue({ step, operation, message, level: 'error' })
+  static error ({ step, operation, message, id }) {
+    return new Issue({ step, operation, message, id, level: 'error' })
   }
 }
 

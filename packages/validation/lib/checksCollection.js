@@ -7,11 +7,11 @@ class ChecksCollection {
     this.pipelines = {}
   }
 
-  setGenericCheck (error) {
+  addGenericCheck (error) {
     this.generic.push(error)
   }
 
-  setPipelineCheck (error, pipeline) {
+  addPipelineCheck (error, pipeline) {
     if (pipeline in this.pipelines) {
       this.pipelines[[pipeline]].push(error)
     }
