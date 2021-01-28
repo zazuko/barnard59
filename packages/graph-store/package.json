@@ -1,6 +1,6 @@
 {
   "name": "barnard59-graph-store",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
   "main": "index.js",
   "scripts": {
