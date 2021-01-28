@@ -1,0 +1,25 @@
+@base <http://barnard59.zazuko.com/operations/ftp/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<list> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "List files (FTP)";
+  rdfs:comment "Lists all files in the given FTP folder.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-ftp#list>
+  ].
+
+<move> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Move file (FTP)";
+  rdfs:comment "Moves the given file at the end of the stream processing and forwards any incoming data.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-ftp#move>
+  ].
+
+<read> a p:Operation, p:Readable;
+  rdfs:label "Read file (FTP)";
+  rdfs:comment "Reads the given file.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-ftp#read>
+  ].
