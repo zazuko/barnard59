@@ -6,7 +6,6 @@ const readline = require('readline')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const utils = require('./utils')
 const Issue = require('./issue')
-const rules = require('./schema')
 const fs = require('fs')
 const validators = require('./validators')
 
