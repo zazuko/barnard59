@@ -3,20 +3,35 @@ const Issue = require('../issue')
 
 const readableObjectModeBeforeWritableObjectMode = {
   ruleId: 11,
-  dependsOn: [8, 100],
   ruleDescription: 'WritableObjectMode operation must always be preceded by a ReadableObjectMode operation',
   messageSuccessTemplate: template`Validated operation ${'operation'}: a writableObjectMode operation must always be preceded by a readableObjectMode operation`,
   messageFailureTemplate: template`Invalid operation ${'operation'}: previous operation is not readableObjectMode`,
-  validate: () => {
+  validate: (lastIsReadableObjectMode, step, operation) => {
     let issue
+    if (!lastIsReadableObjectMode) {
+      issue = Issue.error({
+        id: readableObjectModeBeforeWritableObjectMode.ruleId,
+        message: readableObjectModeBeforeWritableObjectMode.messageFailureTemplate({ operation }),
+        step,
+        operation
+      })
+    }
+    else {
+      issue = Issue.info({
+        id: readableObjectModeBeforeWritableObjectMode.ruleId,
+        message: readableObjectModeBeforeWritableObjectMode.messageSuccessTemplate({ operation }),
+        step,
+        operation
+      })
+    }
     return issue
   },
   describeRule: () => {
     return {
-      ruleId: this.ruleId,
-      ruleDescription: this.ruleDescription,
-      messageSuccess: this.messageSuccessTemplate(),
-      messageFailure: this.messageFailureTemplate()
+      ruleId: readableObjectModeBeforeWritableObjectMode.ruleId,
+      ruleDescription: readableObjectModeBeforeWritableObjectMode.ruleDescription,
+      messageSuccess: readableObjectModeBeforeWritableObjectMode.messageSuccessTemplate(),
+      messageFailure: readableObjectModeBeforeWritableObjectMode.messageFailureTemplate()
     }
   }
 }

@@ -248,112 +248,56 @@ function validateSteps ({ pipelines, properties }, checks) {
       const isWritableObjectMode = (operationProperties || []).includes('WritableObjectMode')
       const lastIsReadable = (lastOperationProperties || []).includes('Readable')
       const lastIsReadableObjectMode = (lastOperationProperties || []).includes('ReadableObjectMode')
+      let issue
 
+      issue = validators.operationPropertiesExist.validate(operationProperties, step, operation)
+      checks.addPipelineCheck(issue, pipeline)
       if (operationProperties === null) {
-        const message = rules.operationPropertiesExist.messageFailure(operation)
-        const issue = Issue.warning({ message, step, operation })
-        // issue.id = rules.operationPropertiesExist.id
-        checks.addPipelineCheck(issue, pipeline)
         return operation
-      }
-      else {
-        const message = rules.operationPropertiesExist.messageSuccess(operation)
-        const issue = Issue.info({ message, step, operation })
-        // issue.id = rules.operationPropertiesExist.id
-        checks.addPipelineCheck(issue, pipeline)
       }
 
+      issue = validators.operationHasOperationProperty.validate(isOperation, step, operation)
+      checks.addPipelineCheck(issue, pipeline)
       if (!isOperation) {
-        const message = rules.operationHasOperationProperty.messageFailure(operation)
-        const issue = Issue.error({ message, step, operation })
-        checks.addPipelineCheck(issue, pipeline)
         return operation
-      }
-      else {
-        const message = rules.operationHasOperationProperty.messageSuccess(operation)
-        const issue = Issue.info({ message, step, operation })
-        checks.addPipelineCheck(issue, pipeline)
       }
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
       if (isFirstStep && !isOnlyStep) {
+        issue = validators.firstOperationIsReadable.validate(isReadableOrReadableObjectMode, step, operation)
+        checks.addPipelineCheck(issue, pipeline)
+
         if (!isReadableOrReadableObjectMode) {
-          const message = rules.firstOperationIsReadable.messageFailure(operation)
-          const issue = Issue.error({ message, step, operation })
-          checks.addPipelineCheck(issue, pipeline)
           return operation
-        }
-        else {
-          const message = rules.firstOperationIsReadable.messageFailure(operation)
-          const issue = Issue.info({ message, step, operation })
-          checks.addPipelineCheck(issue, pipeline)
         }
       }
 
       if (lastOp) {
+        issue = validators.previousOperationHasMetadata.validate(lastOperationProperties, step, operation)
+        checks.addPipelineCheck(issue, pipeline)
+
         if (lastOperationProperties === null) {
-          const message = rules.previousOperationHasMetadata.messageFailure(operation)
-          const issue = Issue.warning({ message, step, operation })
-          // issue.id = rules.previousOperationHasMetadata.id
+          return operation
+        }
+
+        // a writable operation must always be preceded by a readable operation
+        if (isWritable) {
+          issue = validators.readableBeforeWritable.validate(lastIsReadable, step, operation)
           checks.addPipelineCheck(issue, pipeline)
         }
-        else {
-          const message = rules.previousOperationHasMetadata.messageSuccess(operation)
-          const issue = Issue.info({ message, step, operation })
-          // issue.id = rules.previousOperationHasMetadata.id
+        if (isWritableObjectMode) {
+          issue = validators.readableObjectModeBeforeWritableObjectMode.validate(lastIsReadableObjectMode, step, operation)
           checks.addPipelineCheck(issue, pipeline)
+        }
 
-          // a writable operation must always be preceded by a readable operation
-          if (isWritable) {
-            let issue
-            if (!lastIsReadable) {
-              const message = rules.readableBeforeWritable.messageFailure(operation)
-              issue = Issue.error({ message, step, operation })
-            }
-            else {
-              const message = rules.readableBeforeWritable.messageSuccess(operation)
-              issue = Issue.info({ message, step, operation })
-            }
-            checks.addPipelineCheck(issue, pipeline)
-          }
-          if (isWritableObjectMode) {
-            let issue
-            if (!lastIsReadableObjectMode) {
-              const message = rules.readableObjectModeBeforeWritableObjectMode.messageFailure(operation)
-              issue = Issue.error({ message, step, operation })
-            }
-            else {
-              const message = rules.readableObjectModeBeforeWritableObjectMode.messageSuccess(operation)
-              issue = Issue.info({ message, step, operation })
-            }
-            checks.addPipelineCheck(issue, pipeline)
-          }
-
-          // a readable operation must always be followed by a writable operation
-          if (lastIsReadable) {
-            let issue
-            if (!isWritable) {
-              const message = rules.writableAfterReadable.messageFailure(operation)
-              issue = Issue.error({ message, step, operation })
-            }
-            else {
-              const message = rules.writableAfterReadable.messageSuccess(operation)
-              issue = Issue.info({ message, step, operation })
-            }
-            checks.addPipelineCheck(issue, pipeline)
-          }
-          if (lastIsReadableObjectMode) {
-            let issue
-            if (!isWritableObjectMode) {
-              const message = rules.writableObjectModeAfterReadableObjectMode.messageFailure(operation)
-              issue = Issue.error({ message, step, operation })
-            }
-            else {
-              const message = rules.writableObjectModeAfterReadableObjectMode.messageSuccess(operation)
-              issue = Issue.info({ message, step, operation })
-            }
-            checks.addPipelineCheck(issue, pipeline)
-          }
+        // a readable operation must always be followed by a writable operation
+        if (lastIsReadable) {
+          issue = validators.writableAfterReadable.validate(isWritable, step, operation)
+          checks.addPipelineCheck(issue, pipeline)
+        }
+        if (lastIsReadableObjectMode) {
+          issue = validators.writableObjectModeAfterReadableObjectMode.validate(isWritableObjectMode, step, operation)
+          checks.addPipelineCheck(issue, pipeline)
         }
       }
 
