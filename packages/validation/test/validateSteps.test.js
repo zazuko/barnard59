@@ -165,7 +165,7 @@ describe('parser.validateSteps', () => {
     }
 
     Object.keys(pipelines).forEach((pipeline) => {
-      const [erroredOp, errorMessage] = expectedErrors[pipeline]
+      const [_erroredOp, errorMessage] = expectedErrors[pipeline]
       checks.pipelineContainsMessage(errorMessage, pipeline)
     })
   })
