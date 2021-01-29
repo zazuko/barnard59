@@ -129,7 +129,7 @@ describe('countChecks', () => {
     checks.addPipelineCheck('check2', 'pipelineA')
     checks.addPipelineCheck('check3', 'pipelineB')
 
-    const expected = 5
+    const expected = 4
     const actual = checks.countChecks()
     assert(actual === expected)
   })
