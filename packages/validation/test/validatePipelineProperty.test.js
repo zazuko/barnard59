@@ -1,8 +1,6 @@
 const { describe, it } = require('mocha')
 const assert = require('assert')
 const validatePipelineProperty = require('../lib/validatePipelineProperty')
-const Issue = require('../lib/issue')
-const rules = require('../lib/schema')
 const utils = require('../lib/utils')
 const validators = require('../lib/validators')
 const ChecksCollection = require('../lib/checksCollection')
@@ -14,7 +12,7 @@ describe('validatePipelineProperty', () => {
     const pipelineProperties = ['Pipeline', 'Readable']
     const possibleOpProperties = [['Writable'], ['WritableObjectMode'], ['Writable', 'WritableObjectMode']]
     const mode = 'first'
-    const issue = validators.pipelinePropertiesMatchLast.validate(pipeline, pipelineProperties)
+    const issue = validators.pipelinePropertiesMatchFirst.validate(pipeline, pipelineProperties)
 
     for (const opProperties of possibleOpProperties) {
       const checks = new ChecksCollection()
@@ -27,7 +25,7 @@ describe('validatePipelineProperty', () => {
     const pipelineProperties = ['Pipeline', 'Writable']
     const possibleOpProperties = [['Readable'], ['ReadableObjectMode'], ['Readable', 'ReadableObjectMode']]
     const mode = 'last'
-    const issue = Issue.error({ message: rules.pipelinePropertiesMatchLast.messageFailure(pipeline) })
+    const issue = validators.pipelinePropertiesMatchLast.validate(pipeline, [])
 
     for (const opProperties of possibleOpProperties) {
       const checks = new ChecksCollection()
@@ -39,7 +37,7 @@ describe('validatePipelineProperty', () => {
     const possiblePipelineProperties = [['Pipeline', 'Writable'], ['Pipeline', 'WritableObjectMode']]
     const possibleOpProperties = [['Writable'], ['WritableObjectMode'], ['Writable', 'WritableObjectMode']]
     const mode = 'first'
-    const issue = validators.pipelinePropertiesMatchLast.validate(pipeline, ['Writable'])
+    const issue = validators.pipelinePropertiesMatchFirst.validate(pipeline, ['Writable'])
 
     for (const pipelineProperties of possiblePipelineProperties) {
       for (const opProperties of possibleOpProperties) {
@@ -53,12 +51,13 @@ describe('validatePipelineProperty', () => {
     const possiblePipelineProperties = [['Pipeline', 'Readable'], ['Pipeline', 'ReadableObjectMode']]
     const possibleOpProperties = [['Readable'], ['ReadableObjectMode'], ['Readable', 'ReadableObjectMode']]
     const mode = 'last'
-    const issue = Issue.info({ message: rules.pipelinePropertiesMatchLast.messageSuccess(pipeline) })
+    const issue = validators.pipelinePropertiesMatchLast.validate(pipeline, ['ReadableObjectMode'])
 
     for (const pipelineProperties of possiblePipelineProperties) {
       for (const opProperties of possibleOpProperties) {
         const checks = new ChecksCollection()
         validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
+        console.log(checks.pipelines)
         assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
       }
     }

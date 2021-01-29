@@ -11,13 +11,13 @@ const pipelinePropertiesMatchFirst = {
     const pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
     if (!pipelineIsOfRightType) {
       issue = Issue.error({
-        // id: pipelinePropertiesMatchFirst.ruleId,
+        id: pipelinePropertiesMatchFirst.ruleId,
         message: pipelinePropertiesMatchFirst.messageFailureTemplate({ pipeline })
       })
     }
     else {
       issue = Issue.info({
-        // id: pipelinePropertiesMatchFirst.ruleId,
+        id: pipelinePropertiesMatchFirst.ruleId,
         message: pipelinePropertiesMatchFirst.messageSuccessTemplate({ pipeline })
       })
     }
