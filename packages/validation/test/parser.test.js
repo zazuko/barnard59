@@ -351,7 +351,7 @@ describe('parser.getAllOperationProperties', () => {
     const actual = await mockedParser.getAllOperationProperties(input, checks)
     assert.deepStrictEqual(actual, expected)
 
-    const expectedMssg = validators.dependency.messageFailureTemplate({ package: 'foo-bar', operations: 'node:foo-bar#fn' })
+    const expectedMssg = validators.dependency.messageFailureTemplate({ library: 'foo-bar', operations: 'node:foo-bar#fn' })
     assert(checks.genericContainsMessage(expectedMssg))
   })
 })
