@@ -6,18 +6,18 @@ const operation = {
   ruleDescription: 'Manifest.ttl file exists and can be parsed',
   messageSuccessTemplate: template`Metadata file for ${'library'} loaded successfully`,
   messageFailureTemplate: template`Missing metadata file for ${'library'}.\n  The following operations cannot be validated:\n  * "${'operations'}"`,
-  validate: (operationPathExists, module, codelinksWithMissingMetadata) => {
+  validate: (operationPathExists, libraray, codelinksWithMissingMetadata) => {
     let issue
     if (operationPathExists) {
       issue = Issue.info({
         id: operation.ruleId,
-        message: operation.messageSuccessTemplate({ package: module })
+        message: operation.messageSuccessTemplate({ library: libraray })
       })
     }
     else {
       issue = Issue.warning({
         id: operation.ruleId,
-        message: operation.messageFailureTemplate({ package: module, operation: codelinksWithMissingMetadata })
+        message: operation.messageFailureTemplate({ library: libraray, operation: codelinksWithMissingMetadata })
       })
     }
     return issue

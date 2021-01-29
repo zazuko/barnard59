@@ -7,18 +7,18 @@ const dependency = {
   ruleId: 2668,
   messageSuccessTemplate: template`Package ${'library'} found successfully`,
   messageFailureTemplate: template`Missing package ${'library'}\n  The following operations cannot be validated:\n  * "${'operations'}"`,
-  validate: (package, codelinksWithMissingMetadata) => {
+  validate: (library, codelinksWithMissingMetadata) => {
     let issue
-    if (utils.isModuleInstalled(package)) {
+    if (utils.isModuleInstalled(library)) {
       issue = Issue.info({
         id: dependency.ruleId,
-        message: dependency.messageSuccessTemplate({ package: package })
+        message: dependency.messageSuccessTemplate({ library })
       })
     }
     else {
       issue = Issue.error({
         id: dependency.ruleId,
-        message: dependency.messageFailureTemplate({ package: package, operations: codelinksWithMissingMetadata })
+        message: dependency.messageFailureTemplate({ library, operations: codelinksWithMissingMetadata })
       })
     }
     return issue
