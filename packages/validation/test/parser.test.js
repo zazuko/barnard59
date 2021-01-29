@@ -5,8 +5,6 @@ const sinon = require('sinon')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
 const proxyquire = require('proxyquire')
 const parser = require('../lib/parser')
-const Issue = require('../lib/issue')
-const rules = require('../lib/schema')
 const utils = require('../lib/utils')
 const ChecksCollection = require('../lib/checksCollection.js')
 const { turtleToCF } = require('./helpers')
@@ -422,12 +420,8 @@ describe('parser.validatePipelines', () => {
     'Wait 30 min': null,
     'Enjoy!': ['with friends']
   }
-  const expectedPizzaIssue = Issue.warning({
-    message: rules.pipelinePropertiesExist.messageFailure('pizza')
-  })
-  const expectedPancakesIssue = Issue.warning({
-    message: rules.pipelinePropertiesExist.messageFailure('pancakes')
-  })
+  const expectedPizzaIssue = validators.pipelinePropertiesExist.validate('pizza', [])
+  const expectedPancakesIssue = validators.pipelinePropertiesExist.validate('pancakes', [])
 
   it('should issue a warning if pipeline has no readable/writable property', () => {
     const pipeline2properties = {
@@ -453,7 +447,7 @@ describe('parser.validatePipelines', () => {
     for (const pipelineID of ['pizza', 'pancakes']) {
       checks = new ChecksCollection()
 
-      const expectedIssue = Issue.info({ message: rules.pipelinePropertiesExist.messageSuccess(pipelineID) })
+      const expectedIssue = validators.pipelinePropertiesExist.validate(pipelineID, ['Readable'])
       parser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, checks)
       assert(utils.checkArrayContainsObject(checks.pipelines[[pipelineID]], expectedIssue))
     }
