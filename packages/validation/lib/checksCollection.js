@@ -64,11 +64,13 @@ class ChecksCollection {
       return true
     }
 
-    for (const pipeline of this.pipelines) {
+    for (const pipeline of Object.keys(this.pipelines)) {
       if (this.pipelineContainsMessage(mssg, pipeline)) {
         return true
       }
     }
+
+    return false
   }
 
   countChecks (levels) {

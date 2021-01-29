@@ -2,7 +2,6 @@ const { describe, it } = require('mocha')
 const assert = require('assert')
 const rules = require('../lib/rules')
 const validators = require('../lib/validators')
-const fs = require('fs')
 
 describe('rules', () => {
   const requiredFields = ['ruleId', 'ruleDescription', 'messageSuccess', 'messageFailure']
