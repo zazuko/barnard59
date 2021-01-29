@@ -1,7 +1,6 @@
 const { describe, it } = require('mocha')
 const assert = require('assert')
 const ChecksCollection = require('../lib/checksCollection')
-const utils = require('../lib/utils')
 
 let checks
 beforeEach(() => {
