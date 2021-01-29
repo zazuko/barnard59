@@ -4,8 +4,8 @@ const Issue = require('../issue')
 const operation = {
   ruleId: 3,
   ruleDescription: 'Manifest.ttl file exists and can be parsed',
-  messageSuccessTemplate: template`Metadata file for ${'package'} loaded successfully`,
-  messageFailureTemplate: template`Missing metadata file for ${'package'}.\n  The following operations cannot be validated:\n  * "${'operations'}"`,
+  messageSuccessTemplate: template`Metadata file for ${'library'} loaded successfully`,
+  messageFailureTemplate: template`Missing metadata file for ${'library'}.\n  The following operations cannot be validated:\n  * "${'operations'}"`,
   validate: (operationPathExists, module, codelinksWithMissingMetadata) => {
     let issue
     if (operationPathExists) {

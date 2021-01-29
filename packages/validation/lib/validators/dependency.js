@@ -5,8 +5,8 @@ const template = require('../template')
 const dependency = {
   ruleDescription: 'Each dependency must be installed',
   ruleId: 2668,
-  messageSuccessTemplate: template`Package ${'package'} found successfully`,
-  messageFailureTemplate: template`Missing package ${'package'}\n  The following operations cannot be validated:\n  * "${'operations'}"`,
+  messageSuccessTemplate: template`Package ${'library'} found successfully`,
+  messageFailureTemplate: template`Missing package ${'library'}\n  The following operations cannot be validated:\n  * "${'operations'}"`,
   validate: (package, codelinksWithMissingMetadata) => {
     let issue
     if (utils.isModuleInstalled(package)) {
