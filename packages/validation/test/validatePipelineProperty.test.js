@@ -57,7 +57,6 @@ describe('validatePipelineProperty', () => {
       for (const opProperties of possibleOpProperties) {
         const checks = new ChecksCollection()
         validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
-        console.log(checks.pipelines)
         assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
       }
     }

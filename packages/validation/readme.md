@@ -11,32 +11,32 @@ This script will help you understand what is wrong with your pipeline. Documenta
 
 ## Usage
 
-Install globally:  
+Install globally:
 `npm install -g barnard59-pipeline-validation`
 
-CLI help:  
+CLI help:
 `barnard59-validate -h`
 
-Validating a pipeline definition:  
+Validating a pipeline definition:
 `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.ttl`
 
 ### Available Options
 
-* Validating a single pipeline by its IRI:  
-    `barnard59-validate your-pipeline-file -p your-pipeline-iri`  
-    For an example, try:  
+* Validating a single pipeline by its IRI:
+    `barnard59-validate your-pipeline-file -p your-pipeline-iri`
+    For an example, try:
     `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -p http://example.org/pipeline/utc`
-* Exclude warnings from output:  
-    `barnard59-validate your-pipeline-file --quiet`  
-    For an example, try:  
+* Exclude warnings from output:
+    `barnard59-validate your-pipeline-file --quiet`
+    For an example, try:
     `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -q`
-* Show successful validation checks:  
-    `barnard59-validate your-pipeline-file --verbose`  
-    For an example, try:  
+* Show successful validation checks:
+    `barnard59-validate your-pipeline-file --verbose`
+    For an example, try:
     `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -v`
-* Produce an error exit status on warnings (you might want the warnings to show in CI without failing the CI or vice versa):  
-    `barnard59-validate your-pipeline-file --strict`  
-    For an example, try:  
+* Produce an error exit status on warnings (you might want the warnings to show in CI without failing the CI or vice versa):
+    `barnard59-validate your-pipeline-file --strict`
+    For an example, try:
     `barnard59-validate ./sample-pipelines/fetch-json-to-ntriples.json -s`
-* To return error messages in JSON, don't output to a TTY:  
+* To return error messages in JSON, don't output to a TTY:
     `barnard59-validate your-pipeline-file | jq`

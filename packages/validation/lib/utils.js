@@ -42,7 +42,7 @@ function getManifestPath (module) {
   let manifestPath = null
   try {
     const modulePath = removeFilePart(require.resolve(module))
-    const expectedManifestPath = `${modulePath}/operations.ttl`// path.join(modulePath, 'manifest.ttl')
+    const expectedManifestPath = path.join(modulePath, 'operations.ttl')
 
     if (fs.existsSync(expectedManifestPath)) {
       manifestPath = expectedManifestPath
