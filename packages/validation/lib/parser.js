@@ -8,6 +8,7 @@ const utils = require('./utils')
 const Issue = require('./issue')
 const fs = require('fs')
 const validators = require('./validators')
+const validatePipelineProperty = require('./validatePipelineProperty')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -221,10 +222,10 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
     const pipelineProperties = pipeline2properties[pipeline]
 
     if (firstOpProperties !== null) {
-      utils.validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', checks)
+      validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', checks)
     }
     if (lastOpProperties !== null) {
-      utils.validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', checks)
+      validatePipelineProperty(pipeline, pipelineProperties, lastOpProperties, 'last', checks)
     }
 
     const issue = validators.pipelinePropertiesExist.validate(pipeline, pipelineProperties)
