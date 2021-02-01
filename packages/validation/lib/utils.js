@@ -1,31 +1,17 @@
-const path = require('path')
 const deepEqual = require('deep-equal')
 const fs = require('fs')
+const path = require('path')
 
 function removeFilePart (dirname) {
   return path.parse(dirname).dir
 }
 
 function checkArrayContainsField (array, field, value) {
-  let found = false
-  for (let i = 0; i < array.length; i++) {
-    if (array[i][field] === value) {
-      found = true
-      break
-    }
-  }
-  return found
+  return Boolean(array.find((element) => element[field] === value))
 }
 
 function checkArrayContainsObject (array, obj) {
-  let found = false
-  for (let i = 0; i < array.length; i++) {
-    if (deepEqual(array[i], obj)) {
-      found = true
-      break
-    }
-  }
-  return found
+  return Boolean(array.find((element) => deepEqual(element, obj)))
 }
 
 function isModuleInstalled (module) {
@@ -34,8 +20,8 @@ function isModuleInstalled (module) {
     return true
   }
   catch (err) {
-    return false
   }
+  return false
 }
 
 function getManifestPath (module) {

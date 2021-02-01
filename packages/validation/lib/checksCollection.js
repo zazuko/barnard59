@@ -1,4 +1,3 @@
-
 const utils = require('./utils')
 
 class ChecksCollection {
@@ -24,9 +23,7 @@ class ChecksCollection {
     if (levels !== null) {
       return this.generic.filter((issue) => levels.includes(issue.level))
     }
-    else {
-      return this.generic
-    }
+    return this.generic
   }
 
   getPipelineChecks (pipeline, levels = null) {
@@ -34,13 +31,9 @@ class ChecksCollection {
       if (levels !== null) {
         return this.pipelines[pipeline].filter((issue) => levels.includes(issue.level))
       }
-      else {
-        return this.pipelines[pipeline]
-      }
+      return this.pipelines[pipeline]
     }
-    else {
-      return []
-    }
+    return []
   }
 
   getChecks (levels = null) {
@@ -81,9 +74,7 @@ class ChecksCollection {
     if (strict) {
       return this.countChecks(['error', 'warning'])
     }
-    else {
-      return this.countChecks('error')
-    }
+    return this.countChecks('error')
   }
 
   print (levels) {
@@ -104,7 +95,7 @@ class ChecksCollection {
     }
   }
 
-  filterAndJsonify (levels) {
+  filterToJSON (levels) {
     return JSON.stringify(this.getChecks(levels))
   }
 }

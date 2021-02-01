@@ -1,14 +1,14 @@
 const cf = require('clownface')
-const fromFile = require('rdf-utils-fs/fromFile')
+const fs = require('fs')
 const namespace = require('@rdfjs/namespace')
 const rdf = require('rdf-ext')
 const readline = require('readline')
+const fromFile = require('rdf-utils-fs/fromFile')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
-const utils = require('./utils')
 const Issue = require('./issue')
-const fs = require('fs')
-const validators = require('./validators')
+const utils = require('./utils')
 const validatePipelineProperty = require('./validatePipelineProperty')
+const validators = require('./validators')
 
 const ns = {
   schema: namespace('http://schema.org/'),

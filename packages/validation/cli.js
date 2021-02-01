@@ -33,7 +33,7 @@ async function main (file, options) {
   checks.print(options.levels)
 
   if (!process.stdout.isTTY) {
-    console.log(checks.filterAndJsonify(options.levels))
+    console.log(checks.filterToJSON(options.levels))
   }
 
   if (checks.countIssues(options.strict)) {

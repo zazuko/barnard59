@@ -23,9 +23,7 @@ class Issue {
     if (this.id) {
       return chalk.blue(`[${String(this.id).padStart(4, '0')}]  ` + colors[this.level](msg))
     }
-    else {
-      return colors[this.level](msg)
-    }
+    return colors[this.level](msg)
   }
 
   static info ({ step, operation, message, id }) {
