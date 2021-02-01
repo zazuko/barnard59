@@ -17,7 +17,7 @@ const operation = {
     else {
       issue = Issue.warning({
         id: operation.ruleId,
-        message: operation.messageFailureTemplate({ library: libraray, operation: codelinksWithMissingMetadata })
+        message: operation.messageFailureTemplate({ library: libraray, operations: codelinksWithMissingMetadata })
       })
     }
     return issue
