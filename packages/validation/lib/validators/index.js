@@ -1,7 +1,31 @@
-const fs = require('fs')
-const files = fs.readdirSync(__dirname)
+const codelink = require('./codelink')
+const dependency = require('./dependency')
+const firstOperationIsReadable = require('./firstOperationIsReadable')
+const operation = require('./operation')
+const operationHasOperationProperty = require('./operationHasOperationProperty')
+const operationPropertiesExist = require('./operationPropertiesExist')
+const pipelinePropertiesExist = require('./pipelinePropertiesExist')
+const pipelinePropertiesMatchFirst = require('./pipelinePropertiesMatchFirst')
+const pipelinePropertiesMatchLast = require('./pipelinePropertiesMatchLast')
+const previousOperationHasMetadata = require('./previousOperationHasMetadata')
+const readableBeforeWritable = require('./readableBeforeWritable')
+const readableObjectModeBeforeWritableObjectMode = require('./readableObjectModeBeforeWritableObjectMode')
+const writableAfterReadable = require('./writableAfterReadable')
+const writableObjectModeAfterReadableObjectMode = require('./writableObjectModeAfterReadableObjectMode')
 
-for (const file of files) {
-  const func = file.replace('.js', '')
-  module.exports[func] = require('./' + func)
+module.exports = {
+  codelink,
+  dependency,
+  firstOperationIsReadable,
+  operation,
+  operationHasOperationProperty,
+  operationPropertiesExist,
+  pipelinePropertiesExist,
+  pipelinePropertiesMatchFirst,
+  pipelinePropertiesMatchLast,
+  previousOperationHasMetadata,
+  readableBeforeWritable,
+  readableObjectModeBeforeWritableObjectMode,
+  writableAfterReadable,
+  writableObjectModeAfterReadableObjectMode
 }

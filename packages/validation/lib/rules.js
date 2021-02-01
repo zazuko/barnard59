@@ -1,10 +1,15 @@
 const validators = require('./validators')
-const rules = []
 
-for (const validator of Object.keys(validators)) {
-  if (validator !== 'index') {
-    rules.push(validators[validator].describeRule())
-  }
+// { [ruleId]: validator }
+const rulesById = Object.keys(validators)
+  .reduce((acc, rule) => {
+    acc[rule.ruleId] = rule
+    return acc
+  }, {})
+
+const rules = Object.values(validators).map((validator) => validator.describeRule())
+
+module.exports = {
+  rules,
+  rulesById
 }
-
-module.exports = rules
