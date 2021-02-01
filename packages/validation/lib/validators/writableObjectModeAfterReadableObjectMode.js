@@ -1,4 +1,4 @@
-const template = require('../template')
+const { template } = require('../utils')
 const Issue = require('../issue')
 
 const writableObjectModeAfterReadableObjectMode = {

@@ -31,8 +31,18 @@ function getManifestPath (module) {
   return manifestPath
 }
 
+function template ([first, ...rest], ...fields) {
+  return (values = {}) => {
+    const templated = fields.map(
+      (field) => field in values ? values[field] : '${' + field + '}'
+    )
+    return rest.reduce((acc, str, i) => acc + templated[i] + str, first)
+  }
+}
+
 module.exports = {
   removeFilePart,
   getManifestPath,
-  isModuleInstalled
+  isModuleInstalled,
+  template
 }

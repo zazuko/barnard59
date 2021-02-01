@@ -1,5 +1,5 @@
 const Issue = require('../issue')
-const template = require('../template')
+const { template } = require('../utils')
 
 const codelink = {
   ruleDescription: 'Each codelink is described by code.implementedBy/code.link',

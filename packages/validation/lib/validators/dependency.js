@@ -1,6 +1,6 @@
 const Issue = require('../issue')
 const utils = require('../utils')
-const template = require('../template')
+const { template } = require('../utils')
 
 const dependency = {
   ruleDescription: 'Each dependency must be installed',
