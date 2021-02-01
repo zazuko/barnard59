@@ -6,32 +6,22 @@ const operationHasOperationProperty = {
   ruleDescription: 'Operation has property "Operation"',
   messageSuccessTemplate: template`Validated: operation ${'operation'} is of type "Operation"`,
   messageFailureTemplate: template`Invalid operation: ${'operation'} is not of type "Operation"`,
-  validate: (isOperation, step, operation) => {
+  validate (isOperation, step, operation) {
     let issue
     if (!isOperation) {
-      issue = Issue.error({
-        id: operationHasOperationProperty.ruleId,
-        message: operationHasOperationProperty.messageFailureTemplate({ operation }),
-        step,
-        operation
-      })
+      issue = Issue.error({ id: this.ruleId, step, operation })
     }
     else {
-      issue = Issue.info({
-        id: operationHasOperationProperty.ruleId,
-        message: operationHasOperationProperty.messageSuccessTemplate({ operation }),
-        step,
-        operation
-      })
+      issue = Issue.info({ id: this.ruleId, step, operation })
     }
     return issue
   },
-  describeRule: () => {
+  describeRule () {
     return {
-      ruleId: operationHasOperationProperty.ruleId,
-      ruleDescription: operationHasOperationProperty.ruleDescription,
-      messageSuccess: operationHasOperationProperty.messageSuccessTemplate(),
-      messageFailure: operationHasOperationProperty.messageFailureTemplate()
+      ruleId: this.ruleId,
+      ruleDescription: this.ruleDescription,
+      messageSuccess: this.messageSuccessTemplate(),
+      messageFailure: this.messageFailureTemplate()
     }
   }
 }

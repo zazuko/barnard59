@@ -6,32 +6,22 @@ const operationPropertiesExist = {
   ruleDescription: 'Operation has at least one property defined. Recognized choices: Readable, Writable, ReadableObjectMode, WritableObjectMode',
   messageSuccessTemplate: template`Validated: properties for operation ${'operation'} are defined`,
   messageFailureTemplate: template`Cannot validate operation ${'operation'}: no metadata`,
-  validate: (operationProperties, step, operation) => {
+  validate (operationProperties, step, operation) {
     let issue
     if (operationProperties === null) {
-      issue = Issue.warning({
-        id: operationPropertiesExist.ruleId,
-        message: operationPropertiesExist.messageFailureTemplate({ operation }),
-        step,
-        operation
-      })
+      issue = Issue.warning({ id: this.ruleId, step, operation })
     }
     else {
-      issue = Issue.info({
-        id: operationPropertiesExist.ruleId,
-        message: operationPropertiesExist.messageSuccessTemplate({ operation }),
-        step,
-        operation
-      })
+      issue = Issue.info({ id: this.ruleId, step, operation })
     }
     return issue
   },
-  describeRule: () => {
+  describeRule () {
     return {
-      ruleId: operationPropertiesExist.ruleId,
-      ruleDescription: operationPropertiesExist.ruleDescription,
-      messageSuccess: operationPropertiesExist.messageSuccessTemplate(),
-      messageFailure: operationPropertiesExist.messageFailureTemplate()
+      ruleId: this.ruleId,
+      ruleDescription: this.ruleDescription,
+      messageSuccess: this.messageSuccessTemplate(),
+      messageFailure: this.messageFailureTemplate()
     }
   }
 }

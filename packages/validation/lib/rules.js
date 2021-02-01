@@ -1,7 +1,7 @@
 const validators = require('./validators')
 
 // { [ruleId]: validator }
-const rulesById = Object.keys(validators)
+const rulesById = Object.values(validators)
   .reduce((acc, rule) => {
     acc[rule.ruleId] = rule
     return acc

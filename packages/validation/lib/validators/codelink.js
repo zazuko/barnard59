@@ -6,30 +6,22 @@ const codelink = {
   ruleId: 1337,
   messageSuccessTemplate: template`Defined with both code.implementedBy & code.link`,
   messageFailureTemplate: template`Missing code.implementedBy/code.link`,
-  validate: (implementedBy, codeLink, currStepName) => {
+  validate (implementedBy, codeLink, currStepName) {
     let issue
     if (implementedBy && codeLink) {
-      issue = Issue.info({
-        id: codelink.ruleId,
-        message: codelink.messageSuccessTemplate(),
-        step: currStepName
-      })
+      issue = Issue.info({ id: this.ruleId, step: currStepName })
     }
     else {
-      issue = Issue.error({
-        id: codelink.ruleId,
-        message: codelink.messageFailureTemplate(),
-        step: currStepName
-      })
+      issue = Issue.error({ id: this.ruleId, step: currStepName })
     }
     return issue
   },
-  describeRule: () => {
+  describeRule () {
     return {
-      ruleId: codelink.ruleId,
-      ruleDescription: codelink.ruleDescription,
-      messageSuccess: codelink.messageSuccessTemplate(),
-      messageFailure: codelink.messageFailureTemplate()
+      ruleId: this.ruleId,
+      ruleDescription: this.ruleDescription,
+      messageSuccess: this.messageSuccessTemplate(),
+      messageFailure: this.messageFailureTemplate()
     }
   }
 }

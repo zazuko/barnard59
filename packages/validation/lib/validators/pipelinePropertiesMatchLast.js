@@ -6,29 +6,23 @@ const pipelinePropertiesMatchLast = {
   ruleDescription: 'Pipeline should have the same type if its last stream is Readable(ObjectMode)',
   messageFailureTemplate: template`The pipeline ${'pipeline'} must be of type Readable or ReadableObjectMode`,
   messageSuccessTemplate: template`The pipeline mode for ${'pipeline'} matches last stream`,
-  validate: (pipeline, pipelineProperties) => {
+  validate (pipeline, pipelineProperties) {
     let issue
     const pipelineIsOfRightType = pipelineProperties.includes('Readable') || pipelineProperties.includes('ReadableObjectMode')
     if (!pipelineIsOfRightType) {
-      issue = Issue.error({
-        id: pipelinePropertiesMatchLast.ruleId,
-        message: pipelinePropertiesMatchLast.messageFailureTemplate({ pipeline })
-      })
+      issue = Issue.error({ id: this.ruleId, templateData: { pipeline } })
     }
     else {
-      issue = Issue.info({
-        id: pipelinePropertiesMatchLast.ruleId,
-        message: pipelinePropertiesMatchLast.messageSuccessTemplate({ pipeline })
-      })
+      issue = Issue.info({ id: this.ruleId, templateData: { pipeline } })
     }
     return issue
   },
-  describeRule: () => {
+  describeRule () {
     return {
-      ruleId: pipelinePropertiesMatchLast.ruleId,
-      ruleDescription: pipelinePropertiesMatchLast.ruleDescription,
-      messageSuccess: pipelinePropertiesMatchLast.messageSuccessTemplate(),
-      messageFailure: pipelinePropertiesMatchLast.messageFailureTemplate()
+      ruleId: this.ruleId,
+      ruleDescription: this.ruleDescription,
+      messageSuccess: this.messageSuccessTemplate(),
+      messageFailure: this.messageFailureTemplate()
     }
   }
 }

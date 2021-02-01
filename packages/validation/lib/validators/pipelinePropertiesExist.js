@@ -8,27 +8,23 @@ const pipelinePropertiesExist = {
   ruleDescription: `Pipeline has at least one property defined. Recognized choices: ${acceptedPipelineProperties.join(', ')}`,
   messageSuccessTemplate: template`Validated: property for pipeline ${'pipeline'} is defined`,
   messageFailureTemplate: template`Cannot validate pipeline ${'pipeline'}: the pipeline mode (Readable(ObjectMode)/Writable(ObjectMode)) is not defined`,
-  validate: (pipeline, pipelineProperties) => {
+  validate (pipeline, pipelineProperties) {
     let issue
-    const hasDefinedMode = (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))
+    const hasDefinedMode = pipelineProperties.some(p => acceptedPipelineProperties.includes(p))
     if (!hasDefinedMode) {
-      issue = Issue.warning({
-        message: pipelinePropertiesExist.messageFailureTemplate({ pipeline })
-      })
+      issue = Issue.warning({ id: this.ruleId, templateData: { pipeline } })
     }
     else {
-      issue = Issue.info({
-        message: pipelinePropertiesExist.messageSuccessTemplate({ pipeline })
-      })
+      issue = Issue.info({ id: this.ruleId, templateData: { pipeline } })
     }
     return issue
   },
-  describeRule: () => {
+  describeRule () {
     return {
-      ruleId: pipelinePropertiesExist.ruleId,
-      ruleDescription: pipelinePropertiesExist.ruleDescription,
-      messageSuccess: pipelinePropertiesExist.messageSuccessTemplate(),
-      messageFailure: pipelinePropertiesExist.messageFailureTemplate()
+      ruleId: this.ruleId,
+      ruleDescription: this.ruleDescription,
+      messageSuccess: this.messageSuccessTemplate(),
+      messageFailure: this.messageFailureTemplate()
     }
   }
 }

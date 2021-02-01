@@ -6,32 +6,22 @@ const readableBeforeWritable = {
   ruleDescription: 'Writable operation must always be preceded by a Readable operation',
   messageSuccessTemplate: template`Validated operation ${'operation'}: a Writable operation must always be preceded by a Readable operation`,
   messageFailureTemplate: template`Invalid operation ${'operation'}: previous operation is not Readable`,
-  validate: (lastIsReadable, step, operation) => {
+  validate (lastIsReadable, step, operation) {
     let issue
     if (!lastIsReadable) {
-      issue = Issue.error({
-        id: readableBeforeWritable.ruleId,
-        message: readableBeforeWritable.messageFailureTemplate({ operation }),
-        step,
-        operation
-      })
+      issue = Issue.error({ id: this.ruleId, step, operation })
     }
     else {
-      issue = Issue.info({
-        id: readableBeforeWritable.ruleId,
-        message: readableBeforeWritable.messageSuccessTemplate({ operation }),
-        step,
-        operation
-      })
+      issue = Issue.info({ id: this.ruleId, step, operation })
     }
     return issue
   },
-  describeRule: () => {
+  describeRule () {
     return {
-      ruleId: readableBeforeWritable.ruleId,
-      ruleDescription: readableBeforeWritable.ruleDescription,
-      messageSuccess: readableBeforeWritable.messageSuccessTemplate(),
-      messageFailure: readableBeforeWritable.messageFailureTemplate()
+      ruleId: this.ruleId,
+      ruleDescription: this.ruleDescription,
+      messageSuccess: this.messageSuccessTemplate(),
+      messageFailure: this.messageFailureTemplate()
     }
   }
 }

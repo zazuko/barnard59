@@ -6,13 +6,33 @@ const colors = {
   error: chalk.red
 }
 
+const levelsTemplates = {
+  info: 'messageSuccessTemplate',
+  warning: 'messageFailureTemplate',
+  error: 'messageFailureTemplate'
+}
+
 class Issue {
-  constructor ({ step, operation, message, level, id } = {}) {
-    this.step = step
-    this.operation = operation
-    this.message = message
-    this.level = level
+  constructor ({ step, operation, message, level, id, templateData } = {}) {
     this.id = id
+    this.level = level
+    this.operation = operation
+    this.step = step
+    this.message = message
+    // extra metadata to be passed to the message template
+    this.templateData = {}
+    if (typeof templateData === 'object') {
+      this.templateData = templateData
+    }
+
+    if (this.id) {
+      const { rulesById } = require('./rules')
+      const template = levelsTemplates[this.level]
+      this.message = rulesById[this.id][template]({
+        ...this.templateData,
+        operation: this.operation
+      })
+    }
   }
 
   toString () {
@@ -26,16 +46,16 @@ class Issue {
     return colors[this.level](msg)
   }
 
-  static info ({ step, operation, message, id }) {
-    return new Issue({ step, operation, message, id, level: 'info' })
+  static info ({ step, operation, message, id, templateData }) {
+    return new Issue({ step, operation, message, id, templateData, level: 'info' })
   }
 
-  static warning ({ step, operation, message, id }) {
-    return new Issue({ step, operation, message, id, level: 'warning' })
+  static warning ({ step, operation, message, id, templateData }) {
+    return new Issue({ step, operation, message, id, templateData, level: 'warning' })
   }
 
-  static error ({ step, operation, message, id }) {
-    return new Issue({ step, operation, message, id, level: 'error' })
+  static error ({ step, operation, message, id, templateData }) {
+    return new Issue({ step, operation, message, id, templateData, level: 'error' })
   }
 }
 
