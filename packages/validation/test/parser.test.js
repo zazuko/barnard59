@@ -1,14 +1,13 @@
 const { describe, it } = require('mocha')
 const assert = require('assert')
-const path = require('path')
-const sinon = require('sinon')
 const iriResolve = require('rdf-loader-code/lib/iriResolve')
+const path = require('path')
 const proxyquire = require('proxyquire')
+const sinon = require('sinon')
 const parser = require('../lib/parser')
-const utils = require('../lib/utils')
 const ChecksCollection = require('../lib/checksCollection.js')
-const { turtleToCF } = require('./helpers')
 const validators = require('../lib/validators')
+const { turtleToCF, genericContainsMessage, checkArrayContainsObject } = require('./helpers')
 
 const mock = {}
 const mockedParser = proxyquire('../lib/parser', {
@@ -352,7 +351,7 @@ describe('parser.getAllOperationProperties', () => {
     assert.deepStrictEqual(actual, expected)
 
     const expectedMssg = validators.dependency.messageFailureTemplate({ library: 'foo-bar', operations: 'node:foo-bar#fn' })
-    assert(checks.genericContainsMessage(expectedMssg))
+    assert(genericContainsMessage(checks, expectedMssg))
   })
 })
 
@@ -434,8 +433,8 @@ describe('parser.validatePipelines', () => {
     const actualPizzaIssues = checks.getPipelineChecks('pizza', 'warning')
     const actualPancakesIssues = checks.getPipelineChecks('pancakes', 'warning')
 
-    assert(utils.checkArrayContainsObject(actualPizzaIssues, expectedPizzaIssue))
-    assert(utils.checkArrayContainsObject(actualPancakesIssues, expectedPancakesIssue))
+    assert(checkArrayContainsObject(actualPizzaIssues, expectedPizzaIssue))
+    assert(checkArrayContainsObject(actualPancakesIssues, expectedPancakesIssue))
   })
 
   it('should issue an info if pipeline has readable/writable property', () => {
@@ -449,7 +448,7 @@ describe('parser.validatePipelines', () => {
 
       const expectedIssue = validators.pipelinePropertiesExist.validate(pipelineID, ['Readable'])
       parser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, checks)
-      assert(utils.checkArrayContainsObject(checks.pipelines[pipelineID], expectedIssue))
+      assert(checkArrayContainsObject(checks.pipelines[pipelineID], expectedIssue))
     }
   })
 })

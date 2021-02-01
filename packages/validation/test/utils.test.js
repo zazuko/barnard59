@@ -2,6 +2,7 @@ const { describe, it } = require('mocha')
 const assert = require('assert')
 const utils = require('../lib/utils')
 const fs = require('fs')
+const { checkArrayContainsField, checkArrayContainsObject } = require('./helpers')
 
 describe('utils.removeFilePart', () => {
   it('should remove last file part', () => {
@@ -17,38 +18,38 @@ describe('utils.removeFilePart', () => {
     assert(actual === expected)
   })
 })
-describe('utils.checkArrayContainsField', () => {
+describe('checkArrayContainsField', () => {
   const array = [{ gender: 'male', age: 38 }, { gender: 'male', job: 'unemployed' }]
   it('should return true if field with given value exists in at least one object', () => {
     const expected = true
-    const actual = utils.checkArrayContainsField(array, 'age', 38)
+    const actual = checkArrayContainsField(array, 'age', 38)
     assert(actual === expected)
   })
   it('should return false if field with given value does not exists in any object', () => {
     const expected = false
-    const actual = utils.checkArrayContainsField(array, 'age', 17)
+    const actual = checkArrayContainsField(array, 'age', 17)
     assert(actual === expected)
   })
   it('should return false if field does not exists in any object', () => {
     const expected = false
-    const actual = utils.checkArrayContainsField(array, 'address', 'Bahnhofstrasse')
+    const actual = checkArrayContainsField(array, 'address', 'Bahnhofstrasse')
     assert(actual === expected)
   })
 })
 
-describe('utils.checkArrayContainsObject', () => {
+describe('checkArrayContainsObject', () => {
   const array = [{ gender: 'male', age: 38 }, { gender: 'male', job: 'unemployed' }]
   it('should return true if same object exists in array', () => {
     const obj = { gender: 'male', age: 38 }
     const expected = true
-    const actual = utils.checkArrayContainsObject(array, obj)
+    const actual = checkArrayContainsObject(array, obj)
     assert(actual === expected)
   })
   it('should return false if same object does not exists in array', () => {
     const objects = [{ gender: 'male', age: 17 }, { phone: 123 }, {}]
     const expected = false
     for (const obj of objects) {
-      const actual = utils.checkArrayContainsObject(array, obj)
+      const actual = checkArrayContainsObject(array, obj)
       assert(actual === expected)
     }
   })

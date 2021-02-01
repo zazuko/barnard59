@@ -1,5 +1,3 @@
-const utils = require('./utils')
-
 class ChecksCollection {
   constructor () {
     this.generic = []
@@ -42,28 +40,6 @@ class ChecksCollection {
       checks = checks.concat(this.getPipelineChecks(pipeline, levels))
     }
     return checks
-  }
-
-  genericContainsMessage (mssg) {
-    return utils.checkArrayContainsField(this.generic, 'message', mssg)
-  }
-
-  pipelineContainsMessage (mssg, pipeline) {
-    return utils.checkArrayContainsField(this.pipelines[pipeline], 'message', mssg)
-  }
-
-  containsMessage (mssg) {
-    if (this.genericContainsMessage(mssg)) {
-      return true
-    }
-
-    for (const pipeline of Object.keys(this.pipelines)) {
-      if (this.pipelineContainsMessage(mssg, pipeline)) {
-        return true
-      }
-    }
-
-    return false
   }
 
   countChecks (levels) {

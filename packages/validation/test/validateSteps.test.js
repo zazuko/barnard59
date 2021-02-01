@@ -2,8 +2,8 @@ const { describe, it } = require('mocha')
 const assert = require('assert')
 const parser = require('../lib/parser')
 const ChecksCollection = require('../lib/checksCollection.js')
-const utils = require('../lib/utils')
 const validators = require('../lib/validators')
+const { pipelineContainsMessage, checkArrayContainsObject } = require('./helpers')
 
 const properties = {
   o: ['Operation'],
@@ -84,7 +84,7 @@ describe('parser.validateSteps', () => {
 
     parser.validateSteps({ pipelines, properties }, checks)
     const expIssue = validators.operationPropertiesExist.validate(null, 'n-step', 'n')
-    assert(utils.checkArrayContainsObject(checks.pipelines.p1, expIssue))
+    assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
   it('should report found metadata', () => {
     const pipelines = pipelinesToSteps({
@@ -95,7 +95,7 @@ describe('parser.validateSteps', () => {
     parser.validateSteps({ pipelines, properties }, checks)
 
     const expIssue = validators.operationPropertiesExist.validate('not-null', 'rw-step', 'rw')
-    assert(utils.checkArrayContainsObject(checks.pipelines.p1, expIssue))
+    assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
 
   it('should report operations missing p:Operation', () => {
@@ -107,7 +107,7 @@ describe('parser.validateSteps', () => {
     parser.validateSteps({ pipelines, properties }, checks)
 
     const expIssue = validators.operationHasOperationProperty.validate(false, 'e-step', 'e')
-    assert(utils.checkArrayContainsObject(checks.pipelines.p1, expIssue))
+    assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
 
   it('should report non-writable operation being written into', () => {
@@ -120,7 +120,7 @@ describe('parser.validateSteps', () => {
     })
     parser.validateSteps({ pipelines, properties }, checks)
     const expIssue = validators.writableAfterReadable.validate(false, 'or-step', 'or')
-    assert(utils.checkArrayContainsObject(checks.pipelines.p1, expIssue))
+    assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
 
   it('should report error if first operation is writable', () => {
@@ -133,7 +133,7 @@ describe('parser.validateSteps', () => {
     parser.validateSteps({ pipelines, properties }, checks)
 
     const expIssue = validators.firstOperationIsReadable.validate(false, 'ow-step', 'ow')
-    assert(utils.checkArrayContainsObject(checks.pipelines.p1, expIssue))
+    assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
   it('should report bad mix of normal streams and object-mode streams', () => {
     const pipelines = pipelinesToSteps({
@@ -166,7 +166,7 @@ describe('parser.validateSteps', () => {
 
     Object.keys(pipelines).forEach((pipeline) => {
       const [_erroredOp, errorMessage] = expectedErrors[pipeline]
-      checks.pipelineContainsMessage(errorMessage, pipeline)
+      pipelineContainsMessage(checks, errorMessage, pipeline)
     })
   })
 })

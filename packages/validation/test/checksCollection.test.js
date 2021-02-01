@@ -1,6 +1,7 @@
 const { describe, it } = require('mocha')
 const assert = require('assert')
 const ChecksCollection = require('../lib/checksCollection')
+const { containsMessage } = require('./helpers')
 
 let checks
 beforeEach(() => {
@@ -110,14 +111,14 @@ describe('containsMessage', () => {
     checks.addGenericCheck({ name: 'volleyball', message: 'This message exists' })
     checks.addPipelineCheck({ name: 'football', message: 'And this as well!' }, 'pipeline of awesome')
     const expected = true
-    const actual = checks.containsMessage('This message exists')
+    const actual = containsMessage(checks, 'This message exists')
     assert(actual === expected)
   })
   it('should return false if message does not exists in checks', () => {
     checks.addGenericCheck({ name: 'volleyball', message: 'This message exists' })
     checks.addPipelineCheck({ name: 'football', message: 'And this as well!' }, 'pipeline of awesome')
     const expected = false
-    const actual = checks.containsMessage('No such message')
+    const actual = containsMessage(checks, 'No such message')
     assert(actual === expected)
   })
 })
