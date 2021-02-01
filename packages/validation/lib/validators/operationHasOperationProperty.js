@@ -4,8 +4,8 @@ const Issue = require('../issue')
 const operationHasOperationProperty = {
   ruleId: 8,
   ruleDescription: 'Operation has property "Operation"',
-  messageSuccessTemplate: template`Validated: operation ${'operation'} is of "Operation" type.`,
-  messageFailureTemplate: template`Invalid operation: ${'operation'} is not of "Operation" type.`,
+  messageSuccessTemplate: template`Validated: operation ${'operation'} is of type "Operation"`,
+  messageFailureTemplate: template`Invalid operation: ${'operation'} is not of type "Operation"`,
   validate: (isOperation, step, operation) => {
     let issue
     if (!isOperation) {

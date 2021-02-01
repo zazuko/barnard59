@@ -4,8 +4,8 @@ const Issue = require('../issue')
 const readableObjectModeBeforeWritableObjectMode = {
   ruleId: 11,
   ruleDescription: 'WritableObjectMode operation must always be preceded by a ReadableObjectMode operation',
-  messageSuccessTemplate: template`Validated operation ${'operation'}: a writableObjectMode operation must always be preceded by a readableObjectMode operation`,
-  messageFailureTemplate: template`Invalid operation ${'operation'}: previous operation is not readableObjectMode`,
+  messageSuccessTemplate: template`Validated operation ${'operation'}: a WritableObjectMode operation must always be preceded by a ReadableObjectMode operation`,
+  messageFailureTemplate: template`Invalid operation ${'operation'}: previous operation is not ReadableObjectMode`,
   validate: (lastIsReadableObjectMode, step, operation) => {
     let issue
     if (!lastIsReadableObjectMode) {

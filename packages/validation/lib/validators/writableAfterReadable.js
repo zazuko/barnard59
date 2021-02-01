@@ -3,9 +3,9 @@ const Issue = require('../issue')
 
 const writableAfterReadable = {
   ruleId: 12,
-  ruleDescription: 'Readable operation must always be followed by a writable operation',
-  messageSuccessTemplate: template`Validated operation ${'operation'}: a readable operation must always be followed by a writable operation`,
-  messageFailureTemplate: template`Invalid operation ${'operation'}: next operation is not writable`,
+  ruleDescription: 'Readable operation must always be followed by a Writable operation',
+  messageSuccessTemplate: template`Validated operation ${'operation'}: a Readable operation must always be followed by a Writable operation`,
+  messageFailureTemplate: template`Invalid operation ${'operation'}: next operation is not Writable`,
   validate: (isWritable, step, operation) => {
     let issue
     if (!isWritable) {

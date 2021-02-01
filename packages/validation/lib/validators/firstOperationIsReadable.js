@@ -5,7 +5,7 @@ const firstOperationIsReadable = {
   ruleId: 9,
   ruleDescription: 'If there exists more than one step, first step must be either Readable or ReadableObjectMode',
   messageSuccessTemplate: template`Validated operation ${'operation'}: first operation must be either Readable or ReadableObjectMode`,
-  messageFailureTemplate: template`Invalid operation ${'operation'}: it is neither Readable or ReadableObjectMode`,
+  messageFailureTemplate: template`Invalid operation ${'operation'}: it is neither Readable nor ReadableObjectMode`,
   validate: (isReadableOrReadableObjectMode, step, operation) => {
     let issue
     if (!isReadableOrReadableObjectMode) {

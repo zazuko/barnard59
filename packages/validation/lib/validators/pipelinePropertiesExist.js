@@ -5,9 +5,9 @@ const acceptedPipelineProperties = ['Readable', 'ReadableObjectMode', 'Writable'
 
 const pipelinePropertiesExist = {
   ruleId: 4,
-  ruleDescription: 'Pipeline has at least one property defined. Recognzed choices: readable, writable, readableObjectMode, writableObjectMode',
+  ruleDescription: `Pipeline has at least one property defined. Recognized choices: ${acceptedPipelineProperties.join(', ')}`,
   messageSuccessTemplate: template`Validated: property for pipeline ${'pipeline'} is defined`,
-  messageFailureTemplate: template`Cannot validate pipeline ${'pipeline'}: the pipeline mode (readable(ObjectMode)/writable(ObjectMode)) is not defined`,
+  messageFailureTemplate: template`Cannot validate pipeline ${'pipeline'}: the pipeline mode (Readable(ObjectMode)/Writable(ObjectMode)) is not defined`,
   validate: (pipeline, pipelineProperties) => {
     let issue
     const hasDefinedMode = (pipelineProperties.some(p => acceptedPipelineProperties.includes(p)))

@@ -3,9 +3,9 @@ const Issue = require('../issue')
 
 const writableObjectModeAfterReadableObjectMode = {
   ruleId: 13,
-  ruleDescription: 'ReadableObjectMode operation must always be followed by a writableObjectMode operation',
-  messageSuccessTemplate: template`Validated operation ${'operation'}: a readableObjectMode operation must always be followed by a writableObjectMode operation`,
-  messageFailureTemplate: template`Invalid operation ${'operation'}: next operation is not writableObjectMode`,
+  ruleDescription: 'ReadableObjectMode operation must be followed by a WritableObjectMode operation',
+  messageSuccessTemplate: template`Validated operation ${'operation'}: a ReadableObjectMode operation must be followed by a WritableObjectMode operation`,
+  messageFailureTemplate: template`Invalid operation ${'operation'}: next operation is not WritableObjectMode`,
   validate: (isWritableObjectMode, step, operation) => {
     let issue
     if (!isWritableObjectMode) {

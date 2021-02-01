@@ -3,8 +3,8 @@ const Issue = require('../issue')
 
 const readableBeforeWritable = {
   ruleId: 10,
-  ruleDescription: 'Writable operation must always be preceded by a readable operation',
-  messageSuccessTemplate: template`Validated operation ${'operation'}: a writable operation must always be preceded by a readable operation`,
+  ruleDescription: 'Writable operation must always be preceded by a Readable operation',
+  messageSuccessTemplate: template`Validated operation ${'operation'}: a Writable operation must always be preceded by a Readable operation`,
   messageFailureTemplate: template`Invalid operation ${'operation'}: previous operation is not Readable`,
   validate: (lastIsReadable, step, operation) => {
     let issue

@@ -3,9 +3,9 @@ const Issue = require('../issue')
 
 const operationPropertiesExist = {
   ruleId: 7,
-  ruleDescription: 'Operation has at least one property defined. Recognzed choices: readable, writable, readableObjectMode, writableObjectMode',
+  ruleDescription: 'Operation has at least one property defined. Recognized choices: Readable, Writable, ReadableObjectMode, WritableObjectMode',
   messageSuccessTemplate: template`Validated: properties for operation ${'operation'} are defined`,
-  messageFailureTemplate: template`Cannot validate operation ${'operation'}: no metadata.`,
+  messageFailureTemplate: template`Cannot validate operation ${'operation'}: no metadata`,
   validate: (operationProperties, step, operation) => {
     let issue
     if (operationProperties === null) {

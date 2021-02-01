@@ -3,7 +3,7 @@ const Issue = require('../issue')
 
 const pipelinePropertiesMatchFirst = {
   ruleId: 5,
-  ruleDescription: 'Pipeline should have the same type if its first stream is writable(ObjecMode)',
+  ruleDescription: 'Pipeline should have the same type if its first stream is Writable(ObjectMode)',
   messageFailureTemplate: template`The pipeline ${'pipeline'} must be of type Writable or WritableObjectMode`,
   messageSuccessTemplate: template`The pipeline mode for ${'pipeline'} matches first stream`,
   validate: (pipeline, pipelineProperties) => {
