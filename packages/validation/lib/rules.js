@@ -3,7 +3,7 @@ const rules = []
 
 for (const validator of Object.keys(validators)) {
   if (validator !== 'index') {
-    rules.push(validators[[validator]].describeRule())
+    rules.push(validators[validator].describeRule())
   }
 }
 

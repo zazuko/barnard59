@@ -17,7 +17,7 @@ describe('addGenericCheck', () => {
 })
 
 describe('addPipelineCheck', () => {
-  it('should add check to this.pipelines[[pipeline]]', () => {
+  it('should add check to this.pipelines[pipeline]', () => {
     checks.addPipelineCheck('check1', 'pipelineA')
     checks.addPipelineCheck('check2', 'pipelineA')
     checks.addPipelineCheck('check3', 'pipelineB')

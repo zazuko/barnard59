@@ -13,10 +13,10 @@ class ChecksCollection {
 
   addPipelineCheck (error, pipeline) {
     if (pipeline in this.pipelines) {
-      this.pipelines[[pipeline]].push(error)
+      this.pipelines[pipeline].push(error)
     }
     else {
-      this.pipelines[[pipeline]] = [error]
+      this.pipelines[pipeline] = [error]
     }
   }
 
@@ -32,10 +32,10 @@ class ChecksCollection {
   getPipelineChecks (pipeline, levels = null) {
     if (pipeline in this.pipelines) {
       if (levels !== null) {
-        return this.pipelines[[pipeline]].filter((issue) => levels.includes(issue.level))
+        return this.pipelines[pipeline].filter((issue) => levels.includes(issue.level))
       }
       else {
-        return this.pipelines[[pipeline]]
+        return this.pipelines[pipeline]
       }
     }
     else {
@@ -56,7 +56,7 @@ class ChecksCollection {
   }
 
   pipelineContainsMessage (mssg, pipeline) {
-    return utils.checkArrayContainsField(this.pipelines[[pipeline]], 'message', mssg)
+    return utils.checkArrayContainsField(this.pipelines[pipeline], 'message', mssg)
   }
 
   containsMessage (mssg) {

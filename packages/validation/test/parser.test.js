@@ -449,7 +449,7 @@ describe('parser.validatePipelines', () => {
 
       const expectedIssue = validators.pipelinePropertiesExist.validate(pipelineID, ['Readable'])
       parser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, checks)
-      assert(utils.checkArrayContainsObject(checks.pipelines[[pipelineID]], expectedIssue))
+      assert(utils.checkArrayContainsObject(checks.pipelines[pipelineID], expectedIssue))
     }
   })
 })

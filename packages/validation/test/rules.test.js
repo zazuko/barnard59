@@ -24,7 +24,7 @@ describe('rules', () => {
         continue
       }
       for (const rule of rules) {
-        assert(rule[[field]].length > 10)
+        assert(rule[field].length > 10)
       }
     }
   })

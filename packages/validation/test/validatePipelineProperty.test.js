@@ -18,7 +18,7 @@ describe('validatePipelineProperty', () => {
       const checks = new ChecksCollection()
       validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
 
-      assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
+      assert(utils.checkArrayContainsObject(checks.pipelines[pipeline], issue))
     }
   })
   it('should produce an error if last stream is readable, but pipeline is not', () => {
@@ -30,7 +30,7 @@ describe('validatePipelineProperty', () => {
     for (const opProperties of possibleOpProperties) {
       const checks = new ChecksCollection()
       validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
-      assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
+      assert(utils.checkArrayContainsObject(checks.pipelines[pipeline], issue))
     }
   })
   it('should produce an info if first stream is writable, and pipeline is', () => {
@@ -43,7 +43,7 @@ describe('validatePipelineProperty', () => {
       for (const opProperties of possibleOpProperties) {
         const checks = new ChecksCollection()
         validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
-        assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
+        assert(utils.checkArrayContainsObject(checks.pipelines[pipeline], issue))
       }
     }
   })
@@ -57,7 +57,7 @@ describe('validatePipelineProperty', () => {
       for (const opProperties of possibleOpProperties) {
         const checks = new ChecksCollection()
         validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
-        assert(utils.checkArrayContainsObject(checks.pipelines[[pipeline]], issue))
+        assert(utils.checkArrayContainsObject(checks.pipelines[pipeline], issue))
       }
     }
   })

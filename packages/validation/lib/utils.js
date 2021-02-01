@@ -9,7 +9,7 @@ function removeFilePart (dirname) {
 function checkArrayContainsField (array, field, value) {
   let found = false
   for (let i = 0; i < array.length; i++) {
-    if (array[i][[field]] === value) {
+    if (array[i][field] === value) {
       found = true
       break
     }

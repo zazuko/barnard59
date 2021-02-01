@@ -13,7 +13,7 @@ describe('validators', () => {
     const containsAllFields = (arr, target) => target.every(v => arr.includes(v))
     for (const validator of Object.keys(validators)) {
       if (validator !== 'index') {
-        assert(containsAllFields(Object.keys(validators[[validator]]), requiredFields))
+        assert(containsAllFields(Object.keys(validators[validator]), requiredFields))
       }
     }
   })
