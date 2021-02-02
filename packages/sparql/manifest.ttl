@@ -1,0 +1,11 @@
+@base <http://barnard59.zazuko.com/operations/sparql/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<select> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "SPARQL Select";
+  rdfs:comment "Runs the given SELECT query against the given endpoint parses the result into rows of RDF/JS key-value pairs.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-sparql#select>
+  ].
