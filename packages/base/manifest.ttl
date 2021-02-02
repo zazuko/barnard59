@@ -61,7 +61,7 @@
 
 <limit> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Limit";
-  rdfs:comment "Limits the amount of forwarded and discards any chunks after reaching the limit.";
+  rdfs:comment "Limits the amount of forwarded chunks and discards any chunks after reaching the limit.";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#limit>
   ].
