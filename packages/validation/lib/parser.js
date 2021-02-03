@@ -186,27 +186,27 @@ function getPipelineProperties (graph, pipelines) {
 async function getAllOperationProperties (dependencies, checks) {
   const results = {}
   for (const protocol in dependencies) {
-    for (const module in dependencies[protocol]) {
+    for (const library in dependencies[protocol]) {
       let issue
-      const operations = Array.from(dependencies[protocol][module]).join('"\n  * "')
-      issue = validators.dependency.validate(module, { operations, protocol })
+      const operations = Array.from(dependencies[protocol][library]).join('"\n  * "')
+      issue = validators.dependency.validate(library, { operations, protocol })
       checks.addGenericCheck(issue)
 
-      if (!utils.isModuleInstalled(module)) {
+      if (!utils.isModuleInstalled(library)) {
         continue
       }
-      const manifestPath = utils.getManifestPath(module)
+      const manifestPath = utils.getManifestPath(library)
 
-      issue = validators.operation.validate(manifestPath, module, operations)
+      issue = validators.operation.validate(manifestPath, library, operations)
       checks.addGenericCheck(issue)
 
       if (manifestPath) {
         const manifestGraph = await readGraph(manifestPath, checks)
-        const tempResults = getModuleOperationProperties(manifestGraph, dependencies[protocol][module].values())
+        const tempResults = getModuleOperationProperties(manifestGraph, dependencies[protocol][library].values())
         Object.assign(results, tempResults)
       }
       else {
-        for (const codelink of dependencies[protocol][module]) {
+        for (const codelink of dependencies[protocol][library]) {
           results[codelink] = null
         }
       }

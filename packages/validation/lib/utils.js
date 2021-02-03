@@ -1,13 +1,14 @@
 const fs = require('fs')
 const path = require('path')
+const { manifestLocation } = require('./config')
 
 function removeFilePart (dirname) {
   return path.parse(dirname).dir
 }
 
-function isModuleInstalled (module) {
+function isModuleInstalled (library) {
   try {
-    removeFilePart(require.resolve(module))
+    removeFilePart(require.resolve(library))
     return true
   }
   catch (err) {
@@ -15,20 +16,23 @@ function isModuleInstalled (module) {
   return false
 }
 
-function getManifestPath (module) {
-  let manifestPath = null
+function getManifestPath (library) {
+  const override = manifestLocation[library]
+  if (override) {
+    library = override
+  }
   try {
-    const modulePath = removeFilePart(require.resolve(module))
-    const expectedManifestPath = path.join(modulePath, 'operations.ttl')
+    const libraryPath = removeFilePart(require.resolve(library))
+    const expectedManifestPath = path.join(libraryPath, 'manifest.ttl')
 
     if (fs.existsSync(expectedManifestPath)) {
-      manifestPath = expectedManifestPath
+      return expectedManifestPath
     }
   }
   catch (err) {
   }
 
-  return manifestPath
+  return null
 }
 
 function template ([first, ...rest], ...fields) {

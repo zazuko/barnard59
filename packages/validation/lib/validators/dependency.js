@@ -1,13 +1,7 @@
 const Issue = require('../issue')
 const utils = require('../utils')
 const { template } = require('../utils')
-
-// corresponds to rdf-code-loader resolvers:
-// https://github.com/zazuko/rdf-loader-code/blob/c5137d45f13c6788f9f6f161653b7cd800401a0f/lib/iriResolve.js#L4-L17
-const dependencyTypes = {
-  'node:': 'package',
-  'file:': 'file'
-}
+const { dependencyTypes } = require('../config')
 
 const dependency = {
   ruleDescription: 'Each dependency must be installed',

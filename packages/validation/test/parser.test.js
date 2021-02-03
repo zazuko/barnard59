@@ -277,8 +277,8 @@ describe('parser.getAllOperationProperties', () => {
     checks = new ChecksCollection()
   })
 
-  it('should get operation properties from operations.ttl file', async () => {
-    mock.getManifestPath = sinon.stub().returns('test/fixtures/operations.ttl')
+  it('should get operation properties from manifest.ttl file', async () => {
+    mock.getManifestPath = sinon.stub().returns('test/fixtures/manifest.ttl')
     mock.isModuleInstalled = sinon.stub().returns(true)
 
     const input = {
@@ -317,7 +317,7 @@ describe('parser.getAllOperationProperties', () => {
   })
 
   it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
-    mock.getManifestPath = sinon.stub().returns('test/fixtures/operations.ttl')
+    mock.getManifestPath = sinon.stub().returns('test/fixtures/manifest.ttl')
     mock.isModuleInstalled = sinon.stub().returns(true)
 
     const input = {
