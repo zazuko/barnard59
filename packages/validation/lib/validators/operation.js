@@ -5,7 +5,7 @@ const operation = {
   ruleId: 3,
   ruleDescription: 'manifest.ttl file exists and can be parsed',
   messageSuccessTemplate: template`Metadata file for ${'library'} loaded successfully`,
-  messageFailureTemplate: template`Missing metadata file for ${'library'}.\n  The following operations cannot be validated:\n  * "${'operations'}"`,
+  messageFailureTemplate: template`Missing metadata file for ${'library'}\n  The following operations cannot be validated:\n  * "${'operations'}"`,
   validate (operationPathExists, library, codelinksWithMissingMetadata) {
     let issue
     if (operationPathExists) {
