@@ -4,19 +4,21 @@ const { Command } = require('commander')
 const parser = require('./lib/parser')
 const { version } = require(path.join(__dirname, 'package.json'))
 const ChecksCollection = require('./lib/checksCollection.js')
+const { removeFilePart } = require('./lib/utils')
 
 const program = new Command()
 program.version(version)
 
 async function main (file, options) {
+  const pipelineFile = path.resolve(file)
+  const pipelineDir = removeFilePart(pipelineFile)
   const checks = new ChecksCollection()
   let pipelines
   try {
-    const pipelineGraph = await parser.readGraph(file, checks)
+    const pipelineGraph = await parser.readGraph(pipelineFile, checks)
     pipelines = parser.getIdentifiers(pipelineGraph, checks, options.pipeline)
-
     const codelinks = parser.getAllCodeLinks(pipelines)
-    const dependencies = parser.getDependencies(codelinks)
+    const dependencies = parser.getDependencies(codelinks, pipelineDir)
 
     const operationProperties = await parser.getAllOperationProperties(dependencies, checks)
     parser.validateSteps({ pipelines, properties: operationProperties }, checks)

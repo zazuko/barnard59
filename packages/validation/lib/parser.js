@@ -140,11 +140,11 @@ function getAllCodeLinks (pipelines) {
   return codelinks
 }
 
-function getDependencies (codelinks) {
+function getDependencies (codelinks, pipelineDir) {
   const dependencies = {}
 
   codelinks.forEach(({ stepOperation: codelink }) => {
-    const { protocol, filename } = iriResolve(codelink, process.cwd())
+    const { protocol, filename } = iriResolve(codelink, pipelineDir)
 
     if (!dependencies[protocol]) {
       dependencies[protocol] = {}

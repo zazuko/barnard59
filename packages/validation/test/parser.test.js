@@ -111,7 +111,7 @@ describe('parser.getDependencies', () => {
         [path.join(process.cwd(), 'awesomeModule')]: new Set(['file:awesomeModule#awesomeFunction'])
       }
     }
-    const actual = parser.getDependencies(input)
+    const actual = parser.getDependencies(input, process.cwd())
     assert.deepStrictEqual(expected, actual)
   })
 
