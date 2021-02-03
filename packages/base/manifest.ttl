@@ -3,53 +3,88 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-<filter> a p:Operation, p:Writable, p:Readable;
+<combine> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Combine";
+  rdfs:comment "Combines multiple streams to a single stream connecting them in the given order.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#combine>
+  ].
+
+<concat> a p:Operation, p:Readable;
+  rdfs:label "Concat";
+  rdfs:comment "Concatenates the content of the given streams to a single stream.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#concat>
+  ].
+
+<concat/object> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "Concat (Object)";
+  rdfs:comment "Concatenates the content of the given streams to a single stream.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#concat.object>
+  ].
+
+<filter> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Filter";
   rdfs:comment "Forwards incoming chunks if they pass the filter function.";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#filter>
   ].
 
-<flatten> a p:Operation, p:Writable, p:Readable;
+<flatten> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Flatten";
   rdfs:comment "Separates incoming arrays into their elements and emits each element as a single chunk.";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#flatten>
   ].
 
-<glob> a p:Operation, p:Readable;
+<glob> a p:Operation, p:ReadableObjectMode;
   rdfs:label "Glob";
   rdfs:comment "Match files using the given pattern and emits each filename as a single chunk.";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#glob>
   ].
 
-<json/parse> a p:Operation, p:Writable, p:Readable;
+<json/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse JSON";
   rdfs:comment "Converts each chunk to an object by calling JSON.parse().";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#json.parse>
   ].
 
-<json/stringify> a p:Operation, p:Writable, p:Readable;
+<json/stringify> a p:Operation, p:WritableObjectMode, p:Readable;
   rdfs:label "Serialize JSON";
   rdfs:comment "Converts each chunk to a JSON string by calling JSON.stringify().";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#json.parse>
   ].
 
-<map> a p:Operation, p:Writable, p:Readable;
+<limit> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Limit";
+  rdfs:comment "Limits the amount of forwarded chunks and discards any chunks after reaching the limit.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#limit>
+  ].
+
+<map> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Map";
   rdfs:comment "Converts each chunk using the given function.";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#map>
   ].
 
-<nul> a p:Operation, p:Writable;
+<nul> a p:Operation, p:WritableObjectMode;
   rdfs:label "/dev/null";
   rdfs:comment "Dummy output stream, just like /dev/null.";
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-base#nul>
+  ].
+
+<offset> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Offset";
+  rdfs:comment "Discards all chunks before the given offset.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base#offset>
   ].
 
 <stdout> a p:Operation, p:Writable, p:Readable;
@@ -59,7 +94,7 @@
     code:link <node:barnard59-base#stdout>
   ].
 
-<toString> a p:Operation, p:Writable, p:Readable;
+<toString> a p:Operation, p:WritableObjectMode, p:Readable;
   rdfs:label "To String";
   rdfs:comment "Converts each chunk to a string by calling .toString().";
   code:implementedBy [ a code:EcmaScript;
