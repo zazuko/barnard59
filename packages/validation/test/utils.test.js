@@ -74,8 +74,7 @@ describe('utils.isModuleInstalled', () => {
 })
 
 describe('utils.getManifestPath', () => {
-  // TODO: unskip as soon as barnard59-base got published with `manifest.ttl` instead of `operations.ttl`
-  it.skip('should return path if manifest exists', () => {
+  it('should return path if manifest exists', () => {
     const actual = utils.getManifestPath('barnard59-base')
     assert(fs.existsSync(actual))
   })

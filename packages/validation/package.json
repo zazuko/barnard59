@@ -17,7 +17,7 @@
   "devDependencies": {
     "@jsdevtools/chai-exec": "^2.1.1",
     "babel-eslint": "^10.1.0",
-    "barnard59-base": "^0.1.0",
+    "barnard59-base": "^0.1.1",
     "barnard59-core": "^0.1.1",
     "barnard59-formats": "^0.1.0",
     "chai": "^4.2.0",
