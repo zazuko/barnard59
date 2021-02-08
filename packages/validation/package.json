@@ -9,7 +9,9 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha",
-    "coverage": "nyc --reporter=lcov mocha"
+    "coverage": "nyc --reporter=lcov mocha",
+    "posttest": "npm run generate-rules",
+    "generate-rules": "node lib/rules.js > ./rules.json"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,86 @@
+[
+  {
+    "ruleId": 3,
+    "ruleDescription": "manifest.ttl file exists and can be parsed",
+    "messageSuccess": "Manifest file for ${library} loaded successfully",
+    "messageFailure": "Missing manifest file for ${library}\n  The following operations cannot be validated:\n  * \"${operations}\""
+  },
+  {
+    "ruleId": 4,
+    "ruleDescription": "Pipeline has at least one property defined. Recognized choices: Readable, ReadableObjectMode, Writable, WritableObjectMode",
+    "messageSuccess": "Validated: property for pipeline ${pipeline} is defined",
+    "messageFailure": "Cannot validate pipeline ${pipeline}: the pipeline mode (Readable(ObjectMode)/Writable(ObjectMode)) is not defined"
+  },
+  {
+    "ruleId": 5,
+    "ruleDescription": "Pipeline should have the same type if its first stream is Writable(ObjectMode)",
+    "messageSuccess": "The pipeline mode for ${pipeline} matches first stream",
+    "messageFailure": "The pipeline ${pipeline} must be of type Writable or WritableObjectMode"
+  },
+  {
+    "ruleId": 6,
+    "ruleDescription": "Pipeline should have the same type if its last stream is Readable(ObjectMode)",
+    "messageSuccess": "The pipeline mode for ${pipeline} matches last stream",
+    "messageFailure": "The pipeline ${pipeline} must be of type Readable or ReadableObjectMode"
+  },
+  {
+    "ruleId": 7,
+    "ruleDescription": "Operation has at least one property defined. Recognized choices: Readable, Writable, ReadableObjectMode, WritableObjectMode",
+    "messageSuccess": "Validated: properties for operation ${operation} are defined",
+    "messageFailure": "Cannot validate operation ${operation}: no metadata"
+  },
+  {
+    "ruleId": 8,
+    "ruleDescription": "Operation has property \"Operation\"",
+    "messageSuccess": "Validated: operation ${operation} is of type \"Operation\"",
+    "messageFailure": "Invalid operation: ${operation} is not of type \"Operation\""
+  },
+  {
+    "ruleId": 9,
+    "ruleDescription": "If there exists more than one step, first step must be either Readable or ReadableObjectMode",
+    "messageSuccess": "Validated operation ${operation}: first operation must be either Readable or ReadableObjectMode",
+    "messageFailure": "Invalid operation ${operation}: it is neither Readable nor ReadableObjectMode"
+  },
+  {
+    "ruleId": 10,
+    "ruleDescription": "Writable operation must always be preceded by a Readable operation",
+    "messageSuccess": "Validated operation ${operation}: a Writable operation must always be preceded by a Readable operation",
+    "messageFailure": "Invalid operation ${operation}: previous operation is not Readable"
+  },
+  {
+    "ruleId": 11,
+    "ruleDescription": "WritableObjectMode operation must always be preceded by a ReadableObjectMode operation",
+    "messageSuccess": "Validated operation ${operation}: a WritableObjectMode operation must always be preceded by a ReadableObjectMode operation",
+    "messageFailure": "Invalid operation ${operation}: previous operation is not ReadableObjectMode"
+  },
+  {
+    "ruleId": 12,
+    "ruleDescription": "Readable operation must always be followed by a Writable operation",
+    "messageSuccess": "Validated operation ${operation}: a Readable operation must always be followed by a Writable operation",
+    "messageFailure": "Invalid operation ${operation}: next operation is not Writable"
+  },
+  {
+    "ruleId": 13,
+    "ruleDescription": "ReadableObjectMode operation must be followed by a WritableObjectMode operation",
+    "messageSuccess": "Validated operation ${operation}: a ReadableObjectMode operation must be followed by a WritableObjectMode operation",
+    "messageFailure": "Invalid operation ${operation}: next operation is not WritableObjectMode"
+  },
+  {
+    "ruleId": 100,
+    "ruleDescription": "Previous operation should have metadata",
+    "messageSuccess": "Validation can be performed for operation ${operation}: previous operation has metadata",
+    "messageFailure": "Cannot validate operation ${operation}: previous operation does not have metadata"
+  },
+  {
+    "ruleId": 1337,
+    "ruleDescription": "Each codelink is described by code.implementedBy/code.link",
+    "messageSuccess": "Defined with both code.implementedBy & code.link",
+    "messageFailure": "Missing code.implementedBy/code.link"
+  },
+  {
+    "ruleId": 2668,
+    "ruleDescription": "Each dependency must be installed",
+    "messageSuccess": "Found ${dependencyType} ${library} successfully",
+    "messageFailure": "Missing ${dependencyType} ${library}\n  The following operations cannot be validated:\n  * \"${operations}\""
+  }
+]
