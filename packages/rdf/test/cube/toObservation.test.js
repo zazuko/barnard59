@@ -22,7 +22,7 @@ function createMeasure ({ term = ns.ex('topic/a') } = {}) {
 }
 
 function findObservation (result) {
-  return clownface({ dataset: result[0] }).has(ns.rdf.type, ns.cube.Observation)
+  return clownface({ dataset: rdf.dataset(result[0]) }).has(ns.rdf.type, ns.cube.Observation)
 }
 
 describe('cube.toObservation', () => {
