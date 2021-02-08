@@ -1,14 +1,14 @@
 const { template } = require('../utils')
 const Issue = require('../issue')
 
-const pipelinePropertiesMatchFirst = {
-  ruleId: 5,
-  ruleDescription: 'Pipeline should have the same type if its first stream is Writable(ObjectMode)',
-  messageFailureTemplate: template`The pipeline ${'pipeline'} must be of type Writable or WritableObjectMode`,
-  messageSuccessTemplate: template`The pipeline mode for ${'pipeline'} matches first stream`,
+const pipelinePropertiesMatchLastFlex = {
+  ruleId: 61,
+  ruleDescription: 'Pipeline should have the same type if its last stream is Readable(ObjectMode)',
+  messageFailureTemplate: template`The pipeline ${'pipeline'} must be of type Readable or ReadableObjecMode`,
+  messageSuccessTemplate: template`The pipeline type for ${'pipeline'} matches last stream`,
   validate (pipeline, pipelineProperties) {
     let issue
-    const pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
+    const pipelineIsOfRightType = pipelineProperties.includes('Readable') || pipelineProperties.includes('ReadableObjectMode')
     if (!pipelineIsOfRightType) {
       issue = Issue.error({ id: this.ruleId, templateData: { pipeline } })
     }
@@ -26,4 +26,4 @@ const pipelinePropertiesMatchFirst = {
     }
   }
 }
-module.exports = pipelinePropertiesMatchFirst
+module.exports = pipelinePropertiesMatchLastFlex
