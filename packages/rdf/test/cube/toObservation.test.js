@@ -11,7 +11,7 @@ const dateToId = require('../../lib/dateToId')
 const toObservation = require('../../lib/cube/toObservation')
 
 const ns = {
-  cube: namespace('http://ns.bergnet.org/cube/'),
+  cube: namespace('https://cube.link/'),
   ex: namespace('http://example.org/'),
   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
   xsd: namespace('http://www.w3.org/2001/XMLSchema#')
