@@ -9,3 +9,10 @@
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-rdf/mapMatch>
   ].
+
+<cube.js#toObservation> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "to Cube Observation";
+  rdfs:comment "Converts a set of quads to a Cube Observation";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/cube.js#toObservation>
+  ].
