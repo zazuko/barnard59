@@ -1,8 +1,7 @@
 # barnard59-pipeline-validation
 ![CI status](https://github.com/zazuko/barnard59-pipeline-validation/workflows/Node.js%20CI/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/zazuko/barnard59-pipeline-validation/badge.svg?branch=master)](https://coveralls.io/github/zazuko/barnard59-pipeline-validation?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/zazuko/barnard59-pipeline-validation/badge.svg?branch=main)](https://coveralls.io/github/zazuko/barnard59-pipeline-validation?branch=main)
 [![npm version](https://badge.fury.io/js/barnard59-pipeline-validation.svg)](https://www.npmjs.com/package/barnard59-pipeline-validation)
-
 
 ### Pipeline validation
 
