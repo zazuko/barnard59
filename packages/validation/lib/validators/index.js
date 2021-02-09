@@ -5,8 +5,10 @@ const operation = require('./operation')
 const operationHasOperationProperty = require('./operationHasOperationProperty')
 const operationPropertiesExist = require('./operationPropertiesExist')
 const pipelinePropertiesExist = require('./pipelinePropertiesExist')
-const pipelinePropertiesMatchFirst = require('./pipelinePropertiesMatchFirst')
-const pipelinePropertiesMatchLast = require('./pipelinePropertiesMatchLast')
+const pipelinePropertiesMatchFirstFlex = require('./pipelinePropertiesMatchFirstFlex')
+const pipelinePropertiesMatchLastFlex = require('./pipelinePropertiesMatchLastFlex')
+const pipelinePropertiesMatchFirstStrict = require('./pipelinePropertiesMatchFirstStrict')
+const pipelinePropertiesMatchLastStrict = require('./pipelinePropertiesMatchLastStrict')
 const previousOperationHasMetadata = require('./previousOperationHasMetadata')
 const readableBeforeWritable = require('./readableBeforeWritable')
 const readableObjectModeBeforeWritableObjectMode = require('./readableObjectModeBeforeWritableObjectMode')
@@ -21,8 +23,10 @@ module.exports = {
   operationHasOperationProperty,
   operationPropertiesExist,
   pipelinePropertiesExist,
-  pipelinePropertiesMatchFirst,
-  pipelinePropertiesMatchLast,
+  pipelinePropertiesMatchFirstFlex,
+  pipelinePropertiesMatchLastFlex,
+  pipelinePropertiesMatchFirstStrict,
+  pipelinePropertiesMatchLastStrict,
   previousOperationHasMetadata,
   readableBeforeWritable,
   readableObjectModeBeforeWritableObjectMode,
