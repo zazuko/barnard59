@@ -26,12 +26,12 @@ A step to automate loading CSVW mapping documents and the source CSV, by followi
 
 <#CsvwStep>
     a p:Step ;
-    code:arguments [
-        code:name "csvw" ;
-        code:value "file:/test/mappings/remote.csvw.json"
-    ] ;
     code:implementedBy [
         a code:EcmaScript ;
         code:link <node:barnard59-csvw#fetch>
+    ] ;
+    code:arguments [
+        code:name "csvw" ;
+        code:value "file:/test/mappings/remote.csvw.json"
     ] .
 ```
