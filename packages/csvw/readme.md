@@ -21,18 +21,17 @@ A step to automate loading CSVW mapping documents and the source CSV, by followi
 ### Example: Loading CSVW from filesystem
 
 ```turtle
-prefix :     <https://pipeline.described.at/>
-prefix code: <https://code.described.at/>
+@prefix p: <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
 
 <#CsvwStep>
-  a :Step ;
-  code:implementedBy [ 
-    code:link <node:barnard59-csvw#fetch> ;
-    a         code:EcmaScript ;
-  ] ;
-  code:arguments [
-    code:name  "csvw" ;
-    code:value "file:/test/mappings/remote.csvw.json" # assumes absolute path
-  ]
-.
+    a p:Step ;
+    code:arguments [
+        code:name "csvw" ;
+        code:value "file:/test/mappings/remote.csvw.json"
+    ] ;
+    code:implementedBy [
+        a code:EcmaScript ;
+        code:link <node:barnard59-csvw#fetch>
+    ] .
 ```
