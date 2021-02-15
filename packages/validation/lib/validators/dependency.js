@@ -1,6 +1,5 @@
 const Issue = require('../issue')
-const utils = require('../utils')
-const { template } = require('../utils')
+const { isModuleInstalled, template } = require('../utils')
 const { dependencyTypes } = require('../config')
 
 const dependency = {
@@ -11,7 +10,7 @@ const dependency = {
   validate (library, { operations, protocol }) {
     const dependencyType = dependencyTypes[protocol]
     let issue
-    if (utils.isModuleInstalled(library)) {
+    if (isModuleInstalled(library)) {
       issue = Issue.info({ id: this.ruleId, templateData: { library, dependencyType } })
     }
     else {

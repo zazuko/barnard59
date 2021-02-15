@@ -13,15 +13,15 @@
   },
   {
     "ruleId": 5,
-    "ruleDescription": "Pipeline should have the same type if its first stream is Writable(ObjectMode)",
-    "messageSuccess": "The pipeline mode for ${pipeline} matches first stream",
-    "messageFailure": "The pipeline ${pipeline} must be of type Writable or WritableObjectMode"
+    "ruleDescription": "Pipeline should have the same type and mode if its first stream is Writable(ObjectMode)",
+    "messageSuccess": "The pipeline type for ${pipeline} matches first stream",
+    "messageFailure": "The pipeline ${pipeline} must be of type ${type}"
   },
   {
     "ruleId": 6,
-    "ruleDescription": "Pipeline should have the same type if its last stream is Readable(ObjectMode)",
-    "messageSuccess": "The pipeline mode for ${pipeline} matches last stream",
-    "messageFailure": "The pipeline ${pipeline} must be of type Readable or ReadableObjectMode"
+    "ruleDescription": "Pipeline should have the same type and mode if its last stream is Readable(ObjectMode)",
+    "messageSuccess": "The pipeline type for ${pipeline} matches last stream",
+    "messageFailure": "The pipeline ${pipeline} must be of type ${type}"
   },
   {
     "ruleId": 7,
@@ -64,6 +64,18 @@
     "ruleDescription": "ReadableObjectMode operation must be followed by a WritableObjectMode operation",
     "messageSuccess": "Validated operation ${operation}: a ReadableObjectMode operation must be followed by a WritableObjectMode operation",
     "messageFailure": "Invalid operation ${operation}: next operation is not WritableObjectMode"
+  },
+  {
+    "ruleId": 51,
+    "ruleDescription": "Pipeline should have the same type if its first stream is Writable(ObjectMode)",
+    "messageSuccess": "The pipeline type for ${pipeline} matches first stream",
+    "messageFailure": "The pipeline ${pipeline} must be of type Writable or WritableObjectMode"
+  },
+  {
+    "ruleId": 61,
+    "ruleDescription": "Pipeline should have the same type if its last stream is Readable(ObjectMode)",
+    "messageSuccess": "The pipeline type for ${pipeline} matches last stream",
+    "messageFailure": "The pipeline ${pipeline} must be of type Readable or ReadableObjectMode"
   },
   {
     "ruleId": 100,

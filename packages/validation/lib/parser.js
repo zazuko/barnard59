@@ -33,10 +33,17 @@ async function readGraph (file, checks) {
     })
   }
   catch (err) {
-    const error = await parseError(file, err)
-    issue = Issue.error({
-      message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
-    })
+    if (err.stack.includes('at N3')) {
+      const error = await parseError(file, err)
+      issue = Issue.error({
+        message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
+      })
+    }
+    else {
+      issue = Issue.error({
+        message: err.message
+      })
+    }
   }
 
   checks.addGenericCheck(issue)

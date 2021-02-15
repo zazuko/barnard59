@@ -46,6 +46,16 @@ describe('barnard59-validate', function () {
     assert.strictEqual(errors[0].level, 'error')
   })
 
+  it('should report file not found', () => {
+    const strict = chaiExec('./test/-fixtures-/invalid.ttl')
+    assert.exitCode(strict, 255)
+
+    const errors = JSON.parse(strict.stdout)
+    assert.strictEqual(errors.length, 1)
+    assert.ok(errors[0].message.startsWith('ENOENT: no such file or directory'))
+    assert.strictEqual(errors[0].level, 'error')
+  })
+
   it('should not report warnings when quiet', () => {
     const exec = chaiExec('./sample-pipelines/fetch-json-to-ntriples.ttl')
     const warnings = JSON.parse(exec.stdout).filter(issue => issue.level === 'warning').length
