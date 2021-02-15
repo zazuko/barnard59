@@ -2,13 +2,18 @@ const fs = require('fs')
 const path = require('path')
 const { manifestLocation } = require('./config')
 
+const resolvePaths = [
+  process.cwd(),
+  __dirname
+]
+
 function removeFilePart (dirname) {
   return path.parse(dirname).dir
 }
 
 function isModuleInstalled (library) {
   try {
-    removeFilePart(require.resolve(library))
+    removeFilePart(require.resolve(library, { paths: resolvePaths }))
     return true
   }
   catch (err) {
@@ -22,7 +27,7 @@ function getManifestPath (library) {
     library = override
   }
   try {
-    const libraryPath = removeFilePart(require.resolve(library))
+    const libraryPath = removeFilePart(require.resolve(library, { paths: resolvePaths }))
     const expectedManifestPath = path.join(libraryPath, 'manifest.ttl')
 
     if (fs.existsSync(expectedManifestPath)) {
