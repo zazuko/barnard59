@@ -16,3 +16,10 @@
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-rdf/cube.js#toObservation>
   ].
+
+<setGraph> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Set Graph";
+  rdfs:comment "Sets the graph of all quads to the given fixed value.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/setGraph.js>
+  ].

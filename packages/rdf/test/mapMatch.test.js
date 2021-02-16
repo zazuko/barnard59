@@ -4,12 +4,8 @@ const intoStream = require('into-stream')
 const { isDuplex } = require('isstream')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
+const ns = require('./support/namespaces')
 const mapMatch = require('../mapMatch')
-
-const ns = {
-  ex: namespace('http://example.org/')
-}
 
 describe('mapMatch', () => {
   it('should be a factory', () => {

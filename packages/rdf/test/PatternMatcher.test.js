@@ -1,12 +1,8 @@
 const { strictEqual } = require('assert')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
+const ns = require('./support/namespaces')
 const PatternMatcher = require('../lib/PatternMatcher')
-
-const ns = {
-  ex: namespace('http://example.org/')
-}
 
 describe('PatternMatcher', () => {
   it('should be a constructor', () => {
