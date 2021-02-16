@@ -1,6 +1,6 @@
-# undefined
+# barnard59-csvw
 
-undefined
+Simplifies handling CSVW mapping documents in barnard59 pipelines
 
 ## Fetch CSVW
 

@@ -24,7 +24,7 @@
     "proto-fetch": "^1.0.0"
   },
   "devDependencies": {
-    "barnard59-docs": "github:tpluscode/barnard59-docs",
+    "barnard59-docs": "github:tpluscode/barnard59-docs#local-command",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "husky": "^5.0.9",
