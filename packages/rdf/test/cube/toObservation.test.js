@@ -1,21 +1,14 @@
 const { rejects, strictEqual } = require('assert')
+const { termToNTriples: toNT } = require('@rdfjs/to-ntriples')
 const clownface = require('clownface')
 const getStream = require('get-stream')
 const intoStream = require('into-stream')
 const { isDuplex } = require('isstream')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
-const { termToNTriples: toNT } = require('@rdfjs/to-ntriples')
+const ns = require('../support/namespaces')
 const dateToId = require('../../lib/dateToId')
 const toObservation = require('../../lib/cube/toObservation')
-
-const ns = {
-  cube: namespace('https://cube.link/'),
-  ex: namespace('http://example.org/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#')
-}
 
 function createMeasure ({ term = ns.ex('topic/a') } = {}) {
   return clownface({ dataset: rdf.dataset(), term })
