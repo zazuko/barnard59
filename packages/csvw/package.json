@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
-    "test": "mocha"
+    "test": "mocha",
+    "prepublishOnly": "mkdir docs; barnard59-docs local > docs/readme.md",
+    "postinstall": "husky install"
   },
   "files": [
     "index.js",
@@ -22,8 +24,10 @@
     "proto-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "barnard59-docs": "github:tpluscode/barnard59-docs",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "husky": "^5.0.9",
     "mocha": "^8.2.1",
     "sinon": "^9.2.3",
     "sinon-chai": "^3.5.0",
