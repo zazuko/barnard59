@@ -1,3 +1,15 @@
+## Operations
+
+Obviously you want to convert your own data. To do that, barnard59 provides a bunch of default features in so called operations. To understand how you can add your own steps and pipelines, consult the barnard59 [readme](https://github.com/zazuko/barnard59/blob/master/README.md).
+
+Technically, operations are just normal JavaScript functions which return [streams](https://nodejs.org/api/stream.html) (sync or async). The special thing about the operations in barnard59 packages is the interface (named arguments) and that they are adapted to the use-case.
+
+This becomes more clear by having a look at one of the packages, `barnard59-ftp`: From an FTP client library in JavaScript one would expect that we have to create an instance, maybe call connect and then read files. The barnard59 package provides a function that does all this in a single function call. However, there are existing functions that can be integrated with only little or (almost) no additional wrapping. This is for example the case for reading and writing files, where only the `fs.create*Stream`-functions are used with index arguments.
+
+While barnard59 is written in JavaScript, nothing stops you of integrating operators in other languages. `barnard59-tdb` for example is wrapping Java based tooling. You can also use existing Node.js wrappers for other libraries which can be found in package registries like [npm](https://www.npmjs.com/). In the future, we plan to support other languages as well with virtual machine based approaches like [WebAssembly](https://webassembly.org/) and/or [GraalVM](https://www.graalvm.org/).
+
+You do not have to write a full barnard59 operator if you just want to manipulate some of the data, for that you can for example use the `filter()` and `map()` functions of the `barnard59-base` package.
+
 The following operators are available.
 
 ### Core

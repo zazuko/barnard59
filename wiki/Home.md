@@ -16,11 +16,9 @@ barnard59 can be used to:
 * Convert data to RDF
 * Upload data to SPARQL endpoints
 
-List of all operations supported by barnard59 is available [here](https://github.com/zazuko/barnard59/wiki/primer).
-
-
-
+# Here goes CLI description
 ## Pages
-* barnard59 [Primer](primer)
-* Running barnard59 in [Docker & GitLab CI](automation)
-* [pipeline rules](https://github.com/zazuko/barnard59/wiki/Validation#pipeline)
+* [Primer](Primer.md)
+* [Pipeline](Pipeline.md) Pipeline definition
+* [Packages](Packages.md) List of all operations supported by barnard59
+* [Docker & GitLab CI](Automation.md)
