@@ -1,0 +1,12 @@
+@base <http://barnard59.zazuko.com/operations/csvw/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<fetch> a p:Operation, p:Readable ;
+        rdfs:label "Fetch CSVW" ;
+        rdfs:comment "Loads a CSVW file from the local filesystem or the web depending on the given argument" ;
+        code:implementedBy [
+                               a code:EcmaScript ;
+                               code:link <node:barnard59-csvw#fetch>
+                           ] .
