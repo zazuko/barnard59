@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard",
     "test": "mocha",
-    "prepublishOnly": "mkdir docs; barnard59-docs local > docs/readme.md",
+    "prepublishOnly": "mkdir -p docs; barnard59-docs --local . > docs/readme.md",
     "postinstall": "husky install"
   },
   "files": [
