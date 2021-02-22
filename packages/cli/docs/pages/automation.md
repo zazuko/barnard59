@@ -36,11 +36,11 @@ Once the pipeline is running locally we can prepare to run it in a docker contai
 
 Make sure you have a running Docker-environment like [Docker-Desktop](https://www.docker.com/products/docker-desktop) on your system and then run:
 
-    docker pull zazukoians/node-java-jena
+    docker pull node-latest
 
 Now you can run an instance on your system:
 
-    docker run -ti zazukoians/node-java-jena /bin/bash
+    docker run -ti node-latest /bin/bash
 
 This should give you a promt like this:
 
@@ -71,7 +71,7 @@ In a CI/CD we usually have to
 In GitLab we need a `.gitlab-ci.yml` file in the root directory of your GitLab repository. A minimal configuration for running our pipeline looks like this:
 
 ```yaml
-image: zazukoians/node-java-jena
+image: node:latest
 before_script:
   - npm install
 
@@ -89,7 +89,7 @@ If you have CI/CD enabled on your pipeline GitLab should directly execute a pipe
 Note that by definition a CI/CD process is completely nuked at the end so if you wrote data to a file, it will be gone unless you tell your configuration to make this file available. In GitLab this is called [artifacts](https://docs.gitlab.com/ce/ci/yaml/README.html#artifacts), an extended version of the configuration that makes the N-Triples available might look like this:
 
 ```yaml
-image: zazukoians/node-java-jena
+image: node:latest
 before_script:
   - npm install
 

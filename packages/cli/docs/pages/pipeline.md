@@ -1,10 +1,12 @@
 ## Concept
 
-barnard59 runs pipelines which are described in RDF in the [pipeline](https://pipeline.described.at/) and [code](https://code.described.at/) ontology.
+A pipeline is a way to extract, transform, and load data (ETL). barnard59 pipelines are described in RDF format.
+More specifically, they use the [pipeline](https://pipeline.described.at/) and [code](https://code.described.at/) ontology.
 
-A barnard59 pipeline consists of one or more steps where each step returns a [Stream](https://nodejs.org/api/stream.html).
+A barnard59 pipeline consists of steps, where each step returns a [Stream](https://nodejs.org/api/stream.html).
 The streams of all steps are combined via [`.pipe`](https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options).
 The pipeline itself is also a stream.
+
 Depending on the stream types of the first and last stream, the pipeline can be writable or readable.
 If the pipeline is self-contained, a dummy readable interface is provided to handle events for end of processing and errors.
 
@@ -197,3 +199,11 @@ A typical use case are file name patterns, derivative from a variable value, lik
   ] ;
   code:arguments ( "${basePath}/input.txt"^^code:EcmaScriptTemplateLiteral ) .
 ```
+
+## Writing valid pipeline
+
+Writing a valid pipeline can be tedious task. Pipelines are a chain of streams, and those streams have to match.
+
+To learn more about correctly matching those streams, go [here](pipeline-validation.md).
+
+To automatically detect stream-matching errors, use [pipeline validator](https://github.com/zazuko/barnard59-pipeline-validation).
