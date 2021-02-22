@@ -19,7 +19,7 @@ Using a pipeline you can:
 * application/ld+json
 * ...
 
-To learn more about building your own pipeline, go [here]().
+To learn more about building your own pipeline, go [here](docs/pages/pipeline.md).
 
 ## Requirements
 To execute pipeline with `barnard59`, you will need `node.js` environment. The required versions are ... for `node.js` and ... for `npm`.
