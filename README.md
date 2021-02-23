@@ -15,9 +15,10 @@ Using a pipeline you can:
 
 
 `barnard59` expects a pipeline to be defined as linked-data. The supported formats are:
-* text/turtle
-* application/ld+json
-* ...
+* `application/ld+json`
+* `application/n-triples`
+* `text/turtle`
+* `application/rdf+xml`
 
 To learn more about building your own pipeline, go [here](docs/pages/pipeline.md).
 
