@@ -23,7 +23,8 @@ Using a pipeline you can:
 To learn more about building your own pipeline, go [here](docs/pages/pipeline.md).
 
 ## Requirements
-To execute pipeline with `barnard59`, you will need `node.js` environment. The required versions are ... for `node.js` and ... for `npm`.
+To execute pipeline with `barnard59`, you will need `node.js` environment. All `node` and `npm` versions which are actively maintained are supported by `barnard59`.
+
 
 To check if you have Node.js installed, run this command in your terminal:
 `node -v`
