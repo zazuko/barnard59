@@ -3,10 +3,11 @@
   "version": "0.1.2",
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "lint": "eslint **/*.js",
+    "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "jest"
+    "test": "nyc --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
@@ -30,27 +31,16 @@
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
-    "@types/expect": "^1.20.4",
-    "@types/mocha": "^5.2.6",
-    "eslint": "^5.15.0",
-    "eslint-config-standard": "^12.0.0",
+    "@types/expect": "^24.3.0",
+    "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jest": "^22.3.0",
-    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "expect": "^23.6.0",
-    "jest": "^24.1.0",
-    "jest-extended": "^0.11.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint": "^7.21.0",
+    "expect": "^26.6.2",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
     "rdf-ext": "^1.2.2"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "lib/**"
-    ],
-    "setupFilesAfterEnv": [
-      "jest-extended"
-    ]
   }
 }

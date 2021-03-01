@@ -1,22 +1,18 @@
-const combine = require('barnard59-base').combine
-const sinkToDuplex = require('@rdfjs/sink-to-duplex')
-const stringify = require('barnard59-base').json.stringify
-const Parser = require('@rdfjs/parser-jsonld')
-const Serializer = require('@rdfjs/serializer-jsonld')
+import { combine, jsonStringify } from 'barnard59-base'
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
+import Parser from '@rdfjs/parser-jsonld'
+import Serializer from '@rdfjs/serializer-jsonld'
 
-function parse () {
+export function parse () {
   return sinkToDuplex(new Parser(), { objectMode: true })
 }
 
-parse.object = () => {
-  return combine([stringify(), parse()], { objectMode: true })
+export const parseObject = () => {
+  return combine([jsonStringify(), parse()], { objectMode: true })
 }
 
-function serialize () {
+parse.object = parseObject
+
+export function serialize () {
   return sinkToDuplex(new Serializer(), { objectMode: true })
-}
-
-module.exports = {
-  parse,
-  serialize
 }

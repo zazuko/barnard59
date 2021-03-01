@@ -1,13 +1,5 @@
-const csvw = require('./csvw')
-const jsonld = require('./jsonld')
-const n3 = require('./n3')
-const ntriples = require('./ntriples')
-const rdfXml = require('./rdf-xml')
-
-module.exports = {
-  csvw,
-  jsonld,
-  n3,
-  ntriples,
-  rdfXml
-}
+export { parse as csvwParse } from './csvw.js'
+export { parse as jsonldParse, parseObject as jsonldParseObject, serialize as jsonldSerialize } from './jsonld.js'
+export { parse as n3Parse } from './n3.js'
+export { serialize as ntriplesSerialize } from './ntriples.js'
+export { parse as rdfxmlParse } from './rdf-xml.js'

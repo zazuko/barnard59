@@ -1,21 +1,24 @@
-const expect = require('expect')
-const fs = require('fs')
-const path = require('path')
-const createParser = require('../rdf-xml').parse
-const { readDataset } = require('./helpers')
+import { describe, it } from 'mocha'
+import fs from 'fs'
+import { resolve, dirname } from 'path'
+import { parse as createParser } from '../rdf-xml.js'
+import { readDataset } from './helpers.js'
+import { ok } from 'assert'
+
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 describe('rdf/xml', () => {
   describe('parse', () => {
     it('successfully loads the input file', async () => {
       // given
-      const input = fs.createReadStream(path.resolve(__dirname, './datasets/bioinformatics.rdf'))
+      const input = fs.createReadStream(resolve(__dirname, './datasets/bioinformatics.rdf'))
 
       // when
       const parse = createParser()
       const dataset = await readDataset(input.pipe(parse))
 
       // then
-      expect(dataset.length).toBeGreaterThan(0)
+      ok(dataset.length > 0)
     })
   })
 })

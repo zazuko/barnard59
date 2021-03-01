@@ -1,13 +1,9 @@
-const sinkToDuplex = require('@rdfjs/sink-to-duplex')
-const Parser = require('rdfxml-streaming-parser').RdfXmlParser
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
+import { RdfXmlParser } from 'rdfxml-streaming-parser'
 
-function parse () {
-  return sinkToDuplex(new Parser(), {
+export function parse () {
+  return sinkToDuplex(new RdfXmlParser(), {
     readableObjectMode: true,
     writableObjectMode: true
   })
-}
-
-module.exports = {
-  parse
 }

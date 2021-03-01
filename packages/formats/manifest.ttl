@@ -21,7 +21,7 @@
   rdfs:label "Parse JSON-LD (Object)";
   rdfs:comment "Parses the given JSON-LD stream.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-formats/jsonld.js#parse.object>
+    code:link <node:barnard59-formats/jsonld.js#parseObject>
   ].
 
 <jsonld/serialize> a p:Operation, p:WritableObjectMode, p:Readable;

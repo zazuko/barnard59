@@ -1,14 +1,10 @@
-const rdf = require('rdf-ext')
+import rdf from 'rdf-ext'
 
-function readDataset (stream) {
+export function readDataset (stream) {
   return new Promise(resolve => {
-    let dataset = rdf.dataset()
+    const dataset = rdf.dataset()
     stream.on('data', triple => dataset.add(triple))
 
     stream.on('end', () => resolve(dataset))
   })
-}
-
-module.exports = {
-  readDataset
 }

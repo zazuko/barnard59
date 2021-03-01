@@ -1,13 +1,9 @@
-const sinkToDuplex = require('@rdfjs/sink-to-duplex')
-const Parser = require('@rdfjs/parser-n3')
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
+import Parser from '@rdfjs/parser-n3'
 
-function parse () {
+export function parse () {
   return sinkToDuplex(new Parser(), {
     readableObjectMode: true,
     writableObjectMode: true
   })
-}
-
-module.exports = {
-  parse
 }
