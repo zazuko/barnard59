@@ -1,4 +1,7 @@
-const FtpSrv = require('ftp-srv')
+import FtpSrv from 'ftp-srv'
+import { dirname } from 'path'
+
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 class FtpServer {
   constructor ({ path = __dirname, user, password } = {}) {
@@ -49,4 +52,4 @@ class FtpServer {
   }
 }
 
-module.exports = FtpServer
+export default FtpServer

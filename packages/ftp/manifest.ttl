@@ -7,19 +7,19 @@
   rdfs:label "List files (FTP)";
   rdfs:comment "Lists all files in the given FTP folder.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-ftp#list>
+    code:link <node:barnard59-ftp/list.js>
   ].
 
 <move> a p:Operation, p:Writable, p:Readable;
   rdfs:label "Move file (FTP)";
   rdfs:comment "Moves the given file at the end of the stream processing and forwards any incoming data.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-ftp#move>
+    code:link <node:barnard59-ftp/move.js>
   ].
 
 <read> a p:Operation, p:Readable;
   rdfs:label "Read file (FTP)";
   rdfs:comment "Reads the given file.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-ftp#read>
+    code:link <node:barnard59-ftp/read.js>
   ].

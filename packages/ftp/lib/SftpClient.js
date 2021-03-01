@@ -1,5 +1,6 @@
-const SFTP = require('sftp-promises')
-const FileParser = require('ftp/lib/parser')
+import SFTP from 'sftp-promises'
+import ftpParser from 'ftp/lib/parser.js'
+const { parseListEntry } = ftpParser
 
 class SftpClient {
   constructor ({ host, port = 22, user, password, privateKey, passphrase }) {
@@ -36,7 +37,7 @@ class SftpClient {
 
   async list (path) {
     return this.client.ls(path, this.session).then(result => {
-      return result.entries.map(entry => FileParser.parseListEntry(entry.longname))
+      return result.entries.map(entry => parseListEntry(entry.longname))
     })
   }
 
@@ -53,7 +54,7 @@ class SftpClient {
   }
 }
 
-module.exports = SftpClient
+export default SftpClient
 
 // Copied from sftp-promises
 // Fixed to resolve the promise directly instead of waiting `on('readable')`.

@@ -1,6 +1,6 @@
-const Ftp = require('ftp')
-const { promisify } = require('util')
-const { PassThrough, Readable, Writable } = require('readable-stream')
+import Ftp from 'ftp'
+import { promisify } from 'util'
+import { PassThrough, Readable, Writable } from 'readable-stream'
 
 class FtpClient {
   constructor ({ host, port = 21, user, password }) {
@@ -72,4 +72,4 @@ class FtpClient {
   }
 }
 
-module.exports = FtpClient
+export default FtpClient

@@ -1,5 +1,5 @@
-const command = require('./lib/command')
-const { Transform } = require('readable-stream')
+import command from './lib/command.js'
+import { Transform } from 'readable-stream'
 
 function move ({ source, target, ...options }) {
   return new Transform({
@@ -17,4 +17,4 @@ function move ({ source, target, ...options }) {
   })
 }
 
-module.exports = move
+export default move

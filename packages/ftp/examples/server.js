@@ -1,6 +1,6 @@
-const { resolve } = require('path')
-const FtpServer = require('../test/support/FtpServer')
-const SftpServer = require('../test/support/SftpServer')
+import { resolve } from 'path'
+import FtpServer from '../test/support/FtpServer'
+import SftpServer from '../test/support/SftpServer'
 
 async function main () {
   const protocol = process.argv.slice(-1)[0]

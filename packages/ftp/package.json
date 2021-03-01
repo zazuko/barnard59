@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "description": "FTP support for Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "standard && jest --runInBand"
+    "test": "nyc --reporter=lcov mocha",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
@@ -24,9 +26,12 @@
   },
   "devDependencies": {
     "barnard59": "^0.1.0",
+    "chai": "^4.3.0",
+    "chai-as-promised": "^7.1.1",
     "ftp-srv": "^4.2.0",
     "get-stream": "^5.1.0",
-    "jest": "^26.0.1",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
     "rimraf": "^3.0.0",
     "sftp-fs": "^0.0.7",
     "standard": "^14.1.0"

@@ -1,8 +1,4 @@
-const stream = require('readable-stream')
-const { promisify } = require('util')
+import { finished as _finished } from 'readable-stream'
+import { promisify } from 'util'
 
-const finished = promisify(stream.finished)
-
-module.exports = {
-  finished
-}
+export const finished = promisify(_finished)
