@@ -1,6 +1,6 @@
-const Transform = require('readable-stream').Transform
+import { Transform } from 'readable-stream'
 
-class ToString extends Transform {
+export default class ToString extends Transform {
   constructor () {
     super({
       writableObjectMode: true,
@@ -16,5 +16,3 @@ class ToString extends Transform {
     return new ToString()
   }
 }
-
-module.exports = ToString.create

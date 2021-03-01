@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "standard && nyc --reporter=lcov mocha"
   },
@@ -21,7 +22,7 @@
     "@rdfjs/formats-common": "^2.0.0",
     "duplexify": "^3.6.1",
     "glob": "^7.1.6",
-    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "nodeify-fetch": "^2.0.0",
     "rdf-ext": "^1.1.2",
     "rdf-transform-triple-to-quad": "^1.0.1",

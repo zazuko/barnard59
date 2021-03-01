@@ -1,4 +1,4 @@
-const Transform = require('readable-stream').Transform
+import { Transform } from 'readable-stream'
 
 class JsonParse extends Transform {
   constructor () {
@@ -34,7 +34,5 @@ class JsonStringify extends Transform {
   }
 }
 
-module.exports = {
-  parse: JsonParse.create,
-  stringify: JsonStringify.create
-}
+export const parse = JsonParse.create
+export const stringify = JsonStringify.create

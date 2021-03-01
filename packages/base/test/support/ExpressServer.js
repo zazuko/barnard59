@@ -1,8 +1,8 @@
-const express = require('express')
+import express from 'express'
 
-const { promisify } = require('util')
+import { promisify } from 'util'
 
-class ExpressServer {
+export class ExpressServer {
   constructor () {
     this.app = express()
   }
@@ -29,5 +29,3 @@ class ExpressServer {
     return `http://localhost:${this.server.address().port}/`
   }
 }
-
-module.exports = ExpressServer

@@ -1,8 +1,8 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const glob = require('../lib/glob')
+import { deepStrictEqual, strictEqual } from 'assert'
+import { array } from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import glob from '../glob.js'
 
 describe('glob', () => {
   it('should be a function', () => {
@@ -19,7 +19,7 @@ describe('glob', () => {
   it('should emit each file name as a chunk', async () => {
     const s = glob({ pattern: 'test/support/*' })
 
-    const filenames = await getStream.array(s)
+    const filenames = await array(s)
 
     deepStrictEqual(filenames, [
       'test/support/ExpressServer.js',
@@ -33,7 +33,7 @@ describe('glob', () => {
       pattern: '*'
     })
 
-    const filenames = await getStream.array(s)
+    const filenames = await array(s)
 
     deepStrictEqual(filenames, [
       'ExpressServer.js',

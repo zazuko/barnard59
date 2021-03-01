@@ -2,7 +2,7 @@ function nextLoop () {
   return new Promise(resolve => setTimeout(resolve, 0))
 }
 
-class ReadableToReadable {
+export class ReadableToReadable {
   constructor (input, output) {
     this.input = input
     this.output = output
@@ -33,5 +33,3 @@ class ReadableToReadable {
     this.destroyed = true
   }
 }
-
-module.exports = ReadableToReadable

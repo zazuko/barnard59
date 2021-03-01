@@ -1,4 +1,4 @@
-function streamToString (stream) {
+export function streamToString (stream) {
   const chunks = []
 
   stream.on('data', chunk => chunks.push(chunk))
@@ -9,5 +9,3 @@ function streamToString (stream) {
     })
   })
 }
-
-module.exports = streamToString

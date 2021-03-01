@@ -1,7 +1,7 @@
-const through = require('through2')
+import { obj } from 'through2'
 
-function flatten () {
-  return through.obj(function (chunk, encoding, callback) {
+export default function flatten () {
+  return obj(function (chunk, encoding, callback) {
     if (typeof chunk[Symbol.iterator] === 'function') {
       for (const item of chunk) {
         this.push(item)
@@ -21,5 +21,3 @@ function flatten () {
     return callback(new Error('chunk doesn\'t implement Symbol.iterator or .forEach'))
   })
 }
-
-module.exports = flatten

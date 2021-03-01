@@ -1,10 +1,10 @@
-const { Readable } = require('readable-stream')
-const ReadableToReadable = require('./ReadableToReadable')
+import { Readable } from 'readable-stream'
+import { ReadableToReadable } from './ReadableToReadable.js'
 
 /**
  * wraps only the readable part of a duplex stream
  */
-class DuplexToReadable extends Readable {
+export class DuplexToReadable extends Readable {
   constructor (stream, options) {
     super(options)
 
@@ -21,5 +21,3 @@ class DuplexToReadable extends Readable {
     callback(err)
   }
 }
-
-module.exports = DuplexToReadable

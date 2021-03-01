@@ -1,4 +1,4 @@
-const Readable = require('readable-stream')
+import Readable from 'readable-stream'
 
 class ToReadable extends Readable {
   constructor (content, { objectMode = false } = {}) {
@@ -20,7 +20,4 @@ function objectToReadable (obj) {
   return new ToReadable(obj, { objectMode: true })
 }
 
-module.exports = {
-  string: stringToReadable,
-  object: objectToReadable
-}
+export { stringToReadable as string, objectToReadable as object }

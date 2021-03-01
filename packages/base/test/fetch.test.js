@@ -1,9 +1,9 @@
-const { strictEqual } = require('assert')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const fetch = require('../lib/fetch')
-const streamToString = require('./support/streamToString')
-const ExpressServer = require('./support/ExpressServer')
+import { strictEqual } from 'assert'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import fetch from '../fetch.js'
+import { streamToString } from './support/streamToString.js'
+import { ExpressServer } from './support/ExpressServer.js'
 
 describe('fetch', () => {
   it('should be a function', () => {

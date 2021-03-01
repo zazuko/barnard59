@@ -1,4 +1,4 @@
-const Writable = require('readable-stream').Writable
+import { Writable } from 'readable-stream'
 
 class Nul extends Writable {
   constructor () {
@@ -14,4 +14,6 @@ class Nul extends Writable {
   }
 }
 
-module.exports = Nul.create
+const nul = Nul.create
+
+export default nul

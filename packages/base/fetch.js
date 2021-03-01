@@ -1,8 +1,8 @@
-const nodifyFetch = require('nodeify-fetch')
-const objectToReadable = require('./toReadable').object
-const DuplexToReadable = require('./DuplexToReadable')
+import nodifyFetch from 'nodeify-fetch'
+import { object as objectToReadable } from './toReadable.js'
+import { DuplexToReadable } from './DuplexToReadable.js'
 
-async function fetch (url, options = {}) {
+export default async function fetch (url, options = {}) {
   const response = await nodifyFetch(url, options)
 
   return new DuplexToReadable(response.body)
@@ -17,5 +17,3 @@ fetch.json = (url, options = {}) => {
 
   return nodifyFetch(url, options).then(res => res.json()).then(json => objectToReadable(json))
 }
-
-module.exports = fetch
