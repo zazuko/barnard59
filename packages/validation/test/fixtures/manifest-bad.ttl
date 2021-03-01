@@ -1,0 +1,18 @@
+@base <http://barnard59.zazuko.com/operations/ftp/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<a2> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "Exported with a named export";
+  rdfs:comment "but imported with default import";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:fixtures/namedexport.mjs>
+  ].
+
+<a4> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "Exported with a default export";
+  rdfs:comment "but imported with a named import";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:fixtures/defaultexport.mjs#namedimport>
+  ].

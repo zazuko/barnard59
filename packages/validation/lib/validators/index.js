@@ -3,11 +3,13 @@ const dependency = require('./dependency')
 const firstOperationIsReadable = require('./firstOperationIsReadable')
 const operation = require('./operation')
 const operationHasOperationProperty = require('./operationHasOperationProperty')
+const operationIsExported = require('./operationIsExported')
+const operationIsImportable = require('./operationIsImportable')
 const operationPropertiesExist = require('./operationPropertiesExist')
 const pipelinePropertiesExist = require('./pipelinePropertiesExist')
 const pipelinePropertiesMatchFirstFlex = require('./pipelinePropertiesMatchFirstFlex')
-const pipelinePropertiesMatchLastFlex = require('./pipelinePropertiesMatchLastFlex')
 const pipelinePropertiesMatchFirstStrict = require('./pipelinePropertiesMatchFirstStrict')
+const pipelinePropertiesMatchLastFlex = require('./pipelinePropertiesMatchLastFlex')
 const pipelinePropertiesMatchLastStrict = require('./pipelinePropertiesMatchLastStrict')
 const previousOperationHasMetadata = require('./previousOperationHasMetadata')
 const readableBeforeWritable = require('./readableBeforeWritable')
@@ -21,11 +23,13 @@ module.exports = {
   firstOperationIsReadable,
   operation,
   operationHasOperationProperty,
+  operationIsExported,
+  operationIsImportable,
   operationPropertiesExist,
   pipelinePropertiesExist,
   pipelinePropertiesMatchFirstFlex,
-  pipelinePropertiesMatchLastFlex,
   pipelinePropertiesMatchFirstStrict,
+  pipelinePropertiesMatchLastFlex,
   pipelinePropertiesMatchLastStrict,
   previousOperationHasMetadata,
   readableBeforeWritable,

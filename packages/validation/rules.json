@@ -66,6 +66,18 @@
     "messageFailure": "Invalid operation ${operation}: next operation is not WritableObjectMode"
   },
   {
+    "ruleId": 14,
+    "ruleDescription": "Operation defined in manifest can be imported",
+    "messageSuccess": "${filename} can be imported for operation ${op}",
+    "messageFailure": "Cannot import ${filename} for operation ${op}"
+  },
+  {
+    "ruleId": 15,
+    "ruleDescription": "Operation defined in manifest has a corresponding export",
+    "messageSuccess": "File ${filename} exports '${method}' for operation ${op}",
+    "messageFailure": "File ${filename} does not export ${method} for operation ${op}"
+  },
+  {
     "ruleId": 51,
     "ruleDescription": "Pipeline should have the same type if its first stream is Writable(ObjectMode)",
     "messageSuccess": "The pipeline type for ${pipeline} matches first stream",
