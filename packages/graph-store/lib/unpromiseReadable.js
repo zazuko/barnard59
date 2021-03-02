@@ -1,5 +1,5 @@
-const toReadable = require('duplex-to/readable')
-const { PassThrough } = require('readable-stream')
+import toReadable from 'duplex-to/readable.js'
+import { PassThrough } from 'readable-stream'
 
 function unpromiseReadable (promise) {
   const stream = new PassThrough({ objectMode: true })
@@ -13,4 +13,4 @@ function unpromiseReadable (promise) {
   return toReadable(stream)
 }
 
-module.exports = unpromiseReadable
+export default unpromiseReadable
