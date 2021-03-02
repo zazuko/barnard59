@@ -1,12 +1,12 @@
-const { strictEqual } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const rdf = require('@rdfjs/data-model')
-const namespace = require('@rdfjs/namespace')
-const { quadToNTriples } = require('@rdfjs/to-ntriples')
-const withServer = require('./support/withServer')
-const { get } = require('..')
+import { strictEqual } from 'assert'
+import { array } from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import rdf from '@rdfjs/data-model'
+import namespace from '@rdfjs/namespace'
+import { quadToNTriples } from '@rdfjs/to-ntriples'
+import withServer from './support/withServer.js'
+import { get } from '../index.js'
 
 const ns = namespace('http://example.org/')
 
@@ -21,7 +21,7 @@ describe('get', () => {
       strictEqual(isWritable(stream), false)
 
       try {
-        await getStream.array(stream)
+        await array(stream)
       } catch (err) {}
     })
   })
@@ -39,7 +39,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl })
 
-      await getStream.array(stream)
+      await array(stream)
 
       strictEqual(called, true)
     })
@@ -58,7 +58,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl })
 
-      await getStream.array(stream)
+      await array(stream)
 
       strictEqual(mediaType, 'application/n-triples')
     })
@@ -77,7 +77,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl, graph: ns.graph1 })
 
-      await getStream.array(stream)
+      await array(stream)
 
       strictEqual(graph, ns.graph1.value)
     })
@@ -102,7 +102,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl, graph: ns.graph1 })
 
-      const actual = await getStream.array(stream)
+      const actual = await array(stream)
 
       expected.forEach((quad, index) => {
         strictEqual(quad.equals(actual[index]), true)
@@ -129,7 +129,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl, graph: ns.graph1.value })
 
-      const actual = await getStream.array(stream)
+      const actual = await array(stream)
 
       expected.forEach((quad, index) => {
         strictEqual(quad.equals(actual[index]), true)
@@ -156,7 +156,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl, graph: rdf.defaultGraph() })
 
-      const actual = await getStream.array(stream)
+      const actual = await array(stream)
 
       expected.forEach((quad, index) => {
         strictEqual(quad.equals(actual[index]), true)
@@ -183,7 +183,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl, graph: '' })
 
-      const actual = await getStream.array(stream)
+      const actual = await array(stream)
 
       expected.forEach((quad, index) => {
         strictEqual(quad.equals(actual[index]), true)
@@ -204,7 +204,7 @@ describe('get', () => {
       const baseUrl = await server.listen()
       const stream = get({ endpoint: baseUrl, user: 'testuser', password: 'testpassword' })
 
-      await getStream.array(stream)
+      await array(stream)
 
       strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
     })
@@ -222,7 +222,7 @@ describe('get', () => {
       let error = null
 
       try {
-        await getStream.array(stream)
+        await array(stream)
       } catch (err) {
         error = err
       }

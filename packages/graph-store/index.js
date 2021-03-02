@@ -1,9 +1,9 @@
-const rdf = require('@rdfjs/data-model')
-const Client = require('sparql-http-client')
-const SinkToWritable = require('./lib/SinkToWritable')
-const unpromiseReadable = require('./lib/unpromiseReadable')
+import rdf from '@rdfjs/data-model'
+import Client from 'sparql-http-client'
+import SinkToWritable from './lib/SinkToWritable.js'
+import unpromiseReadable from './lib/unpromiseReadable.js'
 
-function get ({ endpoint, graph, user, password }) {
+export function get ({ endpoint, graph, user, password }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
@@ -19,7 +19,7 @@ function get ({ endpoint, graph, user, password }) {
   return unpromiseReadable(client.store.get(graph))
 }
 
-function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
+export function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
@@ -30,7 +30,7 @@ function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   return new SinkToWritable(readable => client.store.post(readable))
 }
 
-function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
+export function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
@@ -39,10 +39,4 @@ function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   })
 
   return new SinkToWritable(readable => client.store.put(readable))
-}
-
-module.exports = {
-  get,
-  post,
-  put
 }

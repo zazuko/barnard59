@@ -3,9 +3,11 @@
   "version": "0.1.2",
   "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "coverage": "codecov",
-    "test": "standard && nyc --reporter=lcov mocha"
+    "lint": "standard",
+    "test": "nyc --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
   "dependencies": {
     "@rdfjs/data-model": "^1.2.0",
     "duplex-to": "^1.0.0",
-    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
     "sparql-http-client": "^2.2.2"
