@@ -3,8 +3,11 @@
   "version": "0.2.4",
   "description": "RDF support for Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "standard && nyc --reporter=lcov mocha"
+    "coverage": "codecov",
+    "lint": "standard",
+    "test": "nyc --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
@@ -28,7 +31,9 @@
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^1.0.2",
+    "codecov": "^3.6.5",
     "get-stream": "^6.0.1",
+    "into-stream": "^5.1.1",
     "isstream": "^0.1.2",
     "mocha": "^8.4.0",
     "nyc": "^15.0.1",

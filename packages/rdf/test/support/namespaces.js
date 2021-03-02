@@ -1,11 +1,15 @@
-const namespace = require('@rdfjs/namespace')
+import namespace from '@rdfjs/namespace'
 
-const ns = {
-  cube: namespace('https://cube.link/'),
-  ex: namespace('http://example.org/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  sh: namespace('http://www.w3.org/ns/shacl#'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#')
+const cube = namespace('https://cube.link/')
+const ex = namespace('http://example.org/')
+const rdf = namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+const sh = namespace('http://www.w3.org/ns/shacl#')
+const xsd = namespace('http://www.w3.org/2001/XMLSchema#')
+
+export {
+  cube,
+  ex,
+  rdf,
+  sh,
+  xsd
 }
-
-module.exports = ns

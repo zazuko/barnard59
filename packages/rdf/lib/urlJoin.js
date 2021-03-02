@@ -1,5 +1,5 @@
-const { join } = require('path')
-const { URL } = require('url')
+import { join } from 'path'
+import { URL } from 'url'
 
 function urlJoin (base, part) {
   const url = new URL(base)
@@ -9,4 +9,4 @@ function urlJoin (base, part) {
   return url.toString()
 }
 
-module.exports = urlJoin
+export default urlJoin

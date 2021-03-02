@@ -1,12 +1,12 @@
-const { URL } = require('url')
-const clownface = require('clownface')
-const namespace = require('@rdfjs/namespace')
-const TermMap = require('@rdfjs/term-map')
-const TermSet = require('@rdfjs/term-set')
-const rdf = require('rdf-ext')
-const { Transform } = require('readable-stream')
-const dateToId = require('../dateToId')
-const urlJoin = require('../urlJoin')
+import { URL } from 'url'
+import clownface from 'clownface'
+import namespace from '@rdfjs/namespace'
+import TermMap from '@rdfjs/term-map'
+import TermSet from '@rdfjs/term-set'
+import rdf from 'rdf-ext'
+import { Transform } from 'readable-stream'
+import dateToId from '../dateToId.js'
+import urlJoin from '../urlJoin.js'
 
 const ns = {
   cube: namespace('https://cube.link/'),
@@ -241,4 +241,4 @@ function toObservation ({
   return new ToObservation({ blacklist, dimensions, observation, observations, observer, useDate, dateProperty, useIndex })
 }
 
-module.exports = toObservation
+export default toObservation

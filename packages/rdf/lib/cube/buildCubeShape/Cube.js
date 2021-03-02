@@ -1,8 +1,8 @@
-const clownface = require('clownface')
-const rdf = require('rdf-ext')
-const TermMap = require('@rdfjs/term-map')
-const Dimension = require('./Dimension')
-const ns = require('./namespaces')
+import clownface from 'clownface'
+import rdf from 'rdf-ext'
+import TermMap from '@rdfjs/term-map'
+import Dimension from './Dimension.js'
+import * as ns from './namespaces.js'
 
 class Cube {
   constructor ({ term, observationSet, shape }) {
@@ -51,4 +51,4 @@ class Cube {
   }
 }
 
-module.exports = Cube
+export default Cube

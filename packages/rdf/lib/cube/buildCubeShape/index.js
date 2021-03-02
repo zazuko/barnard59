@@ -1,11 +1,11 @@
-const clownface = require('clownface')
-const TermMap = require('@rdfjs/term-map')
-const TermSet = require('@rdfjs/term-set')
-const rdf = require('rdf-ext')
-const { Transform } = require('readable-stream')
-const Cube = require('./Cube')
-const ns = require('./namespaces')
-const urlJoin = require('../../urlJoin')
+import clownface from 'clownface'
+import TermMap from '@rdfjs/term-map'
+import TermSet from '@rdfjs/term-set'
+import rdf from 'rdf-ext'
+import { Transform } from 'readable-stream'
+import Cube from './Cube.js'
+import * as ns from './namespaces.js'
+import urlJoin from '../../urlJoin.js'
 
 function defaultCube ({ observationSet }) {
   const observationSetIri = observationSet && observationSet.value
@@ -84,4 +84,4 @@ function buildCubeShape ({ excludeValuesOf } = {}) {
   return new CubeShapeBuilder({ excludeValuesOf })
 }
 
-module.exports = buildCubeShape
+export default buildCubeShape
