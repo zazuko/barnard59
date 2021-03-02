@@ -1,5 +1,5 @@
-const { finished } = require('readable-stream')
-const { promisify } = require('util')
+import { finished } from 'readable-stream'
+import { promisify } from 'util'
 
 function streamToString (stream) {
   const chunks = []
@@ -11,4 +11,4 @@ function streamToString (stream) {
   })
 }
 
-module.exports = streamToString
+export default streamToString

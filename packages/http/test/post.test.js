@@ -1,13 +1,12 @@
-/* global describe, expect, test */
-
-const { post } = require('..')
-const chunksAndContent = require('./support/chunksAndContent')
-const { isReadable, isWritable } = require('isstream')
-const streamToString = require('./support/streamToString')
-const ExpressAsPromise = require('express-as-promise')
+import { post } from '../index.js'
+import chunksAndContent from './support/chunksAndContent.js'
+import { isReadable, isWritable } from 'isstream'
+import streamToString from './support/streamToString.js'
+import ExpressAsPromise from 'express-as-promise'
+import { expect } from 'chai'
 
 describe('post', () => {
-  test('returns a duplex stream', async () => {
+  it('returns a duplex stream', async () => {
     const server = new ExpressAsPromise()
 
     server.app.post('/', (req, res) => {
@@ -17,8 +16,8 @@ describe('post', () => {
     const baseUrl = await server.listen()
     const stream = await post({ url: baseUrl })
 
-    expect(isReadable(stream)).toBe(true)
-    expect(isWritable(stream)).toBe(true)
+    expect(isReadable(stream)).to.equal(true)
+    expect(isWritable(stream)).to.equal(true)
 
     stream.end()
 
@@ -27,7 +26,7 @@ describe('post', () => {
     await server.stop()
   })
 
-  test('sends the stream to the server', async () => {
+  it('sends the stream to the server', async () => {
     let content = null
     const expected = chunksAndContent()
 
@@ -50,7 +49,7 @@ describe('post', () => {
 
     await streamToString(stream)
 
-    expect(content).toBe(expected.content)
+    expect(content).to.equal(expected.content)
 
     await server.stop()
   })

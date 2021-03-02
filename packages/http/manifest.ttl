@@ -7,12 +7,12 @@
   rdfs:label "HTTP GET request";
   rdfs:comment "Makes a HTTP GET request and returns the body of the response as stream.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-http#get>
+    code:link <node:barnard59-http/index.js#get>
   ].
 
 <post> a p:Operation, p:Writable, p:Readable;
   rdfs:label "HTTP POST request";
   rdfs:comment "Makes a HTTP POST request, sends the written data as request body and returns the body of the response as stream.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-http#post>
+    code:link <node:barnard59-http/index.js#post>
   ].

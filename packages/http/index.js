@@ -1,17 +1,13 @@
-const fetch = require('./lib/fetch')
-const writableFetch = require('./lib/writableFetch')
+import fetch from './lib/fetch.js'
+import writableFetch from './lib/writableFetch.js'
 
-function get (options) {
+export function get (options) {
   return fetch(options)
 }
 
-function post (options) {
+export function post (options) {
   return writableFetch(options)
 }
 
-module.exports = {
-  fetch,
-  writableFetch,
-  get,
-  post
-}
+export { default as fetch } from './lib/fetch.js'
+export { default as writableFetch } from './lib/writableFetch.js'

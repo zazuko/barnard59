@@ -11,4 +11,4 @@ function chunksAndContent () {
   }
 }
 
-module.exports = chunksAndContent
+export default chunksAndContent
