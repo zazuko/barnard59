@@ -237,6 +237,32 @@ describe('cube.toObservation', () => {
   })
 
   describe('observations', () => {
+    it('should use the IRI of the observation without the observation ID extended by observation/', async () => {
+      const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
+
+      const transform = toObservation()
+
+      intoStream.object([dataset]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation = findObservation(result)
+
+      strictEqual(toNT(ns.ex('topic/observation/')), toNT(observation.in(ns.cube.observation).term))
+    })
+
+    it('should not create duplicate observation/ pathes', async () => {
+      const dataset = createMeasure({ term: ns.ex('topic/observation/a') }).addOut(ns.ex.property, 'value').dataset
+
+      const transform = toObservation()
+
+      intoStream.object([dataset]).pipe(transform)
+
+      const result = await getStream.array(transform)
+      const observation = findObservation(result)
+
+      strictEqual(toNT(ns.ex('topic/observation/')), toNT(observation.in(ns.cube.observation).term))
+    })
+
     it('should use the given observations function to generate the observations term', async () => {
       const dataset = createMeasure().addOut(ns.ex.property, 'value').dataset
 
