@@ -43,7 +43,13 @@ function defaultObserver ({ dataset, subject }) {
 }
 
 function defaultObservations ({ subject }) {
-  return rdf.namedNode(urlJoin(subject.value, '../observation/'))
+  const iri = urlJoin(subject.value, '..')
+
+  if (iri.endsWith('/observation')) {
+    return rdf.namedNode(`${iri}/`)
+  }
+
+  return rdf.namedNode(`${iri}/observation/`)
 }
 
 function defaultObservation ({ observations, subject }) {
