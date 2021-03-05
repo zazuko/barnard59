@@ -1,0 +1,23 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+
+<> a p:Pipeline, p:Writable;
+  p:steps [
+    p:stepList (<toContext> <null>)
+  ].
+
+<toContext> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base#map>
+  ];
+  code:arguments ("""input => {
+    this.content = input
+
+    return input
+  }"""^^code:EcmaScript).
+
+<null> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/null.js#default>
+  ].

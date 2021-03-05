@@ -1,10 +1,11 @@
-const { deepStrictEqual } = require('assert')
-const { beforeEach, describe, it } = require('mocha')
-const nock = require('nock')
-const Pipeline = require('../lib/pipelineFactory')
-const asyncLoaders = require('./support/asyncLoaders')
-const load = require('./support/load-pipeline')
-const run = require('./support/run')
+import { deepStrictEqual } from 'assert'
+import getStream from 'get-stream'
+import { beforeEach, describe, it } from 'mocha'
+import nock from 'nock'
+import defaultLoaderRegistry from '../lib/defaultLoaderRegistry.js'
+import createPipeline from '../lib/factory/pipeline.js'
+import { promisedEcmaScriptLoader, promisedUrlLoader } from './support/asyncLoaders.js'
+import loadPipelineDefinition from './support/loadPipelineDefinition.js'
 
 const dateTimeLd = {
   '@context': {
@@ -26,43 +27,34 @@ describe('Pipeline', () => {
   })
 
   it('should load code using node: scheme', async () => {
-    // given
-    const definition = await load('e2e/world-clock-node.ttl')
-    const pipe = Pipeline(definition, 'http://example.org/pipeline/')
+    const ptr = await loadPipelineDefinition('e2e/world-clock-node')
+    const pipeline = await createPipeline(ptr)
 
-    // when
-    const out = await run(pipe)
+    const out = await getStream(pipeline.stream)
 
-    // then
     deepStrictEqual(JSON.parse(out), dateTimeLd)
   })
 
   it('should load code using file: scheme', async () => {
-    // given
-    const definition = await load('e2e/world-clock-file.ttl')
-    const pipe = Pipeline(definition, 'http://example.org/pipeline/')
+    const ptr = await loadPipelineDefinition('e2e/world-clock-file')
+    const pipeline = await createPipeline(ptr, { basePath: process.cwd() })
 
-    // when
-    const out = await run(pipe)
+    const out = await getStream(pipeline.stream)
 
-    // then
     deepStrictEqual(JSON.parse(out), dateTimeLd)
   })
 
   it('should load code using async loaders', async () => {
-    // given
-    const definition = await load('e2e/world-clock-async.ttl')
-    const pipe = Pipeline(definition, 'http://example.org/pipeline/', {
-      additionalLoaders: [
-        asyncLoaders.promisedUrl,
-        asyncLoaders.ecmaScriptLoaderWrapper
-      ]
-    })
+    const ptr = await loadPipelineDefinition('e2e/world-clock-async')
+    const loaderRegistry = defaultLoaderRegistry()
 
-    // when
-    const out = await run(pipe)
+    promisedEcmaScriptLoader.register(loaderRegistry)
+    promisedUrlLoader.register(loaderRegistry)
 
-    // then
+    const pipeline = await createPipeline(ptr, { loaderRegistry })
+
+    const out = await getStream(pipeline.stream)
+
     deepStrictEqual(JSON.parse(out), { abc: 'dfg' })
   })
 })

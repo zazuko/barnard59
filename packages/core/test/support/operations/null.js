@@ -1,4 +1,6 @@
-const { Writable } = require('readable-stream')
+import stream from 'readable-stream'
+
+const { Writable } = stream
 
 class NullStream extends Writable {
   constructor () {
@@ -7,10 +9,10 @@ class NullStream extends Writable {
       write: (chunk, encoding, callback) => callback()
     })
   }
-
-  static create () {
-    return new NullStream()
-  }
 }
 
-module.exports = NullStream.create
+function factory () {
+  return new NullStream()
+}
+
+export default factory

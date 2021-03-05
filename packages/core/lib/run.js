@@ -1,31 +1,22 @@
-const { isReadable, isWritable } = require('isstream')
-const { finished } = require('readable-stream')
-const { promisify } = require('util')
+import { promisify } from 'util'
+import { finished } from 'readable-stream'
 
-/**
- * Run a pipe.
- * @param {Stream} something
- * @return {Promise} something
- * @memberof module:barnard59
- * @example
- * ```js
- * p.run(source.pipe(p.limit).pipe(p.stdout())).then(() => {console.log('done')})
- * ```
- */
-function run (something) {
-  if (typeof something === 'function') {
-    return Promise.resolve().then(() => {
-      return something()
-    })
+async function run (pipeline, { end = false, resume = false } = {}) {
+  if (end) {
+    pipeline.stream.end()
   }
 
-  if (isReadable(something) || isWritable(something)) {
-    return run.stream(something)
+  if (resume) {
+    pipeline.stream.resume()
   }
 
-  return Promise.reject(new Error('unknown content'))
+  await promisify(finished)(pipeline.stream)
+
+  pipeline.logger.end()
+
+  await new Promise(resolve => {
+    pipeline.logger.on('finish', () => resolve())
+  })
 }
 
-run.stream = promisify(finished)
-
-module.exports = run
+export default run

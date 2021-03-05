@@ -1,21 +1,26 @@
-const cf = require('clownface')
-const rdf = require('rdf-ext')
-const ecmaScriptLoader = require('rdf-loader-code/ecmaScript')
+import clownface from 'clownface'
+import rdf from 'rdf-ext'
+import ecmaScriptLoader from 'rdf-loader-code/ecmaScript.js'
 
-function promisedUrl (term, dataset) {
-  const node = cf(dataset).node(term)
-  return Promise.resolve().then(() => node.out(rdf.namedNode('http://example.org/url')).value)
-}
-promisedUrl.register = r => r.registerNodeLoader('http://example.org/PromisedUrl', promisedUrl)
-
-function ecmaScriptLoaderWrapper () {
-  const params = arguments
-  return Promise.resolve().then(() => ecmaScriptLoader.apply(this, params))
+async function promisedEcmaScriptLoader (...args) {
+  return ecmaScriptLoader.call(this, ...args)
 }
 
-ecmaScriptLoaderWrapper.register = r => r.registerNodeLoader('http://example.org/DeferredEcmaScript', ecmaScriptLoaderWrapper)
+promisedEcmaScriptLoader.register = registry => {
+  registry.registerNodeLoader('http://example.org/DeferredEcmaScript', promisedEcmaScriptLoader)
+}
 
-module.exports = {
-  promisedUrl,
-  ecmaScriptLoaderWrapper
+async function promisedUrlLoader ({ term, dataset }) {
+  return clownface({ dataset, term })
+    .out(rdf.namedNode('http://example.org/url'))
+    .value
+}
+
+promisedUrlLoader.register = registry => {
+  registry.registerNodeLoader('http://example.org/PromisedUrl', promisedUrlLoader)
+}
+
+export {
+  promisedEcmaScriptLoader,
+  promisedUrlLoader
 }

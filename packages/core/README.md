@@ -4,21 +4,45 @@ The core component of Barnard59 Linked Data pipelines to create and run pipeline
 
 ## Usage
 
-The package exports a `pipeline` and a `run` functions which can be imported like this:
+The package exports multiple functions which can be imported like this:
 
 ```
-const { pipeline, run } = require('barnard59-core') 
+import { createPipeline, run } from 'barnard59-core' 
 ```
 
-### pipeline(definition, iri)
+### createPipeline(ptr, { basePath, context, logger, variables })
 
-The `pipeline` factory function creates new instances based on the given definition.
+Creates a new `Pipeline` object based on the definition given as graph pointer in `ptr`.
+The function accepts the following arguments:
 
-- `definition`: A RDFJS Dataset that contains all quads of the definition.
-- `iri`: A RDFJS Term that points to the subject of the pipeline.
+- `ptr`: A graph pointer to the pipeline definition.
+- `basePath`: Optional an alternative base path given as string, which is used by the code loaders.
+- `context`: Additional optional properties which will be merged into the loader context.
+- `logger`: An optional alternative `winston` logger instance that should be used.
+  See `defaultLogger()` if you want to create a logger based on the default logger settings.
+- `variables`: Additional optional variables which will be merged into the pipeline variables. 
 
-### async run(something) 
+### defaultLoaderRegistry()
 
-Runs a sync function, async function or a stream and waits for it to finish.
+Creates an instance of a loader registry that contains all default loaders.
+The function can be used to create custom registry instances based on the defaults.
 
-- `something`: The function or stream.
+### defaultLogger({ console, errorFilename, filename, level })
+
+The function accepts the following arguments:
+
+- `console` (default: `true`)
+- `errorFilename` (default: `null`)
+- `filename`: (default: `null`)
+- `level`: (default: `error`)
+
+### async run(pipeline, { end = false, resume = false } = {})
+
+Wait for a pipeline to finish.
+Optional calls `.end()` or `.resume()` on the stream of the pipeline to trigger processing.
+
+The function accepts the following arguments:
+
+- `pipeline`: The pipeline as Pipeline object.
+- `end`: An optional flag, if `true` calls `.end()` on the stream of the pipeline. (default = `false`)
+- `resume`: An optional flag, if `true` calls `.resume()` on the stream of the pipeline. (default = `false`)
