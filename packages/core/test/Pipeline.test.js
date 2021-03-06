@@ -139,6 +139,16 @@ describe('Pipeline', () => {
     })
   })
 
+  it('should catch and emit step stream errors', async () => {
+    const ptr = await loadPipelineDefinition('step-stream-throw')
+
+    const pipeline = createPipeline(ptr, { basePath: resolve('test') })
+
+    await rejects(async () => {
+      await getStream(pipeline.stream)
+    })
+  })
+
   describe('plain Pipeline', () => {
     it('should emit an end event', async () => {
       const ptr = await loadPipelineDefinition('plain')
