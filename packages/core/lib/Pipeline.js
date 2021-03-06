@@ -106,12 +106,16 @@ class Pipeline extends StreamObject {
         return
       }
 
-      const chunk = this.lastChild.stream.read(size)
+      try {
+        const chunk = this.lastChild.stream.read(size)
 
-      if (!chunk) {
-        await nextLoop()
-      } else if (!this.stream.push(chunk)) {
-        return
+        if (!chunk) {
+          await nextLoop()
+        } else if (!this.stream.push(chunk)) {
+          return
+        }
+      } catch (err) {
+        this.lastChild.stream.destroy(err)
       }
     }
   }
