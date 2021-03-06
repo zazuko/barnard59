@@ -18,6 +18,10 @@ class Step extends StreamObject {
     this.args = args
     this.operation = operation
 
+    if (typeof stream.step === 'undefined') {
+      stream.step = this
+    }
+
     this.logger.info({ iri: this.ptr.value, message: 'created new Step' })
   }
 }
