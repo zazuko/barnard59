@@ -1,4 +1,4 @@
-const { Readable } = require('readable-stream')
+import { Readable } from 'readable-stream'
 
 function error () {
   const stream = new Readable({
@@ -10,4 +10,4 @@ function error () {
   return stream
 }
 
-module.exports = error
+export default error

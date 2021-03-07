@@ -1,7 +1,7 @@
-const { promisify } = require('util')
-const readline = require('readline')
-const padStart = require('lodash/padStart')
-const range = require('lodash/range')
+import { promisify } from 'util'
+import readline from 'readline'
+import padStart from 'lodash/padStart.js'
+import range from 'lodash/range.js'
 
 class Histogram {
   constructor ({ max = 100, width = 40 } = {}) {
@@ -45,4 +45,4 @@ class Histogram {
   }
 }
 
-module.exports = Histogram
+export default Histogram

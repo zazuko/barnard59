@@ -1,39 +1,39 @@
-const { finished } = require('readable-stream')
-const Histogram = require('./Histogram')
+import stream from 'readable-stream'
+import Histogram from './Histogram.js'
+
+const { finished } = stream
 
 function bufferStatePair ({ index, mode, state, step }) {
-  const key = `[${index}] (${mode}) ${step.value} (${state.length}/${state.highWaterMark})`
+  const key = `[${index}] (${mode}) ${step.ptr.value} (${state.length}/${state.highWaterMark})`
   const value = state.length > 0 ? Math.round(state.length / state.highWaterMark * 100.0) : 0
 
   return { key, value }
 }
 
 function bufferInfo (pipeline) {
-  const streams = pipeline._pipeline.streams
+  const steps = pipeline.children
 
-  if (!streams) {
+  if (!steps) {
     return
   }
 
-  return streams.reduce((data, stream, index) => {
-    const step = pipeline._pipeline.steps[index]
-
-    if (stream._writableState) {
+  return steps.reduce((data, step, index) => {
+    if (step.stream._writableState) {
       const { key, value } = bufferStatePair({
         index,
         mode: 'write',
-        state: stream._writableState,
+        state: step.stream._writableState,
         step
       })
 
       data[key] = value
     }
 
-    if (stream._readableState) {
+    if (step.stream._readableState) {
       const { key, value } = bufferStatePair({
         index,
         mode: 'read',
-        state: stream._readableState,
+        state: step.stream._readableState,
         step
       })
 
@@ -44,10 +44,10 @@ function bufferInfo (pipeline) {
   }, {})
 }
 
-function bufferDebug (pipeline, { interval = 1000 } = {}) {
+function bufferDebug (pipeline, { interval = 10 } = {}) {
   let done = false
 
-  finished(pipeline, () => {
+  finished(pipeline.stream, () => {
     done = true
   })
 
@@ -70,4 +70,4 @@ function bufferDebug (pipeline, { interval = 1000 } = {}) {
   next()
 }
 
-module.exports = bufferDebug
+export default bufferDebug

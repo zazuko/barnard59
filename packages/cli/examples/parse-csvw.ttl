@@ -20,26 +20,21 @@
   ].
 
 <readFile> a p:Step;
-  code:implementedBy [
-    code:link <node:fs#createReadStream>;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:fs#createReadStream>
   ];
   code:arguments ("filename"^^p:VariableName).
 
-
 <parse> a p:Step;
-  code:implementedBy [
-    code:link <node:barnard59-formats#csvw.parse>;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-formats/csvw.js#parse>
   ];
   code:arguments ( <parseMetadata> ).
 
 <serialize> a p:Step;
-  code:implementedBy [
-    code:link <node:barnard59-formats#ntriples.serialize> ;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-formats/ntriples.js#serialize>
   ].
-
 
 <parseMetadata> a p:Pipeline, p:ReadableObjectMode;
   p:steps [
@@ -47,14 +42,12 @@
   ].
 
 <readMetadata> a p:Step;
-  code:implementedBy [
-    code:link <node:fs#createReadStream>;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:fs#createReadStream>
   ];
   code:arguments ("metadata"^^p:VariableName).
 
 <parseMetadataStep> a p:Step;
-  code:implementedBy [
-    code:link <node:barnard59-formats#jsonld.parse>;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-formats/jsonld.js#parse>
   ].

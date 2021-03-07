@@ -15,7 +15,7 @@
   ].
 
 <concatFiles> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-base#concat>
   ];
   code:arguments (<readA> <readB>).
@@ -43,7 +43,7 @@
   ].
 
 <readFile> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:fs#createReadStream>
   ];
   code:arguments ("filename"^^p:VariableName).
