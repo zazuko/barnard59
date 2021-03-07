@@ -7,7 +7,8 @@
     "barnard59": "bin/barnard59.js"
   },
   "scripts": {
-    "test": "standard && jest"
+    "coverage": "codecov",
+    "test": "standard && c8 --reporter=lcov --reporter=text mocha"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,9 @@
   },
   "devDependencies": {
     "barnard59-formats": "^0.1.1",
-    "jest": "^26.6.3",
+    "c8": "^7.6.0",
+    "codecov": "^3.8.1",
+    "mocha": "^8.3.1",
     "shelljs": "^0.8.4",
     "standard": "^16.0.3"
   },

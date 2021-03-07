@@ -1,6 +1,6 @@
-/* global describe, expect, it */
-
+const { strictEqual } = require('assert')
 const { resolve } = require('path')
+const { describe, it } = require('mocha')
 const shell = require('shelljs')
 
 const barnard59 = resolve(__dirname, '../bin/barnard59.js')
@@ -13,7 +13,7 @@ describe('barnard59', () => {
 
       const result = shell.exec(command, { silent: true })
 
-      expect(result.code).toBe(1)
+      strictEqual(result.code, 1)
     })
   })
 
@@ -24,7 +24,7 @@ describe('barnard59', () => {
 
       const result = shell.exec(command, { silent: true })
 
-      expect(result.code).toBe(0)
+      strictEqual(result.code, 0)
     })
 
     it('should run the fetch-json-to-ntriples.ttl example without error', () => {
@@ -33,7 +33,7 @@ describe('barnard59', () => {
 
       const result = shell.exec(command, { silent: true })
 
-      expect(result.code).toBe(0)
+      strictEqual(result.code, 0)
     })
 
     it('should run the parse-csvw.ttl example without error', () => {
@@ -42,7 +42,7 @@ describe('barnard59', () => {
 
       const result = shell.exec(command, { silent: true })
 
-      expect(result.code).toBe(0)
+      strictEqual(result.code, 0)
     })
   })
 })
