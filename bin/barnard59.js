@@ -36,7 +36,7 @@ function parseVariables (str, all) {
 function guessPipeline (dataset) {
   const graph = cf(dataset)
 
-  const pipelines = graph.has(ns.rdf('type'), [ ns.p('Pipeline'), ns.p('ObjectPipeline') ])
+  const pipelines = graph.has(ns.rdf('type'), [ns.p('Pipeline'), ns.p('ObjectPipeline')])
 
   if (pipelines.values.length === 0) {
     throw new Error('no pipeline found in the dataset')
