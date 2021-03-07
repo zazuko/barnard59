@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-const p = require('..')
-const path = require('path')
-const program = require('commander')
-const cf = require('clownface')
-const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
-const bufferDebug = require('../lib/bufferDebug')
-const runner = require('../lib/runner')
+import { createWriteStream } from 'fs'
+import { dirname, resolve } from 'path'
+import program from 'commander'
+import rdf from 'rdf-ext'
+import fromFile from 'rdf-utils-fs/fromFile.js'
+import bufferDebug from '../lib/bufferDebug.js'
+import findPipeline from '../findPipeline.js'
+import runner from '../runner.js'
 
-const ns = {
-  p: namespace('https://pipeline.described.at/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+async function fileToDataset (filename) {
+  return rdf.dataset().import(fromFile(filename))
 }
 
 function createOutputStream (output) {
@@ -20,78 +18,35 @@ function createOutputStream (output) {
     return process.stdout
   }
 
-  return fs.createWriteStream(output)
-}
-
-function parseVariables (str, all) {
-  return str
-    .split(',')
-    .reduce((vars, nameValue) => {
-      const [name, value] = nameValue.split('=')
-
-      return vars.set(name, value)
-    }, all)
-}
-
-function guessPipeline (dataset) {
-  const graph = cf(dataset)
-
-  const pipelines = graph.has(ns.rdf('type'), [ns.p('Pipeline'), ns.p('ObjectPipeline')])
-
-  if (pipelines.values.length === 0) {
-    throw new Error('no pipeline found in the dataset')
-  }
-
-  const rootPipelines = pipelines.values.reduce((arr, id) => {
-    const node = dataset.match(null, null, rdf.namedNode(id), null)
-
-    if (node.length === 0) {
-      arr.push(id)
-    }
-
-    return arr
-  }, [])
-
-  if (rootPipelines.length > 1) {
-    throw new Error('multiple root pipeline found. please specify the one to run using --pipeline option')
-  }
-
-  return rootPipelines[0]
+  return createWriteStream(output)
 }
 
 program
   .command('run <filename>')
-  .option('--format <mediaType>', 'media type of the pipeline description', 'application/ld+json')
   .option('--output [filename]', 'output file', '-')
   .option('--pipeline [iri]', 'IRI of the pipeline description')
-  .option('--variable <name=value>', 'variable key value pairs separated by comma', parseVariables, new Map())
-  .option('-v, --verbose', 'enable diagnostic console output')
+  .option('--variable <name=value>', 'variable key value pairs', (v, all) => all.set(...v.split('=', 2)), new Map())
+  .option('-v, --verbose', 'enable diagnostic console output', (v, total) => ++total, 0)
   .option('--enable-buffer-monitor', 'enable histogram of buffer usage')
-  .action(async (filename, options = {}) => {
+  .action(async (filename, { output, pipeline: iri, variable: variables, verbose, enableBufferMonitor } = {}) => {
     try {
-      let { format, output, pipeline, verbose, enableBufferMonitor } = options
+      const level = ['error', 'info', 'debug'][verbose] || 'error'
 
-      runner.log.enabled = verbose
+      const dataset = await fileToDataset(filename)
+      const ptr = findPipeline(dataset, iri)
 
-      const dataset = await p.fileToDataset(format, filename)
-
-      if (!pipeline) {
-        pipeline = guessPipeline(dataset)
-      }
-
-      const run = runner.create({
-        ...options,
-        dataset,
-        term: pipeline,
+      const { finished, pipeline } = await runner(ptr, {
+        basePath: resolve(dirname(filename)),
+        level,
         outputStream: createOutputStream(output),
-        basePath: path.resolve(path.dirname(filename))
+        variables
       })
 
       if (enableBufferMonitor) {
-        bufferDebug(run.pipeline)
+        bufferDebug(pipeline)
       }
 
-      await run.promise
+      await finished
     } catch (err) {
       console.error(err)
       process.exit(1)
