@@ -31,11 +31,13 @@
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "barnard59-core": "git://github.com/zazuko/barnard59-core.git#next",
     "express": "^4.16.4",
     "get-stream": "^5.1.0",
     "isstream": "^0.1.2",
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
+    "rdf-utils-fs": "^2.1.0",
     "standard": "^14.3.1"
   }
 }

@@ -38,6 +38,13 @@
     code:link <node:barnard59-base/flatten.js#default>
   ].
 
+<forEach> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "For Each";
+  rdfs:comment "Calls a sub pipeline for each incoming chunk.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-base/forEach.js#default>
+  ].
+
 <glob> a p:Operation, p:ReadableObjectMode;
   rdfs:label "Glob";
   rdfs:comment "Match files using the given pattern and emits each filename as a single chunk.";

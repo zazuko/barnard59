@@ -17,27 +17,27 @@ describe('glob', () => {
   })
 
   it('should emit each file name as a chunk', async () => {
-    const s = glob({ pattern: 'test/support/*' })
+    const s = glob({ pattern: 'test/support/definitions/e2e/*' })
 
     const filenames = await array(s)
 
     deepStrictEqual(filenames, [
-      'test/support/ExpressServer.js',
-      'test/support/streamToString.js'
+      'test/support/definitions/e2e/foreach-csv-duplicate.ttl',
+      'test/support/definitions/e2e/foreach-with-handler.ttl'
     ])
   })
 
   it('should forward additional options', async () => {
     const s = glob({
-      cwd: 'test/support',
+      cwd: 'test/support/definitions/e2e',
       pattern: '*'
     })
 
     const filenames = await array(s)
 
     deepStrictEqual(filenames, [
-      'ExpressServer.js',
-      'streamToString.js'
+      'foreach-csv-duplicate.ttl',
+      'foreach-with-handler.ttl'
     ])
   })
 })
