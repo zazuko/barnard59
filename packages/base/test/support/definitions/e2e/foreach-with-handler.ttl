@@ -1,0 +1,38 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+<> a p:Pipeline, p:Readable;
+  p:steps [
+    p:stepList (<iterateDirectory> <printLength>)
+  ] .
+
+<iterateDirectory> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/iterateDirectory.js#default>
+  ];
+  code:arguments ("support/definitions/e2e").
+
+<printLength> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:../forEach.js#default>
+  ];
+  code:arguments (<Print> "file").
+
+<Print> a p:Pipeline, p:ReadableObjectMode;
+  p:steps [
+    p:stepList (<readFile> <getLength>)
+  ].
+
+<readFile> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:fs#createReadStream>
+  ];
+  code:arguments ("file"^^p:VariableName).
+
+<getLength> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/inlineTransform.js#default>
+  ];
+  code:arguments ("_ => this.variables.get('file')"^^code:EcmaScript).
