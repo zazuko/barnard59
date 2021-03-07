@@ -1,6 +1,5 @@
-/* global describe, it */
-
 const { strictEqual } = require('assert')
+const { describe, it } = require('mocha')
 const { dirname, resolve } = require('path')
 const rdf = require('rdf-ext')
 const { fileToDataset } = require('..')
