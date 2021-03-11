@@ -10,6 +10,13 @@
     code:link <node:barnard59-rdf/mapMatch.js>
   ].
 
+<cube.js#buildCubeShape> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "build Cube Shape";
+  rdfs:comment "Builds a Cube Shape based on Cube Observation datasets";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/cube.js#buildCubeShape>
+  ].
+
 <cube.js#toObservation> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "to Cube Observation";
   rdfs:comment "Converts a set of quads to a Cube Observation";
