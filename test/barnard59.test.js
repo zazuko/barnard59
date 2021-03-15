@@ -54,6 +54,38 @@ describe('barnard59', () => {
         strictEqual((/^debug: /m).test(result), true)
       })
     })
+
+    describe('variable', () => {
+      it('should set the given variable to the given value', () => {
+        const pipelineFile = filenamePipelineDefinition('simple')
+        const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc=123`
+
+        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+
+        strictEqual(result.includes('abc: 123'), true)
+      })
+
+      it('should set the given variable to the value of the environment variable with the same name', () => {
+        const pipelineFile = filenamePipelineDefinition('simple')
+        const command = `abc=123 ${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc`
+
+        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+
+        strictEqual(result.includes('abc: 123'), true)
+      })
+    })
+
+    describe('variable-all', () => {
+      it('should import all environment variables', () => {
+        const pipelineFile = filenamePipelineDefinition('simple')
+        const command = `abc=123 def=456 ${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable-all`
+
+        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+
+        result.includes('abc: 123')
+        result.includes('def: 456')
+      })
+    })
   })
 
   describe('examples', () => {
