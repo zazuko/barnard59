@@ -1,0 +1,122 @@
+@base         <urn:pipeline:bar> .
+@prefix :     <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+_:variables p:variable
+  [ a p:Variable; p:name "mappingsDir"; p:value "src-gen/*.json" ] ,
+  [ a p:Variable; p:name "targetFile"; p:value "actual_output.nt" ] .
+
+<#Main>
+    a      :Pipeline ;
+    :steps [ :stepList ( <#mergeInputs> <#streamOutputStep> ) ] .
+
+<#mergeInputs>
+    a                  :Step ;
+    code:implementedBy [ code:link <node:barnard59-base#concat.object> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( <#TransformFiles> ) .
+
+<#StreamOutput>
+    a :Pipeline, :WritableObjectMode .
+
+<#streamOutputStep>
+    a                  :Step ;
+    code:implementedBy [ code:link <file:lib/pipeline#asStep> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( <#StreamOutput> ) .
+
+<#StreamOutput>
+    :steps     [ :stepList ( _:serialize _:save ) ] .
+
+_:serialize
+    a                  :Step ;
+    code:implementedBy [ code:link <node:barnard59-formats#ntriples.serialize> ;
+                         a         code:EcmaScript ] .
+
+_:save
+    a                  :Step ;
+    code:implementedBy [ code:link <node:fs#createWriteStream> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( "targetFile"^^:VariableName ) .
+
+# ------------------------------
+#
+# Transform pipeline
+#
+# One-by-one parses and transforms the source csv files to RDF
+#
+# ------------------------------
+
+<#TransformFiles>
+    a      :Pipeline, :ReadableObjectMode ;
+    :steps [ :stepList ( <#loadMappings> <#doTransform> ) ] .
+
+<#loadMappings>
+    a                  :Step ;
+    code:implementedBy [ code:link <node:barnard59-base#glob> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     [ code:name  "pattern" ;
+                         code:value "mappingsDir"^^:VariableName ] .
+
+<#doTransform>
+    a                  :Step ;
+    code:implementedBy [ code:link <node:barnard59-core#forEach> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( <#TransformCsv>
+                         "(p, fileName) => { p.variables.set('csvw', fileName) }"^^code:EcmaScript ) .
+
+# ------------------------------
+#
+# Transforms individual files
+#
+# ------------------------------
+
+<#TransformCsv>
+    a      :Pipeline, :ReadableObjectMode ;
+    :steps [ :stepList ( <#loadCsvStep> <#parse> <#filterNotCsvw> ) ] .
+
+<#LoadCsv>
+    a      :Pipeline, :ReadableObjectMode ;
+    :steps [ :stepList ( _:openCsvFromFilesystem ) ] .
+
+_:openCsvFromFilesystem
+    a                  :Step ;
+    code:implementedBy [ code:link <file:lib/csv#openFromCsvw> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
+
+
+<#loadCsvStep>
+    a                  :Step ;
+    code:implementedBy [ code:link <file:lib/pipeline#asStep> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( <#LoadCsv> ) .
+
+<#parse>
+    a                  :Step ;
+    code:implementedBy [ code:link <node:barnard59-formats#csvw.parse> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( <#parseMetadata> ) .
+
+<#parseMetadata>
+    a      :Pipeline, :ReadableObjectMode ;
+    :steps [ :stepList ( <#readMetadata> <#parseMetadataStep> ) ] .
+
+<#parseMetadataStep>
+    a                  :Step ;
+    code:implementedBy [ code:link <node:barnard59-formats#jsonld.parse> ;
+                         a         code:EcmaScript ] .
+
+<#readMetadata>
+    a                  :Step ;
+    code:implementedBy [ code:link <node:fs#createReadStream> ;
+                         a         code:EcmaScript ] ;
+    code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
+
+<#filterNotCsvw>
+    a                  :Step ;
+    code:implementedBy [ a         code:EcmaScript ;
+                         code:link <node:barnard59-base#filter> ] ;
+    code:arguments     ( [ code:link <file:lib/output-filter#removeCsvwTriples> ;
+                           a         code:EcmaScript ] ) .

@@ -1,0 +1,28 @@
+// new mapping
+output csvw
+
+map Organization from isilSrc {
+	subject template "https://culture.ld.admin.ch/isil/{0}/organization" with ISIL;
+
+	types
+		schema.Organization
+
+	properties
+		schema.address template "https://culture.ld.admin.ch/isil/{0}/address" with ISIL;
+		schema.identifier template "https://culture.ld.admin.ch/isil/{0}" with ISIL;
+		schema.name from Institution;
+		schema.name from Institution_DE with language-tag de;
+		schema.name from Institution_FR with language-tag fr;
+		schema.name from Institution_IT with language-tag it;
+		schema.name from Institution_RM with language-tag rm;
+		schema.name from Institution_EN with language-tag en;
+		schema.telephone from Telefon_Nr;
+		schema.faxNumber from Fax_Nr;
+		schema.email from E_Mail;
+		schema.url from WWW;
+		schema.publicAccess from Zugang;
+		schema.memberOf from Mitgliedschaft;
+		schema.knowsAbout from Dewey;
+		schema.publicAccess from Zugangsbedingungen;
+		schema.dateModified from LastEditedOn;
+}

@@ -1,0 +1,57 @@
+BASE <https://your-domain.ld.admin.ch/municipalities/>        # Define appropriate domain for your dataset. Examples: energy, agriclture, environment
+PREFIX schema: <http://schema.org/>
+PREFIX geonames: <http://www.geonames.org/ontology#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX qudt: <http://qudt.org/vocab/unit/>
+PREFIX db: <http://dbpedia.org/property/>
+
+
+<261>  schema:name "Zürich";
+    geonames:population "415367"^^xsd:integer ;
+    db:area "9188.0"^^qudt:HA ;
+.
+
+<6621> schema:name "Genève";
+    geonames:population "201818"^^xsd:integer;
+    db:area "1830.0"^^qudt:HA ;
+.
+
+<2701> schema:name "Basel";
+    geonames:population "172258"^^xsd:integer ;
+    db:area "2385.0"^^qudt:HA ;
+.
+
+<5586> schema:name "Lausanne";
+    geonames:population "139111"^^xsd:integer ;
+    db:area "4147.0"^^qudt:HA ;
+.
+
+<351>  schema:name "Bern";
+    geonames:population "133883"^^xsd:integer ;
+    db:area "5162.0"^^qudt:HA ;
+.
+
+<230>  schema:name "Winterthur";
+    geonames:population "111851"^^xsd:integer ;
+    db:area "6807.0"^^qudt:HA ;
+.
+
+<1061> schema:name "Luzern";
+    geonames:population "81691"^^xsd:integer ;
+    db:area "3741.0"^^qudt:HA ;
+.
+
+<3203> schema:name "St. Gallen";
+    geonames:population "75833"^^xsd:integer ;
+    db:area "3938.0"^^qudt:HA ;
+.
+
+<5192> schema:name "Lugano";
+    geonames:population "63185"^^xsd:integer ;
+    db:area "8621.0"^^qudt:HA ;
+.
+
+<371>  schema:name "Biel/Bienne";
+    geonames:population "55159"^^xsd:integer ;
+    db:area "2121.0"^^qudt:HA ;
+.

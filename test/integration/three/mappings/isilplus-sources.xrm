@@ -1,0 +1,43 @@
+dialect Semicolon {
+	delimiter ";"
+	quoteChar '\\"'
+}
+
+logical-source isilSrc {
+	type csv
+	source "../input/isil_lindas.csv"
+	dialect Semicolon
+
+	referenceables
+    ID
+    ISIL
+    VZ_Code
+    Institution
+    Institution_DE
+    Institution_FR
+    Institution_IT
+    Institution_RM
+    Institution_EN
+    Strasse
+    PLZ
+    Ort
+    Kanton
+    Land
+    Telefon_Nr
+    Fax_Nr
+    E_Mail
+    WWW
+    Startdatum
+    Enddatum
+    Aufgegangen_in
+    Verwaltungsgeschichte
+    Bestandsbeschreibung
+    Bibliotheksbestaende
+    Andere_Bestaende
+    Zugang
+    Mitgliedschaft
+    Dewey
+    Status
+    Zugangsbedingungen
+    LastEditedOn
+}

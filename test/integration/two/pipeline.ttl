@@ -1,0 +1,94 @@
+@base <http://ld.admin.ch/pipeline/metadata/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+
+_:variables p:variable
+  [ a p:Variable; p:name "inputDirMetadata"; p:value "input/ontologies/*.ttl" ] ,
+  [ a p:Variable; p:name "inputDirUnits"; p:value "input/units/*.ttl" ] .
+
+<mainCreateFile> a p:Pipeline, p:Readable;
+  p:variables _:variables ;
+  p:steps [
+    p:stepList (<mergeInputsStep> <serialize>)
+  ].
+
+<mergeInputsStep> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base#concat.object> ;
+    a code:EcmaScript ] ;
+  code:arguments (<transformUnitPipeline> <mergeInputsPipeline>) .
+
+<mergeInputsPipeline> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps [
+    p:stepList
+    ( <readDirMetadata> <transformStep> )
+  ].
+
+<readDirMetadata> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base#glob> ;
+    a code:EcmaScript
+  ];
+  code:arguments [
+    code:name  "pattern" ;
+    code:value "inputDirMetadata"^^p:VariableName
+  ] .
+
+<readDirUnits> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base#glob> ;
+    a code:EcmaScript
+  ];
+  code:arguments [
+    code:name  "pattern" ;
+    code:value "inputDirUnits"^^p:VariableName
+  ] .
+
+
+<transformStep> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-core#forEach> ;
+    a code:EcmaScript
+  ] ;
+  code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScript ) .
+
+<transformPipeline> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps [
+    p:stepList (<readFile> <parse>)
+  ].
+
+<readFile> a p:Step ;
+  code:implementedBy [
+    code:link <node:fs#createReadStream> ;
+    a code:EcmaScript ] ;
+  code:arguments  ("${file}"^^code:EcmaScriptTemplateLiteral).
+
+<parse> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-formats#n3.parse> ;
+    a code:EcmaScript
+  ] .
+
+
+
+<transformUnitPipeline> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps [
+    p:stepList (<readDirUnits> <transformStep> <sparqlInsert>)
+  ].
+
+<sparqlInsert> a p:Step;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-tdb#update>
+  ];
+  code:arguments [
+    code:name "queries";
+    code:value (
+      "require('fs').readFileSync('sparql/create_unit_symbols.rq').toString()"^^code:EcmaScript
+    )
+  ].
+
+<serialize> a p:Step;
+  code:implementedBy [
+    code:link <node:barnard59-formats#ntriples.serialize> ;
+    a code:EcmaScript
+  ].

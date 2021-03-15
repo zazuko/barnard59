@@ -1,0 +1,8 @@
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://qudt.org/vocab/unit/GM-PER-KiloM> a <http://qudt.org/schema/qudt/Unit>;
+    rdfs:isDefinedBy <http://qudt.org/2.1/vocab/unit> ;
+    rdfs:label "Gram Per Kilometre"@en , "Gram Per Kilometer"@en-us;
+    <http://qudt.org/schema/qudt/hasQuantityKind> <http://qudt.org/vocab/quantitykind/MassPerLength>;
+    <http://qudt.org/schema/qudt/plainTextDescription> "The SI base unit gram divided by the SI 0,001-fold of the SI base unit metre" ;
+    <http://qudt.org/schema/qudt/ucumCode> "g/km"^^<http://qudt.org/schema/qudt/UCUMcs> .

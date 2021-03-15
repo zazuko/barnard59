@@ -25,6 +25,7 @@
   "dependencies": {
     "@rdfjs/namespace": "^1.1.0",
     "barnard59-core": "git://github.com/zazuko/barnard59-core.git#next",
+    "barnard59-tdb": "0.0.1",
     "clownface": "^1.2.0",
     "commander": "^7.1.0",
     "lodash": "^4.17.21",

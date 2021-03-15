@@ -1,0 +1,36 @@
+BASE <https://your-domain.ld.admin.ch/.well-known/>     # Define appropriate domain for your dataset. Examples: energy, agriclture, environment
+PREFIX void: <http://rdfs.org/ns/void#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX schema: <http://schema.org/>
+PREFIX org: <https://ld.admin.ch/org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+
+<void> schema:dataset <dataset/municipalities> .
+
+<dataset/municipalities> a void:Dataset, dcat:Dataset, schema:Dataset ;
+    schema:description "Hier findet man detaillierte Beschreibung eines Datensatzes"@de;
+    schema:description "Voici la description détaillée d'un ensemble de données"@fr;
+    schema:description "Here goes a detailed description of a dataset"@en;
+    schema:description "Una descrizione dettagliata di un set di dati"@it;
+    schema:name "Municipalities"@en;
+    schema:name "Municipalités"@fr;
+    schema:name "Comune"@de;
+    schema:publisher org:lindas;
+    schema:creator org:your-bundesamt ;                     # Define your organization. Add details on org to https://gitlab.ldbar.ch/pipelines/lindas-metadata.
+    schema:contactPoint <dataset/municipalities/PeterPan> ; # Data owner
+    schema:contributor org:zazuko ;
+    schema:dateCreated "2020-12-16"^^xsd:date;
+    schema:dateModified "2020-12-16"^^xsd:date;             # Will be automatically updated in the pipeline
+    schema:datePublished "2020-12-16"^^xsd:date;
+    void:exampleResource <https://your-domain.ld.admin.ch/municipalities/261:2020> ;
+    void:sparqlEndpoint <https://your-domain.ld.admin.ch/query/> ;
+    dcat:landingPage <https://your-domain.ld.admin.ch/sparql/> ;
+    schema:url <https://your-domain.ld.admin.ch/municipalities/> ;       # If website exists
+.
+
+<dataset/municipalities/PeterPan> a schema:Person ;
+    schema:givenName "Peter" ;
+    schema:familyName "Pan" ;
+    schema:url "https://your-data-owner-url.ch" ; # URL to data owner in https://www.staatskalender.admin.ch/. Example: https://www.staatskalender.admin.ch/displayperson.html?dn=cn=Viegener%20Tobias%20BZKQEY,ou=Dienst%20IKT-Projekte,ou=Sektion%20IKT,ou=Direktion,ou=Schweizerische%20Nationalbibliothek,ou=Bundesamt%20fuer%20Kultur,ou=Eidg.%20Dep.%20des%20Innern,ou=Bundesrat
+.

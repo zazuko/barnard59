@@ -1,0 +1,535 @@
+<https://culture.ld.admin.ch/isil/CH-000050-X/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-000050-X/address> <http://schema.org/streetAddress> "Aargauerplatz" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/address> <http://schema.org/postalCode> "CH-5000" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/address> <http://schema.org/addressLocality> "Aarau" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001847-2/address> <http://schema.org/streetAddress> "Allmendstr. 26" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/address> <http://schema.org/postalCode> "CH-5610" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/address> <http://schema.org/addressLocality> "Wohlen" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001543-7/address> <http://schema.org/streetAddress> "Brown Boveri Strasse 6" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/address> <http://schema.org/postalCode> "CH-5400" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/address> <http://schema.org/addressLocality> "Baden" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-000425-9/address> <http://schema.org/streetAddress> "Bahnhofstrasse 91" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/address> <http://schema.org/postalCode> "CH-5001" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/address> <http://schema.org/addressLocality> "Aarau" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-002036-X/address> <http://schema.org/streetAddress> "Südallee 22" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/address> <http://schema.org/postalCode> "CH-5001" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/address> <http://schema.org/addressLocality> "Aarau" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001221-3/address> <http://schema.org/streetAddress> "Bahnhofstrasse 6" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/address> <http://schema.org/postalCode> "CH-5210" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/address> <http://schema.org/addressLocality> "Windisch" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-002003-9/address> <http://schema.org/streetAddress> "Im Langacker 16" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/address> <http://schema.org/postalCode> "CH-5405" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/address> <http://schema.org/addressLocality> "Baden-Dättwil" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001587-1/address> <http://schema.org/streetAddress> "Bahnhofstrasse 28" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/address> <http://schema.org/postalCode> "CH-5605" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/address> <http://schema.org/addressLocality> "Dottikon" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001970-6/address> <http://schema.org/streetAddress> "Hohlgasse 30" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/address> <http://schema.org/postalCode> "CH-5000" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/address> <http://schema.org/addressLocality> "Aarau" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001800-6/address> <http://schema.org/streetAddress> "Chapf 9" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/address> <http://schema.org/postalCode> "CH-5225" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/address> <http://schema.org/addressLocality> "Bözberg" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-002051-6/address> <http://schema.org/streetAddress> "Dorfstrasse 4" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/address> <http://schema.org/postalCode> "CH-5453" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/address> <http://schema.org/addressLocality> "Remetschwil" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001858-6/address> <http://schema.org/streetAddress> "Langäckerstrasse 11" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/address> <http://schema.org/postalCode> "CH-8957" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/address> <http://schema.org/addressLocality> "Spreitenbach" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001574-3/address> <http://schema.org/streetAddress> "Giebenacherstrasse 54" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/address> <http://schema.org/postalCode> "CH-4303" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/address> <http://schema.org/addressLocality> "Kaiseraugst" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001210-X/address> <http://schema.org/streetAddress> "Schloss Lenzburg" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/address> <http://schema.org/postalCode> "CH-5600" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/address> <http://schema.org/addressLocality> "Lenzburg" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001093-1/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001093-1/address> <http://schema.org/addressLocality> "Windisch" .
+<https://culture.ld.admin.ch/isil/CH-001093-1/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001093-1/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-000705-2/address> <http://schema.org/postalCode> "CH-5113" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/address> <http://schema.org/addressLocality> "Holderbank AG" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001644-X/address> <http://schema.org/streetAddress> "Herzogstrasse 1" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/address> <http://schema.org/postalCode> "CH-5000" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/address> <http://schema.org/addressLocality> "Aarau" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001646-4/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001646-4/address> <http://schema.org/addressLocality> "Bad Zurzach" .
+<https://culture.ld.admin.ch/isil/CH-001646-4/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001646-4/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://culture.ld.admin.ch/isil/CH-001645-7/address> <http://schema.org/streetAddress> "Schmiedestrasse 13 / Gebäude 1485" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/address> <http://schema.org/postalCode> "CH-5400" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/address> <http://schema.org/addressLocality> "Baden" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/address> <http://schema.org/addressRegion> "AG" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/address> <http://schema.org/addressCountry> "CH" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-000050-X/address> .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-000050-X> .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/name> "Aargauer Kantonsbibliothek" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/telephone> "+41 62 835 23 62" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/email> "kantonsbibliothek@ag.ch" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/url> "http://www.ag.ch/de/bks/kultur/archiv_bibliothek/kantonsbibliothek/kantonsbibliothek.jsp" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/publicAccess> "Lesesaal und Freihandbibliothek\nMontag bis Mittwoch und Freitag 08:30 - 18:00 Uhr Donnerstag 08:30 - 20:00 Uhr Samstag 08:30 - 16:00 Uhr \nZugang zum Sonderlesesaal\nSonderlesesaal wird nur mit vereinbartem Termin gewährt. Der Termin muss mindestens eine Woche im Voraus beantragt werden." .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/memberOf> "BIS, IFLA, MEMORIAV, OCLC, , VSA/AAS" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/publicAccess> "Lieferung der Dokumente innerhalb von 48 Stunden" .
+<https://culture.ld.admin.ch/isil/CH-000050-X/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001847-2/address> .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001847-2> .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/name> "Aargauer Kantonsschule Wohlen / Mediothek" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/telephone> "+41 56 618 49 24" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/email> "mediothek@kanti-wohlen.ch" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/url> "http://www.kanti-wohlen.ch/ueber-uns/mediothek" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/publicAccess> "Nicht öffentliche Schulbibliothek, bei Anfragen um Ausleihe aber je nach Möglichkeit und Einschreibung machbar" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/memberOf> "BIS" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001847-2/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001543-7/address> .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001543-7> .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/name> "ABB Schweiz AG Historisches Archiv" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/telephone> "+41 58 585 56 77" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/email> "archive.abb@docuteam.ch" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/url> "http://www.abb.ch/" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001543-7/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-000425-9/address> .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-000425-9> .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://schema.org/name> "Alte Kantonsschule / Medienzentrum" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://schema.org/publicAccess> "Das Medienzentrum ist nicht öffentlich und nur für Schulangehörige der AKSA und der ksb zugänglich" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-000425-9/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-002036-X/address> .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-002036-X> .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/name> "Bibliothek Höhere Fachschule Gesundheit und Soziales" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/telephone> "+41 62 200 21 49" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/email> "anne.guenther@hfgs.ch" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/publicAccess> "nicht öffentlich, bzw. öffentlich nach Voranmeldung und individuellen Absprachen." .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/memberOf> "ABN" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/publicAccess> "Einsichtnahme an Ort und Stelle möglich (vorher anfragen)" .
+<https://culture.ld.admin.ch/isil/CH-002036-X/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001221-3/address> .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001221-3> .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/name> "Campusbibliothek Brugg-Windisch" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/name> "Campusbibliothek Brugg-Windisch"@de .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/telephone> "+41 56 202 77 70" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/email> "bibliothek.windisch@fhnw.ch" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/url> "http://www.fhnw.ch/campus-brugg-windisch/bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/publicAccess> "öffentlich, ohne Voranmeldung zugänglich. Mitglied im NEBIS-Verbund, Einschreibung notwendig, siehe www.nebis.ch." .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/memberOf> "BIS, Consortium, SWITCH, SIKJM" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/knowsAbout> "370.0 [Erziehungswissenschaften]\n300.0 [Sozialwissenschaften]\n607 [Fachdidaktik]\n027.8 [Sämtliche Schulfächer der Volksschule]\n027.8 [Lehrmittel für alle Schulfächer]" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001221-3/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-002003-9/address> .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-002003-9> .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/name> "Docuteam GmbH" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/name> "Docuteam Sàrl"@it .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/telephone> "+41 56 470 03 37" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/email> "info@docuteam.ch" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/url> "http://www.docuteam.ch/" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/memberOf> "VSA/AAS" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-002003-9/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001587-1/address> .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001587-1> .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/name> "Dorfbibliothek Dottikon" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/telephone> "+41 56 624 36 57" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/email> "bibliothek.dottikon@hispeed.ch" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/url> "www.dottikon.ch" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/publicAccess> "Zugänglich während 8,5 Wochenstunden, zusätzlich Schulklassen nach Anmeldung" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/memberOf> "SAB, SIKJM" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/knowsAbout> "808.8 [Belletristik]" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/publicAccess> "Lieferung der Dokumente innerhalb von 48 Stunden" .
+<https://culture.ld.admin.ch/isil/CH-001587-1/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001970-6/address> .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001970-6> .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/name> "Fachstelle Katechese - Medien (Aarau)" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/telephone> "+41 62 836 10 63" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/email> "medienverleih@kathaargau.ch" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/url> "http://www.aareka.ch/medienverleih/" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001970-6/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001800-6/address> .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001800-6> .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/name> "Gemeindearchiv Bözberg" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/name> "Gemeindearchiv Bözberg"@de .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/telephone> "+41 56 460 24 60" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/faxNumber> "+41 56 460 24 61" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/email> "verwaltung@boezberg.ch" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/url> "http://www.boezberg.ch/" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001800-6/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-002051-6/address> .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-002051-6> .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/name> "Gemeindearchiv Remetschwil" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/telephone> "+41 56 485 84 00" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/email> "gemeindekanzlei@remetschwil.ch" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/url> "http://www.remetschwil.ch/" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-002051-6/organization> <http://schema.org/dateModified> "2019-06-18" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001858-6/address> .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001858-6> .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/name> "Gemeindebibliothek Spreitenbach" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/telephone> "+41 56 418 86 80" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/email> "bibliothek@spreitenbach.ch" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/url> "http://www.bibliothek-spreitenbach.ch/" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/publicAccess> "Während der Öffnungszeiten: ohne Voranmeldung zugänglich" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/memberOf> "BIS, SAB" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001858-6/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001574-3/address> .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001574-3> .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/name> "Gemeindebibliothek Violahof" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/telephone> "+41 61 811 56 37" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/email> "bibliothek@kaiseraugst.ch" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/publicAccess> "Öffentlich, ohne Voranmeldung" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/knowsAbout> "808.8 [Belletristik]" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001574-3/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001210-X/address> .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001210-X> .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/name> "Historische Sammlung Museum Aargau Bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/telephone> "+41 62 888 48 40" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/email> "verena.gobeli@ag.ch" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/url> "http://www.museumaargau.ch/" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/memberOf> "VMS/AMS," .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/knowsAbout> "306 [Kulturgeschichte]" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001210-X/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001093-1/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001093-1/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001093-1/address> .
+<https://culture.ld.admin.ch/isil/CH-001093-1/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001093-1> .
+<https://culture.ld.admin.ch/isil/CH-001093-1/organization> <http://schema.org/name> "Höhere Technische Lehranstalt / Ingenieurschule / Bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001093-1/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-000705-2/address> .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-000705-2> .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/name> "Holderbank Management & Beratung AG / Bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/memberOf> "BIS" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/knowsAbout> "620.1 [Zementindustrie]\n338.4 [Verfahrenstechnik]\n551 [Geologie]\n668.3 [Bindemittelchemie]\n668.3 [Bindemitteltechnologie]\n666.8 [Beton]\n666.8 [Kunststeine]\n666.9 [Mörtel]\n666.9 [Zement und Beton (Betonzusätze)]\n666.1 [Glas]\n553.6 [Feuerfeste Steine]\n552 [Petrographie]\n553.1 [Lagerstätten]\n624 [Bautechnik]\n624 [Bauingenieurwesen]\n338.4 [Bauindustrie]\n338.4 [Bauwesen]" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/publicAccess> "Lieferung der Dokumente nur, wenn nicht in einer A- oder B-Bibliothek lokalisierbar ( Spezialbibliotheken, Privatindustrie)" .
+<https://culture.ld.admin.ch/isil/CH-000705-2/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001644-X/address> .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001644-X> .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/name> "Info-Zentrum Aarau / ask! - Beratungsdienste für Ausbildung und Beruf" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/telephone> "+41 62 832 64 20" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/email> "info@bdag.ch" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/url> "http://www.bdag.ch/" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/publicAccess> "Hauptbibliothek (Info-Zentrum) :\nÖffentliche Bibliothek. Kostenpflichtig sind nur direkte Verbrauchskosten. Ausleihkonditionen gemäss internen Regelungen.\nFachschaftsbibliotheken :\nNurr interne Benützung (für Berufs-, Studien- und Laufbahnberatung, Beratung für Berufe Gesundheit und Soziales, Lehrpersonenberatung, Jugendpsychologischer Dienst)" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001644-X/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001646-4/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001646-4/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001646-4/address> .
+<https://culture.ld.admin.ch/isil/CH-001646-4/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001646-4> .
+<https://culture.ld.admin.ch/isil/CH-001646-4/organization> <http://schema.org/name> "Info-Zentrum Bad Zurzach / Beratungsdienste für Ausbildung und Beruf Aargau" .
+<https://culture.ld.admin.ch/isil/CH-001646-4/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Organization> .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/address> <https://culture.ld.admin.ch/isil/CH-001645-7/address> .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/identifier> <https://culture.ld.admin.ch/isil/CH-001645-7> .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/name> "Info-Zentrum Baden / ask! - Beratungsdienste für Ausbildung und Beruf" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/telephone> "+41 62 832 65 20" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/email> "info@bdag.ch" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/url> "http://www.bdag.ch/" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/publicAccess> "Hauptbibliothek (Info-Zentrum) :\nÖffentliche Bibliothek. Kostenpflichtig sind nur direkte Verbrauchskosten. Ausleihkonditionen gemäss internen Regelungen.\nFachschaftsbibliotheken :\nNur interne Benützung (für Berufs-, Studien- und Laufbahnberatung, Beratung für Berufe Gesundheit und Soziales, Lehrpersonenberatung, Jugendpsychologischer Dienst)" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/publicAccess> "Zugänglichkeit nicht festgelegt" .
+<https://culture.ld.admin.ch/isil/CH-001645-7/organization> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/termCode> "CH-000050-X" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/name> "Aargauer Kantonsbibliothek" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=166875"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/alternateName> "AAK" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-000050-X/organization> .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <https://schema.ld.admin.ch/administrativeHistory> "Die Aargauer Kantonsbibliothek wurde 1803 gegründet und 1807 eröffnet. Als Grundstock konnte damals die 9'000 Bände starke Privatbibliothek der einflussreichen Zuger Familie Zurlauben erworben werden.\nNach der Klosteraufhebung von 1841 kamen Bestände aus den Klosterbibliotheken in die Sammlung. Die umfangreichsten und wichtigsten stammen aus den Abteien Muri und Wettingen. Unter diesen mittelalterlichen Handschriften und alten Drucken befinden sich viele wertvolle und einmalige Exemplare. Im 20. Jahrhundert kam eine weitere für die Wissenschaft wichtige Sammlung in die Aargauer Kantonsbibliothek: ein Teil des Nachlasses von Frank Wedekind.\nNeben Büchern, Zeitschriften und Zeitungen umfasst die aktuelle Sammlung der Kantonsbibliothek Landkarten, Musiknoten, CDs und DVDs. Der Schwerpunkt der Sammlung liegt aber bei Sach- und Fachpublikationen zu den verschiedensten Wissensgebieten.\nBesonderes Gewicht haben Publikationen aus dem Aargau und über den Aargau. Der im Kulturgesetz formulierte Sammelauftrag verpflichtet die Aargauer Kantonsbibliothek, veröffentlichte Informationen über den und aus dem Kanton zu erhalten. Damit bewahrt die Kantonsbibliothek einen Teil des historischen Erbes und der kulturellen Identität der Region." .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <https://schema.ld.admin.ch/inventoryDescription> "Aargauer Publikationen, aktuelle weiterführende Fachliteratur sowie Belletristik, div. Depotbibliotheken(Mykologie,Stenographie, Militär, Prediger,Sprachheilkunde)" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <https://schema.ld.admin.ch/libraryMaterials> "754'000 Medien" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <https://schema.ld.admin.ch/otherMaterials> "1'250 Handschriften, 6 Nachlässe, 1'009 Mikrofilmen, 2'153 Karten/Pläne" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/validFrom> "1803" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-000050-X> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/termCode> "CH-001847-2" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/name> "Aargauer Kantonsschule Wohlen / Mediothek" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=883304"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001847-2/organization> .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <https://schema.ld.admin.ch/administrativeHistory> "Die Mediothek der Kantonsschule Wohlen ist seit 1987 im Calatrava-Bau untergebracht und erstrahlt als architektonischer Medientempel. Die Mediothek deckt die Informationsbedürfnisse der Schüler- und Lehrerschaft ab betreffend Unterrichtsstoff und Freizeitbedarf." .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <https://schema.ld.admin.ch/inventoryDescription> "Sachbücher, Belletristik, Graphic Novels und Mangas, DVDs, Hörbücher, Maturaarbeiten, Studien- und Berufsinformationsmappen" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <https://schema.ld.admin.ch/libraryMaterials> "20000" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <https://schema.ld.admin.ch/otherMaterials> "Musik CDs in der Fachschaftsbibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001847-2> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/termCode> "CH-001543-7" .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/name> "ABB Schweiz AG Historisches Archiv" .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=167122"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001543-7/organization> .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <https://schema.ld.admin.ch/inventoryDescription> "Aktenbestände der Kommanditgesellschaft Brown Boveri & Cie. BBC (1891-1900), Aktiengesellschaft Brown, Boveri & Cie. BBC (1900-1987), Asea Brown Boveri ABB Schweiz (ab 1988), Maschinenfabrik Oerlikon MFO (1876-1967), Micafil AG (1918-2004); Fotoarchive, Filmarchive und Objekte der Aktenbildner; Handbibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001543-7> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/termCode> "CH-000425-9" .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/name> "Alte Kantonsschule / Medienzentrum" .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=166872"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/alternateName> "AA001" .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-000425-9/organization> .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-000425-9> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/termCode> "CH-002036-X" .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/name> "Bibliothek Höhere Fachschule Gesundheit und Soziales" .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=1343855"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-002036-X/organization> .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <https://schema.ld.admin.ch/administrativeHistory> "Die Bibliothek der Höheren Fachschule Gesundheit und Soziales steht Studierenden und Lehrpersonen der Bildungsgänge Operationstechnik, Sozialpädagogik & Pflege HF während der Ausbildungszeit zur Verfügung." .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <https://schema.ld.admin.ch/inventoryDescription> "Fachbibliothek Gesundheit & Soziales mit Büchern, Nonbooks & Fachzeitschriften für die Bildungsgänge Operationstechnik, Sozialpädagogik & Pflege HF" .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <https://schema.ld.admin.ch/libraryMaterials> "5500 Medien" .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-002036-X> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/termCode> "CH-001221-3" .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/name> "Campusbibliothek Brugg-Windisch" .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=167086"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001221-3/organization> .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <https://schema.ld.admin.ch/administrativeHistory> "Seit dem 12. August 2013 besteht die Campusbibliothek Brugg-Windisch am FHNW-Standort Brugg. Sie entstand aus einer Fusion der Bibliothek für Schule und Bildung Aarau, der Bibliothek Pädagogische Hochschule Brugg, der Hochschulbibliotheken Technik und Wirtschaft Windisch, sowie des FHNW-Bestands der Mediothek des Bildungszentrums Zofingen." .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <https://schema.ld.admin.ch/inventoryDescription> "Die Campusbibliothek Brugg-Windisch stellt Fachliteratur für die Hochschulen für Pädagogik, Wirtschaft und Technik zur Verfügung. Das Angebot richtet sich an Lehrende und Lernende der Fachhochschule Nordwestschweiz, Lehrpersonen des Kantons Aargau sowie an interessierte Fachpersonen." .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <https://schema.ld.admin.ch/libraryMaterials> "ca. 100'000 Einheiten" .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/validFrom> "2013" .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001221-3> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/termCode> "CH-002003-9" .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/name> "Docuteam GmbH" .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=1203746"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-002003-9/organization> .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <https://schema.ld.admin.ch/inventoryDescription> "Firmenarchiv/Firmengeschichte" .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/validFrom> "2003" .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-002003-9> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/termCode> "CH-001587-1" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/name> "Dorfbibliothek Dottikon" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=229145"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001587-1/organization> .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <https://schema.ld.admin.ch/administrativeHistory> "Seit Mai 2006 allgemeine öffentliche Schul- und Gemeindebibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <https://schema.ld.admin.ch/inventoryDescription> "Belletristik" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <https://schema.ld.admin.ch/libraryMaterials> "9'650 Medien (Sachbücher, Hörbücher, Kassetten, CD-ROMs, DVDs, Zeitschriften für Kinder, Jugendliche und Erwachsene)" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001587-1> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/termCode> "CH-001970-6" .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/name> "Fachstelle Katechese - Medien (Aarau)" .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=1159086"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001970-6/organization> .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <https://schema.ld.admin.ch/inventoryDescription> "Ausleihbar sind mehr als 10'000 Materialien zu biblischen, religiösen, kirchlichen und ethischen Themen: Arbeitshilfen, Bücher, CDs, Dias, DVDs, Folien, Bilder, Medienpakete, Realien, Spiele, ..." .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001970-6> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/termCode> "CH-001800-6" .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/name> "Gemeindearchiv Bözberg" .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=685034"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001800-6/organization> .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <https://schema.ld.admin.ch/administrativeHistory> "Die für eine Gemeinde typisch anfallenden Verwaltungsakten" .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001800-6> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/termCode> "CH-002051-6" .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/name> "Gemeindearchiv Remetschwil" .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=1390849"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-002051-6/organization> .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-002051-6> <http://schema.org/dateModified> "2019-06-18" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/termCode> "CH-001858-6" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/name> "Gemeindebibliothek Spreitenbach" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=919617"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001858-6/organization> .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <https://schema.ld.admin.ch/administrativeHistory> "1977 wurde die Gemeindebibliothek Spreitenbach eröffnet." .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <https://schema.ld.admin.ch/inventoryDescription> "Für Erwachsene, Jugendliche und Kinder stehen zur Ausleihe bereit: Belletristik, Sachbücher, Comics, Zeitschriften, Hörbücher, DVDs, Konsolenspiele, CDs, ebooks" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <https://schema.ld.admin.ch/libraryMaterials> "15000 Medien" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/validFrom> "1977" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001858-6> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/termCode> "CH-001574-3" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/name> "Gemeindebibliothek Violahof" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=228971"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001574-3/organization> .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <https://schema.ld.admin.ch/inventoryDescription> "Belletristik" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <https://schema.ld.admin.ch/libraryMaterials> "3'061 Belletristik, 743 Sachliteratur, 40 comics, 178 Hörbücher, 528 Zeitschriften, 902 CDs, 547 DVD, 818 Tonkassetten, 199 Spiele" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/validFrom> "1978" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001574-3> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/termCode> "CH-001210-X" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/name> "Historische Sammlung Museum Aargau Bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=167127"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001210-X/organization> .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <https://schema.ld.admin.ch/inventoryDescription> "Kulturgeschichte:\nKulturgeschichte" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <https://schema.ld.admin.ch/libraryMaterials> "10'000 Bände, 15 Zeitschriften" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/validFrom> "1958" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001210-X> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/termCode> "CH-001093-1" .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/name> "Höhere Technische Lehranstalt / Ingenieurschule / Bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=167146"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001093-1/organization> .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <https://schema.ld.admin.ch/administrativeHistory> "Die Bibliothek existiert nicht mehr. Der Bestand wurde in eine andere Bibliothek (CH-001221-3) integriert." .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/validFrom> "1965" .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/validThrough> "2013" .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <https://schema.ld.admin.ch/valid> "inaktiv" .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/CH-001221-3> .
+<https://culture.ld.admin.ch/isil/CH-001093-1> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/termCode> "CH-000705-2" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/name> "Holderbank Management & Beratung AG / Bibliothek" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=167134"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/alternateName> "HO001" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-000705-2/organization> .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <https://schema.ld.admin.ch/inventoryDescription> "Zementindustrie,Verfahrenstechnik,Geologie,Bindemittelchemie,Bindemitteltechnologie,Beton,Mörtel,Kunststeine,Glas,feuerfeste Steine,Petrographie,Lagerstätten,Bautechnik,Bauindustrie:\nZement,Bauingenieurwesen,Bauwesen" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <https://schema.ld.admin.ch/libraryMaterials> "5'000 Bände, 150 Zeitschriften" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/validFrom> "1952" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-000705-2> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/termCode> "CH-001644-X" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/name> "Info-Zentrum Aarau / ask! - Beratungsdienste für Ausbildung und Beruf" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=280604"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001644-X/organization> .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <https://schema.ld.admin.ch/administrativeHistory> "Entstanden in der jetzigen Form 2008 durch die Neuorganisation der bisher 12 dezentral geführten Berufsinformationszentren BIZ zu 6 zentral geführten und bewirtschafteten Kompetenzzentren (Aarau, Baden, Rheinfelden, Wohlen, Zofingen, Zurzach)." .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <https://schema.ld.admin.ch/inventoryDescription> "Berufs- und Studienwahl, Berufseinstieg, Arbeitsleben, Laufbahn, rechtliche Fragen zu Beruf und Arbeit, Erwerbsloigkeit, Grund- und Weiterbildungsberufe, Studienrichtungen, Ratgeber" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <https://schema.ld.admin.ch/libraryMaterials> "Ca. 30'000 Exemplare (alle info-Zentren), 15 Zeitschriften" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/validFrom> "2008" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001644-X> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/termCode> "CH-001646-4" .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/name> "Info-Zentrum Bad Zurzach / Beratungsdienste für Ausbildung und Beruf Aargau" .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=280640"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001646-4/organization> .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <https://schema.ld.admin.ch/administrativeHistory> "Das Info-Zentrum existiert nicht mehr." .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/validFrom> "2008" .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <https://schema.ld.admin.ch/valid> "inaktiv" .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001646-4> <http://schema.org/dateModified> "2019-02-06" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Isil> .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/termCode> "CH-001645-7" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/name> "Info-Zentrum Baden / ask! - Beratungsdienste für Ausbildung und Beruf" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/url> "https://www.helveticarchives.ch/detail.aspx?ID=280639"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/inDefinedTermSet> <https://culture.ld.admin.ch/isil> .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/about> <https://culture.ld.admin.ch/isil/CH-001645-7/organization> .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <https://schema.ld.admin.ch/administrativeHistory> "Enstanden in der jetzigen Form 2008 durch die Neuorganisation der bisher 12 dezentral geführten Berufsinformationszentren BIZ zu 6 zentral geführten und bewirtschafteten Kompetenzzentren (Aarau, Baden, Rheinfelden, Wohlen, Zofingen, Zurzach)." .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <https://schema.ld.admin.ch/inventoryDescription> "Berufs- und Studienwahl, Berufseinstieg, Arbeitsleben, Laufbahn, rechtliche Fragen zu Beruf und Arbeit, Erwerbslosigkeit, Grund- und Weiterbildungsberufe, Studienrichtungen, Ratgeber" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <https://schema.ld.admin.ch/libraryMaterials> "ca. 30'000 Exemplare (alle Info-Zentren), 15 Zeitschriften" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/validFrom> "2008" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <https://schema.ld.admin.ch/valid> "aktiv" .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/replacer> <https://culture.ld.admin.ch/isil/> .
+<https://culture.ld.admin.ch/isil/CH-001645-7> <http://schema.org/dateModified> "2019-02-06" .
