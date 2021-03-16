@@ -14,7 +14,7 @@ _:variables p:variable
 <#mergeInputs>
     a                  :Step ;
     code:implementedBy [ code:link <node:barnard59-base#concat.object> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     ( <#TransformFiles> ) .
 
 <#StreamOutput>
@@ -23,7 +23,7 @@ _:variables p:variable
 <#streamOutputStep>
     a                  :Step ;
     code:implementedBy [ code:link <file:lib/pipeline#asStep> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     ( <#StreamOutput> ) .
 
 <#StreamOutput>
@@ -32,12 +32,12 @@ _:variables p:variable
 _:serialize
     a                  :Step ;
     code:implementedBy [ code:link <node:barnard59-formats#ntriples.serialize> ;
-                         a         code:EcmaScript ] .
+                         a         code:EcmaScriptModule ] .
 
 _:save
     a                  :Step ;
     code:implementedBy [ code:link <node:fs#createWriteStream> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     ( "targetFile"^^:VariableName ) .
 
 # ------------------------------
@@ -55,16 +55,16 @@ _:save
 <#loadMappings>
     a                  :Step ;
     code:implementedBy [ code:link <node:barnard59-base#glob> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     [ code:name  "pattern" ;
                          code:value "mappingsDir"^^:VariableName ] .
 
 <#doTransform>
     a                  :Step ;
     code:implementedBy [ code:link <node:barnard59-core#forEach> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     ( <#TransformCsv>
-                         "(p, fileName) => { p.variables.set('csvw', fileName) }"^^code:EcmaScript ) .
+                         "(p, fileName) => { p.variables.set('csvw', fileName) }"^^code:EcmaScriptModule ) .
 
 # ------------------------------
 #
@@ -83,20 +83,20 @@ _:save
 _:openCsvFromFilesystem
     a                  :Step ;
     code:implementedBy [ code:link <file:lib/csv#openFromCsvw> ;
-                         a         code:EcmaScript ] ;
-    code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
+                         a         code:EcmaScriptModule ] ;
+    code:arguments     ( "${csvw}"^^code:EcmaScriptModuleTemplateLiteral ) .
 
 
 <#loadCsvStep>
     a                  :Step ;
     code:implementedBy [ code:link <file:lib/pipeline#asStep> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     ( <#LoadCsv> ) .
 
 <#parse>
     a                  :Step ;
     code:implementedBy [ code:link <node:barnard59-formats#csvw.parse> ;
-                         a         code:EcmaScript ] ;
+                         a         code:EcmaScriptModule ] ;
     code:arguments     ( <#parseMetadata> ) .
 
 <#parseMetadata>
@@ -106,17 +106,17 @@ _:openCsvFromFilesystem
 <#parseMetadataStep>
     a                  :Step ;
     code:implementedBy [ code:link <node:barnard59-formats#jsonld.parse> ;
-                         a         code:EcmaScript ] .
+                         a         code:EcmaScriptModule ] .
 
 <#readMetadata>
     a                  :Step ;
     code:implementedBy [ code:link <node:fs#createReadStream> ;
-                         a         code:EcmaScript ] ;
-    code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
+                         a         code:EcmaScriptModule ] ;
+    code:arguments     ( "${csvw}"^^code:EcmaScriptModuleTemplateLiteral ) .
 
 <#filterNotCsvw>
     a                  :Step ;
-    code:implementedBy [ a         code:EcmaScript ;
+    code:implementedBy [ a         code:EcmaScriptModule ;
                          code:link <node:barnard59-base#filter> ] ;
     code:arguments     ( [ code:link <file:lib/output-filter#removeCsvwTriples> ;
-                           a         code:EcmaScript ] ) .
+                           a         code:EcmaScriptModule ] ) .

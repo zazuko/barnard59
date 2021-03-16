@@ -15,7 +15,7 @@ _:variables p:variable
 <mergeInputsStep> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-base#concat.object> ;
-    a code:EcmaScript ] ;
+    a code:EcmaScriptModule ] ;
   code:arguments (<transformUnitPipeline> <mergeInputsPipeline>) .
 
 <mergeInputsPipeline> a p:Pipeline, p:ReadableObjectMode ;
@@ -27,7 +27,7 @@ _:variables p:variable
 <readDirMetadata> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-base#glob> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ];
   code:arguments [
     code:name  "pattern" ;
@@ -37,7 +37,7 @@ _:variables p:variable
 <readDirUnits> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-base#glob> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ];
   code:arguments [
     code:name  "pattern" ;
@@ -48,9 +48,9 @@ _:variables p:variable
 <transformStep> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-core#forEach> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ] ;
-  code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScript ) .
+  code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScriptModule ) .
 
 <transformPipeline> a p:Pipeline, p:ReadableObjectMode ;
   p:steps [
@@ -60,13 +60,13 @@ _:variables p:variable
 <readFile> a p:Step ;
   code:implementedBy [
     code:link <node:fs#createReadStream> ;
-    a code:EcmaScript ] ;
-  code:arguments  ("${file}"^^code:EcmaScriptTemplateLiteral).
+    a code:EcmaScriptModule ] ;
+  code:arguments  ("${file}"^^code:EcmaScriptModuleTemplateLiteral).
 
 <parse> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-formats#n3.parse> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ] .
 
 
@@ -77,18 +77,18 @@ _:variables p:variable
   ].
 
 <sparqlInsert> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-tdb#update>
   ];
   code:arguments [
     code:name "queries";
     code:value (
-      "require('fs').readFileSync('sparql/create_unit_symbols.rq').toString()"^^code:EcmaScript
+      "require('fs').readFileSync('sparql/create_unit_symbols.rq').toString()"^^code:EcmaScriptModule
     )
   ].
 
 <serialize> a p:Step;
   code:implementedBy [
     code:link <node:barnard59-formats#ntriples.serialize> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ].
