@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { strictEqual, rejects } from 'assert'
 import { resolve } from 'path'
 import getStream from 'get-stream'
 import { describe, it } from 'mocha'
@@ -25,6 +25,24 @@ describe('factory/step', () => {
     })
 
     strictEqual(step instanceof Step, true)
+  })
+
+  it('should forward errors thrown by the loader', async () => {
+    const definition = await loadPipelineDefinition('step-operation-missing-error')
+    const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
+
+    await rejects(async () => {
+      await createStep(ptr, {
+        basePath: resolve('test'),
+        loaderRegistry: defaultLoaderRegistry(),
+        logger: defaultLogger()
+      })
+    }, err => {
+      strictEqual(err.message.includes('step'), true)
+      strictEqual(err.message.includes(ptr.value), true)
+
+      return true
+    })
   })
 
   it('should attach step to the context', async () => {
