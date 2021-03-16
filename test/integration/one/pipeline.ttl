@@ -3,10 +3,10 @@
 @prefix p: <https://pipeline.described.at/> .
 
 _:dataset-vars p:variable
-  [ a p:Variable; p:name "inputFile"; p:value "input/municipalities.ttl" ] .
+  [ a p:Variable; p:name "inputFile"; p:value "test/integration/one/input/municipalities.ttl" ] .
 
 _:metadata-vars p:variable
-  [ a p:Variable; p:name "inputFile"; p:value "input/metadata.ttl" ] .
+  [ a p:Variable; p:name "inputFile"; p:value "test/integration/one/input/metadata.ttl" ] .
 
 
 <mainCreateFile> a p:Pipeline, p:Readable ;
@@ -16,13 +16,13 @@ _:metadata-vars p:variable
 
 <concatStreams> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-base#concat.object>
+    code:link <node:barnard59-base/concat.js#object>
   ];
   code:arguments (<getMunicipalities><getMetadata>).
 
 <serialize> a p:Step;
   code:implementedBy [
-    code:link <node:barnard59-formats#ntriples.serialize> ;
+    code:link <node:barnard59-formats/ntriples.js#serialize> ;
     a code:EcmaScriptModule
   ].
 
@@ -48,13 +48,13 @@ _:metadata-vars p:variable
 
 <parseTurtle> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-formats#n3.parse> ;
+    code:link <node:barnard59-formats/n3.js#parse> ;
     a code:EcmaScriptModule
   ] .
 
 <metadataTimestamp> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base#map> ;
+    code:link <node:barnard59-base/map.js> ;
     a code:EcmaScriptModule
   ];
   code:arguments ( """quad => {

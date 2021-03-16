@@ -1,0 +1,56 @@
+<https://your-domain.ld.admin.ch/municipalities/261> <http://schema.org/name> "Zürich" .
+<https://your-domain.ld.admin.ch/municipalities/261> <http://www.geonames.org/ontology#population> "415367"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/261> <http://dbpedia.org/property/area> "9188.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/6621> <http://schema.org/name> "Genève" .
+<https://your-domain.ld.admin.ch/municipalities/6621> <http://www.geonames.org/ontology#population> "201818"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/6621> <http://dbpedia.org/property/area> "1830.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/2701> <http://schema.org/name> "Basel" .
+<https://your-domain.ld.admin.ch/municipalities/2701> <http://www.geonames.org/ontology#population> "172258"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/2701> <http://dbpedia.org/property/area> "2385.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/5586> <http://schema.org/name> "Lausanne" .
+<https://your-domain.ld.admin.ch/municipalities/5586> <http://www.geonames.org/ontology#population> "139111"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/5586> <http://dbpedia.org/property/area> "4147.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/351> <http://schema.org/name> "Bern" .
+<https://your-domain.ld.admin.ch/municipalities/351> <http://www.geonames.org/ontology#population> "133883"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/351> <http://dbpedia.org/property/area> "5162.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/230> <http://schema.org/name> "Winterthur" .
+<https://your-domain.ld.admin.ch/municipalities/230> <http://www.geonames.org/ontology#population> "111851"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/230> <http://dbpedia.org/property/area> "6807.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/1061> <http://schema.org/name> "Luzern" .
+<https://your-domain.ld.admin.ch/municipalities/1061> <http://www.geonames.org/ontology#population> "81691"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/1061> <http://dbpedia.org/property/area> "3741.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/3203> <http://schema.org/name> "St. Gallen" .
+<https://your-domain.ld.admin.ch/municipalities/3203> <http://www.geonames.org/ontology#population> "75833"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/3203> <http://dbpedia.org/property/area> "3938.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/5192> <http://schema.org/name> "Lugano" .
+<https://your-domain.ld.admin.ch/municipalities/5192> <http://www.geonames.org/ontology#population> "63185"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/5192> <http://dbpedia.org/property/area> "8621.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/municipalities/371> <http://schema.org/name> "Biel/Bienne" .
+<https://your-domain.ld.admin.ch/municipalities/371> <http://www.geonames.org/ontology#population> "55159"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://your-domain.ld.admin.ch/municipalities/371> <http://dbpedia.org/property/area> "2121.0"^^<http://qudt.org/vocab/unit/HA> .
+<https://your-domain.ld.admin.ch/.well-known/void> <http://schema.org/dataset> <https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://rdfs.org/ns/void#Dataset> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/dcat#Dataset> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Dataset> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/description> "Hier findet man detaillierte Beschreibung eines Datensatzes"@de .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/description> "Voici la description détaillée d'un ensemble de données"@fr .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/description> "Here goes a detailed description of a dataset"@en .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/description> "Una descrizione dettagliata di un set di dati"@it .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/name> "Municipalities"@en .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/name> "Municipalités"@fr .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/name> "Comune"@de .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/publisher> <https://ld.admin.ch/org/lindas> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/creator> <https://ld.admin.ch/org/your-bundesamt> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/contactPoint> <https://your-domain.ld.admin.ch/.well-known/dataset/municipalities/PeterPan> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/contributor> <https://ld.admin.ch/org/zazuko> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/dateCreated> "2020-12-16"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/dateModified> "2020-12-16"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/datePublished> "2020-12-16"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://rdfs.org/ns/void#exampleResource> <https://your-domain.ld.admin.ch/municipalities/261:2020> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://rdfs.org/ns/void#sparqlEndpoint> <https://your-domain.ld.admin.ch/query/> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://www.w3.org/ns/dcat#landingPage> <https://your-domain.ld.admin.ch/sparql/> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities> <http://schema.org/url> <https://your-domain.ld.admin.ch/municipalities/> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities/PeterPan> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities/PeterPan> <http://schema.org/givenName> "Peter" .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities/PeterPan> <http://schema.org/familyName> "Pan" .
+<https://your-domain.ld.admin.ch/.well-known/dataset/municipalities/PeterPan> <http://schema.org/url> "https://your-data-owner-url.ch" .

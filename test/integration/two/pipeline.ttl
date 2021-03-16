@@ -3,8 +3,8 @@
 @prefix p: <https://pipeline.described.at/> .
 
 _:variables p:variable
-  [ a p:Variable; p:name "inputDirMetadata"; p:value "input/ontologies/*.ttl" ] ,
-  [ a p:Variable; p:name "inputDirUnits"; p:value "input/units/*.ttl" ] .
+  [ a p:Variable; p:name "inputDirMetadata"; p:value "test/integration/two/input/ontologies/*.ttl" ] ,
+  [ a p:Variable; p:name "inputDirUnits"; p:value "test/integration/two/input/units/*.ttl" ] .
 
 <mainCreateFile> a p:Pipeline, p:Readable;
   p:variables _:variables ;
@@ -14,7 +14,7 @@ _:variables p:variable
 
 <mergeInputsStep> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base#concat.object> ;
+    code:link <node:barnard59-base/concat.js#object> ;
     a code:EcmaScriptModule ] ;
   code:arguments (<transformUnitPipeline> <mergeInputsPipeline>) .
 
@@ -26,7 +26,7 @@ _:variables p:variable
 
 <readDirMetadata> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base#glob> ;
+    code:link <node:barnard59-base/glob.js> ;
     a code:EcmaScriptModule
   ];
   code:arguments [
@@ -36,7 +36,7 @@ _:variables p:variable
 
 <readDirUnits> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base#glob> ;
+    code:link <node:barnard59-base/glob.js> ;
     a code:EcmaScriptModule
   ];
   code:arguments [
@@ -47,7 +47,7 @@ _:variables p:variable
 
 <transformStep> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-core#forEach> ;
+    code:link <node:barnard59-core/forEach.js> ;
     a code:EcmaScriptModule
   ] ;
   code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScriptModule ) .
@@ -65,7 +65,7 @@ _:variables p:variable
 
 <parse> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-formats#n3.parse> ;
+    code:link <node:barnard59-formats/n3.js#parse> ;
     a code:EcmaScriptModule
   ] .
 
@@ -78,7 +78,7 @@ _:variables p:variable
 
 <sparqlInsert> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-tdb#update>
+    code:link <node:barnard59-tdb/update.js>
   ];
   code:arguments [
     code:name "queries";
@@ -89,6 +89,6 @@ _:variables p:variable
 
 <serialize> a p:Step;
   code:implementedBy [
-    code:link <node:barnard59-formats#ntriples.serialize> ;
+    code:link <node:barnard59-formats/ntriples.js#serialize> ;
     a code:EcmaScriptModule
   ].
