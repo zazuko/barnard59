@@ -15,7 +15,7 @@ _:metadata-vars p:variable
   ].
 
 <concatStreams> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-base#concat.object>
   ];
   code:arguments (<getMunicipalities><getMetadata>).
@@ -23,7 +23,7 @@ _:metadata-vars p:variable
 <serialize> a p:Step;
   code:implementedBy [
     code:link <node:barnard59-formats#ntriples.serialize> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ].
 
 <getMunicipalities> a p:Pipeline, p:ReadableObjectMode;
@@ -41,7 +41,7 @@ _:metadata-vars p:variable
 <readFile> a p:Step;
   code:implementedBy [
     code:link <node:fs#createReadStream>;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ];
   code:arguments ("inputFile"^^p:VariableName).
 
@@ -49,13 +49,13 @@ _:metadata-vars p:variable
 <parseTurtle> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-formats#n3.parse> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ] .
 
 <metadataTimestamp> a p:Step ;
   code:implementedBy [
     code:link <node:barnard59-base#map> ;
-    a code:EcmaScript
+    a code:EcmaScriptModule
   ];
   code:arguments ( """quad => {
       const rdf = require('rdf-ext')
@@ -66,4 +66,4 @@ _:metadata-vars p:variable
       }
 
       return quad
-    }"""^^code:EcmaScript) .
+    }"""^^code:EcmaScriptModule) .
