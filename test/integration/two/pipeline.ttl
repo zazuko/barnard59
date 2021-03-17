@@ -26,7 +26,7 @@ _:variables p:variable
 
 <readDirMetadata> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base/glob.js> ;
+    code:link <node:barnard59-base/glob.js#default> ;
     a code:EcmaScriptModule
   ];
   code:arguments [
@@ -36,7 +36,7 @@ _:variables p:variable
 
 <readDirUnits> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base/glob.js> ;
+    code:link <node:barnard59-base/glob.js#default> ;
     a code:EcmaScriptModule
   ];
   code:arguments [
@@ -47,7 +47,7 @@ _:variables p:variable
 
 <transformStep> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-core/forEach.js> ;
+    code:link <node:barnard59-core/forEach.js#default> ;
     a code:EcmaScriptModule
   ] ;
   code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScriptModule ) .
@@ -78,7 +78,7 @@ _:variables p:variable
 
 <sparqlInsert> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-tdb/update.js>
+    code:link <node:barnard59-tdb/update.js#default>
   ];
   code:arguments [
     code:name "queries";
