@@ -17,10 +17,10 @@ class Dimension {
   constructor ({ predicate, object }) {
     this.predicate = predicate
     this.termType = object.termType
-    this.datatype = object.datatype
+    this.datatype = new TermSet()
 
-    if (this.datatype && datatypeParsers.has(this.datatype)) {
-      const datatypeParser = datatypeParsers.get(this.datatype)
+    if (object.datatype && datatypeParsers.has(object.datatype)) {
+      const datatypeParser = datatypeParsers.get(object.datatype)
 
       const value = datatypeParser(object)
 
@@ -34,12 +34,12 @@ class Dimension {
   }
 
   update ({ object }) {
-    if (this.dataset && !this.datatype.equals(object.datatype)) {
-      this.datatype = null
+    if (object.datatype) {
+      this.datatype.add(object.datatype)
     }
 
-    if (this.datatype && datatypeParsers.has(this.datatype)) {
-      const datatypeParser = datatypeParsers.get(this.datatype)
+    if (object.datatype && datatypeParsers.has(object.datatype)) {
+      const datatypeParser = datatypeParsers.get(object.datatype)
 
       const value = datatypeParser(object)
 
@@ -71,8 +71,16 @@ class Dimension {
       .addOut(ns.sh.minCount, 1)
       .addOut(ns.sh.maxCount, 1)
 
-    if (this.datatype) {
-      ptr.addOut(ns.sh.datatype, this.datatype)
+    if (this.datatype.size === 1) {
+      ptr.addOut(ns.sh.datatype, [...this.datatype][0])
+    }
+
+    if (this.datatype.size > 1) {
+      ptr.addList(ns.sh.or, [...this.datatype].map(datatype => {
+        return ptr
+          .blankNode()
+          .addOut(ns.sh.datatype, datatype)
+      }))
     }
 
     if (this.in) {

@@ -371,4 +371,25 @@ describe('cube.buildCubeShape', () => {
 
     checkMinMax(result, min, max)
   })
+
+  it('should generate sh:or for multiple datatypes', async () => {
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property.value]: rdf.literal('a', ns.xsd.integer)
+      }, {
+        [ns.ex.property.value]: rdf.literal('', ns.cube.Undefined)
+      }]
+    })
+    const transform = buildCubeShape()
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const propertyShape = result.has(ns.sh.path, ns.ex.property)
+    const datatypes = new TermSet([...propertyShape.out(ns.sh.or).list()].map(or => or.out(ns.sh.datatype).term))
+
+    strictEqual(datatypes.has(ns.xsd.integer), true)
+    strictEqual(datatypes.has(ns.cube.Undefined), true)
+  })
 })
