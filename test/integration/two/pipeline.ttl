@@ -47,7 +47,7 @@ _:variables p:variable
 
 <transformStep> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-core/forEach.js#default> ;
+    code:link <node:barnard59-base/forEach.js#default> ;
     a code:EcmaScriptModule
   ] ;
   code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScriptModule ) .
