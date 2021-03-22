@@ -61,10 +61,10 @@ _:save
 
 <#doTransform>
     a                  :Step ;
-    code:implementedBy [ code:link <node:barnard59-core/forEach.js> ;
+    code:implementedBy [ code:link <node:barnard59-base/forEach.js#default> ;
                          a         code:EcmaScriptModule ] ;
     code:arguments     ( <#TransformCsv>
-                         "(p, fileName) => { p.variables.set('csvw', fileName) }"^^code:EcmaScriptModule ) .
+                         "csvw" ) .
 
 # ------------------------------
 #
@@ -84,7 +84,7 @@ _:openCsvFromFilesystem
     a                  :Step ;
     code:implementedBy [ code:link <file:lib/csv.js#openFromCsvw> ;
                          a         code:EcmaScriptModule ] ;
-    code:arguments     ( "${csvw}"^^code:EcmaScriptModuleTemplateLiteral ) .
+    code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
 
 
 <#loadCsvStep>
@@ -112,7 +112,7 @@ _:openCsvFromFilesystem
     a                  :Step ;
     code:implementedBy [ code:link <node:fs#createReadStream> ;
                          a         code:EcmaScriptModule ] ;
-    code:arguments     ( "${csvw}"^^code:EcmaScriptModuleTemplateLiteral ) .
+    code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
 
 <#filterNotCsvw>
     a                  :Step ;
