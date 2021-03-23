@@ -75,6 +75,8 @@ class Pipeline extends StreamObject {
       finished(this.lastChild.stream, err => {
         if (!err) {
           this.finish()
+        } else {
+          console.error(err)
         }
       })
     } catch (err) {
@@ -100,6 +102,12 @@ class Pipeline extends StreamObject {
 
   async _read (size) {
     await this.init()
+
+    // if it's just a fake readable interface for events,
+    // there is no data to forward from the last child
+    if (!this.readable) {
+      return
+    }
 
     for (;;) {
       if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
