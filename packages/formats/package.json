@@ -1,6 +1,6 @@
 {
   "name": "barnard59-formats",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "scripts": {
