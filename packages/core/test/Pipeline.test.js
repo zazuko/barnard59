@@ -49,6 +49,20 @@ describe('Pipeline', () => {
     strictEqual(result, 'test')
   })
 
+  it('should support nested writable pipelines', async () => {
+    const ptr = await loadPipelineDefinition('nested-write')
+    const result = []
+
+    const pipeline = createPipeline(ptr, {
+      basePath: resolve('test'),
+      context: { result }
+    })
+
+    await getStream(pipeline.stream)
+
+    strictEqual(Buffer.concat(result).toString(), 'test')
+  })
+
   it('should assign the pipeline stream to the .stream property', async () => {
     const ptr = await loadPipelineDefinition('nested')
 
