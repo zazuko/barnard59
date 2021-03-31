@@ -1,0 +1,98 @@
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX qudt: <http://qudt.org/schema/qudt/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+INSERT {
+  ?unit qudt:symbol ?newsymbol.
+}
+ WHERE
+{
+  ?unit a qudt:Unit.
+
+  FILTER NOT EXISTS {
+  	?unit qudt:symbol ?symbol.
+  }
+
+  ?unit qudt:ucumCode ?originalUcumCode.
+  BIND(replace(replace(replace(str(?originalUcumCode), "deg", "°"), "Cel", "°C"), "Ohm", "Ω") as ?ucumCode)
+  
+  FILTER (strlen(?ucumCode) < 10)
+  FILTER (!(CONTAINS(?ucumCode, "-"))) # filter m-3 over /m3
+  FILTER (!(CONTAINS(?ucumCode, "["))) # marks non SI
+  FILTER (!(CONTAINS(?ucumCode, "{"))) # not handled yet
+  FILTER (!(CONTAINS(?ucumCode, "_"))) # not handled yet
+  
+  BIND (substr(?ucumCode, 1, 1) as ?x1c)
+  BIND(replace(replace(replace(replace(?x1c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x1i)    
+  OPTIONAL {
+  	?x1 qudt:ucumCode ?x1c;
+      	  qudt:symbol ?x1s.
+  }
+ 
+  BIND (substr(?ucumCode, 2, 1) as ?x2c)
+  BIND(replace(replace(replace(replace(?x2c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x2i)    
+  OPTIONAL {
+  	?x2 qudt:ucumCode ?x2c;
+      	  qudt:symbol ?x2s.
+  }
+ 
+  BIND (substr(?ucumCode, 3, 1) as ?x3c)
+  BIND(replace(replace(replace(replace(?x3c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x3i)    
+  
+  OPTIONAL {
+  	?x3 qudt:ucumCode ?x3c;
+      	  qudt:symbol ?x3s.
+  }  
+  BIND (substr(?ucumCode, 4, 1) as ?x4c)
+  BIND(replace(replace(replace(replace(?x4c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x4i)    
+  OPTIONAL {
+  	?x4 qudt:ucumCode ?x4c;
+      	  qudt:symbol ?x4s.
+  }
+  
+  BIND (substr(?ucumCode, 5, 1) as ?x5c)
+  BIND(replace(replace(replace(replace(?x5c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x5i)    
+  OPTIONAL {
+  	?x5 qudt:ucumCode ?x5c;
+      	  qudt:symbol ?x5s.
+  }
+
+  BIND (substr(?ucumCode, 6, 1) as ?x6c)
+  BIND(replace(replace(replace(replace(?x6c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x6i)    
+  OPTIONAL {
+  	?x6 qudt:ucumCode ?x6c;
+      	  qudt:symbol ?x6s.
+  }
+  
+  BIND (substr(str(?ucumCode), 7, 1) as ?x7c)
+  BIND(replace(replace(replace(replace(?x7c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x7i)    
+  OPTIONAL {
+  	?x7 qudt:ucumCode ?x7c;
+      	  qudt:symbol ?x7s.
+  }
+  
+  BIND (substr(?ucumCode, 8, 1) as ?x8c)
+  BIND(replace(replace(replace(replace(?x8c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x8i)    
+  OPTIONAL {
+  	?x8 qudt:ucumCode ?x8c;
+      	  qudt:symbol ?x8s.
+  }
+  
+  BIND (substr(?ucumCode, 9, 1) as ?x9c)
+  BIND(replace(replace(replace(replace(?x9c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x9i)    
+  OPTIONAL {
+  	?x9 qudt:ucumCode ?x9c;
+      	  qudt:symbol ?x9s.
+  }
+  
+  BIND (substr(?ucumCode, 10, 1) as ?x10c)
+  BIND(replace(replace(replace(replace(?x10c, "2", "²"),"3", "³"), "4", "⁴"),"\\.","⋅") as ?x10i)    
+  OPTIONAL {
+  	?x10 qudt:ucumCode ?x10c;
+      	  qudt:symbol ?x10s.
+  }  
+  
+  BIND(coalesce(?symbol, concat(coalesce(?x1s,?x1i,?x1c), coalesce(?x2s,?x2i,?x2c), coalesce(?x3s,?x3i,?x3c), coalesce(?x4s,?x4i,?x4c), coalesce(?x5s,?x5i,?x5c), coalesce(?x6s,?x6i,?x6c), coalesce(?x7s,?x7i,?x7c), coalesce(?x8s,?x8i,?x8c), coalesce(?x9s,?x9i,?x9c), coalesce(?x10s,?x10i,?x10c))) as ?newsymbol)
+}
