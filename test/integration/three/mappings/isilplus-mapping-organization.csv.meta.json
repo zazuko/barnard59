@@ -1,0 +1,159 @@
+{
+	"@context": "http://www.w3.org/ns/csvw",
+	"url": "../input/isil_lindas.csv",
+	"dialect": {
+		"delimiter": ";"
+		,"quoteChar": "\""
+	},
+	"tableSchema": {
+		"aboutUrl": "https://culture.ld.admin.ch/isil/{ISIL}/organization",
+		"columns": [
+			{
+				"virtual": true,
+				"propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+				"valueUrl": "http://schema.org/Organization"
+			}
+			,
+			{
+				"propertyUrl": "http://schema.org/address",
+				"titles": "ISIL",
+				"valueUrl": "https://culture.ld.admin.ch/isil/{ISIL}/address"
+			},
+			{
+				"propertyUrl": "http://schema.org/identifier",
+				"titles": "ISIL",
+				"valueUrl": "https://culture.ld.admin.ch/isil/{ISIL}"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"titles": "Institution"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"lang": "de",
+				"titles": "Institution_DE"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"lang": "fr",
+				"titles": "Institution_FR"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"lang": "it",
+				"titles": "Institution_IT"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"lang": "rm",
+				"titles": "Institution_RM"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"lang": "en",
+				"titles": "Institution_EN"
+			},
+			{
+				"propertyUrl": "http://schema.org/telephone",
+				"titles": "Telefon_Nr"
+			},
+			{
+				"propertyUrl": "http://schema.org/faxNumber",
+				"titles": "Fax_Nr"
+			},
+			{
+				"propertyUrl": "http://schema.org/email",
+				"titles": "E_Mail"
+			},
+			{
+				"propertyUrl": "http://schema.org/url",
+				"titles": "WWW"
+			},
+			{
+				"propertyUrl": "http://schema.org/publicAccess",
+				"titles": "Zugang"
+			},
+			{
+				"propertyUrl": "http://schema.org/memberOf",
+				"titles": "Mitgliedschaft"
+			},
+			{
+				"propertyUrl": "http://schema.org/knowsAbout",
+				"titles": "Dewey"
+			},
+			{
+				"propertyUrl": "http://schema.org/publicAccess",
+				"titles": "Zugangsbedingungen"
+			},
+			{
+				"propertyUrl": "http://schema.org/dateModified",
+				"titles": "LastEditedOn"
+			}
+			,
+			{
+				"suppressOutput": true,
+				"titles": "ID"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "ISIL"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "VZ_Code"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Strasse"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "PLZ"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Ort"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Kanton"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Land"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Startdatum"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Enddatum"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Aufgegangen_in"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Verwaltungsgeschichte"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Bestandsbeschreibung"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Bibliotheksbestaende"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Andere_Bestaende"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Status"
+			}
+		] 
+	}
+}

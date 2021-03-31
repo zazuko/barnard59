@@ -1,0 +1,144 @@
+{
+	"@context": "http://www.w3.org/ns/csvw",
+	"url": "../input/isil_lindas.csv",
+	"dialect": {
+		"delimiter": ";"
+		,"quoteChar": "\""
+	},
+	"tableSchema": {
+		"aboutUrl": "https://culture.ld.admin.ch/isil/{ISIL}/address",
+		"columns": [
+			{
+				"virtual": true,
+				"propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+				"valueUrl": "http://schema.org/PostalAddress"
+			}
+			,
+			{
+				"propertyUrl": "http://schema.org/streetAddress",
+				"titles": "Strasse"
+			},
+			{
+				"propertyUrl": "http://schema.org/postalCode",
+				"titles": "PLZ"
+			},
+			{
+				"propertyUrl": "http://schema.org/addressLocality",
+				"titles": "Ort"
+			},
+			{
+				"propertyUrl": "http://schema.org/addressRegion",
+				"titles": "Kanton"
+			},
+			{
+				"propertyUrl": "http://schema.org/addressCountry",
+				"titles": "Land"
+			}
+			,
+			{
+				"suppressOutput": true,
+				"titles": "ID"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "ISIL"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "VZ_Code"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_DE"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_FR"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_IT"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_RM"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_EN"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Telefon_Nr"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Fax_Nr"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "E_Mail"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "WWW"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Startdatum"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Enddatum"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Aufgegangen_in"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Verwaltungsgeschichte"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Bestandsbeschreibung"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Bibliotheksbestaende"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Andere_Bestaende"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Zugang"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Mitgliedschaft"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Dewey"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Status"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Zugangsbedingungen"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "LastEditedOn"
+			}
+		] 
+	}
+}

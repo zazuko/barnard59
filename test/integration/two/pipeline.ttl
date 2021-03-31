@@ -50,7 +50,7 @@ _:variables p:variable
     code:link <node:barnard59-base/forEach.js#default> ;
     a code:EcmaScriptModule
   ] ;
-  code:arguments ( <transformPipeline> "(p, fileName) => { p.variables.set('file', fileName) }"^^code:EcmaScript ) .
+  code:arguments ( <transformPipeline> "file" ) .
 
 <transformPipeline> a p:Pipeline, p:ReadableObjectMode ;
   p:steps [
@@ -74,18 +74,7 @@ _:variables p:variable
 
 <transformUnitPipeline> a p:Pipeline, p:ReadableObjectMode ;
   p:steps [
-    p:stepList (<readDirUnits> <transformStep> <sparqlInsert>)
-  ].
-
-<sparqlInsert> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-tdb/update.js#default>
-  ];
-  code:arguments [
-    code:name "queries";
-    code:value (
-      "require('fs').readFileSync('test/integration/two/input/create_unit_symbols.rq').toString()"^^code:EcmaScript
-    )
+    p:stepList (<readDirUnits> <transformStep> )
   ].
 
 <serialize> a p:Step;

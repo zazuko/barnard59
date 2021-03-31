@@ -1,0 +1,165 @@
+{
+	"@context": "http://www.w3.org/ns/csvw",
+	"url": "../input/isil_lindas.csv",
+	"dialect": {
+		"delimiter": ";"
+		,"quoteChar": "\""
+	},
+	"tableSchema": {
+		"aboutUrl": "https://culture.ld.admin.ch/isil/{ISIL}",
+		"columns": [
+			{
+				"virtual": true,
+				"propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+				"valueUrl": "http://schema.org/DefinedTerm"
+			},
+			{
+				"virtual": true,
+				"propertyUrl": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+				"valueUrl": "https://schema.ld.admin.ch/Isil"
+			}
+			,
+			{
+				"propertyUrl": "http://schema.org/termCode",
+				"titles": "ISIL"
+			},
+			{
+				"propertyUrl": "http://schema.org/name",
+				"titles": "Institution"
+			},
+			{
+				"propertyUrl": "http://schema.org/url",
+				"datatype": "anyURI",
+				"titles": "ID"
+			},
+			{
+				"propertyUrl": "http://schema.org/alternateName",
+				"titles": "VZ_Code"
+			},
+			{
+				"propertyUrl": "http://schema.org/inDefinedTermSet",
+				"virtual": true,
+				"valueUrl": "https://culture.ld.admin.ch/isil"
+			},
+			{
+				"propertyUrl": "http://schema.org/about",
+				"titles": "ISIL",
+				"valueUrl": "https://culture.ld.admin.ch/isil/{ISIL}/organization"
+			},
+			{
+				"propertyUrl": "https://schema.ld.admin.ch/administrativeHistory",
+				"titles": "Verwaltungsgeschichte"
+			},
+			{
+				"propertyUrl": "https://schema.ld.admin.ch/inventoryDescription",
+				"titles": "Bestandsbeschreibung"
+			},
+			{
+				"propertyUrl": "https://schema.ld.admin.ch/libraryMaterials",
+				"titles": "Bibliotheksbestaende"
+			},
+			{
+				"propertyUrl": "https://schema.ld.admin.ch/otherMaterials",
+				"titles": "Andere_Bestaende"
+			},
+			{
+				"propertyUrl": "http://schema.org/validFrom",
+				"titles": "Startdatum"
+			},
+			{
+				"propertyUrl": "http://schema.org/validThrough",
+				"titles": "Enddatum"
+			},
+			{
+				"propertyUrl": "https://schema.ld.admin.ch/valid",
+				"titles": "Status"
+			},
+			{
+				"propertyUrl": "http://schema.org/replacer",
+				"titles": "Aufgegangen_in",
+				"valueUrl": "https://culture.ld.admin.ch/isil/{Aufgegangen_in}"
+			},
+			{
+				"propertyUrl": "http://schema.org/dateModified",
+				"titles": "LastEditedOn"
+			}
+			,
+			{
+				"suppressOutput": true,
+				"titles": "Institution_DE"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_FR"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_IT"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_RM"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Institution_EN"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Strasse"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "PLZ"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Ort"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Kanton"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Land"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Telefon_Nr"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Fax_Nr"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "E_Mail"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "WWW"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Aufgegangen_in"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Zugang"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Mitgliedschaft"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Dewey"
+			},
+			{
+				"suppressOutput": true,
+				"titles": "Zugangsbedingungen"
+			}
+		] 
+	}
+}

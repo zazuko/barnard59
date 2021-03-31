@@ -5,7 +5,6 @@
 <http://qudt.org/vocab/unit/GM-PER-KiloM> <http://qudt.org/schema/qudt/hasQuantityKind> <http://qudt.org/vocab/quantitykind/MassPerLength> .
 <http://qudt.org/vocab/unit/GM-PER-KiloM> <http://qudt.org/schema/qudt/plainTextDescription> "The SI base unit gram divided by the SI 0,001-fold of the SI base unit metre" .
 <http://qudt.org/vocab/unit/GM-PER-KiloM> <http://qudt.org/schema/qudt/ucumCode> "g/km"^^<http://qudt.org/schema/qudt/UCUMcs> .
-<http://qudt.org/vocab/unit/GM-PER-KiloM> <http://qudt.org/schema/qudt/symbol> "g/km" .
 <http://www.w3.org/1999/02/22-rdf-syntax-ns#> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
 <http://www.w3.org/1999/02/22-rdf-syntax-ns#> <http://purl.org/dc/elements/1.1/title> "The RDF Concepts Vocabulary (RDF)" .
 <http://www.w3.org/1999/02/22-rdf-syntax-ns#> <http://purl.org/dc/elements/1.1/date> "2019-12-16" .
