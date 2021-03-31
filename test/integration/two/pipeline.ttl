@@ -61,7 +61,8 @@ _:variables p:variable
   code:implementedBy [
     code:link <node:fs#createReadStream> ;
     a code:EcmaScriptModule ] ;
-  code:arguments  ("${file}"^^code:EcmaScriptModuleTemplateLiteral).
+  code:arguments  ("${file}"^^code:EcmaScriptTemplateLiteral) .
+
 
 <parse> a p:Step ;
   code:implementedBy [
