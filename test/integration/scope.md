@@ -1,7 +1,7 @@
 ## Frequently use functions with barnard59
 
 To produce expected files, run:
-`node bin/barnard59.js run test/integration/one/pipeline.ttl`
+`node bin/barnard59.js run test/integration/01/pipeline.ttl`
 ### Tested:
 Test pipelines contain following modules:
 * `node:fs#createReadStream`

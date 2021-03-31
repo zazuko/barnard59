@@ -3,8 +3,8 @@
 @prefix p: <https://pipeline.described.at/> .
 
 _:variables p:variable
-  [ a p:Variable; p:name "inputDirMetadata"; p:value "test/integration/two/input/ontologies/*.ttl" ] ,
-  [ a p:Variable; p:name "inputDirUnits"; p:value "test/integration/two/input/units/*.ttl" ] .
+  [ a p:Variable; p:name "inputDirMetadata"; p:value "test/integration/02/input/ontologies/*.ttl" ] ,
+  [ a p:Variable; p:name "inputDirUnits"; p:value "test/integration/02/input/units/*.ttl" ] .
 
 <mainCreateFile> a p:Pipeline, p:Readable;
   p:variables _:variables ;

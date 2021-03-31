@@ -1,6 +1,6 @@
 {
 	"@context": "http://www.w3.org/ns/csvw",
-	"url": "./test/integration/three/input/isil_lindas.csv",
+	"url": "./test/integration/03/input/isil_lindas.csv",
 	"dialect": {
 		"delimiter": ";"
 		,"quoteChar": "\""

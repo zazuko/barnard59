@@ -3,10 +3,10 @@
 @prefix p: <https://pipeline.described.at/> .
 
 _:dataset-vars p:variable
-  [ a p:Variable; p:name "inputFile"; p:value "test/integration/one/input/municipalities.ttl" ] .
+  [ a p:Variable; p:name "inputFile"; p:value "test/integration/01/input/municipalities.ttl" ] .
 
 _:metadata-vars p:variable
-  [ a p:Variable; p:name "inputFile"; p:value "test/integration/one/input/metadata.ttl" ] .
+  [ a p:Variable; p:name "inputFile"; p:value "test/integration/01/input/metadata.ttl" ] .
 
 
 <mainCreateFile> a p:Pipeline, p:Readable ;
