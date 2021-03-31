@@ -24,12 +24,12 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@rdfjs/namespace": "^1.1.0",
+    "@tpluscode/rdf-ns-builders": "^0.4.2",
     "barnard59-base": "github:zazuko/barnard59-base#next",
     "barnard59-core": "github:zazuko/barnard59-core#next",
     "barnard59-formats": "github:zazuko/barnard59-formats#next",
     "barnard59-tdb": "git+https://github.com/zazuko/barnard59-tdb.git",
     "clownface": "^1.2.0",
-    "esm": "^3.2.25",
     "fs": "0.0.1-security",
     "rdf-utils-fs": "^2.1.0",
     "standard": "^16.0.3"

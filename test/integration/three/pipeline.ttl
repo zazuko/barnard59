@@ -3,10 +3,6 @@
 @prefix code: <https://code.described.at/> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-:variables :variable
-  [ a :Variable; :name "mappingsDir"; :value "test/integration/three/input/mappings/*.json" ] ,
-  [ a :Variable; :name "targetFile"; :value "test/integration/three/actual_output.nt" ] .
-
 <#Main>
     a      :Pipeline ;
     :steps [ :stepList ( <#mergeInputs> <#streamOutputStep> ) ] .
@@ -82,7 +78,7 @@ _:save
 
 _:openCsvFromFilesystem
     a                  :Step ;
-    code:implementedBy [ code:link <file:lib/csv.js#openFromCsvw> ;
+    code:implementedBy [ code:link <node:barnard59-csvw/fetch.js#default> ;
                          a         code:EcmaScriptModule ] ;
     code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
 
@@ -117,6 +113,6 @@ _:openCsvFromFilesystem
 <#filterNotCsvw>
     a                  :Step ;
     code:implementedBy [ a         code:EcmaScriptModule ;
-                         code:link <node:barnard59-base/filter.js> ] ;
+                         code:link <node:barnard59-base/filter.js#default> ] ;
     code:arguments     ( [ code:link <file:lib/output-filter.js#removeCsvwTriples> ;
                            a         code:EcmaScriptModule ] ) .

@@ -8,9 +8,6 @@
 #--pipeline http://ld.admin.ch/pipeline/metadata/mainCreateFile \
 #--output test/integration/two/actual_output.nt
 
-#node bin/barnard59 run test/integration/three/pipeline.ttl -v \
-#--pipeline=urn:pipeline:bar#Main
-
 node bin/barnard59 run -v test/integration/three/pipeline.ttl \
 --variable="inputDir=test/integration/three/input" \
 --variable="targetFile=test/integration/three/actual_output.nt" \
