@@ -1,6 +1,6 @@
 {
 	"@context": "http://www.w3.org/ns/csvw",
-	"url": "../input/isil_lindas.csv",
+	"url": "./test/integration/three/input/isil_lindas.csv",
 	"dialect": {
 		"delimiter": ";"
 		,"quoteChar": "\""
@@ -160,6 +160,6 @@
 				"suppressOutput": true,
 				"titles": "Zugangsbedingungen"
 			}
-		] 
+		]
 	}
 }

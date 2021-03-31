@@ -78,7 +78,7 @@ _:save
 
 _:openCsvFromFilesystem
     a                  :Step ;
-    code:implementedBy [ code:link <node:barnard59-csvw/fetch.js#default> ;
+    code:implementedBy [ code:link <file:lib/csv.js#openFromCsvw> ;
                          a         code:EcmaScriptModule ] ;
     code:arguments     ( "${csvw}"^^code:EcmaScriptTemplateLiteral ) .
 
