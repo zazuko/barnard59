@@ -7,16 +7,16 @@ class SinkToWritable extends Writable {
   constructor (factory) {
     super({
       objectMode: true,
-      write: (chunk, encoding, callback) => {
+      write: async (chunk, encoding, callback) => {
         init()
 
-        if (read) {
-          read = readable.push(chunk)
+        await read.promise
 
-          callback()
-        } else {
-          setTimeout(() => this._write(chunk, encoding, callback), 0)
+        if (!readable.push(chunk)) {
+          read = defer()
         }
+
+        callback()
       },
       final: async callback => {
         readable.push(null)
@@ -45,11 +45,11 @@ class SinkToWritable extends Writable {
     const readable = new Readable({
       objectMode: true,
       read: () => {
-        read = true
+        read.resolve()
       }
     })
 
-    let read = false
+    let read = defer()
     const isFinished = promisify(finished)(readable)
     const returned = defer()
   }
