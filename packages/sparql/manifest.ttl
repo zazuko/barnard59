@@ -3,6 +3,13 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
+<construct> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "SPARQL Select";
+  rdfs:comment "Runs the given CONSTRUCT query against the given endpoint parses the result.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-sparql#construct>
+  ].
+
 <select> a p:Operation, p:ReadableObjectMode;
   rdfs:label "SPARQL Select";
   rdfs:comment "Runs the given SELECT query against the given endpoint parses the result into rows of RDF/JS key-value pairs.";
