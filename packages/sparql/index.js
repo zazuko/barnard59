@@ -1,11 +1,7 @@
-const SparqlClient = require('./lib/SparqlClient')
-
-function select ({ endpoint, query, user, password }) {
-  const client = new SparqlClient({ endpoint, user, password })
-
-  return client.select(query)
-}
+const construct = require('./construct')
+const select = require('./select')
 
 module.exports = {
+  construct,
   select
 }

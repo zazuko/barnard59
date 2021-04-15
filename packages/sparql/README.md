@@ -5,6 +5,15 @@ This package exports operations to run SPARQL queries on endpoints that support 
 
 ## Operations
 
+### construct
+
+Runs a construct or describe query and parses the response into RDF/JS Quad stream.
+
+- `endpoint`: URL of the SPARQL endpoint as a string.
+- `query`: The SPARQL construct or describe query as a string.
+- `user`: User for basic authentication.
+- `password`: Password for basic authentication.
+
 ### select
 
 Runs a select query and returns each row of the results as single chunk object.
