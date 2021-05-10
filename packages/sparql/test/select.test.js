@@ -1,5 +1,6 @@
 const { strictEqual } = require('assert')
 const getStream = require('get-stream')
+const { isReadable, isWritable } = require('isstream')
 const { describe, it } = require('mocha')
 const nock = require('nock')
 const select = require('../select')
@@ -7,6 +8,20 @@ const select = require('../select')
 describe('select', () => {
   it('should be a function', () => {
     strictEqual(typeof select, 'function')
+  })
+
+  it('should return a readable stream', async () => {
+    const endpoint = new URL('http://example.org/send-request')
+    const query = 'SELECT * WHERE { ?s ?p ?o }'
+
+    nock(endpoint.origin)
+      .get(`${endpoint.pathname}?query=${encodeURIComponent(query)}`)
+      .reply(200, '{}')
+
+    const result = await select({ endpoint, query })
+
+    strictEqual(isReadable(result), true)
+    strictEqual(isWritable(result), false)
   })
 
   it('should send a request', async () => {

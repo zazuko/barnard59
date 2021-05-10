@@ -1,5 +1,6 @@
 const { strictEqual } = require('assert')
 const getStream = require('get-stream')
+const { isReadable, isWritable } = require('isstream')
 const { describe, it } = require('mocha')
 const nock = require('nock')
 const rdf = require('rdf-ext')
@@ -9,6 +10,20 @@ const ns = require('./support/namespaces')
 describe('construct', () => {
   it('should be a function', () => {
     strictEqual(typeof construct, 'function')
+  })
+
+  it('should return a readable stream', async () => {
+    const endpoint = new URL('http://example.org/send-request')
+    const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
+
+    nock(endpoint.origin)
+      .get(`${endpoint.pathname}?query=${encodeURIComponent(query)}`)
+      .reply(200, '{}')
+
+    const result = await construct({ endpoint, query })
+
+    strictEqual(isReadable(result), true)
+    strictEqual(isWritable(result), false)
   })
 
   it('should send a request', async () => {
