@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59-graph-store",
   "dependencies": {
+    "@rdfjs/data-model": "^1.2.0",
     "duplex-to": "^1.0.0",
     "lodash": "^4.17.15",
     "promise-the-world": "^1.0.1",
@@ -26,7 +27,6 @@
     "sparql-http-client": "^2.2.2"
   },
   "devDependencies": {
-    "@rdfjs/data-model": "^1.1.2",
     "@rdfjs/namespace": "^1.1.0",
     "@rdfjs/to-ntriples": "^1.0.2",
     "barnard59": "0.0.9",
