@@ -2,10 +2,10 @@ const { rejects, strictEqual } = require('assert')
 const { termToNTriples: toNT } = require('@rdfjs/to-ntriples')
 const clownface = require('clownface')
 const getStream = require('get-stream')
-const intoStream = require('into-stream')
 const { isDuplex } = require('isstream')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
+const { Readable } = require('readable-stream')
 const ns = require('../support/namespaces')
 const dateToId = require('../../lib/dateToId')
 const toObservation = require('../../lib/cube/toObservation')
@@ -34,7 +34,7 @@ describe('cube.toObservation', () => {
 
     const transform = toObservation()
 
-    intoStream.object([dataset]).pipe(transform)
+    Readable.from([dataset]).pipe(transform)
 
     const result = await getStream.array(transform)
     const observation = findObservation(result)
@@ -55,7 +55,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation()
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -68,7 +68,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ observer: ns.ex.observer.value })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -81,7 +81,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ observer: ns.ex.observer })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -99,7 +99,7 @@ describe('cube.toObservation', () => {
         useIndex: true
       })
 
-      intoStream.object([dataset1, dataset2]).pipe(transform)
+      Readable.from([dataset1, dataset2]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation1 = findObservation([result[0]])
@@ -120,7 +120,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ useDate: true })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -137,7 +137,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ useDate: 'true' })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -155,7 +155,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ useDate: true })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       await rejects(async () => {
         await getStream.array(transform)
@@ -175,7 +175,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ useDate: ns.ex.date2.value })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -196,7 +196,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ useDate: ns.ex.date2 })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -214,7 +214,7 @@ describe('cube.toObservation', () => {
         }
       })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -227,7 +227,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ useDate: 'now' })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -242,7 +242,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation()
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -255,7 +255,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation()
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -272,7 +272,7 @@ describe('cube.toObservation', () => {
         }
       })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -285,7 +285,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ observations: ns.ex.observation.value })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -298,7 +298,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ observations: ns.ex.observation })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -317,7 +317,7 @@ describe('cube.toObservation', () => {
         }
       })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -336,7 +336,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ blacklist: [ns.ex.property1.value, ns.ex.property3.value] })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -357,7 +357,7 @@ describe('cube.toObservation', () => {
         blacklist: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })]
       })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -376,7 +376,7 @@ describe('cube.toObservation', () => {
 
       const transform = toObservation({ dimensions: [ns.ex.property1.value, ns.ex.property3.value] })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
@@ -395,7 +395,7 @@ describe('cube.toObservation', () => {
         dimensions: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })]
       })
 
-      intoStream.object([dataset]).pipe(transform)
+      Readable.from([dataset]).pipe(transform)
 
       const result = await getStream.array(transform)
       const observation = findObservation(result)
