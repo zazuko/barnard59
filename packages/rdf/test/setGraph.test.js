@@ -1,9 +1,9 @@
 const { strictEqual } = require('assert')
 const getStream = require('get-stream')
-const intoStream = require('into-stream')
 const { isDuplex } = require('isstream')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
+const { Readable } = require('readable-stream')
 const ns = require('./support/namespaces')
 const setGraph = require('../setGraph')
 
@@ -26,7 +26,7 @@ describe('setGraph', () => {
 
     const map = setGraph(ns.ex.graph)
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     const result = await getStream.array(map)
 
@@ -42,11 +42,53 @@ describe('setGraph', () => {
 
     const map = setGraph(ns.ex.graph.value)
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     const result = await getStream.array(map)
 
     strictEqual(ns.ex.graph.equals(result[0].graph), true)
     strictEqual(ns.ex.graph.equals(result[1].graph), true)
+  })
+
+  it('should use default graph if an empty string is given', async () => {
+    const quads = [
+      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph)
+    ]
+
+    const map = setGraph('')
+
+    Readable.from(quads).pipe(map)
+
+    const result = await getStream.array(map)
+
+    strictEqual(rdf.defaultGraph().equals(result[0].graph), true)
+  })
+
+  it('should use default graph if null is given', async () => {
+    const quads = [
+      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph)
+    ]
+
+    const map = setGraph(null)
+
+    Readable.from(quads).pipe(map)
+
+    const result = await getStream.array(map)
+
+    strictEqual(rdf.defaultGraph().equals(result[0].graph), true)
+  })
+
+  it('should use default graph if undefined is given', async () => {
+    const quads = [
+      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph)
+    ]
+
+    const map = setGraph()
+
+    Readable.from(quads).pipe(map)
+
+    const result = await getStream.array(map)
+
+    strictEqual(rdf.defaultGraph().equals(result[0].graph), true)
   })
 })
