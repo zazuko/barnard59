@@ -28,11 +28,10 @@
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^1.0.2",
-    "get-stream": "^5.1.0",
-    "into-stream": "^5.1.1",
+    "get-stream": "^6.0.1",
     "isstream": "^0.1.2",
-    "mocha": "^7.2.0",
+    "mocha": "^8.4.0",
     "nyc": "^15.0.1",
-    "standard": "^14.3.4"
+    "standard": "^16.0.3"
   }
 }

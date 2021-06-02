@@ -1,9 +1,9 @@
 const { strictEqual } = require('assert')
 const getStream = require('get-stream')
-const intoStream = require('into-stream')
 const { isDuplex } = require('isstream')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
+const { Readable } = require('readable-stream')
 const ns = require('./support/namespaces')
 const mapMatch = require('../mapMatch')
 
@@ -29,7 +29,7 @@ describe('mapMatch', () => {
       map: () => rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
     })
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     const result = await getStream.array(map)
 
@@ -53,7 +53,7 @@ describe('mapMatch', () => {
       map: () => mapped
     })
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     const result = await getStream.array(map)
 
@@ -78,7 +78,7 @@ describe('mapMatch', () => {
       map: () => mapped
     })
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     const result = await getStream.array(map)
 
@@ -98,7 +98,7 @@ describe('mapMatch', () => {
       map: async () => mapped
     })
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     const result = await getStream.array(map)
 
@@ -122,7 +122,7 @@ describe('mapMatch', () => {
       }
     })
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     await getStream.array(map)
 
@@ -146,7 +146,7 @@ describe('mapMatch', () => {
       }
     })
 
-    intoStream.object(quads).pipe(map)
+    Readable.from(quads).pipe(map)
 
     await getStream.array(map)
 

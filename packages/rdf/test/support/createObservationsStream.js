@@ -1,6 +1,6 @@
 const clownface = require('clownface')
-const intoStream = require('into-stream')
 const rdf = require('rdf-ext')
+const { Readable } = require('readable-stream')
 const ns = require('./namespaces')
 
 function createObservationsStream ({ observations = [{ [ns.ex.property.value]: rdf.literal('test') }] } = {}) {
@@ -22,7 +22,7 @@ function createObservationsStream ({ observations = [{ [ns.ex.property.value]: r
     datasets.push(observationPtr.dataset)
   })
 
-  return intoStream.object(datasets)
+  return Readable.from(datasets)
 }
 
 module.exports = createObservationsStream
