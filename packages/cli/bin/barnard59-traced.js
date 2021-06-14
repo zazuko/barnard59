@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
+import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
 import { CollectorTraceExporter, CollectorMetricExporter } from '@opentelemetry/exporter-collector'
 import { Resource } from '@opentelemetry/resources'
 import { NodeSDK } from '@opentelemetry/sdk-node'
@@ -13,7 +14,10 @@ const sdk = new NodeSDK({
   autoDetectResources: true,
   traceExporter,
   metricExporter,
-  instrumentations: [getNodeAutoInstrumentations()],
+  instrumentations: [
+    getNodeAutoInstrumentations(),
+    new WinstonInstrumentation(),
+  ],
   resource: new Resource({
     [ResourceAttributes.SERVICE_NAME]: 'barnard59'
   })
