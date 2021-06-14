@@ -1,6 +1,7 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import rdf from 'rdf-ext'
 import CsvwParser from 'rdf-parser-csvw'
+import tracer from './tracer.js'
 
 function toDataset (streamOrDataset) {
   if (!streamOrDataset.readable) {
@@ -34,15 +35,21 @@ function parse (args) {
     metadata = args
   }
 
-  return toDataset(metadata).then(dataset => {
-    return sinkToDuplex(new CsvwParser({
-      metadata: dataset,
-      relaxColumnCount,
-      skipLinesWithError,
-      timezone
-    }), {
-      readableObjectMode: true
-    })
+  return tracer.startActiveSpan('csvw:parse', async span => {
+    try {
+      const dataset = await toDataset(metadata)
+      span.addEvent('metadata')
+      return sinkToDuplex(new CsvwParser({
+        metadata: dataset,
+        relaxColumnCount,
+        skipLinesWithError,
+        timezone
+      }), {
+        readableObjectMode: true
+      })
+    } finally {
+      span.end()
+    }
   })
 }
 
