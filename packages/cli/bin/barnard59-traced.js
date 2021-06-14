@@ -28,3 +28,9 @@ sdk.start()
     process.exit(1)
   })
   .then(() => sdk.shutdown())
+
+process.on('uncaughtException', async (err) => {
+  console.error(err)
+  await sdk.shutdown()
+  process.exit(1)
+});
