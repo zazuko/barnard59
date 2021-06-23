@@ -5,7 +5,7 @@ import { obj } from 'through2'
  * @param {number} limit Limit the amount of chunks passed through the pipe.
  * @memberof module:barnard59
  */
-export default function limit (limit) {
+function limit (limit) {
   const t = obj(function (chunk, encoding, callback) {
     t.count++
 
@@ -21,3 +21,5 @@ export default function limit (limit) {
 
   return t
 }
+
+export default limit

@@ -1,6 +1,6 @@
 import { Transform } from 'readable-stream'
 
-export default class ToString extends Transform {
+class ToString extends Transform {
   constructor () {
     super({
       writableObjectMode: true,
@@ -11,8 +11,10 @@ export default class ToString extends Transform {
   _transform (chunk, encoding, callback) {
     callback(null, chunk.toString())
   }
-
-  static create () {
-    return new ToString()
-  }
 }
+
+function factory () {
+  return new ToString()
+}
+
+export default factory

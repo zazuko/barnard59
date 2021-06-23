@@ -8,12 +8,10 @@ class Nul extends Writable {
   _write (chunk, encoding, callback) {
     callback()
   }
-
-  static create () {
-    return new Nul()
-  }
 }
 
-const nul = Nul.create
+function factory () {
+  return new Nul()
+}
 
-export default nul
+export default factory

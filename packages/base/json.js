@@ -11,10 +11,6 @@ class JsonParse extends Transform {
   _transform (chunk, encoding, callback) {
     callback(null, JSON.parse(chunk.toString()))
   }
-
-  static create () {
-    return new JsonParse()
-  }
 }
 
 class JsonStringify extends Transform {
@@ -28,11 +24,14 @@ class JsonStringify extends Transform {
   _transform (chunk, encoding, callback) {
     callback(null, JSON.stringify(chunk))
   }
-
-  static create () {
-    return new JsonStringify()
-  }
 }
 
-export const parse = JsonParse.create
-export const stringify = JsonStringify.create
+function parse () {
+  return new JsonParse()
+}
+
+function stringify () {
+  return new JsonStringify()
+}
+
+export { parse, stringify }

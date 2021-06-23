@@ -1,6 +1,6 @@
 import { obj } from 'through2'
 
-export default function offset (offset) {
+function offset (offset) {
   const t = obj(function (chunk, encoding, callback) {
     t.count++
 
@@ -16,3 +16,5 @@ export default function offset (offset) {
 
   return t
 }
+
+export default offset

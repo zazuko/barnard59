@@ -1,6 +1,6 @@
 import { obj } from 'through2'
 
-export default function flatten () {
+function flatten () {
   return obj(function (chunk, encoding, callback) {
     if (typeof chunk[Symbol.iterator] === 'function') {
       for (const item of chunk) {
@@ -11,9 +11,7 @@ export default function flatten () {
     }
 
     if (typeof chunk.forEach === 'function') {
-      chunk.forEach((item) => {
-        this.push(item)
-      })
+      chunk.forEach(item => this.push(item))
 
       return callback()
     }
@@ -21,3 +19,5 @@ export default function flatten () {
     return callback(new Error('chunk doesn\'t implement Symbol.iterator or .forEach'))
   })
 }
+
+export default flatten

@@ -6,11 +6,10 @@ class StdOut extends Transform {
 
     callback(null, chunk)
   }
-
-  static create () {
-    return new StdOut()
-  }
 }
 
-const stdout = StdOut.create
-export default stdout
+function factory () {
+  return new StdOut()
+}
+
+export default factory

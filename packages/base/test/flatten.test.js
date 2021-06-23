@@ -2,8 +2,8 @@ import { deepStrictEqual, strictEqual } from 'assert'
 import { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
 import { describe, it } from 'mocha'
-import flatten from '../flatten.js'
 import { Readable } from 'readable-stream'
+import flatten from '../flatten.js'
 
 describe('flatten', () => {
   it('should be a function', () => {
@@ -20,7 +20,9 @@ describe('flatten', () => {
   it('should do nothing if there are no input chunks', async () => {
     const input = Readable({
       objectMode: true,
-      read: () => { input.push(null) }
+      read: () => {
+        input.push(null)
+      }
     })
 
     const result = await array(input.pipe(flatten()))

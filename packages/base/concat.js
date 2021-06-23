@@ -37,12 +37,15 @@ class ConcatStream extends Readable {
   }
 }
 
-export default function factory (...streams) {
+function factory (...streams) {
   return new ConcatStream(streams)
 }
 
-export const object = (...streams) => {
+const object = (...streams) => {
   return new ConcatStream(streams, { objectMode: true })
 }
 
 factory.object = object
+
+export default factory
+export { object }

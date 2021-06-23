@@ -1,9 +1,9 @@
 import { promisify } from 'util'
 import globFn from 'glob'
+import once from 'lodash/once.js'
 import { Readable } from 'readable-stream'
-import { once } from 'lodash-es'
 
-export default function glob ({ pattern, ...options }) {
+function glob ({ pattern, ...options }) {
   let filenames = null
 
   const init = once(async () => {
@@ -33,3 +33,5 @@ export default function glob ({ pattern, ...options }) {
 
   return stream
 }
+
+export default glob
