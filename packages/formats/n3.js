@@ -1,9 +1,11 @@
-import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import Parser from '@rdfjs/parser-n3'
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
 
-export function parse () {
+function parse () {
   return sinkToDuplex(new Parser(), {
     readableObjectMode: true,
     writableObjectMode: true
   })
 }
+
+export { parse }

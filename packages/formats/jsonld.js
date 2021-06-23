@@ -1,18 +1,20 @@
-import { combine, jsonStringify } from 'barnard59-base'
-import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import Parser from '@rdfjs/parser-jsonld'
 import Serializer from '@rdfjs/serializer-jsonld'
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
+import { combine, jsonStringify } from 'barnard59-base'
 
-export function parse () {
+function parse () {
   return sinkToDuplex(new Parser(), { objectMode: true })
 }
 
-export const parseObject = () => {
+const parseObject = () => {
   return combine([jsonStringify(), parse()], { objectMode: true })
 }
 
 parse.object = parseObject
 
-export function serialize () {
+function serialize () {
   return sinkToDuplex(new Serializer(), { objectMode: true })
 }
+
+export { parse, parseObject, serialize }

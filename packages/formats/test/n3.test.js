@@ -1,24 +1,18 @@
-import { describe, it } from 'mocha'
+import { strictEqual } from 'assert'
 import fs from 'fs'
-import { resolve, dirname } from 'path'
-import { parse as createParser } from '../n3.js'
-import { readDataset } from './helpers.js'
-import { ok } from 'assert'
-
-const __dirname = dirname(new URL(import.meta.url).pathname)
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import { parse } from '../n3.js'
 
 describe('n3', () => {
   describe('parse', () => {
     it('successfully loads the input file', async () => {
-      // given
-      const input = fs.createReadStream(resolve(__dirname, './datasets/ontologist.n3'))
+      const input = fs.createReadStream(new URL('./datasets/ontologist.n3', import.meta.url))
 
-      // when
-      const parse = createParser()
-      const dataset = await readDataset(input.pipe(parse))
+      const parser = parse()
+      const dataset = await rdf.dataset().import(input.pipe(parser))
 
-      // then
-      ok(dataset.length > 0)
+      strictEqual(dataset.length > 0, true)
     })
   })
 })

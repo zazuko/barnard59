@@ -1,5 +1,5 @@
-import rdf from 'rdf-ext'
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
+import rdf from 'rdf-ext'
 import CsvwParser from 'rdf-parser-csvw'
 
 function toDataset (streamOrDataset) {
