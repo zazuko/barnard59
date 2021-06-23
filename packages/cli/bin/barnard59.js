@@ -5,8 +5,8 @@ import { dirname, resolve } from 'path'
 import program from 'commander'
 import rdf from 'rdf-ext'
 import fromFile from 'rdf-utils-fs/fromFile.js'
-import bufferDebug from '../lib/bufferDebug.js'
 import findPipeline from '../findPipeline.js'
+import bufferDebug from '../lib/bufferDebug.js'
 import runner from '../runner.js'
 
 async function fileToDataset (filename) {

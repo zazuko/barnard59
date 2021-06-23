@@ -1,8 +1,8 @@
 import { strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import { resolve } from 'path'
-import loadPipelineDefinition from './support/loadPipelineDefinition.js'
+import { describe, it } from 'mocha'
 import runner from '../runner.js'
+import loadPipelineDefinition from './support/loadPipelineDefinition.js'
 
 describe('run', () => {
   it('should emit an error if an error in the pipeline occurs', async () => {
