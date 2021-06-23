@@ -29,6 +29,7 @@
   "devDependencies": {
     "barnard59-core": "git://github.com/zazuko/barnard59-core.git#next",
     "c8": "^7.7.3",
+    "codecov": "^3.8.2",
     "get-stream": "^6.0.1",
     "isstream": "^0.1.2",
     "mocha": "^9.0.1",
