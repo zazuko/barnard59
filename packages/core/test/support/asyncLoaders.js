@@ -1,9 +1,9 @@
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
-import ecmaScriptLoader from 'rdf-loader-code/ecmaScript.js'
+import ecmaScriptModuleLoader from 'rdf-loader-code/ecmaScriptModule.js'
 
 async function promisedEcmaScriptLoader (...args) {
-  return ecmaScriptLoader.call(this, ...args)
+  return ecmaScriptModuleLoader.call(this, ...args)
 }
 
 promisedEcmaScriptLoader.register = registry => {

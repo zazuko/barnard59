@@ -1,9 +1,9 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { describe, it } from 'mocha'
-import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
-import ns from '../support/namespaces.js'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
 import createArguments from '../../lib/factory/arguments.js'
+import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
+import ns from '../support/namespaces.js'
 
 describe('factory/arguments', () => {
   it('should be a method', () => {

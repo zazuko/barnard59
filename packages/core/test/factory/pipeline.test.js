@@ -2,9 +2,9 @@ import { strictEqual, throws } from 'assert'
 import { resolve } from 'path'
 import getStream from 'get-stream'
 import { describe, it } from 'mocha'
+import createPipeline from '../../lib/factory/pipeline.js'
 import { isReadable, isReadableObjectMode, isWritable, isWritableObjectMode } from '../../lib/isStream.js'
 import Pipeline from '../../lib/Pipeline.js'
-import createPipeline from '../../lib/factory/pipeline.js'
 import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
 
 describe('factory/pipeline', () => {

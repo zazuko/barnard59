@@ -1,5 +1,5 @@
-import ns from '../namespaces.js'
 import createPipeline from '../factory/pipeline.js'
+import ns from '../namespaces.js'
 
 async function loader (ptr, { basePath, context, loaderRegistry, logger, variables } = {}) {
   if (ptr.has(ns.rdf.type, ns.p.Pipeline).terms.length > 0) {

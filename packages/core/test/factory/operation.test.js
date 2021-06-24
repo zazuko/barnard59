@@ -1,11 +1,11 @@
 import { strictEqual } from 'assert'
 import { resolve } from 'path'
 import { describe, it } from 'mocha'
+import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
+import createOperation from '../../lib/factory/operation.js'
 import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
 import ns from '../support/namespaces.js'
 import argsToStream from '../support/operations/argsToStream.js'
-import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
-import createOperation from '../../lib/factory/operation.js'
 
 describe('factory/operation', () => {
   it('should be a method', () => {

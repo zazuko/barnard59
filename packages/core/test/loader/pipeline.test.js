@@ -1,11 +1,11 @@
 import { strictEqual, rejects } from 'assert'
+import { resolve } from 'path'
 import clownface from 'clownface'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
-import loader from '../../lib/loader/pipeline.js'
 import { run } from '../../index.js'
+import loader from '../../lib/loader/pipeline.js'
 import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
-import { resolve } from 'path'
 
 describe('loader/pipeline', () => {
   it('should use the given variables', async () => {

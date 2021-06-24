@@ -1,8 +1,8 @@
 import once from 'lodash/once.js'
 import streams from 'readable-stream'
 import createStream from './factory/stream.js'
-import nextLoop from './nextLoop.js'
 import { isReadable } from './isStream.js'
+import nextLoop from './nextLoop.js'
 import StreamObject from './StreamObject.js'
 
 const { finished } = streams

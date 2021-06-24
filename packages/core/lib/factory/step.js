@@ -1,9 +1,9 @@
-import createArguments from './arguments.js'
-import createOperation from './operation.js'
 import { isStream } from '../isStream.js'
 import ns from '../namespaces.js'
 import PipelineError from '../PipelineError.js'
 import Step from '../Step.js'
+import createArguments from './arguments.js'
+import createOperation from './operation.js'
 
 async function createStep (ptr, { basePath, context, loaderRegistry, logger, variables }) {
   try {

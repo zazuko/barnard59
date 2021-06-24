@@ -34,7 +34,7 @@ function createPipeline (ptr, {
 
   ptr = clownface({ dataset: ptr.dataset, term: ptr.term })
 
-  const onInit = async (pipeline) => {
+  const onInit = async pipeline => {
     variables = await createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables })
     context = await createPipelineContext(ptr, { basePath, context, logger, variables })
 

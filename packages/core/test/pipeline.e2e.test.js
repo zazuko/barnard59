@@ -55,6 +55,6 @@ describe('Pipeline', () => {
 
     const out = await getStream(pipeline.stream)
 
-    deepStrictEqual(JSON.parse(out), { abc: 'dfg' })
+    deepStrictEqual(JSON.parse(out), dateTimeLd)
   })
 })

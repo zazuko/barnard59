@@ -14,18 +14,26 @@
 <> a p:Pipeline, p:Readable;
   p:variables <variables>;
   p:steps [
-    p:stepList (<fetch> <jsonldStructure> <serialize>)
+    p:stepList (<fetch> <parse> <jsonldStructure> <serialize>)
   ].
 
 <fetch> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-base#fetch.json>
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-http#get>
   ];
-  code:arguments ("${url}"^^code:EcmaScriptTemplateLiteral).
+  code:arguments [
+    code:name "url";
+    code:value "url"^^p:VariableName
+  ].
+
+<parse> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/json.js#parse>
+  ].
 
 <jsonldStructure> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-base#map>
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/map.js#default>
   ];
   code:arguments ("""json => {
     return {
@@ -36,6 +44,6 @@
   }"""^^code:EcmaScript) .
 
 <serialize> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-base#json.stringify>
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/json.js#stringify>
   ].

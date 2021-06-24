@@ -1,7 +1,7 @@
 import { strictEqual } from 'assert'
 import { describe, it } from 'mocha'
-import ns from './support/namespaces.js'
 import defaultLoaderRegistry from '../lib/defaultLoaderRegistry.js'
+import ns from './support/namespaces.js'
 
 describe('defaultLoaderRegistry', () => {
   it('should be a function', () => {
