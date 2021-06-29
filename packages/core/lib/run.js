@@ -1,21 +1,25 @@
 import { promisify } from 'util'
 import { finished } from 'readable-stream'
+import tracer from './tracer.js'
 
-async function run (pipeline, { end = false, resume = false } = {}) {
-  if (end) {
-    pipeline.stream.end()
-  }
+function run (pipeline, { end = false, resume = false } = {}) {
+  return tracer.startSpan('run', async span => {
+    if (end) {
+      pipeline.stream.end()
+    }
 
-  if (resume) {
-    pipeline.stream.resume()
-  }
+    if (resume) {
+      pipeline.stream.resume()
+    }
 
-  await promisify(finished)(pipeline.stream)
+    await promisify(finished)(pipeline.stream)
 
-  pipeline.logger.end()
+    pipeline.logger.end()
+    span.end()
 
-  await new Promise(resolve => {
-    pipeline.logger.on('finish', () => resolve())
+    await new Promise(resolve => {
+      pipeline.logger.on('finish', () => resolve())
+    })
   })
 }
 

@@ -1,9 +1,11 @@
+import { SpanStatusCode } from '@opentelemetry/api'
 import once from 'lodash/once.js'
 import streams from 'readable-stream'
 import createStream from './factory/stream.js'
 import { isReadable } from './isStream.js'
 import nextLoop from './nextLoop.js'
 import StreamObject from './StreamObject.js'
+import tracer from './tracer.js'
 
 const { finished } = streams
 
@@ -52,40 +54,46 @@ class Pipeline extends StreamObject {
     return this.children[this.children.length - 1]
   }
 
-  async _init () {
-    this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
+  _init () {
+    return tracer.startActiveSpan('Pipeline#init', { attributes: { iri: this.ptr.value } }, async span => {
+      this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
 
-    try {
-      await this.onInit(this)
+      try {
+        await this.onInit(this)
 
-      if (this.children.length === 0) {
-        throw new Error(`pipeline ${this.ptr.value} does not contain any steps`)
-      }
-
-      // connect all steps
-      for (let index = 0; index < this.children.length - 1; index++) {
-        this.children[index].stream.pipe(this.children[index + 1].stream)
-      }
-
-      // add error handler to all steps
-      for (let index = 0; index < this.children.length; index++) {
-        this.children[index].stream.on('error', err => this.destroy(err))
-      }
-
-      finished(this.lastChild.stream, err => {
-        if (!err) {
-          this.finish()
-        } else {
-          console.error(err)
+        if (this.children.length === 0) {
+          throw new Error(`pipeline ${this.ptr.value} does not contain any steps`)
         }
-      })
-    } catch (err) {
-      this.destroy(err)
 
-      this.logger.error(err, { iri: this.ptr.value })
-    }
+        // connect all steps
+        for (let index = 0; index < this.children.length - 1; index++) {
+          this.children[index].stream.pipe(this.children[index + 1].stream)
+        }
 
-    this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
+        // add error handler to all steps
+        for (let index = 0; index < this.children.length; index++) {
+          this.children[index].stream.on('error', err => this.destroy(err))
+        }
+
+        finished(this.lastChild.stream, err => {
+          if (!err) {
+            this.finish()
+          } else {
+            console.error(err)
+          }
+        })
+      } catch (err) {
+        span.recordException(err)
+        span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
+        this.destroy(err)
+
+        this.logger.error(err, { iri: this.ptr.value })
+      } finally {
+        span.end()
+      }
+
+      this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
+    })
   }
 
   destroy (err) {

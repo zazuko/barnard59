@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59-core",
   "dependencies": {
+    "@opentelemetry/api": "^0.20.0",
     "@rdfjs/namespace": "^1.1.0",
     "clownface": "^1.3.0",
     "duplex-to": "^1.0.1",
