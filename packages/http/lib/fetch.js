@@ -1,10 +1,10 @@
+import toReadable from 'duplex-to/readable.js'
 import nodeFetch from 'node-fetch'
-import DuplexToReadable from './DuplexToReadable.js'
 
 async function fetch ({ method = 'GET', url, ...options } = {}) {
   const response = await nodeFetch(url, { method, ...options })
 
-  return new DuplexToReadable(response.body)
+  return toReadable(response.body)
 }
 
 export default fetch
