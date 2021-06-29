@@ -1,13 +1,13 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { promisify } from 'util'
-import getStream from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
 import rdf from '@rdfjs/data-model'
 import namespace from '@rdfjs/namespace'
 import { quadToNTriples } from '@rdfjs/to-ntriples'
+import withServer from 'express-as-promise/withServer.js'
+import getStream from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
 import { finished } from 'readable-stream'
-import withServer from './support/withServer.js'
 import { put } from '../index.js'
 
 const ns = namespace('http://example.org/')

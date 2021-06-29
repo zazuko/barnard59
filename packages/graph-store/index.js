@@ -3,7 +3,7 @@ import Client from 'sparql-http-client'
 import SinkToWritable from './lib/SinkToWritable.js'
 import unpromiseReadable from './lib/unpromiseReadable.js'
 
-export function get ({ endpoint, graph, user, password }) {
+function get ({ endpoint, graph, user, password }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
@@ -19,7 +19,7 @@ export function get ({ endpoint, graph, user, password }) {
   return unpromiseReadable(client.store.get(graph))
 }
 
-export function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
+function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
@@ -30,7 +30,7 @@ export function post ({ endpoint, user, password, maxQuadsPerRequest = 500000 })
   return new SinkToWritable(readable => client.store.post(readable))
 }
 
-export function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
+function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
@@ -40,3 +40,5 @@ export function put ({ endpoint, user, password, maxQuadsPerRequest = 500000 }) 
 
   return new SinkToWritable(readable => client.store.put(readable))
 }
+
+export { get, post, put }

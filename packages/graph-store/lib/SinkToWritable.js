@@ -1,5 +1,5 @@
 import { promisify } from 'util'
-import once from 'lodash-es/once.js'
+import once from 'lodash/once.js'
 import defer from 'promise-the-world/defer.js'
 import { finished, Readable, Writable } from 'readable-stream'
 
