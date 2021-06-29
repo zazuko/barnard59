@@ -46,4 +46,4 @@ The following options are supported:
 
 ## Examples
 
-See the `examples` folder for working example pipelines. 
+See the [barnard59-examples](https://github.com/zazuko/barnard59-examples/) repository for working example pipelines. 
