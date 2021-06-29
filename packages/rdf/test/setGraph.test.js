@@ -4,8 +4,8 @@ import { isDuplex } from 'isstream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
-import * as ns from './support/namespaces.js'
 import setGraph from '../setGraph.js'
+import * as ns from './support/namespaces.js'
 
 describe('setGraph', () => {
   it('should be a factory', () => {

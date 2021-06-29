@@ -1,8 +1,8 @@
 import { strictEqual } from 'assert'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
-import { ex } from './support/namespaces.js'
 import PatternMatcher from '../lib/PatternMatcher.js'
+import { ex } from './support/namespaces.js'
 
 describe('PatternMatcher', () => {
   it('should be a constructor', () => {

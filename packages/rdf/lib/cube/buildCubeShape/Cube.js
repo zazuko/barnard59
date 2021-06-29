@@ -1,6 +1,6 @@
+import TermMap from '@rdfjs/term-map'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
-import TermMap from '@rdfjs/term-map'
 import Dimension from './Dimension.js'
 import * as ns from './namespaces.js'
 

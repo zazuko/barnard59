@@ -6,7 +6,6 @@ jobs:
     strategy:
       matrix:
         node:
-          - '12'
           - '14'
           - '16'
     steps:
@@ -16,3 +15,4 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install
       - run: npm test
+      - run: npm run coverage

@@ -1,7 +1,7 @@
-import clownface from 'clownface'
-import rdf from 'rdf-ext'
 import TermMap from '@rdfjs/term-map'
 import TermSet from '@rdfjs/term-set'
+import clownface from 'clownface'
+import rdf from 'rdf-ext'
 import * as ns from './namespaces.js'
 
 const datatypeParsers = new TermMap([

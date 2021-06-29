@@ -6,9 +6,9 @@ import { isDuplex } from 'isstream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
-import * as ns from '../support/namespaces.js'
-import dateToId from '../../lib/dateToId.js'
 import toObservation from '../../lib/cube/toObservation.js'
+import dateToId from '../../lib/dateToId.js'
+import * as ns from '../support/namespaces.js'
 
 function createMeasure ({ term = ns.ex('topic/a') } = {}) {
   return clownface({ dataset: rdf.dataset(), term })

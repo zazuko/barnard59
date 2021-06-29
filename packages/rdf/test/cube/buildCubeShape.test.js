@@ -4,10 +4,10 @@ import { termToNTriples as toNT } from '@rdfjs/to-ntriples'
 import { isDuplex } from 'isstream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
+import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
 import createObservationsStream from '../support/createObservationsStream.js'
 import datasetStreamToClownface from '../support/datasetStreamToClownface.js'
 import * as ns from '../support/namespaces.js'
-import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
 
 function checkMinMax (result, min, max) {
   const propertyShape = result.has(ns.sh.path, ns.ex.property)
