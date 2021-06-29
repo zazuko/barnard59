@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
+import { diag, DiagConsoleLogger } from '@opentelemetry/api'
 import { CollectorTraceExporter } from '@opentelemetry/exporter-collector'
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
 import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
 import { Resource } from '@opentelemetry/resources'
 import { NodeSDK } from '@opentelemetry/sdk-node'
@@ -10,7 +11,20 @@ import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
 import program, { Option } from 'commander'
 
-function setVariable(str, all) {
+diag.setLogger(new DiagConsoleLogger())
+
+const sdk = new NodeSDK({
+  autoDetectResources: true,
+  instrumentations: [
+    new HttpInstrumentation(),
+    new WinstonInstrumentation()
+  ],
+  resource: new Resource({
+    [ResourceAttributes.SERVICE_NAME]: 'barnard59'
+  })
+})
+
+function setVariable (str, all) {
   let [key, value] = str.split('=', 2)
 
   if (typeof value === 'undefined') {
@@ -19,17 +33,6 @@ function setVariable(str, all) {
 
   return all.set(key, value)
 }
-
-const sdk = new NodeSDK({
-  autoDetectResources: true,
-  instrumentations: [
-    getNodeAutoInstrumentations(),
-    new WinstonInstrumentation()
-  ],
-  resource: new Resource({
-    [ResourceAttributes.SERVICE_NAME]: 'barnard59'
-  })
-})
 
 program
   .command('run <filename>')
@@ -42,6 +45,9 @@ program
   .option('--enable-buffer-monitor', 'enable histogram of buffer usage')
   .action(async (filename, options) => {
     try {
+      // Export the traces to a collector. By default it exports to
+      // http://localhost:55681/v1/traces, but it can be changed with the
+      // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
       if (options.otelTracesExporter === 'otlp') {
         const exporter = new CollectorTraceExporter()
         const spanProcessor = new BatchSpanProcessor(exporter)
