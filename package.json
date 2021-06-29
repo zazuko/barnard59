@@ -5,8 +5,7 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "barnard59": "bin/barnard59.js",
-    "barnard59-traced": "bin/barnard59-traced.js"
+    "barnard59": "bin/barnard59.js"
   },
   "scripts": {
     "coverage": "codecov",
