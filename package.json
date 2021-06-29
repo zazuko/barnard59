@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "barnard59": "bin/barnard59.js"
+    "barnard59": "bin/barnard59.js",
+    "barnard59-traced": "bin/barnard59-traced.js"
   },
   "scripts": {
     "coverage": "codecov",
@@ -23,6 +24,11 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.20.0",
+    "@opentelemetry/exporter-collector": "^0.20.0",
+    "@opentelemetry/resources": "^0.20.0",
+    "@opentelemetry/sdk-node": "^0.20.0",
+    "@opentelemetry/semantic-conventions": "^0.20.0",
     "@rdfjs/namespace": "^1.1.0",
     "barnard59-core": "^1.0.0",
     "clownface": "^1.2.0",
