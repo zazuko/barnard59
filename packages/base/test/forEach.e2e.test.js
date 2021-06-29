@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { deepStrictEqual, strictEqual } from 'assert'
 import { resolve } from 'path'
 import { createPipeline } from 'barnard59-core'
 import getStream from 'get-stream'
@@ -27,5 +27,18 @@ describe('forEach', () => {
 
     strictEqual(out.length > 0, true)
     strictEqual(out[0] !== out[1], true)
+  })
+
+  it('should be able to access variables from higher scopes', async () => {
+    const ptr = await loadPipelineDefinition('e2e/foreach-with-variable')
+    const pipeline = createPipeline(ptr, { basePath: resolve('test') })
+
+    const out = await getStream.array(pipeline.stream)
+
+    deepStrictEqual(out, [
+      '/root/test/support/definitions/e2e/foreach-csv-duplicate.ttl',
+      '/root/test/support/definitions/e2e/foreach-with-handler.ttl',
+      '/root/test/support/definitions/e2e/foreach-with-variable.ttl'
+    ])
   })
 })
