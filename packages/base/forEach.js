@@ -9,7 +9,7 @@ async function nextLoop () {
 }
 
 class ForEach extends Duplex {
-  constructor ({ createPipeline, pipeline, step, variable }) {
+  constructor ({ createPipeline, pipeline, step, variable, variables }) {
     super({ objectMode: true })
 
     this.createPipeline = createPipeline
@@ -21,6 +21,7 @@ class ForEach extends Duplex {
     pipeline.destroy()
 
     this.variable = variable
+    this.variables = variables
 
     this.pull = null
   }
@@ -35,7 +36,7 @@ class ForEach extends Duplex {
 
   async _write (chunk, encoding, callback) {
     try {
-      const variables = new Map()
+      const variables = new Map(this.variables)
 
       if (this.variable) {
         variables.set(this.variable, chunk)
@@ -83,7 +84,8 @@ function factory (pipeline, variable) {
     pipeline,
     createPipeline: this.createPipeline,
     step: this.step,
-    variable
+    variable,
+    variables: this.variables
   })
 }
 

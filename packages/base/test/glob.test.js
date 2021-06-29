@@ -23,7 +23,8 @@ describe('glob', () => {
 
     deepStrictEqual(filenames, [
       'test/support/definitions/e2e/foreach-csv-duplicate.ttl',
-      'test/support/definitions/e2e/foreach-with-handler.ttl'
+      'test/support/definitions/e2e/foreach-with-handler.ttl',
+      'test/support/definitions/e2e/foreach-with-variable.ttl'
     ])
   })
 
@@ -37,7 +38,8 @@ describe('glob', () => {
 
     deepStrictEqual(filenames, [
       'foreach-csv-duplicate.ttl',
-      'foreach-with-handler.ttl'
+      'foreach-with-handler.ttl',
+      'foreach-with-variable.ttl'
     ])
   })
 })
