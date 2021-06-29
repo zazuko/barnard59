@@ -1,4 +1,4 @@
-import buildCubeShape from './lib/cube/buildCubeShape.js'
+import buildCubeShape from './lib/cube/buildCubeShape/index.js'
 import toObservation from './lib/cube/toObservation.js'
 
 export {
