@@ -1,4 +1,4 @@
-import { SpanStatusCode } from '@opentelemetry/api'
+import * as otel from '@opentelemetry/api'
 import once from 'lodash/once.js'
 import streams from 'readable-stream'
 import createStream from './factory/stream.js'
@@ -33,15 +33,22 @@ class Pipeline extends StreamObject {
     this.writable = writable
     this.writableObjectMode = writableObjectMode
 
-    this.read = this._read.bind(this)
-    this.write = this._write.bind(this)
-    this.final = this._final.bind(this)
+    // Create a span for the whole pipeline
+    this._span = tracer.startSpan(`Pipeline <${this.ptr.value}>`, { attributes: { iri: this.ptr.value } })
+    // Then create a OTEL context with this span bound
+    const ctx = otel.trace.setSpan(otel.context.active(), this._span)
+
+    // And bind it to all methods. This helps attaching the child span
+    // correctly and have the right context when logging
+    this.read = otel.context.bind(ctx, this._read.bind(this))
+    this.write = otel.context.bind(ctx, this._write.bind(this))
+    this.final = otel.context.bind(ctx, this._final.bind(this))
 
     this.stream = createStream(this)
     this.stream.pipeline = this
 
     this.onInit = onInit || (() => {})
-    this.init = once(this._init.bind(this))
+    this.init = once(otel.context.bind(ctx, this._init.bind(this)))
 
     this.logger.info({ iri: this.ptr.value, message: 'created new Pipeline' })
   }
@@ -54,10 +61,10 @@ class Pipeline extends StreamObject {
     return this.children[this.children.length - 1]
   }
 
-  _init () {
-    return tracer.startActiveSpan('Pipeline#init', { attributes: { iri: this.ptr.value } }, async span => {
-      this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
+  async _init () {
+    this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
 
+    await tracer.startActiveSpan('Pipeline#init', async span => {
       try {
         await this.onInit(this)
 
@@ -84,23 +91,27 @@ class Pipeline extends StreamObject {
         })
       } catch (err) {
         span.recordException(err)
-        span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
+        span.setStatus({ code: otel.SpanStatusCode.ERROR, message: err.message })
         this.destroy(err)
 
         this.logger.error(err, { iri: this.ptr.value })
       } finally {
         span.end()
       }
-
-      this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
     })
+
+    this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
   }
 
   destroy (err) {
+    this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
+    this._span.end()
     this.stream.destroy(err)
   }
 
   finish () {
+    this._span.setStatus({ code: otel.SpanStatusCode.OK })
+    this._span.end()
     if (isReadable(this.stream)) {
       return this.stream.push(null)
     }
@@ -111,40 +122,57 @@ class Pipeline extends StreamObject {
   async _read (size) {
     await this.init()
 
-    // if it's just a fake readable interface for events,
-    // there is no data to forward from the last child
-    if (!this.readable) {
-      return
-    }
-
-    for (;;) {
-      if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
-        return
-      }
-
+    await tracer.startActiveSpan('Pipeline#read', async span => {
       try {
-        const chunk = this.lastChild.stream.read(size)
-
-        if (!chunk) {
-          await nextLoop()
-        } else if (!this.stream.push(chunk)) {
+        // if it's just a fake readable interface for events,
+        // there is no data to forward from the last child
+        if (!this.readable) {
           return
         }
-      } catch (err) {
-        this.lastChild.stream.destroy(err)
+
+        let chunks = 0
+        for (;;) {
+          span.setAttribute('stream.chunks', chunks)
+
+          if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+            return
+          }
+
+          try {
+            const chunk = this.lastChild.stream.read(size)
+
+            if (!chunk) {
+              await nextLoop()
+            } else if (!this.stream.push(chunk)) {
+              return
+            } else {
+              if (chunks === 0) {
+                span.addEvent('first chunk')
+              }
+              chunks++
+            }
+          } catch (err) {
+            span.recordException(err)
+            this.lastChild.stream.destroy(err)
+          }
+        }
+      } finally {
+        span.end()
       }
-    }
+    })
   }
 
   async _write (chunk, encoding, callback) {
     await this.init()
 
+    this._span.addEvent('write')
     return this.firstChild.stream.write(chunk, encoding, callback)
   }
 
   async _final (callback) {
     await this.init()
 
+    this._span.addEvent('final')
     finished(this.lastChild.stream, callback)
 
     this.firstChild.stream.end()
