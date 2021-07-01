@@ -1,8 +1,8 @@
-import { Readable } from 'readable-stream'
+import { Transform } from 'readable-stream'
 
 function error () {
-  const stream = new Readable({
-    read: () => {
+  const stream = new Transform({
+    transform: () => {
       stream.destroy(new Error('test'))
     }
   })
