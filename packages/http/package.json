@@ -1,6 +1,6 @@
 {
   "name": "barnard59-http",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "HTTP protocol support for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "type": "module",
