@@ -1,0 +1,19 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+
+<> a p:Pipeline, p:Readable;
+  p:steps [
+    p:stepList (<subPipeline>)
+  ].
+
+<subPipeline> a p:Pipeline, p:Readable;
+  p:steps [
+    p:stepList (<createContent>)
+  ].
+
+<createContent> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/argsToStream.js#default>
+  ];
+  code:arguments ("t" "e" "s" "t").

@@ -1,18 +1,21 @@
-const stream = require('readable-stream')
+import stream from 'readable-stream'
 
-class InlineTransformer extends stream.Transform {
+const { Transform } = stream
+
+class InlineTransformer extends Transform {
   constructor (func) {
     super({ objectMode: true })
 
     this.transform = func
   }
 
-  _transform (chunk, e, next) {
-    this.push(this.transform(chunk))
-    next()
+  _transform (chunk, encoding, callback) {
+    callback(null, this.transform(chunk))
   }
 }
 
-module.exports = (fun) => {
-  return new InlineTransformer(fun)
+function factory (func) {
+  return new InlineTransformer(func)
 }
+
+export default factory

@@ -1,9 +1,11 @@
-const forEach = require('./lib/forEach')
-const pipeline = require('./lib/pipelineFactory')
-const run = require('./lib/run')
+import defaultLoaderRegistry from './lib/defaultLoaderRegistry.js'
+import defaultLogger from './lib/defaultLogger.js'
+import createPipeline from './lib/factory/pipeline.js'
+import run from './lib/run.js'
 
-module.exports = {
-  forEach,
-  pipeline,
+export {
+  createPipeline,
+  defaultLoaderRegistry,
+  defaultLogger,
   run
 }

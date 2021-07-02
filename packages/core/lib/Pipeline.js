@@ -1,230 +1,146 @@
-const isStream = require('isstream')
-const { isReadable, isWritable } = require('isstream')
-const ns = require('./namespaces')
-const { finished } = require('readable-stream')
-const Logger = require('./logger')
-const parseArguments = require('rdf-loader-code/arguments')
+import once from 'lodash/once.js'
+import streams from 'readable-stream'
+import createStream from './factory/stream.js'
+import { isReadable } from './isStream.js'
+import nextLoop from './nextLoop.js'
+import StreamObject from './StreamObject.js'
 
-function nextLoop () {
-  return new Promise(resolve => setTimeout(resolve, 0))
-}
+const { finished } = streams
 
-class Pipeline {
-  constructor (node, { basePath = process.cwd(), context = {}, variables = new Map(), loaderRegistry } = {}) {
-    this.node = node
-    this.basePath = basePath
-    this.variables = variables
-    this.loaderRegistry = loaderRegistry
+class Pipeline extends StreamObject {
+  constructor ({
+    basePath,
+    children,
+    context,
+    loaderRegistry,
+    logger,
+    onInit,
+    ptr,
+    readable,
+    readableObjectMode,
+    variables,
+    writable,
+    writableObjectMode
+  }) {
+    super({ basePath, children, context, loaderRegistry, logger, ptr, variables })
 
-    this.readableObjectMode = Boolean(this.node.has(ns.rdf.type, ns.p.ReadableObjectMode).term)
-    this.readable = Boolean(this.node.has(ns.rdf.type, ns.p.Readable).term) || this.readableObjectMode
-    this.writableObjectMode = Boolean(this.node.has(ns.rdf.type, ns.p.WritableObjectMode).term)
-    this.writable = Boolean(this.node.has(ns.rdf.type, ns.p.Writable).term) || this.writableObjectMode
+    this.logger.debug({ iri: this.ptr.value, message: 'create new Pipeline' })
 
-    this.context = { ...context }
-    this.context.basePath = this.basePath
-    this.context.log = new Logger(this.node, { master: context.log })
+    this.readable = readable
+    this.readableObjectMode = readableObjectMode
+    this.writable = writable
+    this.writableObjectMode = writableObjectMode
+
+    this.read = this._read.bind(this)
+    this.write = this._write.bind(this)
+    this.final = this._final.bind(this)
+
+    this.stream = createStream(this)
+    this.stream.pipeline = this
+
+    this.onInit = onInit || (() => {})
+    this.init = once(this._init.bind(this))
+
+    this.logger.info({ iri: this.ptr.value, message: 'created new Pipeline' })
   }
 
-  error (err) {
+  get firstChild () {
+    return this.children[0]
+  }
+
+  get lastChild () {
+    return this.children[this.children.length - 1]
+  }
+
+  async _init () {
+    this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
+
+    try {
+      await this.onInit(this)
+
+      if (this.children.length === 0) {
+        throw new Error(`pipeline ${this.ptr.value} does not contain any steps`)
+      }
+
+      // connect all steps
+      for (let index = 0; index < this.children.length - 1; index++) {
+        this.children[index].stream.pipe(this.children[index + 1].stream)
+      }
+
+      // add error handler to all steps
+      for (let index = 0; index < this.children.length; index++) {
+        this.children[index].stream.on('error', err => this.destroy(err))
+      }
+
+      finished(this.lastChild.stream, err => {
+        if (!err) {
+          this.finish()
+        } else {
+          console.error(err)
+        }
+      })
+    } catch (err) {
+      this.destroy(err)
+
+      this.logger.error(err, { iri: this.ptr.value })
+    }
+
+    this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
+  }
+
+  destroy (err) {
     this.stream.destroy(err)
   }
 
-  destroy (err, callback) {
-    this.destroyed = true
-
-    if (err) {
-      this.context.log.error(err.stack)
-    }
-
-    this.context.log.end()
-
-    callback(err)
-  }
-
-  async init (stream) {
-    try {
-      this.context.log.info('initializing pipeline')
-
-      this.stream = stream
-      this.context.pipeline = this.stream
-
-      await this.initVariables()
-
-      await this.initSteps()
-
-      if (this.streams.length === 0) {
-        throw new Error(`pipeline ${this.node.term.value} doesn't contain any steps`)
-      }
-
-      for (let index = 0; index < this.streams.length - 1; index++) {
-        this.streams[index].pipe(this.streams[index + 1])
-      }
-
-      this.streams.forEach((stream, index) => {
-        const step = this.steps[index]
-
-        stream.on('error', cause => {
-          const err = new Error(`error in pipeline step ${step.value}`)
-
-          err.stack += `\nCaused by: ${cause.stack}`
-
-          this.error(err)
-        })
-      })
-
-      this.initStreamInterface()
-      this.validateStreams()
-    } catch (err) {
-      this.error(err)
-
-      return false
-    }
-
-    return true
-  }
-
-  validateStreams () {
-    if (this.readable && !isReadable(this.lastStream)) {
-      this.error(new Error(`Pipeline <${this.node.term.value}> is defined as Readable, but last stream doesn't have a Readable interface`))
-    }
-    if (!this.readable && isReadable(this.lastStream)) {
-      this.error(new Error(`Pipeline <${this.node.term.value}> is not defined as Readable, but last stream has a Readable interface`))
-    }
-
-    if (this.writable && !isWritable(this.firstStream)) {
-      this.error(new Error(`Pipeline <${this.node.term.value}> is defined as Writable, but first stream doesn't have a Writable interface`))
-    }
-    if (!this.writable && isWritable(this.firstStream)) {
-      this.error(new Error(`Pipeline <${this.node.term.value}> is not defined as Writable, but first stream has a Writable interface`))
+  finish () {
+    if (isReadable(this.stream)) {
+      return this.stream.push(null)
     }
   }
 
-  initStreamInterface () {
-    this.firstStream = this.streams[0]
-    this.lastStream = this.streams[this.streams.length - 1]
-    this.destroyed = false
+  // stream interface
 
-    finished(this.lastStream, () => {
-      if (isReadable(this.stream)) {
-        this.stream.push(null)
+  async _read (size) {
+    await this.init()
+
+    // if it's just a fake readable interface for events,
+    // there is no data to forward from the last child
+    if (!this.readable) {
+      return
+    }
+
+    for (;;) {
+      if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+        return
       }
-    })
 
-    this.read = async (size) => {
-      for (;;) {
-        if (this.destroyed) {
-          return
-        }
-
-        const chunk = this.lastStream.read(size)
+      try {
+        const chunk = this.lastChild.stream.read(size)
 
         if (!chunk) {
           await nextLoop()
         } else if (!this.stream.push(chunk)) {
           return
         }
+      } catch (err) {
+        this.lastChild.stream.destroy(err)
       }
     }
-
-    this.write = (chunk, encoding, callback) => {
-      this.firstStream.write(chunk, encoding, callback)
-    }
-
-    this.final = (callback) => {
-      finished(this.lastStream, callback)
-
-      this.firstStream.end()
-    }
   }
 
-  initSteps () {
-    this.steps = [...this.node.out(ns.p('steps')).out(ns.p('stepList')).list()]
+  async _write (chunk, encoding, callback) {
+    await this.init()
 
-    return Promise.all(this.steps.map(step => this.parseStep(step))).then(streams => {
-      this.streams = streams
-    })
+    return this.firstChild.stream.write(chunk, encoding, callback)
   }
 
-  async parseArguments (args) {
-    return parseArguments(args, this.node.dataset, {
-      loaderRegistry: this.loaderRegistry,
-      variables: this.variables,
-      basePath: this.basePath,
-      context: this.context
-    })
-  }
+  async _final (callback) {
+    await this.init()
 
-  async parseOperation (operation) {
-    const result = await this.loaderRegistry.load(operation, {
-      context: this.context,
-      variables: this.variables,
-      basePath: this.basePath
-    })
+    finished(this.lastChild.stream, callback)
 
-    if (!result) {
-      throw new Error(`Failed to load operation ${operation.value}`)
-    }
-
-    return result
-  }
-
-  async parseStep (step) {
-    const log = new Logger(step, { master: this.context.log })
-
-    log.info('step init', { name: 'beforeStepInit' })
-
-    let stream = null
-
-    try {
-      const operation = await this.parseOperation(step.out(ns.code('implementedBy')))
-      const args = await this.parseArguments(step.out(ns.code('arguments')))
-      stream = await operation.apply({ ...this.context, log }, args)
-    } catch (cause) {
-      const err = new Error(`Failed to load step ${step.value}`)
-      err.stack += `\nCaused by: ${cause.stack}`
-
-      throw err
-    }
-
-    if (!stream || !isStream(stream)) {
-      throw new Error(`${step.value} didn't return a stream`)
-    }
-
-    stream.on('close', () => {
-      log.info('step finished', { name: 'afterStep' })
-    })
-
-    log.info('step created', { name: 'afterStepInit' })
-
-    return stream
-  }
-
-  async initVariables () {
-    const parsedVariables = await this.parseVariables()
-
-    this.variables = new Map([...parsedVariables, ...this.variables])
-    this.context.variables = this.variables
-  }
-
-  parseVariables () {
-    const variableNodes = this.node.out(ns.p('variables')).out(ns.p('variable'))
-
-    return variableNodes.toArray().reduce(async (p, variableNode) => {
-      const variables = await p
-      const variable = await this.loaderRegistry.load(variableNode, {
-        context: this.context,
-        variables: new Map()
-      })
-
-      if (!variable) {
-        throw new Error(`Failed to load variable ${variableNode}`)
-      }
-
-      variables.push([variable.name, variable.value])
-      return variables
-    }, Promise.resolve([]))
+    this.firstChild.stream.end()
   }
 }
 
-module.exports = Pipeline
+export default Pipeline

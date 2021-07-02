@@ -1,74 +1,66 @@
-/* global describe, test, beforeEach */
-const cf = require('clownface')
-const rdf = require('rdf-ext')
-const expect = require('expect')
-const loader = require('../../lib/loader/variable')
-const ns = require('../../lib/namespaces')
-const namespace = require('@rdfjs/namespace')
+import { strictEqual } from 'assert'
+import clownface from 'clownface'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import loader from '../../lib/loader/variable.js'
+import ns from '../support/namespaces.js'
 
-describe('variable loader', () => {
-  const example = namespace('http://example.org/pipeline#')
-  let dataset
-  let def
-
-  beforeEach(async () => {
-    dataset = rdf.dataset()
-    def = cf(dataset, rdf.namedNode('http://example.com/'))
-  })
-
-  test('loads variable from the map by name', () => {
-    // given
-    const node = def.node(example('var'))
-    node.addOut(ns.rdf('type'), ns.p('Variable'))
-      .addOut(ns.p('name'), 'foo')
+describe('loader/variable', () => {
+  it('should load a variable from the map by name', async () => {
+    const ptr = clownface({ dataset: rdf.dataset() })
+      .blankNode()
+      .addOut(ns.rdf.type, ns.p.Variable)
+      .addOut(ns.p.name, 'foo')
     const variables = new Map([['foo', 'bar']])
 
-    // when
-    const result = loader(node, dataset, { variables })
+    const result = await loader(ptr, { variables })
 
-    // then
-    expect(result).toBe('bar')
+    strictEqual(result.value, 'bar')
   })
 
-  test('adds name to variable value term', () => {
-    // given
-    const node = def.node(example('var'))
-      .addOut(ns.rdf('type'), ns.p('Variable'))
-      .addOut(ns.p('name'), 'foo')
-      .addOut(ns.p('value'), 'bar')
-    const variables = new Map()
+  it('should add the variable name to variable value term', async () => {
+    const ptr = clownface({ dataset: rdf.dataset() })
+      .blankNode()
+      .addOut(ns.rdf.type, ns.p.Variable)
+      .addOut(ns.p.name, 'foo')
+      .addOut(ns.p.value, 'bar')
 
-    // when
-    const result = loader(node, dataset, { variables })
+    const result = await loader(ptr)
 
-    // then
-    expect(result.name).toBe('foo')
+    strictEqual(result.name, 'foo')
   })
 
-  test('loads variable from the node if not present in variable map', () => {
-    // given
-    const node = def.node(example('var'))
-    node.addOut(ns.rdf('type'), ns.p('Variable'))
-      .addOut(ns.p('name'), 'foo')
-      .addOut(ns.p('value'), 'bar')
-    const variables = new Map()
+  it('should load the variable from the dataset if it\'s not present in the variable map', async () => {
+    const ptr = clownface({ dataset: rdf.dataset() })
+      .blankNode()
+      .addOut(ns.rdf.type, ns.p.Variable)
+      .addOut(ns.p.name, 'foo')
+      .addOut(ns.p.value, 'bar')
 
-    // when
-    const result = loader(node, dataset, { variables })
+    const result = await loader(ptr)
 
-    // then
-    expect(result.value).toBe('bar')
+    strictEqual(result.value, 'bar')
   })
 
-  test('loads variable from a string', () => {
-    // given
-    const node = rdf.literal('foo', ns.p('VariableName'))
+  it('should prioritize the variable value from the variable map', async () => {
+    const ptr = clownface({ dataset: rdf.dataset() })
+      .blankNode()
+      .addOut(ns.rdf.type, ns.p.Variable)
+      .addOut(ns.p.name, 'foo')
+      .addOut(ns.p.value, 'bar')
+    const variables = new Map([['foo', 'barer']])
+
+    const result = await loader(ptr, { variables })
+
+    strictEqual(result.value, 'barer')
+  })
+
+  it('should load a variable value for a given variable name', async () => {
+    const ptr = clownface({ dataset: rdf.dataset() }).literal('foo', ns.p.VariableName)
     const variables = new Map([['foo', 'bar']])
 
-    // when
-    const result = loader(node, dataset, { variables })
+    const result = await loader(ptr, { variables })
 
-    // then
-    expect(result).toBe('bar')
+    strictEqual(result, 'bar')
   })
 })

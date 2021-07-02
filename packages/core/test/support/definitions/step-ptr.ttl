@@ -1,0 +1,13 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+
+<> a p:Pipeline, p:Readable;
+  p:steps [
+    p:stepList (<stepPtr>)
+  ] .
+
+<stepPtr> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/stepPtr.js#default>
+  ].
