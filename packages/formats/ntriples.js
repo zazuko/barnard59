@@ -1,5 +1,5 @@
-const sinkToDuplex = require('@rdfjs/sink-to-duplex')
-const Serializer = require('@rdfjs/serializer-ntriples')
+import Serializer from '@rdfjs/serializer-ntriples'
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
 
 function serialize () {
   return sinkToDuplex(new Serializer(), {
@@ -8,6 +8,4 @@ function serialize () {
   })
 }
 
-module.exports = {
-  serialize
-}
+export { serialize }

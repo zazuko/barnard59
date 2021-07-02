@@ -1,21 +1,18 @@
-const expect = require('expect')
-const fs = require('fs')
-const path = require('path')
-const createParser = require('../n3').parse
-const { readDataset } = require('./helpers')
+import { strictEqual } from 'assert'
+import fs from 'fs'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import { parse } from '../n3.js'
 
 describe('n3', () => {
   describe('parse', () => {
     it('successfully loads the input file', async () => {
-      // given
-      const input = fs.createReadStream(path.resolve(__dirname, './datasets/ontologist.n3'))
+      const input = fs.createReadStream(new URL('./datasets/ontologist.n3', import.meta.url))
 
-      // when
-      const parse = createParser()
-      const dataset = await readDataset(input.pipe(parse))
+      const parser = parse()
+      const dataset = await rdf.dataset().import(input.pipe(parser))
 
-      // then
-      expect(dataset.length).toBeGreaterThan(0)
+      strictEqual(dataset.length > 0, true)
     })
   })
 })

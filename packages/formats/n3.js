@@ -1,5 +1,5 @@
-const sinkToDuplex = require('@rdfjs/sink-to-duplex')
-const Parser = require('@rdfjs/parser-n3')
+import Parser from '@rdfjs/parser-n3'
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
 
 function parse () {
   return sinkToDuplex(new Parser(), {
@@ -8,6 +8,4 @@ function parse () {
   })
 }
 
-module.exports = {
-  parse
-}
+export { parse }

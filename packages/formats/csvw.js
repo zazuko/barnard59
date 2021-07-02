@@ -1,6 +1,6 @@
-const rdf = require('rdf-ext')
-const sinkToDuplex = require('@rdfjs/sink-to-duplex')
-const CsvwParser = require('rdf-parser-csvw')
+import sinkToDuplex from '@rdfjs/sink-to-duplex'
+import rdf from 'rdf-ext'
+import CsvwParser from 'rdf-parser-csvw'
 
 function toDataset (streamOrDataset) {
   if (!streamOrDataset.readable) {
@@ -46,6 +46,6 @@ function parse (args) {
   })
 }
 
-module.exports = {
+export {
   parse
 }
