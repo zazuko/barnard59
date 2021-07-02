@@ -1,25 +1,25 @@
-@base <http://example.org/> .
+@base <http://example.org/pipeline/> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-<pipeline> a p:Pipeline, p:Readable;
+<> a p:Pipeline, p:Readable;
   p:steps [
     p:stepList (<read> <error> <passthrough>)
   ].
 
 <read> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:fs#createReadStream>
   ];
-  code:arguments ("test/support/error.ttl").
+  code:arguments ("test/support/definitions/error.ttl").
 
 <error> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
-    code:link <file:error.js>
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:../operations/error.js#default>
   ].
 
 <passthrough> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:stream#PassThrough>
   ].

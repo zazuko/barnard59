@@ -41,18 +41,13 @@ To execute pipeline, run:
 `barnard59 run <pipeline_file>`
 
 The following arguments are available:
-* `--format <pipeline_format>`
 * `--pipeline <pipeline_iri>`
 * `--output <filename>`
 * `--verbose` or `-v`
 * `--enable-buffer-monitor`
 * `--variable <name=value>`
 
-By default, `barnard59` expects your pipeline to be defined in json-ld format. [The following formats](#pipeline) are supported.
-To execute pipeline in format different than json-ld, run:
-`barnard59 run <pipeline_file> --format <pipeline_format>`
-
-If the file contains more than one pipeline, you can define the pieline to execute. By default, first pipeline will be executed.
+If the file contains more than one pipeline, you can define the pipeline to execute. By default, first pipeline will be executed.
 To define pipeline to be executed, run:
 `barnard59 run <pipeline_file> --pipeline <pipeline_iri>`
 
@@ -93,7 +88,7 @@ This pipeline parses a CSV file. It uses the CSV on the Web format. The file `ex
 Tho execute the main pipeline, run:
 
 ```
-barnard59 run examples/parse-csvw.ttl --format=text/turtle --pipeline=http://example.org/pipeline/parseCsvw
+barnard59 run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
 ```
 ### Transform json file
 
@@ -119,10 +114,8 @@ The `--pipeline` parameter is required, as the file contains two pipelines.
 To execute the Turtle pipeline, run:
 
 ```
-node bin/barnard59.js run examples/fetch-json-to-ntriples.ttl --format text/turtle --pipeline http://example.org/pipeline/utc
+node bin/barnard59.js run examples/fetch-json-to-ntriples.ttl --pipeline http://example.org/pipeline/utc
 ```
-The `--format` parameter is required, as the pipeline format is now different from the default (`application/json-ld`).
-
 
 By default, the pipeline stream will be written to `stdout`. Use `--output` parameter to write output to the file:
 

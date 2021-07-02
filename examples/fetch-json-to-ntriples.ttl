@@ -31,30 +31,34 @@
   p:value """{"date\":"http://purl.org/dc/elements/1.1/date"}""" .
 
 <steps>
-  p:stepList ( <fetch> <jsonldStructure> <parse> <serialize> ) .
+  p:stepList ( <fetch> <parseJson> <jsonldStructure> <parse> <serialize> ) .
 
 <fetch> a p:Step ;
-  code:implementedBy [
-    code:link <node:barnard59-base#fetch.json> ;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-http#get>
   ];
-  code:arguments ("url"^^p:VariableName) .
+  code:arguments [
+    code:name "url";
+    code:value "url"^^p:VariableName
+  ].
+
+<parseJson> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/json.js#parse>
+  ].
 
 <jsonldStructure> a p:Step ;
-  code:implementedBy [
-    code:link <node:barnard59-base#map> ;
-    a code:EcmaScript
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/map.js#default>
   ];
-  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"^^code:EcmaScript) .
+  code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"^^code:EcmaScript).
 
 <parse> a p:Step ;
-  code:implementedBy [
-    code:link <node:barnard59-formats#jsonld.parse.object> ;
-    a code:EcmaScript
-  ] .
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-formats/jsonld.js#parse.object>
+  ].
 
 <serialize> a p:Step ;
-  code:implementedBy [
-    code:link <node:barnard59-formats#ntriples.serialize> ;
-    a code:EcmaScript
-  ] .
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-formats/ntriples.js#serialize>
+  ].

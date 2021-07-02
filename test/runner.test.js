@@ -1,28 +1,21 @@
-/* global describe, it */
+import { strictEqual } from 'assert'
+import { resolve } from 'path'
+import { describe, it } from 'mocha'
+import runner from '../runner.js'
+import loadPipelineDefinition from './support/loadPipelineDefinition.js'
 
-const { strictEqual } = require('assert')
-const { dirname, resolve } = require('path')
-const rdf = require('rdf-ext')
-const { fileToDataset } = require('..')
-const { create } = require('../lib/runner')
-
-describe('barnard59', () => {
-  describe('run', () => {
-    it('should emit an error if an error in the pipeline occurs', async () => {
-      const pipelineFile = resolve(__dirname, 'support/error.ttl')
-      const dataset = await fileToDataset('text/turtle', pipelineFile)
-      const run = create({
-        dataset,
-        term: rdf.namedNode('http://example.org/pipeline'),
-        outputStream: process.stdout,
-        basePath: dirname(pipelineFile)
-      })
-
-      try {
-        await run.promise
-      } catch (err) {
-        strictEqual(err.message, 'error in pipeline step http://example.org/error')
-      }
+describe('run', () => {
+  it('should emit an error if an error in the pipeline occurs', async () => {
+    const ptr = loadPipelineDefinition('error')
+    const run = runner(ptr, {
+      outputStream: process.stdout,
+      basePath: resolve('test')
     })
+
+    try {
+      await run.promise
+    } catch (err) {
+      strictEqual(err.message, 'error in pipeline step http://example.org/error')
+    }
   })
 })
