@@ -25,7 +25,7 @@
     "@rdfjs/serializer-jsonld": "^1.2.0",
     "@rdfjs/serializer-ntriples": "^1.0.1",
     "@rdfjs/sink-to-duplex": "^1.0.0",
-    "barnard59-base": "git://github.com/zazuko/barnard59-base.git#next",
+    "barnard59-base": "^1.0.0",
     "rdf-parser-csvw": "^0.14.0",
     "rdfxml-streaming-parser": "^1.2.0"
   },
