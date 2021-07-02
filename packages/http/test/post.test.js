@@ -1,57 +1,49 @@
-/* global describe, expect, test */
-
-const { post } = require('..')
-const chunksAndContent = require('./support/chunksAndContent')
-const { isReadable, isWritable } = require('isstream')
-const streamToString = require('./support/streamToString')
-const ExpressAsPromise = require('express-as-promise')
+import { strictEqual } from 'assert'
+import withServer from 'express-as-promise/withServer.js'
+import getStream from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import post from '../post.js'
+import chunksAndContent from './support/chunksAndContent.js'
 
 describe('post', () => {
-  test('returns a duplex stream', async () => {
-    const server = new ExpressAsPromise()
+  it('returns a duplex stream', async () => {
+    await withServer(async server => {
+      server.app.post('/', (req, res) => {
+        res.status(204).end()
+      })
 
-    server.app.post('/', (req, res) => {
-      res.status(204).end()
+      const baseUrl = await server.listen()
+      const stream = await post({ url: baseUrl })
+
+      strictEqual(isReadable(stream), true)
+      strictEqual(isWritable(stream), true)
+
+      stream.end()
+
+      await getStream(stream)
     })
-
-    const baseUrl = await server.listen()
-    const stream = await post({ url: baseUrl })
-
-    expect(isReadable(stream)).toBe(true)
-    expect(isWritable(stream)).toBe(true)
-
-    stream.end()
-
-    await streamToString(stream)
-
-    await server.stop()
   })
 
-  test('sends the stream to the server', async () => {
-    let content = null
-    const expected = chunksAndContent()
+  it('sends the stream to the server', async () => {
+    await withServer(async server => {
+      let content = null
+      const expected = chunksAndContent()
 
-    const server = new ExpressAsPromise()
+      server.app.post('/', async (req, res) => {
+        content = await getStream(req)
 
-    server.app.post('/', async (req, res) => {
-      content = await streamToString(req)
+        res.status(204).end()
+      })
 
-      res.status(204).end()
+      const baseUrl = await server.listen()
+      const stream = await post({ url: baseUrl })
+
+      expected.stream.pipe(stream)
+
+      await getStream(stream)
+
+      strictEqual(content, expected.content)
     })
-
-    const baseUrl = await server.listen()
-    const stream = await post({ url: baseUrl })
-
-    expected.chunks.forEach(chunk => {
-      stream.write(chunk)
-    })
-
-    stream.end()
-
-    await streamToString(stream)
-
-    expect(content).toBe(expected.content)
-
-    await server.stop()
   })
 })

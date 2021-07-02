@@ -1,3 +1,5 @@
+import { Readable } from 'readable-stream'
+
 function chunksAndContent () {
   const chunks = []
 
@@ -6,9 +8,9 @@ function chunksAndContent () {
   }
 
   return {
-    chunks,
-    content: Buffer.concat(chunks).toString()
+    content: Buffer.concat(chunks).toString(),
+    stream: Readable.from(chunks)
   }
 }
 
-module.exports = chunksAndContent
+export default chunksAndContent

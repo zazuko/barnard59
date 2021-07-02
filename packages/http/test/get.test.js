@@ -1,42 +1,36 @@
-/* global describe, expect, test */
-
-const { get } = require('..')
-const chunksAndContent = require('./support/chunksAndContent')
-const { isReadable, isWritable } = require('isstream')
-const streamToString = require('./support/streamToString')
-const ExpressAsPromise = require('express-as-promise')
+import { strictEqual } from 'assert'
+import withServer from 'express-as-promise/withServer.js'
+import getStream from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import get from '../get.js'
+import chunksAndContent from './support/chunksAndContent.js'
 
 describe('get', () => {
-  test('returns only a readable stream', async () => {
-    const server = new ExpressAsPromise()
-    const baseUrl = await server.listen()
+  it('returns only a readable stream', async () => {
+    await withServer(async server => {
+      const baseUrl = await server.listen()
 
-    const response = await get({ url: baseUrl })
+      const response = await get({ url: baseUrl })
 
-    expect(isReadable(response)).toBe(true)
-    expect(isWritable(response)).toBe(false)
-
-    await server.stop()
+      strictEqual(isReadable(response), true)
+      strictEqual(isWritable(response), false)
+    })
   })
 
-  test('provides the response content as stream', async () => {
-    const expected = chunksAndContent()
-    const server = new ExpressAsPromise()
+  it('provides the response content as stream', async () => {
+    await withServer(async server => {
+      const expected = chunksAndContent()
 
-    server.app.get('/', (req, res) => {
-      expected.chunks.forEach(chunk => {
-        res.write(chunk)
+      server.app.get('/', (req, res) => {
+        expected.stream.pipe(res)
       })
 
-      res.end()
+      const baseUrl = await server.listen()
+      const response = await get({ url: baseUrl })
+      const content = await getStream(response)
+
+      strictEqual(content, expected.content)
     })
-
-    const baseUrl = await server.listen()
-    const response = await get({ url: baseUrl })
-    const content = await streamToString(response)
-
-    expect(content).toBe(expected.content)
-
-    await server.stop()
   })
 })

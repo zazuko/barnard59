@@ -1,6 +1,6 @@
-const duplexify = require('duplexify')
-const nodeFetch = require('node-fetch')
-const { PassThrough } = require('readable-stream')
+import duplexify from 'duplexify'
+import nodeFetch from 'node-fetch'
+import { PassThrough } from 'readable-stream'
 
 async function fetch ({ method = 'POST', url, ...options } = {}) {
   const inputStream = new PassThrough()
@@ -19,4 +19,4 @@ async function fetch ({ method = 'POST', url, ...options } = {}) {
   return duplexify(inputStream, outputStream)
 }
 
-module.exports = fetch
+export default fetch

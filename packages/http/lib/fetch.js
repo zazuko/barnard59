@@ -1,10 +1,10 @@
-const nodeFetch = require('node-fetch')
-const DuplexToReadable = require('./DuplexToReadable')
+import toReadable from 'duplex-to/readable.js'
+import nodeFetch from 'node-fetch'
 
 async function fetch ({ method = 'GET', url, ...options } = {}) {
   const response = await nodeFetch(url, { method, ...options })
 
-  return new DuplexToReadable(response.body)
+  return toReadable(response.body)
 }
 
-module.exports = fetch
+export default fetch
