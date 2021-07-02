@@ -1,4 +1,4 @@
-const Transform = require('readable-stream').Transform
+import { Transform } from 'readable-stream'
 
 class StdOut extends Transform {
   _transform (chunk, encoding, callback) {
@@ -6,10 +6,10 @@ class StdOut extends Transform {
 
     callback(null, chunk)
   }
-
-  static create () {
-    return new StdOut()
-  }
 }
 
-module.exports = StdOut.create
+function factory () {
+  return new StdOut()
+}
+
+export default factory

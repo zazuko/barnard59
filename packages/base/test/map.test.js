@@ -1,8 +1,8 @@
-const { deepStrictEqual } = require('assert')
-const getStream = require('get-stream')
-const { describe, it } = require('mocha')
-const { Readable } = require('readable-stream')
-const map = require('../lib/map')
+import { deepStrictEqual } from 'assert'
+import { array } from 'get-stream'
+import { describe, it } from 'mocha'
+import { Readable } from 'readable-stream'
+import map from '../map.js'
 
 describe('map', () => {
   it('should pass pipeline context to mapper function', async () => {
@@ -20,7 +20,7 @@ describe('map', () => {
     const outStream = input.pipe(map.call(context, function (chunk) {
       return this.variable.get('prefix') + chunk
     }))
-    const output = await getStream.array(outStream)
+    const output = await array(outStream)
 
     deepStrictEqual(output, ['foo_a', 'foo_b'])
   })

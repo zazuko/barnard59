@@ -1,9 +1,9 @@
-const { deepStrictEqual, strictEqual, rejects } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const { Readable } = require('readable-stream')
-const concat = require('../lib/concat')
+import { deepStrictEqual, strictEqual, rejects } from 'assert'
+import getStream, { array } from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import { Readable } from 'readable-stream'
+import concat, { object } from '../concat.js'
 
 describe('concat', () => {
   it('should be a function', () => {
@@ -90,11 +90,11 @@ describe('concat', () => {
 
   describe('object', () => {
     it('should be a function', () => {
-      strictEqual(typeof concat.object, 'function')
+      strictEqual(typeof object, 'function')
     })
 
     it('should return a Readable', () => {
-      const s = concat.object(new Readable({ read: () => {} }))
+      const s = object(new Readable({ read: () => {} }))
 
       strictEqual(isReadable(s), true)
       strictEqual(isWritable(s), false)
@@ -120,7 +120,7 @@ describe('concat', () => {
         }
       })
 
-      const s = concat.object(stream0, stream1)
+      const s = object(stream0, stream1)
 
       await getStream(s)
 
@@ -146,9 +146,9 @@ describe('concat', () => {
         }
       })
 
-      const s = concat.object(stream0, stream1)
+      const s = object(stream0, stream1)
 
-      const result = await getStream.array(s)
+      const result = await array(s)
 
       deepStrictEqual(result, ['a', 'b', 'c', 'd'])
     })
@@ -170,9 +170,9 @@ describe('concat', () => {
         }
       })
 
-      const s = concat.object(stream0, stream1)
+      const s = object(stream0, stream1)
 
-      await rejects(() => getStream.array(s))
+      await rejects(() => array(s))
     })
   })
 })

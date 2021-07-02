@@ -1,13 +1,13 @@
-const { promisify } = require('util')
-const glob = require('glob')
-const once = require('lodash/once')
-const { Readable } = require('readable-stream')
+import { promisify } from 'util'
+import globFn from 'glob'
+import once from 'lodash/once.js'
+import { Readable } from 'readable-stream'
 
-function factory ({ pattern, ...options }) {
+function glob ({ pattern, ...options }) {
   let filenames = null
 
   const init = once(async () => {
-    filenames = await promisify(glob)(pattern, options)
+    filenames = await promisify(globFn)(pattern, options)
   })
 
   const stream = new Readable({
@@ -34,4 +34,4 @@ function factory ({ pattern, ...options }) {
   return stream
 }
 
-module.exports = factory
+export default glob

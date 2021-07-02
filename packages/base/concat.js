@@ -1,4 +1,4 @@
-const { finished, Readable } = require('readable-stream')
+import { finished, Readable } from 'readable-stream'
 
 class ConcatStream extends Readable {
   constructor (streams, { objectMode = false } = {}) {
@@ -41,8 +41,11 @@ function factory (...streams) {
   return new ConcatStream(streams)
 }
 
-factory.object = (...streams) => {
+const object = (...streams) => {
   return new ConcatStream(streams, { objectMode: true })
 }
 
-module.exports = factory
+factory.object = object
+
+export default factory
+export { object }

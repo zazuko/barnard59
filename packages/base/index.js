@@ -1,34 +1,12 @@
-const concat = require('./lib/concat')
-const combine = require('./lib/combine')
-const fetch = require('./lib/fetch')
-const filter = require('./lib/filter')
-const flatten = require('./lib/flatten')
-const glob = require('./lib/glob')
-const json = require('./lib/json')
-const limit = require('./lib/limit')
-const map = require('./lib/map')
-const nul = require('./lib/nul')
-const offset = require('./lib/offset')
-const setGraph = require('./lib/setGraph')
-const stdout = require('./lib/stdout')
-const toString = require('./lib/toString')
-const { fileToDataset, stringToDataset } = require('./lib/toDataset')
-
-module.exports = {
-  concat,
-  combine,
-  fetch,
-  fileToDataset,
-  filter,
-  flatten,
-  glob,
-  json,
-  limit,
-  map,
-  nul,
-  offset,
-  setGraph,
-  stdout,
-  stringToDataset,
-  toString
-}
+export { default as combine } from './combine.js'
+export { default as concat, object as concatObject } from './concat.js'
+export { default as filter } from './filter.js'
+export { default as flatten } from './flatten.js'
+export { default as glob } from './glob.js'
+export { parse as jsonParse, stringify as jsonStringify } from './json.js'
+export { default as limit } from './limit.js'
+export { default as map } from './map.js'
+export { default as nul } from './nul.js'
+export { default as offset } from './offset.js'
+export { default as stdout } from './stdout.js'
+export { default as toString } from './toString.js'

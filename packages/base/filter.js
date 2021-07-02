@@ -1,10 +1,10 @@
-const through = require('through2')
+import { obj } from 'through2'
 
 function filter (func) {
-  return through.obj(function (chunk, encoding, callback) {
+  return obj(function (chunk, encoding, callback) {
     Promise.resolve().then(() => {
       return func(chunk, encoding)
-    }).then((result) => {
+    }).then(result => {
       if (result) {
         this.push(chunk)
       }
@@ -14,4 +14,4 @@ function filter (func) {
   })
 }
 
-module.exports = filter
+export default filter

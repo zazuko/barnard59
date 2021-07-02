@@ -1,4 +1,4 @@
-const Writable = require('readable-stream').Writable
+import { Writable } from 'readable-stream'
 
 class Nul extends Writable {
   constructor () {
@@ -8,10 +8,10 @@ class Nul extends Writable {
   _write (chunk, encoding, callback) {
     callback()
   }
-
-  static create () {
-    return new Nul()
-  }
 }
 
-module.exports = Nul.create
+function factory () {
+  return new Nul()
+}
+
+export default factory

@@ -1,7 +1,7 @@
-const through = require('through2')
+import { obj } from 'through2'
 
 function offset (offset) {
-  const t = through.obj(function (chunk, encoding, callback) {
+  const t = obj(function (chunk, encoding, callback) {
     t.count++
 
     if (t.count > t.offset) {
@@ -17,4 +17,4 @@ function offset (offset) {
   return t
 }
 
-module.exports = offset
+export default offset

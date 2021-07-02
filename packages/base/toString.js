@@ -1,4 +1,4 @@
-const Transform = require('readable-stream').Transform
+import { Transform } from 'readable-stream'
 
 class ToString extends Transform {
   constructor () {
@@ -11,10 +11,10 @@ class ToString extends Transform {
   _transform (chunk, encoding, callback) {
     callback(null, chunk.toString())
   }
-
-  static create () {
-    return new ToString()
-  }
 }
 
-module.exports = ToString.create
+function factory () {
+  return new ToString()
+}
+
+export default factory

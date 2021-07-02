@@ -1,4 +1,4 @@
-const duplexify = require('duplexify')
+import duplexify from 'duplexify'
 
 function combine (streams, options) {
   if (streams.length === 0) {
@@ -16,4 +16,4 @@ function combine (streams, options) {
   return duplexify(streams[0], streams[streams.length - 1], options)
 }
 
-module.exports = combine
+export default combine

@@ -1,4 +1,4 @@
-const Transform = require('readable-stream').Transform
+import { Transform } from 'readable-stream'
 
 class JsonParse extends Transform {
   constructor () {
@@ -10,10 +10,6 @@ class JsonParse extends Transform {
 
   _transform (chunk, encoding, callback) {
     callback(null, JSON.parse(chunk.toString()))
-  }
-
-  static create () {
-    return new JsonParse()
   }
 }
 
@@ -28,13 +24,14 @@ class JsonStringify extends Transform {
   _transform (chunk, encoding, callback) {
     callback(null, JSON.stringify(chunk))
   }
-
-  static create () {
-    return new JsonStringify()
-  }
 }
 
-module.exports = {
-  parse: JsonParse.create,
-  stringify: JsonStringify.create
+function parse () {
+  return new JsonParse()
 }
+
+function stringify () {
+  return new JsonStringify()
+}
+
+export { parse, stringify }

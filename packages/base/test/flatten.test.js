@@ -1,9 +1,9 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const flatten = require('../lib/flatten')
-const { Readable } = require('readable-stream')
+import { deepStrictEqual, strictEqual } from 'assert'
+import { array } from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import { Readable } from 'readable-stream'
+import flatten from '../flatten.js'
 
 describe('flatten', () => {
   it('should be a function', () => {
@@ -20,10 +20,12 @@ describe('flatten', () => {
   it('should do nothing if there are no input chunks', async () => {
     const input = Readable({
       objectMode: true,
-      read: () => { input.push(null) }
+      read: () => {
+        input.push(null)
+      }
     })
 
-    const result = await getStream.array(input.pipe(flatten()))
+    const result = await array(input.pipe(flatten()))
 
     deepStrictEqual(result, [])
   })
@@ -44,7 +46,7 @@ describe('flatten', () => {
       }
     })
 
-    const result = await getStream.array(input.pipe(flatten()))
+    const result = await array(input.pipe(flatten()))
 
     deepStrictEqual(result, expected)
   })
@@ -65,7 +67,7 @@ describe('flatten', () => {
       }
     })
 
-    const result = await getStream.array(input.pipe(flatten()))
+    const result = await array(input.pipe(flatten()))
 
     deepStrictEqual(result, expected)
   })
@@ -81,7 +83,7 @@ describe('flatten', () => {
     })
 
     try {
-      await getStream.array(input.pipe(flatten()))
+      await array(input.pipe(flatten()))
     } catch (err) {
       error = err
     }
