@@ -1,19 +1,19 @@
+import { strictEqual } from 'assert'
+import { resolve, dirname } from 'path'
+import getStream from 'get-stream'
 import { describe, it } from 'mocha'
+import { Readable } from 'readable-stream'
 import move from '../move.js'
 import fs from './support/fs.js'
 import FtpServer from './support/FtpServer.js'
-import SftpServer from './support/SftpServer.js'
 import { withServer } from './support/server.js'
-import { resolve, dirname } from 'path'
-import getStream from 'get-stream'
-import { Readable } from 'readable-stream'
-import { expect } from 'chai'
+import SftpServer from './support/SftpServer.js'
 
 const __dirname = dirname(new URL(import.meta.url).pathname)
 
 describe('move', () => {
   it('is a function', () => {
-    expect(typeof move).to.equal('function')
+    strictEqual(typeof move, 'function')
   })
 
   ;[
@@ -44,7 +44,7 @@ describe('move', () => {
     ]
   ].forEach(([label, serverFactory, additionalOptions]) => {
     it(`moves a file from the given place to another place ${label}`, async () => {
-      await withServer(serverFactory, async (server) => {
+      await withServer(serverFactory, async server => {
         const options = { ...server.options, ...additionalOptions }
 
         const root = resolve(__dirname, 'support/tmp/move')
@@ -64,7 +64,7 @@ describe('move', () => {
 
         await fs.rmdir(root)
 
-        expect(content.toString()).to.equal('987\n654')
+        strictEqual(content.toString(), '987\n654')
       })
     })
   })

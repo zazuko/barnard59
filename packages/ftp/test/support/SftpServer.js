@@ -1,4 +1,3 @@
-
 import { join, dirname } from 'path'
 import fs from 'fs-extra'
 import sftpFS from 'sftp-fs'
@@ -30,7 +29,7 @@ class SftpServer {
   }
 
   async start () {
-    this.server.on('error', (error) => {
+    this.server.on('error', error => {
       console.error(error)
     })
 
@@ -41,8 +40,6 @@ class SftpServer {
     return this.server.stop()
   }
 }
-
-export default SftpServer
 
 // Extend reference file system implementation to add the notion of "root directory"
 class FileSystem extends sftpFS.ImplFileSystem {
@@ -226,3 +223,5 @@ function longname (name, attrs, num) {
 
   return str
 }
+
+export default SftpServer

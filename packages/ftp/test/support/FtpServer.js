@@ -1,5 +1,5 @@
-import FtpSrv from 'ftp-srv'
 import { dirname } from 'path'
+import FtpSrv from 'ftp-srv'
 
 const __dirname = dirname(new URL(import.meta.url).pathname)
 

@@ -1,18 +1,15 @@
-import { describe, it } from 'mocha'
+import { deepStrictEqual, rejects, strictEqual } from 'assert'
 import { readFileSync } from 'fs'
+import getStream from 'get-stream'
+import { describe, it } from 'mocha'
 import list from '../list.js'
 import FtpServer from './support/FtpServer.js'
-import SftpServer from './support/SftpServer.js'
 import { withServer } from './support/server.js'
-import getStream from 'get-stream'
-import chai, { expect } from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
+import SftpServer from './support/SftpServer.js'
 
 describe('list', () => {
   it('is a function', () => {
-    expect(typeof list).to.equal('function')
+    strictEqual(typeof list, 'function')
   })
 
   ;[
@@ -43,20 +40,24 @@ describe('list', () => {
     ]
   ].forEach(([label, serverFactory, additionalOptions]) => {
     it(`lists files from the given directory ${label}`, async () => {
-      await withServer(serverFactory, async (server) => {
+      await withServer(serverFactory, async server => {
         const options = { ...server.options, ...additionalOptions }
 
         const stream = await list({ pathname: 'data', ...options })
         const filenames = await getStream.array(stream)
 
-        expect(filenames).to.deep.equal(['data/abc.txt', 'data/xyz.txt'])
+        deepStrictEqual(filenames, ['data/abc.txt', 'data/xyz.txt'])
       })
     })
   })
 
   it('throws proper error when file does not exist', async () => {
-    await withServer(() => new FtpServer(), async (server) => {
-      expect(list({ pathname: 'does-not-exist', ...server.options })).to.be.rejectedWith('no such file or directory')
+    await withServer(() => new FtpServer(), async server => {
+      await rejects(async () => {
+        await list({ pathname: 'does-not-exist', ...server.options })
+      }, err => {
+        return err.message.includes('no such file or directory')
+      })
     })
   })
 })

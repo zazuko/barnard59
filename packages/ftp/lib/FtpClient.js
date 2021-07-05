@@ -1,5 +1,5 @@
-import Ftp from 'ftp'
 import { promisify } from 'util'
+import Ftp from 'ftp'
 import { PassThrough, Readable, Writable } from 'readable-stream'
 
 class FtpClient {
