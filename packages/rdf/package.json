@@ -1,6 +1,6 @@
 {
   "name": "barnard59-rdf",
-  "version": "0.2.4",
+  "version": "1.0.0",
   "description": "RDF support for Linked Data pipelines",
   "main": "index.js",
   "type": "module",
