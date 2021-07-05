@@ -1,14 +1,14 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const { promisify } = require('util')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const rdf = require('@rdfjs/data-model')
-const namespace = require('@rdfjs/namespace')
-const { quadToNTriples } = require('@rdfjs/to-ntriples')
-const { finished } = require('readable-stream')
-const withServer = require('./support/withServer')
-const { put } = require('..')
+import { deepStrictEqual, strictEqual } from 'assert'
+import { promisify } from 'util'
+import rdf from '@rdfjs/data-model'
+import namespace from '@rdfjs/namespace'
+import { quadToNTriples } from '@rdfjs/to-ntriples'
+import withServer from 'express-as-promise/withServer.js'
+import getStream from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import { finished } from 'readable-stream'
+import put from '../put.js'
 
 const ns = namespace('http://example.org/')
 

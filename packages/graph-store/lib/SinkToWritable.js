@@ -1,7 +1,7 @@
-const { promisify } = require('util')
-const once = require('lodash/once')
-const defer = require('promise-the-world/defer')
-const { finished, Readable, Writable } = require('readable-stream')
+import { promisify } from 'util'
+import once from 'lodash/once.js'
+import defer from 'promise-the-world/defer.js'
+import { finished, Readable, Writable } from 'readable-stream'
 
 class SinkToWritable extends Writable {
   constructor (factory) {
@@ -55,4 +55,4 @@ class SinkToWritable extends Writable {
   }
 }
 
-module.exports = SinkToWritable
+export default SinkToWritable
