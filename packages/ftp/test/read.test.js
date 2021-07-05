@@ -1,18 +1,18 @@
-/* global describe, expect, it */
-
-const fs = require('fs')
-const read = require('../read')
-const FtpServer = require('./support/FtpServer')
-const SftpServer = require('./support/SftpServer')
-const { withServer } = require('./support/server')
-const getStream = require('get-stream')
+import { strictEqual } from 'assert'
+import { readFileSync } from 'fs'
+import getStream from 'get-stream'
+import { describe, it } from 'mocha'
+import read from '../read.js'
+import FtpServer from './support/FtpServer.js'
+import { withServer } from './support/server.js'
+import SftpServer from './support/SftpServer.js'
 
 describe('read', () => {
   it('is a function', () => {
-    expect(typeof read).toBe('function')
+    strictEqual(typeof read, 'function')
   })
 
-  it.each([
+  ;[
     [
       'on a FTP server with anonymous user',
       () => new FtpServer(),
@@ -36,16 +36,18 @@ describe('read', () => {
     [
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: fs.readFileSync('test/support/test.key') }
+      { password: undefined, privateKey: readFileSync('test/support/test.key') }
     ]
-  ])('read file from the given path %s', async (label, serverFactory, additionalOptions) => {
-    await withServer(serverFactory, async (server) => {
-      const options = { ...server.options, ...additionalOptions }
+  ].forEach(([label, serverFactory, additionalOptions]) => {
+    it(`read file from the given path ${label}`, async () => {
+      await withServer(serverFactory, async server => {
+        const options = { ...server.options, ...additionalOptions }
 
-      const stream = await read({ filename: 'data/xyz.txt', ...options })
-      const content = await getStream(stream)
+        const stream = await read({ filename: 'data/xyz.txt', ...options })
+        const content = await getStream(stream)
 
-      expect(content).toBe('987\n654')
+        strictEqual(content, '987\n654')
+      })
     })
   })
 })

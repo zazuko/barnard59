@@ -1,5 +1,4 @@
-
-async function withServer (serverFactory, callback) {
+export async function withServer (serverFactory, callback) {
   const server = serverFactory()
   await server.start()
 
@@ -9,5 +8,3 @@ async function withServer (serverFactory, callback) {
     await server.stop()
   }
 }
-
-module.exports = { withServer }

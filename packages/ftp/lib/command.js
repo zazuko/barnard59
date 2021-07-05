@@ -1,5 +1,5 @@
-const FtpClient = require('./FtpClient')
-const SftpClient = require('./SftpClient')
+import FtpClient from './FtpClient.js'
+import SftpClient from './SftpClient.js'
 
 async function command (options, callback, keepAlive = false) {
   const ClientClass = getClientClass(options.protocol)
@@ -28,4 +28,4 @@ function getClientClass (protocol = 'ftp') {
   }
 }
 
-module.exports = command
+export default command
