@@ -6,7 +6,7 @@ import withServer from 'express-as-promise/withServer.js'
 import { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
 import { describe, it } from 'mocha'
-import { get } from '../index.js'
+import get from '../get.js'
 
 const ns = namespace('http://example.org/')
 
