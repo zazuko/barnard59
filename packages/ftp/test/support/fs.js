@@ -1,14 +1,14 @@
-const fs = require('fs')
-const rimraf = require('rimraf')
-const { promisify } = require('util')
+import fs, { copyFile as _copyFile, createReadStream as _createReadStream, mkdir as _mkdir, readFile as _readFile } from 'fs'
+import { promisify } from 'util'
+import rimraf from 'rimraf'
 
-const copyFile = promisify(fs.copyFile)
-const createReadStream = fs.createReadStream
-const mkdir = promisify(fs.mkdir)
-const readFile = promisify(fs.readFile)
+const copyFile = promisify(_copyFile)
+const createReadStream = _createReadStream
+const mkdir = promisify(_mkdir)
+const readFile = promisify(_readFile)
 const rmdir = promisify(rimraf)
 
-module.exports = {
+export default {
   ...fs,
   copyFile,
   createReadStream,

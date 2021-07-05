@@ -1,5 +1,5 @@
-const command = require('./lib/command')
-const { finished } = require('readable-stream')
+import { finished } from 'readable-stream'
+import command from './lib/command.js'
 
 async function read ({ filename, ...options }) {
   return command(options, async client => {
@@ -13,4 +13,4 @@ async function read ({ filename, ...options }) {
   }, true)
 }
 
-module.exports = read
+export default read

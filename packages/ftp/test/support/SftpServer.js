@@ -1,9 +1,10 @@
+import { join, dirname } from 'path'
+import fs from 'fs-extra'
+import sftpFS from 'sftp-fs'
+import { PermissionDeniedError } from 'sftp-fs/lib/errors.js'
+import ssh2 from 'ssh2'
 
-const path = require('path')
-const fs = require('fs-extra')
-const { ImplFileSystem, Server } = require('sftp-fs')
-const { PermissionDeniedError } = require('sftp-fs/lib/errors')
-const { SFTP_OPEN_MODE } = require('ssh2')
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 class SftpServer {
   constructor ({ path = __dirname, user, password } = {}) {
@@ -14,7 +15,7 @@ class SftpServer {
 
     this.keyFile = 'test/support/test.key'
 
-    this.server = new Server(new FileSystem(this.user, this.password, this.path))
+    this.server = new sftpFS.Server(new FileSystem(this.user, this.password, this.path))
   }
 
   get options () {
@@ -28,7 +29,7 @@ class SftpServer {
   }
 
   async start () {
-    this.server.on('error', (error) => {
+    this.server.on('error', error => {
       console.error(error)
     })
 
@@ -40,10 +41,8 @@ class SftpServer {
   }
 }
 
-module.exports = SftpServer
-
 // Extend reference file system implementation to add the notion of "root directory"
-class FileSystem extends ImplFileSystem {
+class FileSystem extends sftpFS.ImplFileSystem {
   constructor (username, password, rootPath) {
     super(username, password)
 
@@ -99,7 +98,7 @@ class FileSystem extends ImplFileSystem {
     const files = await fs.readdir(fullPath)
 
     for (const filename of files) {
-      const attrs = await this.lstat(session, path.join(handle.pathname, filename))
+      const attrs = await this.lstat(session, join(handle.pathname, filename))
       const num = 1 // TODO: Number of links and directories inside this directory
 
       list.push({
@@ -157,34 +156,34 @@ class FileSystem extends ImplFileSystem {
   }
 
   getFullPath (pathname) {
-    return path.join(this.rootPath, pathname)
+    return join(this.rootPath, pathname)
   }
 }
 
 function convFlags (flags) {
   let mode = 0
 
-  if ((flags & SFTP_OPEN_MODE.READ) && (flags & SFTP_OPEN_MODE.WRITE)) {
+  if ((flags & ssh2.SFTP_OPEN_MODE.READ) && (flags & ssh2.SFTP_OPEN_MODE.WRITE)) {
     mode = fs.constants.O_RDWR
-  } else if (flags & SFTP_OPEN_MODE.READ) {
+  } else if (flags & ssh2.SFTP_OPEN_MODE.READ) {
     mode = fs.constants.O_RDONLY
-  } else if (flags & SFTP_OPEN_MODE.WRITE) {
+  } else if (flags & ssh2.SFTP_OPEN_MODE.WRITE) {
     mode = fs.constants.O_WRONLY
   }
 
-  if (flags & SFTP_OPEN_MODE.CREAT) {
+  if (flags & ssh2.SFTP_OPEN_MODE.CREAT) {
     mode |= fs.constants.O_CREAT
   }
 
-  if (flags & SFTP_OPEN_MODE.APPEND) {
+  if (flags & ssh2.SFTP_OPEN_MODE.APPEND) {
     mode |= fs.constants.O_APPEND
   }
 
-  if (flags & SFTP_OPEN_MODE.EXCL) {
+  if (flags & ssh2.SFTP_OPEN_MODE.EXCL) {
     mode |= fs.constants.O_EXCL
   }
 
-  if (flags & SFTP_OPEN_MODE.TRUNC) {
+  if (flags & ssh2.SFTP_OPEN_MODE.TRUNC) {
     mode |= fs.constants.O_TRUNC
   }
 
@@ -224,3 +223,5 @@ function longname (name, attrs, num) {
 
   return str
 }
+
+export default SftpServer
