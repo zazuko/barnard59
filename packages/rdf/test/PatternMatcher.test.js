@@ -1,8 +1,8 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const ns = require('./support/namespaces')
-const PatternMatcher = require('../lib/PatternMatcher')
+import { strictEqual } from 'assert'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import PatternMatcher from '../lib/PatternMatcher.js'
+import { ex } from './support/namespaces.js'
 
 describe('PatternMatcher', () => {
   it('should be a constructor', () => {
@@ -10,10 +10,10 @@ describe('PatternMatcher', () => {
   })
 
   it('should assign the given terms to the pattern object', () => {
-    const subject = ns.ex.subject
-    const predicate = ns.ex.predicate
-    const object = ns.ex.object
-    const graph = ns.ex.graph
+    const subject = ex.subject
+    const predicate = ex.predicate
+    const object = ex.object
+    const graph = ex.graph
 
     const matcher = new PatternMatcher({ subject, predicate, object, graph })
 
@@ -24,14 +24,14 @@ describe('PatternMatcher', () => {
   })
 
   it('should assign the given iterable to the pattern object', () => {
-    const subject1 = ns.ex.subject1
-    const subject2 = ns.ex.subject2
-    const predicate1 = ns.ex.predicate1
-    const predicate2 = ns.ex.predicate2
-    const object1 = ns.ex.object1
-    const object2 = ns.ex.object2
-    const graph1 = ns.ex.graph1
-    const graph2 = ns.ex.graph2
+    const subject1 = ex.subject1
+    const subject2 = ex.subject2
+    const predicate1 = ex.predicate1
+    const predicate2 = ex.predicate2
+    const object1 = ex.object1
+    const object2 = ex.object2
+    const graph1 = ex.graph1
+    const graph2 = ex.graph2
 
     const matcher = new PatternMatcher({
       subject: [subject1, subject2],
@@ -58,23 +58,23 @@ describe('PatternMatcher', () => {
     })
 
     it('should return false if the quad doesn\'t match the pattern', () => {
-      const subject = ns.ex.subject
-      const predicate = ns.ex.predicate
-      const object = ns.ex.object
-      const graph = ns.ex.graph
+      const subject = ex.subject
+      const predicate = ex.predicate
+      const object = ex.object
+      const graph = ex.graph
 
       const matcher = new PatternMatcher({ subject, predicate, object, graph })
 
-      const result = matcher.test(rdf.quad(subject, predicate, object, ns.ex.graph1))
+      const result = matcher.test(rdf.quad(subject, predicate, object, ex.graph1))
 
       strictEqual(result, false)
     })
 
     it('should return true if the subject matches', () => {
-      const subject = ns.ex.subject
-      const predicate = ns.ex.predicate
-      const object = ns.ex.object
-      const graph = ns.ex.graph
+      const subject = ex.subject
+      const predicate = ex.predicate
+      const object = ex.object
+      const graph = ex.graph
 
       const matcher = new PatternMatcher({ subject })
 
@@ -84,10 +84,10 @@ describe('PatternMatcher', () => {
     })
 
     it('should return true if the predicate matches', () => {
-      const subject = ns.ex.subject
-      const predicate = ns.ex.predicate
-      const object = ns.ex.object
-      const graph = ns.ex.graph
+      const subject = ex.subject
+      const predicate = ex.predicate
+      const object = ex.object
+      const graph = ex.graph
 
       const matcher = new PatternMatcher({ predicate })
 
@@ -97,10 +97,10 @@ describe('PatternMatcher', () => {
     })
 
     it('should return true if the object matches', () => {
-      const subject = ns.ex.subject
-      const predicate = ns.ex.predicate
-      const object = ns.ex.object
-      const graph = ns.ex.graph
+      const subject = ex.subject
+      const predicate = ex.predicate
+      const object = ex.object
+      const graph = ex.graph
 
       const matcher = new PatternMatcher({ object })
 
@@ -110,10 +110,10 @@ describe('PatternMatcher', () => {
     })
 
     it('should return true if the graph matches', () => {
-      const subject = ns.ex.subject
-      const predicate = ns.ex.predicate
-      const object = ns.ex.object
-      const graph = ns.ex.graph
+      const subject = ex.subject
+      const predicate = ex.predicate
+      const object = ex.object
+      const graph = ex.graph
 
       const matcher = new PatternMatcher({ graph })
 

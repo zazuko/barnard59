@@ -6,4 +6,4 @@ function dateToId (date) {
   // [^0-9Z]
 }
 
-module.exports = dateToId
+export default dateToId

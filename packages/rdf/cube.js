@@ -1,7 +1,7 @@
-const buildCubeShape = require('./lib/cube/buildCubeShape')
-const toObservation = require('./lib/cube/toObservation')
+import buildCubeShape from './lib/cube/buildCubeShape/index.js'
+import toObservation from './lib/cube/toObservation.js'
 
-module.exports = {
+export {
   buildCubeShape,
   toObservation
 }

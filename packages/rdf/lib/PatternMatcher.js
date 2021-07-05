@@ -1,4 +1,4 @@
-const TermSet = require('@rdfjs/term-set')
+import TermSet from '@rdfjs/term-set'
 
 class PatternMatcher {
   constructor ({ subject, predicate, object, graph } = {}) {
@@ -27,4 +27,4 @@ class PatternMatcher {
   }
 }
 
-module.exports = PatternMatcher
+export default PatternMatcher

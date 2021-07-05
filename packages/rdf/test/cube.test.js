@@ -1,2 +1,2 @@
-require('./cube/buildCubeShape.test')
-require('./cube/toObservation.test')
+import './cube/buildCubeShape.test.js'
+import './cube/toObservation.test.js'

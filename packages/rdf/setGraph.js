@@ -1,5 +1,5 @@
-const rdf = require('rdf-ext')
-const TripleToQuadTransform = require('rdf-transform-triple-to-quad')
+import rdf from 'rdf-ext'
+import TripleToQuadTransform from 'rdf-transform-triple-to-quad'
 
 function setGraph (graph) {
   const iri = (graph && graph.value) || (graph && graph.toString()) || ''
@@ -11,4 +11,4 @@ function setGraph (graph) {
   return new TripleToQuadTransform(rdf.namedNode(iri), { factory: rdf })
 }
 
-module.exports = setGraph
+export default setGraph

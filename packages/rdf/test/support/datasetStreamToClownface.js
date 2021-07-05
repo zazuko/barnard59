@@ -1,6 +1,6 @@
-const clownface = require('clownface')
-const getStream = require('get-stream')
-const rdf = require('rdf-ext')
+import clownface from 'clownface'
+import getStream from 'get-stream'
+import rdf from 'rdf-ext'
 
 async function datasetStreamToClownface (stream) {
   const datasets = await getStream.array(stream)
@@ -8,4 +8,4 @@ async function datasetStreamToClownface (stream) {
   return clownface({ dataset: datasets.reduce((all, current) => all.addAll(current), rdf.dataset()) })
 }
 
-module.exports = datasetStreamToClownface
+export default datasetStreamToClownface

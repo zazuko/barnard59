@@ -1,8 +1,8 @@
-const clownface = require('clownface')
-const rdf = require('rdf-ext')
-const TermMap = require('@rdfjs/term-map')
-const TermSet = require('@rdfjs/term-set')
-const ns = require('./namespaces')
+import TermMap from '@rdfjs/term-map'
+import TermSet from '@rdfjs/term-set'
+import clownface from 'clownface'
+import rdf from 'rdf-ext'
+import * as ns from './namespaces.js'
 
 const datatypeParsers = new TermMap([
   [ns.xsd.date, term => new Date(term.value)],
@@ -99,4 +99,4 @@ class Dimension {
   }
 }
 
-module.exports = Dimension
+export default Dimension

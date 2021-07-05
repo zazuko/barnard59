@@ -1,14 +1,14 @@
-const { rejects, strictEqual } = require('assert')
-const { termToNTriples: toNT } = require('@rdfjs/to-ntriples')
-const clownface = require('clownface')
-const getStream = require('get-stream')
-const { isDuplex } = require('isstream')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const { Readable } = require('readable-stream')
-const ns = require('../support/namespaces')
-const dateToId = require('../../lib/dateToId')
-const toObservation = require('../../lib/cube/toObservation')
+import { rejects, strictEqual } from 'assert'
+import { termToNTriples as toNT } from '@rdfjs/to-ntriples'
+import clownface from 'clownface'
+import getStream from 'get-stream'
+import { isDuplex } from 'isstream'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import { Readable } from 'readable-stream'
+import toObservation from '../../lib/cube/toObservation.js'
+import dateToId from '../../lib/dateToId.js'
+import * as ns from '../support/namespaces.js'
 
 function createMeasure ({ term = ns.ex('topic/a') } = {}) {
   return clownface({ dataset: rdf.dataset(), term })

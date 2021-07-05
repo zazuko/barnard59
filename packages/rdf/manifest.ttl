@@ -7,7 +7,7 @@
   rdfs:label "Map (RDF/JS Quad)";
   rdfs:comment "Calls a map function only for quads matching the given triple pattern.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-rdf/mapMatch.js>
+    code:link <node:barnard59-rdf/mapMatch.js#default>
   ].
 
 <cube.js#buildCubeShape> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
@@ -28,5 +28,5 @@
   rdfs:label "Set Graph";
   rdfs:comment "Sets the graph of all quads to the given fixed value.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-rdf/setGraph.js>
+    code:link <node:barnard59-rdf/setGraph.js#default>
   ].

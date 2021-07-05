@@ -1,13 +1,13 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const TermSet = require('@rdfjs/term-set')
-const { termToNTriples: toNT } = require('@rdfjs/to-ntriples')
-const { isDuplex } = require('isstream')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const createObservationsStream = require('../support/createObservationsStream')
-const datasetStreamToClownface = require('../support/datasetStreamToClownface')
-const ns = require('../support/namespaces')
-const buildCubeShape = require('../../lib/cube/buildCubeShape')
+import { deepStrictEqual, strictEqual } from 'assert'
+import TermSet from '@rdfjs/term-set'
+import { termToNTriples as toNT } from '@rdfjs/to-ntriples'
+import { isDuplex } from 'isstream'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
+import createObservationsStream from '../support/createObservationsStream.js'
+import datasetStreamToClownface from '../support/datasetStreamToClownface.js'
+import * as ns from '../support/namespaces.js'
 
 function checkMinMax (result, min, max) {
   const propertyShape = result.has(ns.sh.path, ns.ex.property)

@@ -3,8 +3,10 @@
   "version": "0.2.4",
   "description": "RDF support for Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "standard && nyc --reporter=lcov mocha"
+    "coverage": "codecov",
+    "test": "stricter-standard && c8 --reporter=lcov --reporter=text mocha"
   },
   "repository": {
     "type": "git",
@@ -21,17 +23,21 @@
     "@rdfjs/namespace": "^1.1.0",
     "@rdfjs/term-map": "^1.0.0",
     "@rdfjs/term-set": "^1.0.1",
-    "clownface": "^1.0.0",
-    "rdf-ext": "^1.3.0",
+    "clownface": "^1.3.0",
+    "rdf-ext": "^1.3.2",
     "rdf-transform-triple-to-quad": "^1.0.2",
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^1.0.2",
+    "c8": "^7.7.3",
+    "codecov": "^3.8.2",
     "get-stream": "^6.0.1",
     "isstream": "^0.1.2",
-    "mocha": "^8.4.0",
-    "nyc": "^15.0.1",
-    "standard": "^16.0.3"
+    "mocha": "^9.0.1",
+    "stricter-standard": "^0.2.0"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
   }
 }
