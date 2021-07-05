@@ -8,7 +8,7 @@ import getStream from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
 import { describe, it } from 'mocha'
 import { finished } from 'readable-stream'
-import { put } from '../index.js'
+import put from '../put.js'
 
 const ns = namespace('http://example.org/')
 
