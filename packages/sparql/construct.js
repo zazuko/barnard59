@@ -1,4 +1,4 @@
-const Client = require('sparql-http-client')
+import Client from 'sparql-http-client'
 
 function construct ({ endpoint, query, user, password }) {
   const client = new Client({ endpointUrl: endpoint, user, password })
@@ -6,4 +6,4 @@ function construct ({ endpoint, query, user, password }) {
   return client.query.construct(query)
 }
 
-module.exports = construct
+export default construct

@@ -1,9 +1,9 @@
-const { strictEqual } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const nock = require('nock')
-const select = require('../select')
+import { strictEqual } from 'assert'
+import getStream from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import nock from 'nock'
+import select from '../select.js'
 
 describe('select', () => {
   it('should be a function', () => {

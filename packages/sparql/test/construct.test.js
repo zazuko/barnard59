@@ -1,11 +1,11 @@
-const { strictEqual } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const nock = require('nock')
-const rdf = require('rdf-ext')
-const construct = require('../construct')
-const ns = require('./support/namespaces')
+import { strictEqual } from 'assert'
+import getStream from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import nock from 'nock'
+import rdf from 'rdf-ext'
+import construct from '../construct.js'
+import * as ns from './support/namespaces.js'
 
 describe('construct', () => {
   it('should be a function', () => {

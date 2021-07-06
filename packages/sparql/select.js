@@ -1,5 +1,5 @@
-const { readable } = require('duplex-to')
-const Client = require('sparql-http-client')
+import readable from 'duplex-to/readable.js'
+import Client from 'sparql-http-client'
 
 async function select ({ endpoint, query, user, password }) {
   const client = new Client({ endpointUrl: endpoint, user, password })
@@ -7,4 +7,4 @@ async function select ({ endpoint, query, user, password }) {
   return readable(await client.query.select(query))
 }
 
-module.exports = select
+export default select
