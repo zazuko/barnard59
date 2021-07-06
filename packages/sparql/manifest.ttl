@@ -7,12 +7,12 @@
   rdfs:label "SPARQL Select";
   rdfs:comment "Runs the given CONSTRUCT query against the given endpoint parses the result.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-sparql#construct>
+    code:link <node:barnard59-sparql#construct.js#default>
   ].
 
 <select> a p:Operation, p:ReadableObjectMode;
   rdfs:label "SPARQL Select";
   rdfs:comment "Runs the given SELECT query against the given endpoint parses the result into rows of RDF/JS key-value pairs.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-sparql#select>
+    code:link <node:barnard59-sparql#select.js#default>
   ].

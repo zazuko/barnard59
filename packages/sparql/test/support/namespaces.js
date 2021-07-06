@@ -1,8 +1,6 @@
-const namespace = require('@rdfjs/namespace')
-const rdf = require('rdf-ext')
+import namespace from '@rdfjs/namespace'
+import rdf from 'rdf-ext'
 
-const ns = {
-  ex: namespace('http://example.org/', { factory: rdf })
-}
+const ex = namespace('http://example.org/', { factory: rdf })
 
-module.exports = ns
+export { ex }

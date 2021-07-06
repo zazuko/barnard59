@@ -1,7 +1,4 @@
-const construct = require('./construct')
-const select = require('./select')
+import construct from './construct'
+import select from './select'
 
-module.exports = {
-  construct,
-  select
-}
+export { construct, select }
