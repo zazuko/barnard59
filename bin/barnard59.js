@@ -45,40 +45,40 @@ program
   .option('-v, --verbose', 'enable diagnostic console output', (v, total) => ++total, 0)
   .option('--enable-buffer-monitor', 'enable histogram of buffer usage')
   .action(async (filename, options) => {
-    try {
-      // Export the traces to a collector. By default it exports to
-      // http://localhost:55681/v1/traces, but it can be changed with the
-      // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
-      if (options.otelTracesExporter === 'otlp') {
-        const exporter = new CollectorTraceExporter()
-        const spanProcessor = new BatchSpanProcessor(exporter)
-        sdk.configureTracerProvider({}, spanProcessor)
-      }
-
-      // Automatic resource detection is disabled because the default AWS and
-      // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
-      // the resources manually here, since we still want process informations
-      // TODO: make this configurable if we're ever running in GCP/AWS environment?
-      await sdk.detectResources({ detectors: [envDetector, processDetector] })
-
-      await sdk.start()
-
-      // Dynamically import the rest once the SDK started to ensure
-      // monkey-patching was done properly
-      const { run } = await import('../cli.js')
-      await run(filename, options)
-    } finally {
-      await sdk.shutdown()
+    // Export the traces to a collector. By default it exports to
+    // http://localhost:55681/v1/traces, but it can be changed with the
+    // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
+    if (options.otelTracesExporter === 'otlp') {
+      const exporter = new CollectorTraceExporter()
+      const spanProcessor = new BatchSpanProcessor(exporter)
+      sdk.configureTracerProvider({}, spanProcessor)
     }
+
+    // Automatic resource detection is disabled because the default AWS and
+    // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
+    // the resources manually here, since we still want process informations
+    // TODO: make this configurable if we're ever running in GCP/AWS environment?
+    await sdk.detectResources({ detectors: [envDetector, processDetector] })
+
+    await sdk.start()
+
+    // Dynamically import the rest once the SDK started to ensure
+    // monkey-patching was done properly
+    const { run } = await import('../cli.js')
+    await run(filename, options)
+    await sdk.shutdown()
   })
 
-program.parseAsync(process.argv).catch(err => {
-  console.error(err)
-  process.exit(1)
-})
-
-process.on('uncaughtException', async err => {
-  console.error(err)
+const onError = async err => {
+  if (err) {
+    console.log(err)
+  }
   await sdk.shutdown()
   process.exit(1)
-})
+}
+
+program.parseAsync(process.argv).catch(onError)
+
+process.on('uncaughtException', onError)
+process.on('SIGINT', onError)
+process.on('SIGTERM', onError)
