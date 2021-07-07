@@ -1,4 +1,5 @@
 import { promisify } from 'util'
+import { context } from '@opentelemetry/api'
 import stream from 'readable-stream'
 import ReadableToReadable from 'readable-to-readable'
 
@@ -12,6 +13,10 @@ class ForEach extends Duplex {
   constructor ({ createPipeline, pipeline, step, variable, variables }) {
     super({ objectMode: true })
 
+    // Bind the read and write function to the current context so the trace ID
+    // gets properly propagated
+    this._read = context.bind(context.active(), this._read)
+    this._write = context.bind(context.active(), this._write)
     this.createPipeline = createPipeline
     this.step = step
 
