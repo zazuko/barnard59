@@ -1,4 +1,4 @@
-import * as otel from '@opentelemetry/api'
+import once from 'lodash/once.js'
 import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
 
@@ -27,30 +27,17 @@ class Step extends StreamObject {
     // Create a span for this step
     this._span = tracer.startSpan(`Step <${this.ptr.value}>`, { attributes: { iri: this.ptr.value } })
 
+    // TODO: record errors in the span
+    const end = once(() => this._span.end())
+
     // End it either on the 'end' event or when there is an error
-    stream.on('end', () => {
-      this._span.setStatus({ code: otel.SpanStatusCode.OK })
-      this._span.end()
-    })
-    stream.on('error', () => {
-      this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
-      this._span.end()
-    })
-
-    // Count the number of chunks in that stream
-    let chunks = 0
-    stream.on('data', () => {
-      if (chunks === 0) {
-        this._span.addEvent('first chunk')
-      }
-
-      chunks++
-      this._span.setAttribute('stream.chunks', chunks)
-    })
+    for (const event of ['end', 'error', 'close', 'destroy']) {
+      stream.on(event, end)
+    }
 
     // Record some events from the stream
-    for (const event of ['pipe', 'unpipe', 'pause', 'readable', 'resume']) {
-      stream.on(event, () => this._span.addEvent(event, { 'stream.chunks': chunks }))
+    for (const event of ['pipe', 'resume']) {
+      stream.on(event, () => this._span.addEvent(event))
     }
 
     this.logger.info({ iri: this.ptr.value, message: 'created new Step' })

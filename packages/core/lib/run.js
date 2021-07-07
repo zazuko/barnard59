@@ -16,11 +16,12 @@ async function run (pipeline, { end = false, resume = false } = {}) {
 
       await promisify(finished)(pipeline.stream)
 
-      pipeline.logger.end()
-
-      await new Promise(resolve => {
+      const p = new Promise(resolve => {
         pipeline.logger.on('finish', () => resolve())
       })
+
+      pipeline.logger.end()
+      await p
     } catch (err) {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
