@@ -19,6 +19,15 @@ describe('factory/arguments', () => {
     deepStrictEqual(args, [{ a: '1', b: '2' }])
   })
 
+  it('should build key-value pair arguments with undefined variable', async () => {
+    const definition = await loadPipelineDefinition('arguments')
+    const ptr = [...definition.node(ns.ex.keyValueMissingVar).out(ns.p.steps).out(ns.p.stepList).list()][0]
+
+    const args = await createArguments(ptr, { loaderRegistry: defaultLoaderRegistry() })
+
+    deepStrictEqual(args, [{ a: undefined }])
+  })
+
   it('should build list arguments', async () => {
     const definition = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.list).out(ns.p.steps).out(ns.p.stepList).list()][0]
@@ -26,6 +35,15 @@ describe('factory/arguments', () => {
     const args = await createArguments(ptr, { loaderRegistry: defaultLoaderRegistry() })
 
     deepStrictEqual(args, ['a', 'b'])
+  })
+
+  it('should build list arguments with undefined variable', async () => {
+    const definition = await loadPipelineDefinition('arguments')
+    const ptr = [...definition.node(ns.ex.listMissingVar).out(ns.p.steps).out(ns.p.stepList).list()][0]
+
+    const args = await createArguments(ptr, { loaderRegistry: defaultLoaderRegistry() })
+
+    deepStrictEqual(args, [undefined])
   })
 
   it('should forward variables to the loader', async () => {

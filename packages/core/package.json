@@ -21,7 +21,7 @@
   "homepage": "https://github.com/zazuko/barnard59-core",
   "dependencies": {
     "@rdfjs/namespace": "^1.1.0",
-    "clownface": "^1.3.0",
+    "clownface": "^1.4.0",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.1.1",
     "isstream": "^0.1.2",
