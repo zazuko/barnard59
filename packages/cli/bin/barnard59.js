@@ -9,7 +9,7 @@ import { NodeSDK } from '@opentelemetry/sdk-node'
 import { ResourceAttributes } from '@opentelemetry/semantic-conventions'
 import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
-import program, { Option } from 'commander'
+import { Option, Command } from 'commander'
 
 diag.setLogger(new DiagConsoleLogger())
 
@@ -25,51 +25,12 @@ const sdk = new NodeSDK({
   })
 })
 
-function setVariable (str, all) {
-  let [key, value] = str.split('=', 2)
-
-  if (typeof value === 'undefined') {
-    value = process.env[key]
-  }
-
-  return all.set(key, value)
-}
-
-program
-  .command('run <filename>')
-  .addOption(new Option('--otel-traces-exporter <exporter>', 'OpenTelemetry Traces exporter to use').choices(['otlp', 'none']).default('none'))
-  .option('--output [filename]', 'output file', '-')
-  .option('--pipeline [iri]', 'IRI of the pipeline description')
-  .option('--variable <name=value>', 'variable key value pairs', setVariable, new Map())
-  .option('--variable-all', 'Import all environment variables')
-  .option('-v, --verbose', 'enable diagnostic console output', (v, total) => ++total, 0)
-  .option('--enable-buffer-monitor', 'enable histogram of buffer usage')
-  .action(async (filename, options) => {
-    // Export the traces to a collector. By default it exports to
-    // http://localhost:55681/v1/traces, but it can be changed with the
-    // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
-    if (options.otelTracesExporter === 'otlp') {
-      const exporter = new CollectorTraceExporter()
-      const spanProcessor = new BatchSpanProcessor(exporter)
-      sdk.configureTracerProvider({}, spanProcessor)
-    }
-
-    // Automatic resource detection is disabled because the default AWS and
-    // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
-    // the resources manually here, since we still want process informations
-    // TODO: make this configurable if we're ever running in GCP/AWS environment?
-    await sdk.detectResources({ detectors: [envDetector, processDetector] })
-
-    await sdk.start()
-
-    // Dynamically import the rest once the SDK started to ensure
-    // monkey-patching was done properly
-    const { run } = await import('../cli.js')
-    await run(filename, options)
-    await sdk.shutdown()
-  })
-
 const onError = async err => {
+  // Remove signal handler to quit immediately when receiving multiple
+  // SIGINT/SIGTEM
+  process.off('SIGINT', onError)
+  process.off('SIGTERM', onError)
+
   if (err) {
     console.log(err)
   }
@@ -77,7 +38,47 @@ const onError = async err => {
   process.exit(1)
 }
 
-program.parseAsync(process.argv).catch(onError)
+(async () => {
+  // Create a new commander instance that only parses the OTEL-related options.
+  // This is needed because we want to keep the actual command definition in
+  // the same file, but we need to figure out what exporter is being used
+  // before starting the SDK and loading any other code.
+  const program = new Command()
+  const otelExporterOpt = new Option('--otel-traces-exporter <exporter>', 'OpenTelemetry Traces exporter to use')
+    .choices(['otlp', 'none'])
+    .default('none')
+  program.addOption(otelExporterOpt)
+
+  // Command#parseOptions() does not handle --help or run anything, which fits
+  // well for this use case. The options used here are then passed to the
+  // actual commander instance to properly show up in --help.
+  program.parseOptions(process.argv)
+
+  const { otelTracesExporter } = program.opts()
+
+  // Export the traces to a collector. By default it exports to
+  // http://localhost:55681/v1/traces, but it can be changed with the
+  // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
+  if (otelTracesExporter === 'otlp') {
+    const exporter = new CollectorTraceExporter()
+    const spanProcessor = new BatchSpanProcessor(exporter)
+    sdk.configureTracerProvider({}, spanProcessor)
+  }
+
+  // Automatic resource detection is disabled because the default AWS and
+  // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
+  // the resources manually here, since we still want process informations
+  // TODO: make this configurable if we're ever running in GCP/AWS environment?
+  await sdk.detectResources({ detectors: [envDetector, processDetector] })
+
+  await sdk.start()
+
+  // Dynamically import the rest once the SDK started to ensure
+  // monkey-patching was done properly
+  const { run } = await import('../cli.js')
+  await run([otelExporterOpt])
+  await sdk.shutdown()
+})().catch(onError)
 
 process.on('uncaughtException', onError)
 process.on('SIGINT', onError)
