@@ -6,10 +6,10 @@ import program from 'commander'
 import rdf from 'rdf-ext'
 import fromFile from 'rdf-utils-fs/fromFile.js'
 import { finished } from 'readable-stream'
-import findPipeline from './findPipeline.js'
-import bufferDebug from './lib/bufferDebug.js'
-import tracer from './lib/tracer.js'
-import runner from './runner.js'
+import findPipeline from '../findPipeline.js'
+import bufferDebug from './bufferDebug.js'
+import tracer from './tracer.js'
+import runner from '../runner.js'
 
 async function fileToDataset (filename) {
   return rdf.dataset().import(fromFile(filename))
