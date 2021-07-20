@@ -5,7 +5,7 @@ import { SpanStatusCode } from '@opentelemetry/api'
 import program from 'commander'
 import rdf from 'rdf-ext'
 import fromFile from 'rdf-utils-fs/fromFile.js'
-import { finished } from 'readable-stream'
+import { finished, PassThrough } from 'readable-stream'
 import findPipeline from '../findPipeline.js'
 import bufferDebug from './bufferDebug.js'
 import tracer from './tracer.js'
@@ -17,7 +17,13 @@ async function fileToDataset (filename) {
 
 function createOutputStream (output) {
   if (output === '-') {
-    return process.stdout
+    // Use a PassThrough stream instead of just process.stdout to avoid closing
+    // stdout too early
+    const stream = new PassThrough()
+
+    stream.pipe(process.stdout)
+
+    return stream
   }
 
   return createWriteStream(output)
