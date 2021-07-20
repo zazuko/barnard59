@@ -75,7 +75,7 @@ const onError = async err => {
 
   // Dynamically import the rest once the SDK started to ensure
   // monkey-patching was done properly
-  const { run } = await import('../cli.js')
+  const { run } = await import('../lib/cli.js')
   await run([otelExporterOpt])
   await sdk.shutdown()
 })().catch(onError)
