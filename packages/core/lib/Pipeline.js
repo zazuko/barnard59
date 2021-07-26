@@ -1,9 +1,11 @@
+import * as otel from '@opentelemetry/api'
 import once from 'lodash/once.js'
 import streams from 'readable-stream'
 import createStream from './factory/stream.js'
 import { isReadable } from './isStream.js'
 import nextLoop from './nextLoop.js'
 import StreamObject from './StreamObject.js'
+import tracer from './tracer.js'
 
 const { finished } = streams
 
@@ -31,15 +33,24 @@ class Pipeline extends StreamObject {
     this.writable = writable
     this.writableObjectMode = writableObjectMode
 
-    this.read = this._read.bind(this)
-    this.write = this._write.bind(this)
-    this.final = this._final.bind(this)
+    // Create a span for the whole pipeline
+    this._span = tracer.startSpan(`Pipeline <${this.ptr.value}>`, { attributes: { iri: this.ptr.value } })
+    // Then create a OTEL context with this span bound
+    this.ctx = otel.trace.setSpan(otel.context.active(), this._span)
+
+    // And bind it to all methods. This helps attaching the child span
+    // correctly and have the right context when logging
+    this.read = otel.context.bind(this.ctx, this._read.bind(this))
+    this.write = otel.context.bind(this.ctx, this._write.bind(this))
+    this.final = otel.context.bind(this.ctx, this._final.bind(this))
 
     this.stream = createStream(this)
     this.stream.pipeline = this
 
-    this.onInit = onInit || (() => {})
-    this.init = once(this._init.bind(this))
+    this.onInit = onInit || (() => { })
+    this.init = once(otel.context.bind(this.ctx, this._init.bind(this)))
+
+    this._chunks = 0
 
     this.logger.info({ iri: this.ptr.value, message: 'created new Pipeline' })
   }
@@ -89,10 +100,14 @@ class Pipeline extends StreamObject {
   }
 
   destroy (err) {
+    this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
+    this._span.end()
     this.stream.destroy(err)
   }
 
   finish () {
+    this._span.setStatus({ code: otel.SpanStatusCode.OK })
+    this._span.end()
     if (isReadable(this.stream)) {
       return this.stream.push(null)
     }
@@ -109,7 +124,7 @@ class Pipeline extends StreamObject {
       return
     }
 
-    for (;;) {
+    for (; ;) {
       if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
         return
       }
@@ -121,8 +136,15 @@ class Pipeline extends StreamObject {
           await nextLoop()
         } else if (!this.stream.push(chunk)) {
           return
+        } else {
+          if (this._chunks === 0) {
+            this._span.addEvent('first chunk')
+          }
+          this._chunks++
+          this._span.setAttribute('stream.chunks', this._chunks)
         }
       } catch (err) {
+        this._span.recordException(err)
         this.lastChild.stream.destroy(err)
       }
     }
@@ -131,6 +153,7 @@ class Pipeline extends StreamObject {
   async _write (chunk, encoding, callback) {
     await this.init()
 
+    this._span.addEvent('write')
     return this.firstChild.stream.write(chunk, encoding, callback)
   }
 
