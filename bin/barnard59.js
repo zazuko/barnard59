@@ -1,73 +1,85 @@
 #!/usr/bin/env node
 
-import { createWriteStream } from 'fs'
-import { dirname, resolve } from 'path'
-import program from 'commander'
-import rdf from 'rdf-ext'
-import fromFile from 'rdf-utils-fs/fromFile.js'
-import findPipeline from '../findPipeline.js'
-import bufferDebug from '../lib/bufferDebug.js'
-import runner from '../runner.js'
+import { diag, DiagConsoleLogger } from '@opentelemetry/api'
+import { CollectorTraceExporter } from '@opentelemetry/exporter-collector'
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
+import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
+import { Resource, envDetector, processDetector } from '@opentelemetry/resources'
+import { NodeSDK } from '@opentelemetry/sdk-node'
+import { ResourceAttributes } from '@opentelemetry/semantic-conventions'
+import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
-async function fileToDataset (filename) {
-  return rdf.dataset().import(fromFile(filename))
-}
+import { Option, Command } from 'commander'
 
-function createOutputStream (output) {
-  if (output === '-') {
-    return process.stdout
-  }
+diag.setLogger(new DiagConsoleLogger())
 
-  return createWriteStream(output)
-}
-
-function setVariable (str, all) {
-  let [key, value] = str.split('=', 2)
-
-  if (typeof value === 'undefined') {
-    value = process.env[key]
-  }
-
-  return all.set(key, value)
-}
-
-program
-  .command('run <filename>')
-  .option('--output [filename]', 'output file', '-')
-  .option('--pipeline [iri]', 'IRI of the pipeline description')
-  .option('--variable <name=value>', 'variable key value pairs', setVariable, new Map())
-  .option('--variable-all', 'Import all environment variables')
-  .option('-v, --verbose', 'enable diagnostic console output', (v, total) => ++total, 0)
-  .option('--enable-buffer-monitor', 'enable histogram of buffer usage')
-  .action(async (filename, { output, pipeline: iri, variable: variables, variableAll, verbose, enableBufferMonitor } = {}) => {
-    try {
-      const level = ['error', 'info', 'debug'][verbose] || 'error'
-
-      const dataset = await fileToDataset(filename)
-      const ptr = findPipeline(dataset, iri)
-
-      if (variableAll) {
-        for (const [key, value] of Object.entries(process.env)) {
-          variables.set(key, value)
-        }
-      }
-
-      const { finished, pipeline } = await runner(ptr, {
-        basePath: resolve(dirname(filename)),
-        level,
-        outputStream: createOutputStream(output),
-        variables
-      })
-
-      if (enableBufferMonitor) {
-        bufferDebug(pipeline)
-      }
-
-      await finished
-    } catch (err) {
-      console.error(err)
-      process.exit(1)
-    }
+const sdk = new NodeSDK({
+  // Automatic detection is disabled, see comment below
+  autoDetectResources: false,
+  instrumentations: [
+    new HttpInstrumentation(),
+    new WinstonInstrumentation()
+  ],
+  resource: new Resource({
+    [ResourceAttributes.SERVICE_NAME]: 'barnard59'
   })
+})
 
-program.parse(process.argv)
+const onError = async err => {
+  // Remove signal handler to quit immediately when receiving multiple
+  // SIGINT/SIGTEM
+  process.off('SIGINT', onError)
+  process.off('SIGTERM', onError)
+
+  if (err) {
+    console.log(err)
+  }
+  await sdk.shutdown()
+  process.exit(1)
+}
+
+(async () => {
+  // Create a new commander instance that only parses the OTEL-related options.
+  // This is needed because we want to keep the actual command definition in
+  // the same file, but we need to figure out what exporter is being used
+  // before starting the SDK and loading any other code.
+  const program = new Command()
+  const otelExporterOpt = new Option('--otel-traces-exporter <exporter>', 'OpenTelemetry Traces exporter to use')
+    .choices(['otlp', 'none'])
+    .default('none')
+  program.addOption(otelExporterOpt)
+
+  // Command#parseOptions() does not handle --help or run anything, which fits
+  // well for this use case. The options used here are then passed to the
+  // actual commander instance to properly show up in --help.
+  program.parseOptions(process.argv)
+
+  const { otelTracesExporter } = program.opts()
+
+  // Export the traces to a collector. By default it exports to
+  // http://localhost:55681/v1/traces, but it can be changed with the
+  // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
+  if (otelTracesExporter === 'otlp') {
+    const exporter = new CollectorTraceExporter()
+    const spanProcessor = new BatchSpanProcessor(exporter)
+    sdk.configureTracerProvider({}, spanProcessor)
+  }
+
+  // Automatic resource detection is disabled because the default AWS and
+  // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
+  // the resources manually here, since we still want process informations
+  // TODO: make this configurable if we're ever running in GCP/AWS environment?
+  await sdk.detectResources({ detectors: [envDetector, processDetector] })
+
+  await sdk.start()
+
+  // Dynamically import the rest once the SDK started to ensure
+  // monkey-patching was done properly
+  const { run } = await import('../lib/cli.js')
+  await run([otelExporterOpt])
+  await sdk.shutdown()
+})().catch(onError)
+
+process.on('uncaughtException', onError)
+process.on('SIGINT', onError)
+process.on('SIGTERM', onError)
