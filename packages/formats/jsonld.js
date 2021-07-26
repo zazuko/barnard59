@@ -3,7 +3,7 @@ import Parser from '@rdfjs/parser-jsonld'
 import Serializer from '@rdfjs/serializer-jsonld'
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import { combine, jsonStringify } from 'barnard59-base'
-import tracer from './tracer.js'
+import tracer from './lib/tracer.js'
 
 function parse () {
   return tracer.startActiveSpan('jsonld:parse', span => {

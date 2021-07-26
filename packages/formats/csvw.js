@@ -1,7 +1,7 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import rdf from 'rdf-ext'
 import CsvwParser from 'rdf-parser-csvw'
-import tracer from './tracer.js'
+import tracer from './lib/tracer.js'
 
 function toDataset (streamOrDataset) {
   if (!streamOrDataset.readable) {
