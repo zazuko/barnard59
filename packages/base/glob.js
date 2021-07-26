@@ -3,7 +3,7 @@ import { SpanStatusCode } from '@opentelemetry/api'
 import globFn from 'glob'
 import once from 'lodash/once.js'
 import { Readable } from 'readable-stream'
-import tracer from './tracer.js'
+import tracer from './lib/tracer.js'
 
 function glob ({ pattern, ...options }) {
   let filenames = null
