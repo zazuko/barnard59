@@ -4,7 +4,7 @@ import { finished } from 'readable-stream'
 import tracer from './tracer.js'
 
 async function run (pipeline, { end = false, resume = false } = {}) {
-  await tracer.startSpan('run', async span => {
+  await tracer.startActiveSpan('run', async span => {
     try {
       if (end) {
         pipeline.stream.end()
