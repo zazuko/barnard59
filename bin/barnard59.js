@@ -6,7 +6,7 @@ import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
 import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
 import { Resource, envDetector, processDetector } from '@opentelemetry/resources'
 import { NodeSDK } from '@opentelemetry/sdk-node'
-import { ResourceAttributes } from '@opentelemetry/semantic-conventions'
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
 import { Option, Command } from 'commander'
@@ -19,7 +19,7 @@ const sdk = new NodeSDK({
     new WinstonInstrumentation()
   ],
   resource: new Resource({
-    [ResourceAttributes.SERVICE_NAME]: 'barnard59'
+    [SemanticResourceAttributes.SERVICE_NAME]: 'barnard59'
   })
 })
 
