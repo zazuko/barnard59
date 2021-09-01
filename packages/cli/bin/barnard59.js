@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { diag, DiagConsoleLogger } from '@opentelemetry/api'
+import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import { CollectorTraceExporter, CollectorMetricExporter } from '@opentelemetry/exporter-collector'
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
 import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
@@ -50,7 +50,10 @@ const onError = async err => {
     .choices(['otlp', 'none'])
     .default('none')
   program.addOption(otelMetricsOpt)
-  const otelDebugOpt = new Option('--otel-debug', 'Enable OpenTelemetry console diagnostic output')
+  const otelDebugOpt = new Option('--otel-debug <level>', 'Enable OpenTelemetry console diagnostic output')
+      .choices([...Object.keys(DiagLogLevel)].filter(opt => isNaN(Number.parseInt(opt, 10))))
+      .default('ERROR')
+  program.addOption(otelDebugOpt)
 
   // Command#parseOptions() does not handle --help or run anything, which fits
   // well for this use case. The options used here are then passed to the
@@ -77,9 +80,7 @@ const onError = async err => {
     })
   }
 
-  if (otelDebug) {
-    diag.setLogger(new DiagConsoleLogger())
-  }
+  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel[otelDebug])
 
   // Automatic resource detection is disabled because the default AWS and
   // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
