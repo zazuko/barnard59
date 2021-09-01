@@ -30,6 +30,7 @@
     "@opentelemetry/resources": "^0.22.0",
     "@opentelemetry/sdk-node": "^0.22.0",
     "@opentelemetry/semantic-conventions": "^0.22.0",
+    "@opentelemetry/tracing": "^0.22.0",
     "@rdfjs/namespace": "^1.1.0",
     "barnard59-core": "^1.0.0",
     "clownface": "^1.2.0",
