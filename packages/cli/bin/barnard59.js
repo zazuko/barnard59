@@ -11,8 +11,6 @@ import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
 import { Option, Command } from 'commander'
 
-diag.setLogger(new DiagConsoleLogger())
-
 const sdk = new NodeSDK({
   // Automatic detection is disabled, see comment below
   autoDetectResources: false,
@@ -52,13 +50,14 @@ const onError = async err => {
     .choices(['otlp', 'none'])
     .default('none')
   program.addOption(otelMetricsOpt)
+  const otelDebugOpt = new Option('--otel-debug', 'Enable OpenTelemetry console diagnostic output')
 
   // Command#parseOptions() does not handle --help or run anything, which fits
   // well for this use case. The options used here are then passed to the
   // actual commander instance to properly show up in --help.
   program.parseOptions(process.argv)
 
-  const { otelTracesExporter, otelMetricsExporter } = program.opts()
+  const { otelTracesExporter, otelMetricsExporter, otelDebug } = program.opts()
 
   // Export the traces to a collector. By default it exports to
   // http://localhost:55681/v1/traces, but it can be changed with the
@@ -78,6 +77,10 @@ const onError = async err => {
     })
   }
 
+  if (otelDebug) {
+    diag.setLogger(new DiagConsoleLogger())
+  }
+
   // Automatic resource detection is disabled because the default AWS and
   // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
   // the resources manually here, since we still want process informations
@@ -89,7 +92,7 @@ const onError = async err => {
   // Dynamically import the rest once the SDK started to ensure
   // monkey-patching was done properly
   const { run } = await import('../lib/cli.js')
-  await run([otelExporterOpt, otelMetricsOpt])
+  await run([otelExporterOpt, otelMetricsOpt, otelDebugOpt])
   await sdk.shutdown()
 })().catch(onError)
 
