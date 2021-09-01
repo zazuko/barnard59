@@ -73,7 +73,7 @@ const onError = async err => {
   if (otelMetricsExporter === 'otlp') {
     const exporter = new CollectorMetricExporter()
     sdk.configureMeterProvider({
-      exporter,
+      exporter
     })
   }
 
