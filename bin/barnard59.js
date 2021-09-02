@@ -50,9 +50,13 @@ const onError = async err => {
     .choices(['otlp', 'none'])
     .default('none')
   program.addOption(otelMetricsOpt)
+  const otelMetricsIntervalOpt = new Option('--otel-metrics-interval <milliseconds>', 'Export Metrics interval')
+    .argParser(value => Number.parseInt(value, 10))
+    .default(10000)
+  program.addOption(otelMetricsIntervalOpt)
   const otelDebugOpt = new Option('--otel-debug <level>', 'Enable OpenTelemetry console diagnostic output')
-      .choices([...Object.keys(DiagLogLevel)].filter(opt => isNaN(Number.parseInt(opt, 10))))
-      .default('ERROR')
+    .choices([...Object.keys(DiagLogLevel)].filter(opt => isNaN(Number.parseInt(opt, 10))))
+    .default('ERROR')
   program.addOption(otelDebugOpt)
 
   // Command#parseOptions() does not handle --help or run anything, which fits
@@ -60,7 +64,7 @@ const onError = async err => {
   // actual commander instance to properly show up in --help.
   program.parseOptions(process.argv)
 
-  const { otelTracesExporter, otelMetricsExporter, otelDebug } = program.opts()
+  const { otelTracesExporter, otelMetricsExporter, otelDebug, otelMetricsInterval } = program.opts()
 
   // Export the traces to a collector. By default it exports to
   // http://localhost:55681/v1/traces, but it can be changed with the
@@ -76,7 +80,8 @@ const onError = async err => {
   if (otelMetricsExporter === 'otlp') {
     const exporter = new CollectorMetricExporter()
     sdk.configureMeterProvider({
-      exporter
+      exporter,
+      interval: otelMetricsInterval
     })
   }
 
@@ -93,7 +98,7 @@ const onError = async err => {
   // Dynamically import the rest once the SDK started to ensure
   // monkey-patching was done properly
   const { run } = await import('../lib/cli.js')
-  await run([otelExporterOpt, otelMetricsOpt, otelDebugOpt])
+  await run([otelExporterOpt, otelMetricsOpt, otelDebugOpt, otelMetricsIntervalOpt])
   await sdk.shutdown()
 })().catch(onError)
 
