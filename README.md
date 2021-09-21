@@ -20,7 +20,7 @@ Using a pipeline you can:
 * `text/turtle`
 * `application/rdf+xml`
 
-To learn more about building your own pipeline, go [here](wiki/).
+To learn more about building your own pipeline, go [here](https://github.com/zazuko/barnard59/wiki).
 
 ## Requirements
 To execute pipeline with `barnard59`, you will need `node.js` environment. All `node` and `npm` versions which are actively maintained are supported by `barnard59`.
