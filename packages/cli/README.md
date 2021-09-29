@@ -92,7 +92,7 @@ node bin/barnard59.js run examples/parse-csvw.ttl --pipeline=http://example.org/
 ```
 Or, if you'd like to use [npx](https://www.npmjs.com/package/npx) you can run: 
 ```
-npx run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
+npx barnard59 run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
 ```
 
 ### Transform json file
@@ -114,7 +114,7 @@ node bin/barnard59.js run examples/fetch-json-to-ntriples.json --pipeline http:/
 ```
 with npx: 
 ```
-npx run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet
+npx barnard59 run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet
 ```
 
 The `--pipeline` parameter is required, as the file contains two pipelines.
@@ -127,7 +127,7 @@ node bin/barnard59.js run examples/fetch-json-to-ntriples.ttl --pipeline http://
 ```
 or
 ```
-npx run examples/fetch-json-to-ntriples.ttl --pipeline http://example.org/pipeline/utc
+npx barnard59 run examples/fetch-json-to-ntriples.ttl --pipeline http://example.org/pipeline/utc
 ```
 
 By default, the pipeline stream will be written to `stdout`. Use `--output` parameter to write output to the file:
@@ -137,6 +137,6 @@ node bin/barnard59.js run examples/fetch-json-to-ntriples.json --pipeline http:/
 ```
 or
 ```
-npx run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet --output test.nt
+npx barnard59 run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet --output test.nt
 ```
 
