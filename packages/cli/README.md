@@ -90,6 +90,11 @@ Tho execute the main pipeline, run:
 ```
 node bin/barnard59.js run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
 ```
+Or, if you'd like to use [npx](https://www.npmjs.com/package/npx) you can run: 
+```
+npx run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
+```
+
 ### Transform json file
 
 This pipeline downloads, and transforms json file. It:
@@ -107,6 +112,10 @@ To execute the JSON-LD pipeline, run:
 ```
 node bin/barnard59.js run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet
 ```
+with npx: 
+```
+npx run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet
+```
 
 The `--pipeline` parameter is required, as the file contains two pipelines.
 
@@ -116,9 +125,18 @@ To execute the Turtle pipeline, run:
 ```
 node bin/barnard59.js run examples/fetch-json-to-ntriples.ttl --pipeline http://example.org/pipeline/utc
 ```
+or
+```
+npx run examples/fetch-json-to-ntriples.ttl --pipeline http://example.org/pipeline/utc
+```
 
 By default, the pipeline stream will be written to `stdout`. Use `--output` parameter to write output to the file:
 
 ```
 node bin/barnard59.js run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet --output test.nt
 ```
+or
+```
+npx run examples/fetch-json-to-ntriples.json --pipeline http://example.org/pipeline/cet --output test.nt
+```
+
