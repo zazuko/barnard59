@@ -88,7 +88,7 @@ This pipeline parses a CSV file. It uses the CSV on the Web format. The file `ex
 Tho execute the main pipeline, run:
 
 ```
-barnard59 run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
+node bin/barnard59.js run examples/parse-csvw.ttl --pipeline=http://example.org/pipeline/parseCsvw
 ```
 ### Transform json file
 
