@@ -11,7 +11,7 @@ async function fetchMetadata (url) {
     fetch: commonFetch
   })
 
-  checkResponse(res)
+  await checkResponse(res)
 
   if (!res.dataset) {
     throw new Error('response is empty')
