@@ -1,54 +1,45 @@
 {
-  "name": "barnard59-csvw",
+  "name": "barnard59",
   "version": "0.1.0",
   "description": "Simplifies handling CSVW mapping documents in barnard59 pipelines",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint": "standard",
-    "test": "mocha",
-    "prepublishOnly": "mkdir -p docs; barnard59-docs --local . > docs/readme.md",
-    "postinstall": "husky install"
-  },
-  "files": [
-    "index.js",
-    "lib"
-  ],
-  "dependencies": {
-    "@rdfjs/data-model": "^1.2.0",
-    "@tpluscode/rdf-ns-builders": "^0.4.0",
-    "barnard59": "^0.1.1",
-    "clownface-io": "github:zazuko/clownface-io#tpluscode-proposals",
-    "duplex-to": "^1.0.0",
-    "file-fetch": "^1.5",
-    "nodeify-fetch": "^2.2.1",
-    "proto-fetch": "^1.0.0"
-  },
-  "devDependencies": {
-    "barnard59-docs": "github:tpluscode/barnard59-docs#local-command",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "husky": "^5.0.9",
-    "mocha": "^8.2.1",
-    "sinon": "^9.2.3",
-    "sinon-chai": "^3.5.0",
-    "standard": "^16.0.3",
-    "stream-to-string": "^1.2.0",
-    "string-to-stream": "^3.0.1"
+    "coverage": "codecov",
+    "test": "stricter-standard && c8 --reporter=lcov --reporter=text mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zazuko/barnard59-csvw.git"
+    "url": "git://github.com/zazuko/barnard59-csvw.git"
   },
+  "keywords": [],
   "author": "Zazuko GmbH",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zazuko/barnard59-csvw/issues"
   },
-  "homepage": "https://github.com/zazuko/barnard59-csvw#readme",
-  "engines": {
-    "node": ">=13"
+  "homepage": "https://github.com/zazuko/barnard59-csvw",
+  "dependencies": {
+    "@rdfjs/fetch": "^2.1.0",
+    "@rdfjs/namespace": "^1.1.0",
+    "clownface": "^1.4.0",
+    "duplex-to": "^1.0.1",
+    "file-fetch": "^1.7.0",
+    "node-fetch": "^3.0.0",
+    "proto-fetch": "^1.0.0",
+    "rdf-ext": "^1.3.5",
+    "readable-stream": "^3.6.0"
   },
-  "mocha": {
-    "require": "test/setup-mocha.js"
+  "devDependencies": {
+    "c8": "^7.9.0",
+    "codecov": "^3.8.3",
+    "express-as-promise": "^1.2.0",
+    "get-stream": "^6.0.1",
+    "isstream": "^0.1.2",
+    "mocha": "^9.1.2",
+    "stricter-standard": "^0.2.0"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
   }
 }
