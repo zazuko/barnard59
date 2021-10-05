@@ -5,7 +5,7 @@ Simplifies handling CSVW mapping documents in barnard59 pipelines
 ## Install
 
 ```
-npm i -S barnard59-csvw
+npm install barnard59-csvw --save
 ```
 
 ## Exported steps
@@ -24,14 +24,12 @@ A step to automate loading CSVW mapping documents and the source CSV, by followi
 @prefix p: <https://pipeline.described.at/> .
 @prefix code: <https://code.described.at/> .
 
-<#CsvwStep>
-    a p:Step ;
-    code:implementedBy [
-        a code:EcmaScript ;
-        code:link <node:barnard59-csvw#fetch>
-    ] ;
-    code:arguments [
-        code:name "csvw" ;
-        code:value "file:/test/mappings/remote.csvw.json"
-    ] .
+<#CsvwStep> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-csvw/fetch.js#default>
+  ];
+  code:arguments [
+    code:name "csvw";
+    code:value "file:/test/mappings/remote.csvw.json"
+  ].
 ```

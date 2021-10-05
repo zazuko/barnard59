@@ -1,5 +1,5 @@
-const fetchCsv = require('./lib/fetch')
+import fetch from './fetch.js'
 
-module.exports = {
-  fetch: fetchCsv
+export {
+  fetch
 }
