@@ -19,6 +19,8 @@ class SinkToWritable extends Writable {
         callback()
       },
       final: async callback => {
+        init()
+
         readable.push(null)
 
         try {
