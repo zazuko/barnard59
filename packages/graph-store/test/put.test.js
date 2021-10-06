@@ -26,7 +26,7 @@ describe('put', () => {
     })
   })
 
-  it('should send a GET request', async () => {
+  it('should send a PUT request', async () => {
     await withServer(async server => {
       let called = false
       const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
@@ -46,6 +46,27 @@ describe('put', () => {
       await promisify(finished)(stream)
 
       strictEqual(called, true)
+    })
+  })
+
+  it('should do nothing if the stream was closed and no quads have been written', async () => {
+    await withServer(async server => {
+      let called = false
+
+      server.app.put('/', async (req, res) => {
+        called = true
+
+        res.status(204).end()
+      })
+
+      const baseUrl = await server.listen()
+      const stream = put({ endpoint: baseUrl })
+
+      stream.end()
+
+      await promisify(finished)(stream)
+
+      strictEqual(called, false)
     })
   })
 
