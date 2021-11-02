@@ -8,7 +8,7 @@ import { describe, it } from 'mocha'
 import nock from 'nock'
 import pkg from 'rdf-dataset-ext'
 import rdf from 'rdf-ext'
-import validate from '../validate.js'
+import { validate } from '../validate.js'
 
 const { toStream } = pkg
 
