@@ -37,7 +37,7 @@ describe('validate-shacl', () => {
       }, Error, /needs a shacl or shaclStream argument/)
     })
 
-    it('should throw an error if shacl and shaclStream is given', async () => {
+    it('should throw an error if botjh shacl and shaclStream are given', async () => {
       await assertThrows(async () => {
         await validate({ shacl: simpleShapeFile, shaclStream: getShapeRDFStream() })
       }, Error, /shacl and shaclStream given, but only one argument allowed/)
@@ -45,6 +45,36 @@ describe('validate-shacl', () => {
 
     it('should return a duplex stream with the shaclStream parameter', async () => {
       const stream = await validate({ shaclStream: getShapeRDFStream() })
+
+      strictEqual(isReadable(stream), true)
+      strictEqual(isWritable(stream), true)
+      stream.end()
+
+      try {
+        await getStream(stream)
+      } catch (err) {}
+    })
+
+    it('should return a duplex stream with an URL pointing to a file', async () => {
+      const stream = await validate({ shacl: simpleShapeFile })
+
+      strictEqual(isReadable(stream), true)
+      strictEqual(isWritable(stream), true)
+      stream.end()
+
+      try {
+        await getStream(stream)
+      } catch (err) {}
+    })
+
+    it('should return a duplex stream with an URL pointing to a public resource', async () => {
+      // Mocking a remote file.
+      const fileStr = await fs.readFileSync(new URL(shapePath, import.meta.url), 'utf8')
+      nock('https://example.com')
+        .get('/shape.ttl')
+        .reply(200, fileStr, { 'content-type': 'text/turtle' })
+
+      const stream = await validate({ shacl: 'https://example.com/shape.ttl' })
 
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
@@ -87,34 +117,5 @@ describe('validate-shacl', () => {
       }, Error, /More than 1 values/)
     })
 
-    it('should return a duplex stream with an URL pointing to a public resource', async () => {
-      // Mocking a remote file.
-      const fileStr = await fs.readFileSync(new URL(shapePath, import.meta.url), 'utf8')
-      nock('https://example.com')
-        .get('/shape.ttl')
-        .reply(200, fileStr, { 'content-type': 'text/turtle' })
-
-      const stream = await validate({ shacl: 'https://example.com/shape.ttl' })
-
-      strictEqual(isReadable(stream), true)
-      strictEqual(isWritable(stream), true)
-      stream.end()
-
-      try {
-        await getStream(stream)
-      } catch (err) {}
-    })
-
-    it('should return a duplex stream with an URL pointing to a file', async () => {
-      const stream = await validate({ shacl: simpleShapeFile })
-
-      strictEqual(isReadable(stream), true)
-      strictEqual(isWritable(stream), true)
-      stream.end()
-
-      try {
-        await getStream(stream)
-      } catch (err) {}
-    })
   })
 })
