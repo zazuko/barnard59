@@ -25,7 +25,7 @@ class ValidateChunk extends Transform {
   }
 }
 
-async function validate ({ shacl: url, shaclStream }) {
+export async function validate ({ shacl: url, shaclStream }) {
   if (!(url || shaclStream)) {
     throw new Error('needs a shacl or shaclStream argument')
   }
@@ -72,5 +72,3 @@ function buildErrorMessage (report) {
     return result
   }))// TODO define an error format
 }
-
-export default validate

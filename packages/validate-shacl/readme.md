@@ -27,12 +27,8 @@ A step that automates the validation of RDF against a set of conditions specifie
 
 <validateAddress> a p:Step;
            code:implementedBy [ a code:EcmaScriptModule;
-                                code:link <node:barnard59-validate-schacl/validate.js#default>
+                                code:link <node:barnard59-validate-schacl/validate.js#validate>
                               ];
-           code:arguments ( <addressShape> ).
-
-<addressShape>
-    a p:Variable;
-    p:name "shacl" ;
-    p:value "file:///test/shapes/address.ttl" .
+           code:arguments [ code:name  "shacl" ;
+                            code:value "address-shape.ttl" ] .
 ```
