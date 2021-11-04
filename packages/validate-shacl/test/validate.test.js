@@ -15,14 +15,14 @@ const { toStream } = pkg
 const shapePath = 'support/simple.shape.ttl'
 const simpleShapeFile = new URL(shapePath, import.meta.url).toString()
 
-async function getRDFStream (filePath) {
-  const stream = fs.createReadStream(new URL(filePath, import.meta.url))
-  const parser = new ParserN3({ factory: rdf })
-  return rdf.dataset().import(parser.import(stream))
+async function getRDFDataset (filePath) {
+  return rdf.dataset().import(getRDFStream(filePath))
 }
 
-function getShapeRDFStream () {
-  return getRDFStream(shapePath)
+function getRDFStream (filePath) {
+  const stream = fs.createReadStream(new URL(filePath, import.meta.url))
+  const parser = new ParserN3({ factory: rdf })
+  return parser.import(stream)
 }
 
 describe('validate-shacl', () => {
@@ -39,12 +39,12 @@ describe('validate-shacl', () => {
 
     it('should throw an error if botjh shacl and shaclStream are given', async () => {
       await assertThrows(async () => {
-        await validate({ shacl: simpleShapeFile, shaclStream: getShapeRDFStream() })
+        await validate({ shacl: simpleShapeFile, shaclStream: getRDFStream(shapePath) })
       }, Error, /shacl and shaclStream given, but only one argument allowed/)
     })
 
     it('should return a duplex stream with the shaclStream parameter', async () => {
-      const stream = await validate({ shaclStream: getShapeRDFStream() })
+      const stream = await validate({ shaclStream: getRDFStream(shapePath) })
 
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
@@ -78,6 +78,7 @@ describe('validate-shacl', () => {
 
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
+
       stream.end()
 
       try {
@@ -92,11 +93,11 @@ describe('validate-shacl', () => {
     })
 
     it('does not fail when validation ok', async () => {
-      const data = await getRDFStream('support/data.ttl')
+      const data = await getRDFDataset('support/data.ttl')
       const dataset = [data, data, data, data]
 
       // Assumes partitioned data is sent through
-      const validator = await validate({ shaclStream: getShapeRDFStream() })
+      const validator = await validate({ shaclStream: getRDFStream(shapePath) })
       const validatedInput = toStream(dataset).pipe(validator)
 
       const passedTrough = await getStream.array(validatedInput)
@@ -104,12 +105,12 @@ describe('validate-shacl', () => {
     })
 
     it('successfully fails when there are validation errors', async () => {
-      const data = await getRDFStream('support/data.ttl')
-      const wrongData = await getRDFStream('support/wrong-data.ttl')
+      const data = await getRDFDataset('support/data.ttl')
+      const wrongData = await getRDFDataset('support/wrong-data.ttl')
       const dataset = [data, data, wrongData, data]
 
       // Assumes partitioned data is sent through
-      const validator = await validate({ shaclStream: getShapeRDFStream() })
+      const validator = await validate({ shaclStream: getRDFStream(shapePath) })
       const validatedInput = toStream(dataset).pipe(validator)
 
       await assertThrows(async () => {

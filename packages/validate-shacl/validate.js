@@ -4,6 +4,7 @@ import ParserN3 from '@rdfjs/parser-n3'
 import rdf from 'rdf-ext'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
+import { buildErrorMessage } from './lib/buildErrorMessage.js'
 
 class ValidateChunk extends Transform {
   constructor (shape) {
@@ -49,26 +50,6 @@ export async function validate ({ shacl: url, shaclStream }) {
     }
   }
 
-  const shape = url ? await readFromURL(url) : await shaclStream
+  const shape = url ? await readFromURL(url) : await rdf.dataset().import(shaclStream)
   return new ValidateChunk(shape)
-}
-
-function buildErrorMessage (report) {
-  return JSON.stringify(report.results.map(x => {
-    const result = {}
-    if (x.message && x.message.length > 0) {
-      result.message = x.message.map(x => x.value)
-    }
-    if (x.path) {
-      result.path = x.path.value
-    }
-    if (x.sourceShape) {
-      result.sourceShape = x.sourceShape.value
-    }
-    // Mandatory
-    result.focusNode = x.focusNode.value
-    result.severity = x.severity.value
-    result.sourceConstraintComponent = x.sourceConstraintComponent.value
-    return result
-  }))// TODO define an error format
 }
