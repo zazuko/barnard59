@@ -31,20 +31,14 @@ describe('validate-shacl', () => {
       strictEqual(typeof validate, 'function')
     })
 
-    it('should throw an error if no shacl is given', async () => {
+    it('should throw an error if no argument is given', async () => {
       await assertThrows(async () => {
-        await validate({})
-      }, Error, /needs a shacl or shaclStream argument/)
+        await validate()
+      }, Error, /Needs a SHACL shape as parameter/)
     })
 
-    it('should throw an error if botjh shacl and shaclStream are given', async () => {
-      await assertThrows(async () => {
-        await validate({ shacl: simpleShapeFile, shaclStream: getRDFStream(shapePath) })
-      }, Error, /shacl and shaclStream given, but only one argument allowed/)
-    })
-
-    it('should return a duplex stream with the shaclStream parameter', async () => {
-      const stream = await validate({ shaclStream: getRDFStream(shapePath) })
+    it('should return a duplex stream with a stream shape parameter', async () => {
+      const stream = await validate(getRDFStream(shapePath))
 
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
@@ -56,7 +50,7 @@ describe('validate-shacl', () => {
     })
 
     it('should return a duplex stream with an URL pointing to a file', async () => {
-      const stream = await validate({ shacl: simpleShapeFile })
+      const stream = await validate(simpleShapeFile)
 
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
@@ -67,6 +61,12 @@ describe('validate-shacl', () => {
       } catch (err) {}
     })
 
+    it('fails at file not found', async () => {
+      await assertThrows(async () => {
+        await validate('file:///not/found.ttl')
+      }, Error, /ENOENT: no such file or directory/)
+    })
+
     it('should return a duplex stream with an URL pointing to a public resource', async () => {
       // Mocking a remote file.
       const fileStr = await fs.readFileSync(new URL(shapePath, import.meta.url), 'utf8')
@@ -74,7 +74,7 @@ describe('validate-shacl', () => {
         .get('/shape.ttl')
         .reply(200, fileStr, { 'content-type': 'text/turtle' })
 
-      const stream = await validate({ shacl: 'https://example.com/shape.ttl' })
+      const stream = await validate('https://example.com/shape.ttl')
 
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
@@ -88,7 +88,7 @@ describe('validate-shacl', () => {
 
     it('fails at unknown protocol', async () => {
       await assertThrows(async () => {
-        await validate({ shacl: 'unknown::protocol' })
+        await validate('unknown::protocol')
       }, Error, /unknown::protocol not supported/)
     })
 
@@ -97,7 +97,7 @@ describe('validate-shacl', () => {
       const dataset = [data, data, data, data]
 
       // Assumes partitioned data is sent through
-      const validator = await validate({ shaclStream: getRDFStream(shapePath) })
+      const validator = await validate(getRDFStream(shapePath))
       const validatedInput = toStream(dataset).pipe(validator)
 
       const passedTrough = await getStream.array(validatedInput)
@@ -110,7 +110,7 @@ describe('validate-shacl', () => {
       const dataset = [data, data, wrongData, data]
 
       // Assumes partitioned data is sent through
-      const validator = await validate({ shaclStream: getRDFStream(shapePath) })
+      const validator = await validate(getRDFStream(shapePath))
       const validatedInput = toStream(dataset).pipe(validator)
 
       await assertThrows(async () => {

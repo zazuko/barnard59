@@ -5,6 +5,7 @@ import rdf from 'rdf-ext'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
 import { buildErrorMessage } from './lib/buildErrorMessage.js'
+import stream from 'stream'
 
 class ValidateChunk extends Transform {
   constructor (shape) {
@@ -26,30 +27,27 @@ class ValidateChunk extends Transform {
   }
 }
 
-export async function validate ({ shacl: url, shaclStream }) {
-  if (!(url || shaclStream)) {
-    throw new Error('needs a shacl or shaclStream argument')
-  }
-  if (url && shaclStream) {
-    throw new Error('shacl and shaclStream given, but only one argument allowed')
-  }
+function isReadableStream (obj) {
+  return obj instanceof stream.Stream &&
+    typeof (obj._read === 'function') &&
+    typeof (obj._readableState === 'object')
+}
 
-  async function readFromURL (fileOrLink) {
-    const url = new URL(fileOrLink, import.meta.url)
-
-    if (!(url.protocol === 'https:' || url.protocol === 'http:' || url.protocol === 'file:')) {
+export async function validate (shape) {
+  if (!shape) {
+    throw new Error(`Needs a SHACL shape as parameter`)
+  } else if (isReadableStream(shape)) {
+    return new ValidateChunk(await rdf.dataset().import(shape))
+  } else {
+    const url = new URL(shape, import.meta.url)
+    if (url.protocol === 'https:' || url.protocol === 'http:') {
+      const res = await fetch(url)
+      return new ValidateChunk(await res.dataset())
+    } else if (url.protocol === 'file:') {
+      const parser = new ParserN3({ factory: rdf })
+      return new ValidateChunk(await rdf.dataset().import(parser.import(fs.createReadStream(url))))
+    } else {
       throw new Error(`${url} not supported`)
     }
-
-    if (url.protocol === 'file:') {
-      const parser = new ParserN3({ factory: rdf })
-      return rdf.dataset().import(parser.import(fs.createReadStream(url)))
-    } else {
-      const res = await fetch(url)
-      return res.dataset()
-    }
   }
-
-  const shape = url ? await readFromURL(url) : await rdf.dataset().import(shaclStream)
-  return new ValidateChunk(shape)
 }

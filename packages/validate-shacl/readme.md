@@ -14,12 +14,9 @@ npm install barnard59-validate-shacl --save
 
 A step that automates the validation of RDF against a set of conditions specified in a SHACL document. Note that this operation does not take care of partitioning the data, using this operation requires to prepare the data accordingly. 
 
-| Argument   |      Type      |  Description |
-|----------|:-------------:|------:|
-| shacl |  string | Local path or URL of the shapes to load |
-| shaclStream |  RDF/JS Dataset stream | a shape stream |
+The argument can be a RDF stream or the URL pointing to the SHACL shapes. 
 
-### Example: Validating using a SHACL from a raw string
+### Example: Validating using a SHACL from a file
 
 ```turtle
 @prefix p: <https://pipeline.described.at/> .
@@ -29,6 +26,5 @@ A step that automates the validation of RDF against a set of conditions specifie
            code:implementedBy [ a code:EcmaScriptModule;
                                 code:link <node:barnard59-validate-schacl/validate.js#validate>
                               ];
-           code:arguments [ code:name  "shacl" ;
-                            code:value "address-shape.ttl" ] .
+           code:arguments ("address-shape.ttl" ) .
 ```
