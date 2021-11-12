@@ -116,20 +116,20 @@ class Pipeline extends StreamObject {
   // stream interface
 
   async _read (size) {
-    await this.init()
+    try {
+      await this.init()
 
-    // if it's just a fake readable interface for events,
-    // there is no data to forward from the last child
-    if (!this.readable) {
-      return
-    }
-
-    for (; ;) {
-      if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+      // if it's just a fake readable interface for events,
+      // there is no data to forward from the last child
+      if (!this.readable) {
         return
       }
 
-      try {
+      for (; ;) {
+        if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+          return
+        }
+
         const chunk = this.lastChild.stream.read(size)
 
         if (!chunk) {
@@ -143,10 +143,10 @@ class Pipeline extends StreamObject {
           this._chunks++
           this._span.setAttribute('stream.chunks', this._chunks)
         }
-      } catch (err) {
-        this._span.recordException(err)
-        this.lastChild.stream.destroy(err)
       }
+    } catch (err) {
+      this._span.recordException(err)
+      this.lastChild.stream.destroy(err)
     }
   }
 
