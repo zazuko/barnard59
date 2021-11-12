@@ -1,6 +1,6 @@
 {
   "name": "barnard59-core",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Core component of Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
