@@ -189,6 +189,16 @@ describe('Pipeline', () => {
 
       await promise
     })
+
+    it('should emit an error if the last step doesn\'t have a readable interface', async () => {
+      const ptr = await loadPipelineDefinition('read-step-not-read')
+
+      const pipeline = createPipeline(ptr, { basePath: resolve('test') })
+
+      await rejects(async () => {
+        await getStream(pipeline.stream)
+      })
+    })
   })
 
   describe('writeable Pipeline', () => {
