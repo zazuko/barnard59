@@ -1,6 +1,3 @@
-import * as fs from 'fs'
-import rdfFetch from '@rdfjs/fetch'
-import ParserN3 from '@rdfjs/parser-n3'
 import rdf from 'rdf-ext'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
@@ -33,30 +30,12 @@ function isReadableStream (obj) {
     typeof (obj._readableState === 'object')
 }
 
-export async function validate (shape) {
+export async function shacl (shape) {
   if (!shape) {
     throw new Error(`Needs a SHACL shape as parameter`)
   } else if (isReadableStream(shape)) {
     return new ValidateChunk(await rdf.dataset().import(shape))
   } else {
-    const url = new URL(shape, import.meta.url)
-    if (url.protocol === 'https:' || url.protocol === 'http:') {
-      try {
-        const res = await rdfFetch(shape, {
-          headers: {
-            accept: 'application/n-triples'
-          }
-        })
-        const dataset = await res.dataset()
-        return new ValidateChunk(dataset)
-      } catch (err) {
-        throw new Error(`${shape}: ${err}`)
-      }
-    } else if (url.protocol === 'file:') {
-      const parser = new ParserN3({ factory: rdf })
-      return new ValidateChunk(await rdf.dataset().import(parser.import(fs.createReadStream(url))))
-    } else {
-      throw new Error(`${url} not supported`)
-    }
+    throw new Error(`${shape} is not a readable stream`)
   }
 }

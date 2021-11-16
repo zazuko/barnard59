@@ -34,7 +34,6 @@
     "get-stream": "^6.0.1",
     "isstream": "^0.1.2",
     "mocha": "^9.1.2",
-    "nock": "^13.1.4",
     "rdf-utils-fs": "^2.2.0",
     "readable-stream": "^3.6.0",
     "stricter-standard": "^0.2.0"
