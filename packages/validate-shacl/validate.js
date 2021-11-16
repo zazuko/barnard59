@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import fetch from '@rdfjs/fetch'
+import rdfFetch from '@rdfjs/fetch'
 import ParserN3 from '@rdfjs/parser-n3'
 import rdf from 'rdf-ext'
 import SHACLValidator from 'rdf-validate-shacl'
@@ -41,8 +41,17 @@ export async function validate (shape) {
   } else {
     const url = new URL(shape, import.meta.url)
     if (url.protocol === 'https:' || url.protocol === 'http:') {
-      const res = await fetch(url)
-      return new ValidateChunk(await res.dataset())
+      try {
+        const res = await rdfFetch(shape, {
+          headers: {
+            accept: 'application/n-triples'
+          }
+        })
+        const dataset = await res.dataset()
+        return new ValidateChunk(dataset)
+      } catch (err) {
+        throw new Error(`${shape}: ${err}`)
+      }
     } else if (url.protocol === 'file:') {
       const parser = new ParserN3({ factory: rdf })
       return new ValidateChunk(await rdf.dataset().import(parser.import(fs.createReadStream(url))))

@@ -44,9 +44,7 @@ describe('validate-shacl', () => {
       strictEqual(isWritable(stream), true)
       stream.end()
 
-      try {
-        await getStream(stream)
-      } catch (err) {}
+      const res = await getStream(stream)
     })
 
     it('should return a duplex stream with an URL pointing to a file', async () => {
@@ -56,9 +54,7 @@ describe('validate-shacl', () => {
       strictEqual(isWritable(stream), true)
       stream.end()
 
-      try {
-        await getStream(stream)
-      } catch (err) {}
+      const res = await getStream(stream)
     })
 
     it('fails at file not found', async () => {
@@ -75,15 +71,23 @@ describe('validate-shacl', () => {
         .reply(200, fileStr, { 'content-type': 'text/turtle' })
 
       const stream = await validate('https://example.com/shape.ttl')
-
       strictEqual(isReadable(stream), true)
       strictEqual(isWritable(stream), true)
-
       stream.end()
 
-      try {
-        await getStream(stream)
-      } catch (err) {}
+      const res = await getStream(stream)
+    })
+
+    it('fails at unknown mediatype', async () => {
+      await assertThrows(async () => {
+        // Mocking a remote file.
+        const fileStr = await fs.readFileSync(new URL(shapePath, import.meta.url), 'utf8')
+        nock('https://example.com')
+          .get('/shape.ttl')
+          .reply(200, fileStr, { 'content-type': 'text/html' })
+        const stream = await validate('https://example.com/shape.ttl')
+
+      }, Error,/https:\/\/example.com\/shape.ttl: Error: unknown content type: text\/html/)
     })
 
     it('fails at unknown protocol', async () => {
