@@ -1,3 +1,3 @@
-import { validate } from './validate.js'
+import { shacl } from './validate.js'
 
-export { validate }
+export { shacl }
