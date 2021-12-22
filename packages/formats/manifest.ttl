@@ -51,3 +51,10 @@
   code:implementedBy [ a code:EcmaScript;
     code:link <node:barnard59-formats/rdfxml.js#parse>
   ].
+
+<xlsx/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
+  rdfs:label "Parse XSLX files based on the CSV on the Web standard";
+  rdfs:comment "Parses the given XLSX stream using the given metadata.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-formats/xlsx.js#parse>
+  ].
