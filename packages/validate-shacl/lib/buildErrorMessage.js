@@ -1,5 +1,4 @@
 export function buildErrorMessage (report) {
-
   return JSON.stringify(report.results.map(x => {
     const result = {}
     if (x.message && x.message.length > 0) {
@@ -17,5 +16,4 @@ export function buildErrorMessage (report) {
     result.sourceConstraintComponent = x.sourceConstraintComponent.value
     return result
   }))
-
 }
