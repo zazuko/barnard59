@@ -23,7 +23,7 @@ class ValidateChunk extends Transform {
       shouldContinue = this.onViolation({
         context: this.context,
         report,
-        data,
+        data
       })
     }
 

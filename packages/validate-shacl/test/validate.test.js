@@ -2,17 +2,17 @@ import assert, { strictEqual } from 'assert'
 import fs from 'fs'
 import ParserN3 from '@rdfjs/parser-n3'
 import assertThrows from 'assert-throws-async'
+import chai, { expect } from 'chai'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import { describe, it } from 'mocha'
 import pkg from 'rdf-dataset-ext'
 import rdf from 'rdf-ext'
-import chai, {expect} from 'chai'
 import sinon from 'sinon'
-import sinonChai from "sinon-chai"
+import sinonChai from 'sinon-chai'
 import { shacl } from '../validate.js'
 
-chai.use(sinonChai);
+chai.use(sinonChai)
 const { toStream } = pkg
 
 const shapePath = 'support/simple.shape.ttl'
