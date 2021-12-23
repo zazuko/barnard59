@@ -49,7 +49,7 @@ describe('validate-shacl', () => {
     it('sets maxErrors for validator', async () => {
       const stream = await shacl({
         shape: getRDFStream(shapePath),
-        maxErrors: 200,
+        maxErrors: 200
       })
 
       strictEqual(stream.validator.validationEngine.maxErrors, 200)

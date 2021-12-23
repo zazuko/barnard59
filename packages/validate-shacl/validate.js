@@ -1,8 +1,8 @@
+import { isStream, isReadableStream } from 'is-stream'
 import rdf from 'rdf-ext'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
 import { buildErrorMessage } from './lib/buildErrorMessage.js'
-import { isStream, isReadableStream } from 'is-stream'
 
 class ValidateChunk extends Transform {
   constructor (shape, { maxErrors = 1 } = {}) {
@@ -30,7 +30,7 @@ export async function shacl (arg) {
   if (isStream(arg)) {
     shape = arg
   } else if (arg) {
-    ({shape, ...options} = arg)
+    ({ shape, ...options } = arg)
   }
 
   if (!shape) {
