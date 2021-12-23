@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import assert, { strictEqual } from 'assert'
 import fs from 'fs'
 import ParserN3 from '@rdfjs/parser-n3'
 import assertThrows from 'assert-throws-async'
@@ -53,6 +53,16 @@ describe('validate-shacl', () => {
       })
 
       strictEqual(stream.validator.validationEngine.maxErrors, 200)
+      stream.end()
+    })
+
+    it('unsets maxErrors when argument is zero', async () => {
+      const stream = await shacl({
+        shape: getRDFStream(shapePath),
+        maxErrors: 0
+      })
+
+      assert(typeof stream.validator.validationEngine.maxErrors === 'undefined')
       stream.end()
     })
 

@@ -47,6 +47,7 @@ prefix code: <https://code.described.at/>
   code:arguments
     [ code:name "shape" ; code:value <#CubeShapes> ] ,
     # validation will stop when the given number is reached (default 1)
+    # set to 0 to report all errors    
     [ code:name "maxErrors" ; code:value 100 ] ;
 .
 ```

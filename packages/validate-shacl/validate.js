@@ -5,7 +5,7 @@ import { Transform } from 'readable-stream'
 import { buildErrorMessage } from './lib/buildErrorMessage.js'
 
 class ValidateChunk extends Transform {
-  constructor (shape, { maxErrors = 1 } = {}) {
+  constructor (shape, { maxErrors } = {}) {
     super({
       writableObjectMode: true,
       readableObjectMode: true
@@ -27,10 +27,12 @@ class ValidateChunk extends Transform {
 export async function shacl (arg) {
   let shape
   let options
+  let maxErrors = 1
   if (isStream(arg)) {
     shape = arg
   } else if (arg) {
     ({ shape, ...options } = arg)
+    maxErrors = options.maxErrors < 1 ? undefined : Number(options.maxErrors)
   }
 
   if (!shape) {
@@ -40,5 +42,5 @@ export async function shacl (arg) {
     throw new Error(`${shape} is not a readable stream`)
   }
 
-  return new ValidateChunk(await rdf.dataset().import(shape), options)
+  return new ValidateChunk(await rdf.dataset().import(shape), { maxErrors })
 }
