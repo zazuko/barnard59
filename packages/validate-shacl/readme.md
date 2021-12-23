@@ -48,6 +48,32 @@ prefix code: <https://code.described.at/>
     [ code:name "shape" ; code:value <#CubeShapes> ] ,
     # validation will stop when the given number is reached (default 1)
     # set to 0 to report all errors    
-    [ code:name "maxErrors" ; code:value 100 ] ;
+    [ code:name "maxErrors" ; code:value 100 ] ,
+    # callback function which allows pipeline authors to perform
+    # additional actions and/or decide to continue the pipeline 
+    # when SHACL violations are encountered (see below)
+    [ 
+      code:name "onViolation" ; 
+      code:value [ a code:EcmaScriptModule ; code:link <file:...> ] ;
+    ] ;
 .
+```
+
+#### `onViolation`
+
+The function below could be used to continue the pipeline when SHACL violations are found but none of them are `sh:Violation`.
+
+```js
+import { sh } from '@tpluscode/rdf-ns-builders'
+
+/**
+* @param context {Object} Pipeline context
+* @param data {DatasetCore} Data graph which failed validation
+* @param report {ValidationReport}
+*/
+export function continueOnWarnings({ context, data, report }) {
+    const hasViolations = report.results.some(({ severity }) => severity.equals(sh.Violation))
+
+    return !hasViolations
+}
 ```
