@@ -3,7 +3,7 @@ import fs from 'fs'
 import ParserN3 from '@rdfjs/parser-n3'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream, isWritableStream } from 'is-stream'
 import { describe, it } from 'mocha'
 import pkg from 'rdf-dataset-ext'
 import rdf from 'rdf-ext'
@@ -39,11 +39,21 @@ describe('validate-shacl', () => {
     it('should return a duplex stream with a stream shape parameter', async () => {
       const stream = await shacl(getRDFStream(shapePath))
 
-      strictEqual(isReadable(stream), true)
-      strictEqual(isWritable(stream), true)
+      strictEqual(isReadableStream(stream), true)
+      strictEqual(isWritableStream(stream), true)
       stream.end()
 
       await getStream(stream)
+    })
+
+    it('sets maxErrors for validator', async () => {
+      const stream = await shacl({
+        shape: getRDFStream(shapePath),
+        maxErrors: 200,
+      })
+
+      strictEqual(stream.validator.validationEngine.maxErrors, 200)
+      stream.end()
     })
 
     it('does not fail when validation ok', async () => {
