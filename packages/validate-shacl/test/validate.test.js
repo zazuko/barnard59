@@ -2,13 +2,17 @@ import assert, { strictEqual } from 'assert'
 import fs from 'fs'
 import ParserN3 from '@rdfjs/parser-n3'
 import assertThrows from 'assert-throws-async'
+import chai, { expect } from 'chai'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import { describe, it } from 'mocha'
 import pkg from 'rdf-dataset-ext'
 import rdf from 'rdf-ext'
+import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
 import { shacl } from '../validate.js'
 
+chai.use(sinonChai)
 const { toStream } = pkg
 
 const shapePath = 'support/simple.shape.ttl'
@@ -90,6 +94,29 @@ describe('validate-shacl', () => {
       await assertThrows(async () => {
         await getStream.array(validatedInput)
       }, Error, /More than 1 values/)
+    })
+
+    it('does not fail when there are validation errors but callback returns true', async () => {
+      const data = await getRDFDataset('support/data.ttl')
+      const wrongData = await getRDFDataset('support/wrong-data.ttl')
+      const dataset = [data, data, wrongData, data]
+      const onViolation = sinon.stub().returns(true)
+      const context = {}
+
+      // Assumes partitioned data is sent through
+      const validator = await shacl.call(context, {
+        shape: getRDFStream(shapePath),
+        onViolation
+      })
+      const validatedInput = toStream(dataset).pipe(validator)
+
+      const passedTrough = await getStream.array(validatedInput)
+      strictEqual(passedTrough.length, dataset.length)
+      expect(onViolation).to.have.been.calledWithMatch({
+        context,
+        data: wrongData,
+        report: sinon.match.object
+      })
     })
   })
 })
