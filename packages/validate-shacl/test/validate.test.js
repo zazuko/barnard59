@@ -43,7 +43,7 @@ describe('validate-shacl', () => {
       strictEqual(isWritable(stream), true)
       stream.end()
 
-      const res = await getStream(stream)
+      await getStream(stream)
     })
 
     it('does not fail when validation ok', async () => {
@@ -71,6 +71,5 @@ describe('validate-shacl', () => {
         await getStream.array(validatedInput)
       }, Error, /More than 1 values/)
     })
-
   })
 })
