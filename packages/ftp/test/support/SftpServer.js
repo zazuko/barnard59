@@ -2,9 +2,22 @@ import { join, dirname } from 'path'
 import fs from 'fs-extra'
 import sftpFS from 'sftp-fs'
 import { PermissionDeniedError } from 'sftp-fs/lib/errors.js'
-import ssh2 from 'ssh2'
 
 const __dirname = dirname(new URL(import.meta.url).pathname)
+let OPEN_MODE = null
+
+async function loadOpenMode () {
+  let openModeLegacyModule = null
+  let openModeNewModule = null
+
+  try {
+    openModeLegacyModule = await import('ssh2')
+    openModeNewModule = await import('ssh2/lib/protocol/SFTP.js')
+  } catch (err) {}
+
+  OPEN_MODE = (openModeNewModule && openModeNewModule.OPEN_MODE) ||
+    (openModeLegacyModule && openModeLegacyModule.default.SFTP_OPEN_MODE)
+}
 
 class SftpServer {
   constructor ({ path = __dirname, user, password } = {}) {
@@ -29,6 +42,8 @@ class SftpServer {
   }
 
   async start () {
+    await loadOpenMode()
+
     this.server.on('error', error => {
       console.error(error)
     })
@@ -163,27 +178,27 @@ class FileSystem extends sftpFS.ImplFileSystem {
 function convFlags (flags) {
   let mode = 0
 
-  if ((flags & ssh2.SFTP_OPEN_MODE.READ) && (flags & ssh2.SFTP_OPEN_MODE.WRITE)) {
+  if ((flags & OPEN_MODE.READ) && (flags & OPEN_MODE.WRITE)) {
     mode = fs.constants.O_RDWR
-  } else if (flags & ssh2.SFTP_OPEN_MODE.READ) {
+  } else if (flags & OPEN_MODE.READ) {
     mode = fs.constants.O_RDONLY
-  } else if (flags & ssh2.SFTP_OPEN_MODE.WRITE) {
+  } else if (flags & OPEN_MODE.WRITE) {
     mode = fs.constants.O_WRONLY
   }
 
-  if (flags & ssh2.SFTP_OPEN_MODE.CREAT) {
+  if (flags & OPEN_MODE.CREAT) {
     mode |= fs.constants.O_CREAT
   }
 
-  if (flags & ssh2.SFTP_OPEN_MODE.APPEND) {
+  if (flags & OPEN_MODE.APPEND) {
     mode |= fs.constants.O_APPEND
   }
 
-  if (flags & ssh2.SFTP_OPEN_MODE.EXCL) {
+  if (flags & OPEN_MODE.EXCL) {
     mode |= fs.constants.O_EXCL
   }
 
-  if (flags & ssh2.SFTP_OPEN_MODE.TRUNC) {
+  if (flags & OPEN_MODE.TRUNC) {
     mode |= fs.constants.O_TRUNC
   }
 

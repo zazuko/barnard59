@@ -1,4 +1,5 @@
 import ftpParser from 'ftp/lib/parser.js'
+import { PassThrough } from 'readable-stream'
 import SFTP from 'sftp-promises'
 const { parseListEntry } = ftpParser
 
@@ -46,7 +47,12 @@ class SftpClient {
   }
 
   async read (path) {
-    return createReadStream(this.client, path, this.session)
+    const stream = await createReadStream(this.client, path, this.session)
+    const through = new PassThrough()
+
+    stream.pipe(through)
+
+    return through
   }
 
   async write (path) {
