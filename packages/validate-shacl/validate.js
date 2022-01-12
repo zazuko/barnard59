@@ -2,7 +2,7 @@ import { isStream, isReadableStream } from 'is-stream'
 import rdf from 'rdf-ext'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
-import { buildErrorMessage } from './lib/buildErrorMessage.js'
+import { ValidationError } from './lib/errors.js'
 
 class ValidateChunk extends Transform {
   constructor (context, shape, { maxErrors, onViolation } = {}) {
@@ -31,8 +31,7 @@ class ValidateChunk extends Transform {
       return callback(null, data)
     }
 
-    const errorMessage = buildErrorMessage(report)
-    this.destroy(new Error(errorMessage))
+    this.destroy(new ValidationError(report))
   }
 }
 
