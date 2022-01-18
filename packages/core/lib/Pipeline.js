@@ -126,7 +126,7 @@ class Pipeline extends StreamObject {
       }
 
       for (; ;) {
-        if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+        if (this.stream._readableState.destroyed || this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
           return
         }
 
