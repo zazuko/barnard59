@@ -8,7 +8,7 @@ import createArguments from './arguments.js'
 import createOperation from './operation.js'
 
 async function createStep (ptr, { basePath, context, loaderRegistry, logger, variables }) {
-  return await tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
+  return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
       const operation = await createOperation(ptr.out(ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })

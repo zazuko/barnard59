@@ -63,6 +63,11 @@ class Pipeline extends StreamObject {
     return this.children[this.children.length - 1]
   }
 
+  addChild (step) {
+    step.stream.on('error', err => this.destroy(err))
+    this.children.push(step)
+  }
+
   async _init () {
     this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
 
@@ -76,11 +81,6 @@ class Pipeline extends StreamObject {
       // connect all steps
       for (let index = 0; index < this.children.length - 1; index++) {
         this.children[index].stream.pipe(this.children[index + 1].stream)
-      }
-
-      // add error handler to all steps
-      for (let index = 0; index < this.children.length; index++) {
-        this.children[index].stream.on('error', err => this.destroy(err))
       }
 
       finished(this.lastChild.stream, err => {
@@ -126,7 +126,7 @@ class Pipeline extends StreamObject {
       }
 
       for (; ;) {
-        if (this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+        if (this.stream._readableState.destroyed || this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
           return
         }
 

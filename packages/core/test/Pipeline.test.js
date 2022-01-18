@@ -49,6 +49,16 @@ describe('Pipeline', () => {
     strictEqual(result, 'test')
   })
 
+  it('should emit error when nested pipeline step errors immediately', async () => {
+    const ptr = await loadPipelineDefinition('nestedErrorBeforeInit')
+
+    const pipeline = createPipeline(ptr, { basePath: resolve('test') })
+
+    await rejects(async () => {
+      await getStream(pipeline.stream)
+    })
+  })
+
   it('should support nested writable pipelines', async () => {
     const ptr = await loadPipelineDefinition('nested-write')
     const result = []

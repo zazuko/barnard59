@@ -47,9 +47,9 @@ function createPipeline (ptr, {
 
     for (const stepPtr of ptr.out(ns.p.steps).out(ns.p.stepList).list()) {
       if (stepPtr.has(ns.rdf.type, ns.p.Pipeline).terms.length > 0) {
-        pipeline.children.push(createPipeline(stepPtr, { basePath, context, loaderRegistry, logger, variables }))
+        pipeline.addChild(createPipeline(stepPtr, { basePath, context, loaderRegistry, logger, variables }))
       } else {
-        pipeline.children.push(await createStep(stepPtr, { basePath, context, loaderRegistry, logger, variables }))
+        pipeline.addChild(await createStep(stepPtr, { basePath, context, loaderRegistry, logger, variables }))
       }
     }
   }
