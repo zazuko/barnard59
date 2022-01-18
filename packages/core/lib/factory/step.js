@@ -9,24 +9,20 @@ import createOperation from './operation.js'
 
 async function createStep (ptr, { basePath, context, loaderRegistry, logger, variables }) {
   return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
-    const onError = cause => {
-      span.recordException(cause)
-      span.setStatus({ code: SpanStatusCode.ERROR, message: cause.message })
-      throw new PipelineError(`could not load step ${ptr.value}`, cause)
-    }
-
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
       const operation = await createOperation(ptr.out(ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })
       const stream = await operation.apply(context, args)
 
       if (!stream || !isStream(stream)) {
-        onError(new Error(`${ptr.value} didn't return a stream`))
+        throw new Error(`${ptr.value} didn't return a stream`)
       }
 
       return new Step({ args, basePath, context, loaderRegistry, logger, operation, ptr, stream, variables })
     } catch (cause) {
-      onError(cause)
+      span.recordException(cause)
+      span.setStatus({ code: SpanStatusCode.ERROR, message: cause.message })
+      throw new PipelineError(`could not load step ${ptr.value}`, cause)
     } finally {
       span.end()
     }
