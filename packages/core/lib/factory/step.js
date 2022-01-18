@@ -21,11 +21,8 @@ async function createStep (ptr, { basePath, context, loaderRegistry, logger, var
       const stream = await operation.apply(context, args)
 
       if (!stream || !isStream(stream)) {
-        throw new Error(`${ptr.value} didn't return a stream`)
+        onError(new Error(`${ptr.value} didn't return a stream`))
       }
-
-      stream.on('error', onError)
-      stream.on('pipe', () => stream.off('error', onError))
 
       return new Step({ args, basePath, context, loaderRegistry, logger, operation, ptr, stream, variables })
     } catch (cause) {
