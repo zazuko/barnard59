@@ -331,7 +331,7 @@ describe('cube.buildCubeShape', () => {
   })
 
   it('should generate sh:minInclusive an sh:maxInclusive properties for gYear values', async () => {
-    const min = rdf.literal('99', ns.xsd.gYear)
+    const min = rdf.literal('0099', ns.xsd.gYear)
     const max = rdf.literal('1300', ns.xsd.gYear)
     const input = createObservationsStream({
       observations: [{
