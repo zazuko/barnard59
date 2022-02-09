@@ -2,15 +2,32 @@ import TermMap from '@rdfjs/term-map'
 import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
+import { fromRdf } from 'rdf-literal'
 import * as ns from './namespaces.js'
 
 const datatypeParsers = new TermMap([
-  [ns.xsd.date, term => new Date(term.value)],
-  [ns.xsd.double, term => parseFloat(term.value)],
-  [ns.xsd.float, term => parseFloat(term.value)],
-  [ns.xsd.gYear, term => parseInt(term.value, 10)],
-  [ns.xsd.int, term => parseInt(term.value)],
-  [ns.xsd.integer, term => parseInt(term.value)]
+  [ns.xsd.byte, fromRdf],
+  [ns.xsd.date, fromRdf],
+  [ns.xsd.dateTime, fromRdf],
+  [ns.xsd.decimal, fromRdf],
+  [ns.xsd.double, fromRdf],
+  [ns.xsd.float, fromRdf],
+  [ns.xsd.gDay, fromRdf],
+  [ns.xsd.gMonthDay, fromRdf],
+  [ns.xsd.gYear, fromRdf],
+  [ns.xsd.gYearMonth, fromRdf],
+  [ns.xsd.int, fromRdf],
+  [ns.xsd.integer, fromRdf],
+  [ns.xsd.long, fromRdf],
+  [ns.xsd.negativeInteger, fromRdf],
+  [ns.xsd.nonNegativeInteger, fromRdf],
+  [ns.xsd.nonPositiveInteger, fromRdf],
+  [ns.xsd.positiveInteger, fromRdf],
+  [ns.xsd.short, fromRdf],
+  [ns.xsd.unsignedByte, fromRdf],
+  [ns.xsd.unsignedInt, fromRdf],
+  [ns.xsd.unsignedLong, fromRdf],
+  [ns.xsd.unsignedShort, fromRdf]
 ])
 
 class Dimension {
