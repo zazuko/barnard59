@@ -1,6 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import TermSet from '@rdfjs/term-set'
 import { termToNTriples as toNT } from '@rdfjs/to-ntriples'
+import clownface from 'clownface'
 import { isDuplex } from 'isstream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
@@ -391,5 +392,51 @@ describe('cube.buildCubeShape', () => {
 
     strictEqual(datatypes.has(ns.xsd.integer), true)
     strictEqual(datatypes.has(ns.cube.Undefined), true)
+  })
+
+  it('should merge given metadata to cube metadata', async () => {
+    const metadata = rdf.dataset([
+      rdf.quad(ns.ex.cube, ns.schema.name, rdf.literal('Test Cube')),
+      rdf.quad(ns.ex.other, ns.schema.name, rdf.literal('Test Other'))
+    ]).toStream()
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property.value]: rdf.literal('test')
+      }]
+    })
+    const transform = buildCubeShape({ metadata })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const cubeName = result.out(ns.schema.name).term
+
+    strictEqual(rdf.literal('Test Cube').equals(cubeName), true)
+  })
+
+  it('should merge given metadata to dimension metadata', async () => {
+    const dataset = rdf.dataset()
+
+    clownface({ dataset, term: rdf.blankNode() })
+      .addOut(ns.sh.path, ns.ex.property1)
+      .addOut(ns.schema.name, 'Test Property')
+
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property1.value]: rdf.literal('A'),
+        [ns.ex.property2.value]: rdf.literal('B')
+      }]
+    })
+    const transform = buildCubeShape({ metadata: dataset.toStream() })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const property1Name = result.has(ns.sh.path, ns.ex.property1)
+      .out(ns.schema.name).term
+
+    strictEqual(rdf.literal('Test Property').equals(property1Name), true)
   })
 })
