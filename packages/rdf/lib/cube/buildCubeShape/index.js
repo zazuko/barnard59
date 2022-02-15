@@ -1,6 +1,7 @@
 import TermMap from '@rdfjs/term-map'
 import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
+import once from 'lodash/once.js'
 import rdf from 'rdf-ext'
 import { Transform } from 'readable-stream'
 import urlJoin from '../../urlJoin.js'
@@ -28,18 +29,35 @@ function defaultShape ({ term }) {
 }
 
 class CubeShapeBuilder extends Transform {
-  constructor ({ excludeValuesOf } = {}) {
+  constructor ({ excludeValuesOf, metadata } = {}) {
     super({ objectMode: true })
 
     this.options = {
       cubes: new TermMap(),
       cube: defaultCube,
-      shape: defaultShape,
-      excludeValuesOf: new TermSet(excludeValuesOf ? excludeValuesOf.map(v => rdf.namedNode(v)) : [])
+      excludeValuesOf: new TermSet(excludeValuesOf ? excludeValuesOf.map(v => rdf.namedNode(v)) : []),
+      metadataStream: metadata,
+      shape: defaultShape
+    }
+
+    this.init = once(() => this._init())
+  }
+
+  async _init () {
+    if (this.options.metadataStream) {
+      this.options.metadata = await rdf.dataset().import(this.options.metadataStream)
+    } else {
+      this.options.metadata = rdf.dataset()
     }
   }
 
-  _transform (chunk, encoding, callback) {
+  async _transform (chunk, encoding, callback) {
+    try {
+      await this.init()
+    } catch (err) {
+      return callback(err)
+    }
+
     const dataset = rdf.dataset([...chunk])
 
     const context = {
@@ -55,6 +73,7 @@ class CubeShapeBuilder extends Transform {
     if (!context.cube) {
       context.cube = new Cube({
         term: context.term,
+        metadata: clownface({ dataset: this.options.metadata, term: context.term }),
         observationSet: context.observationSet,
         shape: context.shape
       })
@@ -80,8 +99,8 @@ class CubeShapeBuilder extends Transform {
   }
 }
 
-function buildCubeShape ({ excludeValuesOf } = {}) {
-  return new CubeShapeBuilder({ excludeValuesOf })
+function buildCubeShape ({ excludeValuesOf, metadata } = {}) {
+  return new CubeShapeBuilder({ excludeValuesOf, metadata })
 }
 
 export default buildCubeShape

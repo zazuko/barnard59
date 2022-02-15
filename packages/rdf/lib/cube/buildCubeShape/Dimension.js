@@ -31,7 +31,8 @@ const datatypeParsers = new TermMap([
 ])
 
 class Dimension {
-  constructor ({ predicate, object }) {
+  constructor ({ metadata, predicate, object }) {
+    this.metadata = metadata
     this.predicate = predicate
     this.termType = object.termType
     this.datatype = new TermSet()
@@ -110,6 +111,12 @@ class Dimension {
 
     if (this.max) {
       ptr.addOut(ns.sh.maxInclusive, this.max)
+    }
+
+    if (this.metadata.term) {
+      for (const quad of this.metadata.dataset.match(this.metadata.term)) {
+        dataset.add(rdf.quad(ptr.term, quad.predicate, quad.object))
+      }
     }
 
     return dataset
