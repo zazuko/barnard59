@@ -418,9 +418,25 @@ describe('cube.buildCubeShape', () => {
   it('should merge given metadata to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
-    clownface({ dataset, term: rdf.blankNode() })
-      .addOut(ns.sh.path, ns.ex.property1)
-      .addOut(ns.schema.name, 'Test Property')
+    clownface({ dataset, term: ns.ex.cube })
+      .addOut(ns.cube.observationConstraint, shape => {
+        shape.addOut(ns.sh.property, property => {
+          property
+            .addOut(ns.sh.path, ns.ex.property1)
+            .addOut(ns.schema.name, 'Test Property')
+        })
+      })
+
+    clownface({ dataset, term: ns.ex.otherCube })
+      .addOut(ns.cube.observationConstraint, shape => {
+        shape.addOut(ns.sh.property, property => {
+          property
+            .addOut(ns.sh.path, ns.ex.property1)
+            .addOut(ns.schema.name, 'Other Property')
+        })
+      })
+
+    console.log(dataset.toString())
 
     const input = createObservationsStream({
       observations: [{
@@ -436,6 +452,8 @@ describe('cube.buildCubeShape', () => {
 
     const property1Name = result.has(ns.sh.path, ns.ex.property1)
       .out(ns.schema.name).term
+
+    console.log(result.dataset.toString())
 
     strictEqual(rdf.literal('Test Property').equals(property1Name), true)
   })

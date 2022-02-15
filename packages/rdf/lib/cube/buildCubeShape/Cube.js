@@ -17,7 +17,12 @@ class Cube {
     let dimension = this.dimensions.get(predicate)
 
     if (!dimension) {
-      dimension = new Dimension({ metadata: this.metadata, predicate, object })
+      const metadata = this.metadata
+        .out(ns.cube.observationConstraint)
+        .out(ns.sh.property)
+        .has(ns.sh.path, predicate)
+
+      dimension = new Dimension({ metadata, predicate, object })
 
       this.dimensions.set(predicate, dimension)
     }
@@ -37,7 +42,7 @@ class Cube {
       .addOut(ns.cube.observationSet, this.observationSet)
       .addOut(ns.cube.observationConstraint, this.shape)
 
-    dataset.addAll(this.metadata.match(this.term))
+    dataset.addAll(this.metadata.dataset.match(this.term))
 
     clownface({ dataset, term: this.observationSet })
       .addOut(ns.rdf.type, ns.cube.ObservationSet)

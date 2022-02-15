@@ -113,10 +113,8 @@ class Dimension {
       ptr.addOut(ns.sh.maxInclusive, this.max)
     }
 
-    const metadataTerm = clownface({ dataset: this.metadata }).has(ns.sh.path, this.predicate).term
-
-    if (metadataTerm) {
-      for (const quad of this.metadata.match(metadataTerm)) {
+    if (this.metadata.term) {
+      for (const quad of this.metadata.dataset.match(this.metadata.term)) {
         dataset.add(rdf.quad(ptr.term, quad.predicate, quad.object))
       }
     }

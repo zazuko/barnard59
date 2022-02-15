@@ -73,7 +73,7 @@ class CubeShapeBuilder extends Transform {
     if (!context.cube) {
       context.cube = new Cube({
         term: context.term,
-        metadata: this.options.metadata,
+        metadata: clownface({ dataset: this.options.metadata, term: context.term }),
         observationSet: context.observationSet,
         shape: context.shape
       })
