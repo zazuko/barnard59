@@ -42,7 +42,11 @@ class Cube {
       .addOut(ns.cube.observationSet, this.observationSet)
       .addOut(ns.cube.observationConstraint, this.shape)
 
-    dataset.addAll(this.metadata.dataset.match(this.term))
+    const metadata = this.metadata.dataset
+      .match(this.term)
+      .filter(quad => !quad.predicate.equals(ns.cube.observationConstraint))
+
+    dataset.addAll(metadata)
 
     clownface({ dataset, term: this.observationSet })
       .addOut(ns.rdf.type, ns.cube.ObservationSet)

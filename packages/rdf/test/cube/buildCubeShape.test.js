@@ -415,6 +415,27 @@ describe('cube.buildCubeShape', () => {
     strictEqual(rdf.literal('Test Cube').equals(cubeName), true)
   })
 
+  it('should ignore cube:observationConstraint property in cube metadata', async () => {
+    const metadata = rdf.dataset([
+      rdf.quad(ns.ex.cube, ns.cube.observationConstraint, ns.ex.shape)
+    ]).toStream()
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property.value]: rdf.literal('test')
+      }]
+    })
+    const transform = buildCubeShape({ metadata })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const constraints = result.out(ns.cube.observationConstraint).terms
+
+    strictEqual(constraints.length, 1)
+    strictEqual(constraints[0].equals(ns.ex.shape), false)
+  })
+
   it('should merge given metadata to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
