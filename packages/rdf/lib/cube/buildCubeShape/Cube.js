@@ -1,6 +1,8 @@
 import TermMap from '@rdfjs/term-map'
+import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
+import cbdCopy from '../../cbdCopy.js'
 import Dimension from './Dimension.js'
 import * as ns from './namespaces.js'
 
@@ -37,16 +39,12 @@ class Cube {
   toDataset () {
     const dataset = rdf.dataset()
 
-    clownface({ dataset, term: this.term })
+    const cube = clownface({ dataset, term: this.term })
       .addOut(ns.rdf.type, ns.cube.Cube)
       .addOut(ns.cube.observationSet, this.observationSet)
       .addOut(ns.cube.observationConstraint, this.shape)
 
-    const metadata = this.metadata.dataset
-      .match(this.term)
-      .filter(quad => !quad.predicate.equals(ns.cube.observationConstraint))
-
-    dataset.addAll(metadata)
+    cbdCopy(this.metadata, cube, { ignore: new TermSet([ns.cube.observationConstraint]) })
 
     clownface({ dataset, term: this.observationSet })
       .addOut(ns.rdf.type, ns.cube.ObservationSet)

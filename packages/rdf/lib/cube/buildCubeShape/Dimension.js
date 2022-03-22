@@ -3,6 +3,7 @@ import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import { fromRdf } from 'rdf-literal'
+import cbdCopy from '../../cbdCopy.js'
 import * as ns from './namespaces.js'
 
 const datatypeParsers = new TermMap([
@@ -114,9 +115,7 @@ class Dimension {
     }
 
     if (this.metadata.term) {
-      for (const quad of this.metadata.dataset.match(this.metadata.term)) {
-        dataset.add(rdf.quad(ptr.term, quad.predicate, quad.object))
-      }
+      cbdCopy(this.metadata, ptr)
     }
 
     return dataset
