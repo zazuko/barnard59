@@ -436,6 +436,48 @@ describe('cube.buildCubeShape', () => {
     strictEqual(constraints[0].equals(ns.ex.shape), false)
   })
 
+  it('should merge given metadata with blank nodes to cube metadata', async () => {
+    const dataset = rdf.dataset()
+
+    clownface({ dataset, term: ns.ex.cube })
+      .addOut(ns.ex.propertyA, null, ptr => {
+        ptr
+          .addOut(ns.ex.propertyB, 'Text B')
+          .addOut(ns.ex.propertyC, null, ptr => {
+            ptr.addOut(ns.ex.propertyD, 'Text D')
+          })
+          .addOut(ns.ex.propertyF, ns.ex.node, ptr => {
+            ptr.addOut(ns.ex.propertyE, 'Text E')
+          })
+      })
+      .addOut(ns.cube.observationConstraint, ns.ex.test)
+
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property.value]: rdf.literal('test')
+      }]
+    })
+    const transform = buildCubeShape({ metadata: dataset.toStream() })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const propertyA = result.out(ns.ex.propertyA)
+    const propertyB = propertyA.out(ns.ex.propertyB)
+    const propertyC = propertyA.out(ns.ex.propertyC)
+    const propertyD = propertyC.out(ns.ex.propertyD)
+    const propertyF = propertyA.out(ns.ex.propertyF)
+    const propertyG = propertyF.out(ns.ex.propertyG)
+
+    strictEqual(propertyA.term.termType, 'BlankNode')
+    strictEqual(rdf.literal('Text B').equals(propertyB.term), true)
+    strictEqual(propertyC.term.termType, 'BlankNode')
+    strictEqual(rdf.literal('Text D').equals(propertyD.term), true)
+    strictEqual(ns.ex.node.equals(propertyF.term), true)
+    strictEqual(propertyG.term, undefined)
+  })
+
   it('should merge given metadata to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
@@ -457,8 +499,6 @@ describe('cube.buildCubeShape', () => {
         })
       })
 
-    console.log(dataset.toString())
-
     const input = createObservationsStream({
       observations: [{
         [ns.ex.property1.value]: rdf.literal('A'),
@@ -474,8 +514,50 @@ describe('cube.buildCubeShape', () => {
     const property1Name = result.has(ns.sh.path, ns.ex.property1)
       .out(ns.schema.name).term
 
-    console.log(result.dataset.toString())
-
     strictEqual(rdf.literal('Test Property').equals(property1Name), true)
+  })
+
+  it('should merge given metadata with blank nodes to dimension metadata', async () => {
+    const dataset = rdf.dataset()
+
+    clownface({ dataset, term: ns.ex.cube })
+      .addOut(ns.cube.observationConstraint, shape => {
+        shape.addOut(ns.sh.property, property => {
+          property
+            .addOut(ns.sh.path, ns.ex.property1)
+            .addOut(ns.ex.propertyA, null, ptr => {
+              ptr
+                .addOut(ns.ex.propertyB, 'Text B')
+                .addOut(ns.ex.propertyC, null, ptr => ptr.addOut(ns.ex.propertyD, 'Text D'))
+                .addOut(ns.ex.propertyF, ns.ex.node, ptr => ptr.addOut(ns.ex.propertyE, 'Text E'))
+            })
+        })
+      })
+
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property1.value]: rdf.literal('A'),
+        [ns.ex.property2.value]: rdf.literal('B')
+      }]
+    })
+    const transform = buildCubeShape({ metadata: dataset.toStream() })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const propertyA = result.has(ns.sh.path, ns.ex.property1).out(ns.ex.propertyA)
+    const propertyB = propertyA.out(ns.ex.propertyB)
+    const propertyC = propertyA.out(ns.ex.propertyC)
+    const propertyD = propertyC.out(ns.ex.propertyD)
+    const propertyF = propertyA.out(ns.ex.propertyF)
+    const propertyG = propertyF.out(ns.ex.propertyG)
+
+    strictEqual(propertyA.term.termType, 'BlankNode')
+    strictEqual(rdf.literal('Text B').equals(propertyB.term), true)
+    strictEqual(propertyC.term.termType, 'BlankNode')
+    strictEqual(rdf.literal('Text D').equals(propertyD.term), true)
+    strictEqual(ns.ex.node.equals(propertyF.term), true)
+    strictEqual(propertyG.term, undefined)
   })
 })
