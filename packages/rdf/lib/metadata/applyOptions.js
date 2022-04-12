@@ -19,7 +19,7 @@ function updateOrInsert (dataset, predicate, object) {
   const targetSubjects = subjectsWithDatasetType(dataset, wellKnownDatasetClasses)
 
   // Remove existent
-  dataset = dataset.filter((quad) => {
+  dataset = dataset.filter(quad => {
     return !(quad.predicate.equals(predicate) && targetSubjects.has(quad.subject))
   })
 
@@ -44,7 +44,6 @@ function resolveNamedDate (value, metadata) {
 }
 
 async function applyOptions (quadStream, metadata = {}, options = {}) {
-
   let dataset = await rdf.dataset().import(quadStream)
 
   // dateModified
@@ -59,7 +58,7 @@ async function applyOptions (quadStream, metadata = {}, options = {}) {
 
   // Sets graph
   if (options.graph) {
-    dataset = dataset.map((quad) => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(options.graph)))
+    dataset = dataset.map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(options.graph)))
   }
 
   return dataset

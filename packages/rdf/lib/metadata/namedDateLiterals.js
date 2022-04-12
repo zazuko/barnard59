@@ -1,5 +1,5 @@
-import { xsd } from '../namespaces.js'
 import rdf from 'rdf-ext'
+import { xsd } from '../namespaces.js'
 
 const namedDateLiterals = new Map()
 

@@ -4,9 +4,9 @@ import clownface from 'clownface'
 import once from 'lodash/once.js'
 import $rdf from 'rdf-ext'
 import { Transform } from 'readable-stream'
+import * as ns from '../../namespaces.js'
 import urlJoin from '../../urlJoin.js'
 import Cube from './Cube.js'
-import * as ns from '../../namespaces.js'
 
 function defaultCube ({ observationSet }) {
   const observationSetIri = observationSet && observationSet.value

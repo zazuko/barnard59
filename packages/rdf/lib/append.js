@@ -1,6 +1,6 @@
 import { Transform } from 'readable-stream'
-import { applyOptions } from './metadata/applyOptions.js'
 import { localFetch } from './localFetch/localFetch.js'
+import { applyOptions } from './metadata/applyOptions.js'
 
 class MetadataAppend extends Transform {
   constructor (context, basePath, input, options) {
@@ -34,7 +34,7 @@ async function append ({
   basepath,
   dateModified = undefined,
   dateCreated = undefined,
-  graph = undefined,
+  graph = undefined
 } = {}) {
   if (!input) {
     throw new Error('Needs input as parameter (url or filename)')

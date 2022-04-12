@@ -51,7 +51,7 @@ describe('applyOptions', () => {
 
   it('should update or append schema:dateCreated for known classes (string)', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
     ]
 
     const options = {
@@ -89,7 +89,7 @@ describe('applyOptions', () => {
 
   it('should update or append schema:dateModified for known (string)', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
     ]
 
     const options = {
@@ -102,7 +102,6 @@ describe('applyOptions', () => {
     strictEqual(result[0].equals(data[0]), true)
     strictEqual(result[1].equals(rdf.quad(ex.subject0, ns.schema.dateModified, rdf.literal('1999-12-31', xsd.dateTime))), true)
   })
-
 
   it('should set the corresponding graph', async () => {
     const data = [
@@ -125,16 +124,15 @@ describe('applyOptions', () => {
     strictEqual(result[2].graph.equals(ex.graph2), true)
     strictEqual(result[3].graph.equals(ex.graph2), true)
     strictEqual(result[4].graph.equals(ex.graph2), true)
-
   })
 
   it('should set the corresponding graph (string)', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
     ]
 
     const options = {
-      graph: ex.graph2.value,
+      graph: ex.graph2.value
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -142,5 +140,4 @@ describe('applyOptions', () => {
     strictEqual(result.length, 1)
     strictEqual(result[0].graph.equals(ex.graph2), true)
   })
-
 })

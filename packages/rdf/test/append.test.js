@@ -1,7 +1,9 @@
 import { equal, strictEqual } from 'assert'
 import fs from 'fs'
 import fsp from 'fs/promises'
+import { fileURLToPath } from 'url'
 import defaultFormats from '@rdfjs/formats-common'
+import namespace from '@rdfjs/namespace'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplex } from 'isstream'
@@ -11,8 +13,6 @@ import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import append from '../lib/append.js'
 import { schema, xsd } from '../lib/namespaces.js'
-import namespace from '@rdfjs/namespace'
-import { fileURLToPath } from 'url'
 
 const dataPath = './support/dataset.ttl'
 new URL(dataPath, import.meta.url).toString()
@@ -181,7 +181,6 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result[5].predicate.value, schema.dateCreated.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
-
   })
 
   it('should use resolved literal TIME_FILE_CREATION with dateModified', async () => {
@@ -205,7 +204,6 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result[5].predicate.value, schema.dateModified.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
-
   })
 
   it('should use resolved literal TIME_FILE_MODIFICATION with dateCreated', async () => {
@@ -228,7 +226,6 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result[5].predicate.value, schema.dateCreated.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
-
   })
 
   it('should use resolved literal TIME_FILE_MODIFICATION with dateModified', async () => {
@@ -252,7 +249,6 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result[5].predicate.value, schema.dateModified.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
-
   })
 
   it('should use resolved literal TIME_NOW with dateModified', async () => {
@@ -278,7 +274,6 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result[3].predicate.value, schema.dateModified.value)
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
-
   })
 
   it('should use resolved literal TIME_NOW with dateCreated', async () => {
@@ -304,7 +299,5 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result[3].predicate.value, schema.dateCreated.value)
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
-
   })
-
 })
