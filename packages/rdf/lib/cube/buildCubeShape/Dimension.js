@@ -4,7 +4,7 @@ import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import { fromRdf } from 'rdf-literal'
 import cbdCopy from '../../cbdCopy.js'
-import * as ns from './namespaces.js'
+import * as ns from '../../namespaces.js'
 
 const datatypeParsers = new TermMap([
   [ns.xsd.byte, fromRdf],

@@ -4,7 +4,7 @@ import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import cbdCopy from '../../cbdCopy.js'
 import Dimension from './Dimension.js'
-import * as ns from './namespaces.js'
+import * as ns from '../../namespaces.js'
 
 class Cube {
   constructor ({ metadata, observationSet, shape, term }) {

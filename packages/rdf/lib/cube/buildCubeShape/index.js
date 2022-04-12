@@ -2,11 +2,11 @@ import TermMap from '@rdfjs/term-map'
 import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import once from 'lodash/once.js'
-import rdf from 'rdf-ext'
+import $rdf from 'rdf-ext'
 import { Transform } from 'readable-stream'
 import urlJoin from '../../urlJoin.js'
 import Cube from './Cube.js'
-import * as ns from './namespaces.js'
+import * as ns from '../../namespaces.js'
 
 function defaultCube ({ observationSet }) {
   const observationSetIri = observationSet && observationSet.value
@@ -15,7 +15,7 @@ function defaultCube ({ observationSet }) {
     return null
   }
 
-  return rdf.namedNode(urlJoin(observationSetIri, '..'))
+  return $rdf.namedNode(urlJoin(observationSetIri, '..'))
 }
 
 function defaultShape ({ term }) {
@@ -25,7 +25,7 @@ function defaultShape ({ term }) {
     return null
   }
 
-  return rdf.namedNode(urlJoin(cubeIri, 'shape'))
+  return $rdf.namedNode(urlJoin(cubeIri, 'shape'))
 }
 
 class CubeShapeBuilder extends Transform {
@@ -35,7 +35,7 @@ class CubeShapeBuilder extends Transform {
     this.options = {
       cubes: new TermMap(),
       cube: defaultCube,
-      excludeValuesOf: new TermSet(excludeValuesOf ? excludeValuesOf.map(v => rdf.namedNode(v)) : []),
+      excludeValuesOf: new TermSet(excludeValuesOf ? excludeValuesOf.map(v => $rdf.namedNode(v)) : []),
       metadataStream: metadata,
       shape: defaultShape
     }
@@ -45,9 +45,9 @@ class CubeShapeBuilder extends Transform {
 
   async _init () {
     if (this.options.metadataStream) {
-      this.options.metadata = await rdf.dataset().import(this.options.metadataStream)
+      this.options.metadata = await $rdf.dataset().import(this.options.metadataStream)
     } else {
-      this.options.metadata = rdf.dataset()
+      this.options.metadata = $rdf.dataset()
     }
   }
 
@@ -58,7 +58,7 @@ class CubeShapeBuilder extends Transform {
       return callback(err)
     }
 
-    const dataset = rdf.dataset([...chunk])
+    const dataset = $rdf.dataset([...chunk])
 
     const context = {
       dataset,
