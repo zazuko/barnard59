@@ -1,0 +1,36 @@
+BASE <http://example.org/>
+PREFIX void:   <http://rdfs.org/ns/void#>
+PREFIX dcat:   <http://www.w3.org/ns/dcat#>
+
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX foaf:   <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
+PREFIX wd:     <http://www.wikidata.org/entity/>
+PREFIX org:    <https://ld.admin.ch/org/>
+
+
+<>
+    schema:dataset      <data> ;
+    foaf:topic          <data> ;
+    <dateSomethingElse> "2001-05-30"^^xsd:date
+.
+
+<data>
+    a                    void:Dataset, dcat:Dataset, schema:Dataset ;
+    schema:dateCreated   "2020-05-30"^^xsd:date ; # The date on which the CreativeWork was created or the item was added to a DataFeed.
+    schema:datePublished "2020-05-30"^^xsd:date ; # Date of first broadcast/publication.
+    schema:dateModified  "2020-05-30"^^xsd:date ; # The date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed.
+
+    schema:workExample   <data/2> ;
+.
+
+<data/2>
+    a          schema:CreativeWork ;
+    schema:url <https://some/url> ;
+.
+
+<https://some/url>
+    a            schema:DefinedTermSet ;
+    rdfs:seeAlso <data> ;
+.
