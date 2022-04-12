@@ -300,4 +300,88 @@ describe('File System: metadata.append', () => {
     strictEqual(result[3].predicate.value, schema.dateCreated.value)
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
   })
+
+  it('should use specified literal with dateModified (string)', async () => {
+    const data = [
+      rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0)
+    ]
+    const metadata = [
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
+      rdf.quad(ex.subject1, schema.dateModified, rdf.literal('2020-05-30'))
+    ]
+    const step = await append({
+      input: Readable.from(metadata),
+      dateModified: '1999-12-31'
+    })
+
+    const result = await getStream.array(Readable.from(data).pipe(step))
+
+    strictEqual(result.length, 3)
+
+    strictEqual(result[2].predicate.value, schema.dateModified.value)
+    strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
+  })
+
+  it('should use specified literal with dateCreated (string)', async () => {
+    const data = [
+      rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0)
+    ]
+    const metadata = [
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
+      rdf.quad(ex.subject1, schema.dateCreated, rdf.literal('2020-05-30'))
+    ]
+    const step = await append({
+      input: Readable.from(metadata),
+      dateCreated: '1999-12-31'
+    })
+
+    const result = await getStream.array(Readable.from(data).pipe(step))
+
+    strictEqual(result.length, 3)
+
+    strictEqual(result[2].predicate.value, schema.dateCreated.value)
+    strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
+  })
+
+  it('should use specified literal with dateModified', async () => {
+    const data = [
+      rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0)
+    ]
+    const metadata = [
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
+      rdf.quad(ex.subject1, schema.dateModified, rdf.literal('2020-05-30'))
+    ]
+    const step = await append({
+      input: Readable.from(metadata),
+      dateModified: rdf.literal('1999-12-31', xsd.dateTime)
+    })
+
+    const result = await getStream.array(Readable.from(data).pipe(step))
+
+    strictEqual(result.length, 3)
+
+    strictEqual(result[2].predicate.value, schema.dateModified.value)
+    strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
+  })
+
+  it('should use specified literal with dateCreated', async () => {
+    const data = [
+      rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0)
+    ]
+    const metadata = [
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
+      rdf.quad(ex.subject1, schema.dateCreated, rdf.literal('2020-05-30'))
+    ]
+    const step = await append({
+      input: Readable.from(metadata),
+      dateCreated: rdf.literal('1999-12-31', xsd.dateTime)
+    })
+
+    const result = await getStream.array(Readable.from(data).pipe(step))
+
+    strictEqual(result.length, 3)
+
+    strictEqual(result[2].predicate.value, schema.dateCreated.value)
+    strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
+  })
 })
