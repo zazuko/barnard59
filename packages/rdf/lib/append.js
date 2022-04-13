@@ -39,7 +39,7 @@ async function append ({
   if (!input) {
     throw new Error('Needs input as parameter (url or filename)')
   }
-  const basePath = this?.context?.basePath ? this.context.basePath : basepath
+  const basePath = this?.basePath ? this.basePath : basepath
 
   return new MetadataAppend(this, basePath, input, { graph, dateModified, dateCreated })
 }
