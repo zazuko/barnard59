@@ -2,7 +2,7 @@ import TermSet from '@rdfjs/term-set'
 import rdf from 'rdf-ext'
 import * as ns from '../namespaces.js'
 import { xsd } from '../namespaces.js'
-import { wellKnownDatasetClasses } from './datasetClasses.js'
+import { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms } from './datasetClasses.js'
 import { namedDateLiterals } from './namedDateLiterals.js'
 
 function subjectsWithDatasetType (dataset, classes) {
@@ -15,8 +15,8 @@ function subjectsWithDatasetType (dataset, classes) {
   return result
 }
 
-function updateOrInsert (dataset, predicate, object) {
-  const targetSubjects = subjectsWithDatasetType(dataset, wellKnownDatasetClasses)
+function updateOrInsert (dataset, datasetClasses, predicate, object) {
+  const targetSubjects = subjectsWithDatasetType(dataset, datasetClasses)
 
   // Remove existent
   dataset = dataset.filter(quad => {
@@ -48,12 +48,17 @@ async function applyOptions (quadStream, metadata = {}, options = {}) {
 
   // dateModified
   if (options.dateModified) {
-    dataset = updateOrInsert(dataset, ns.schema.dateModified, resolveNamedDate(options.dateModified, metadata))
+    const dateModifiedLiteral = resolveNamedDate(options.dateModified, metadata)
+
+    dataset = updateOrInsert(dataset, wellKnownDatasetClassesWithDcterms, ns.dcterms.modified, dateModifiedLiteral)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClasses, ns.schema.dateModified, dateModifiedLiteral)
   }
 
   // dateCreated
   if (options.dateCreated) {
-    dataset = updateOrInsert(dataset, ns.schema.dateCreated, resolveNamedDate(options.dateCreated, metadata))
+    const dateCreatedLiteral = resolveNamedDate(options.dateCreated, metadata)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClassesWithDcterms, ns.dcterms.created, dateCreatedLiteral)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClasses, ns.schema.dateCreated, dateCreatedLiteral)
   }
 
   // Sets graph

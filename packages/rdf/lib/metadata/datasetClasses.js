@@ -2,11 +2,15 @@ import TermSet from '@rdfjs/term-set'
 import * as ns from '../namespaces.js'
 
 const wellKnownDatasetClasses = new TermSet([
-  ns._void.Dataset,
   ns.schema.Dataset,
-  ns.dcat.Dataset,
   ns.cube.Cube
 ]
 )
 
-export { wellKnownDatasetClasses }
+const wellKnownDatasetClassesWithDcterms = new TermSet([
+  ns._void.Dataset,
+  ns.dcat.Dataset
+]
+)
+
+export { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms }
