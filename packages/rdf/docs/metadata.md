@@ -63,10 +63,15 @@ The namedgraph used for the incoming metadata quads.
 The operation updates subjects with a type that's a 'well known dataset class', currently:
 
 * http://rdfs.org/ns/void#Dataset
-* http://schema.org/Dataset,
-* http://www.w3.org/ns/dcat#Dataset,
+* http://www.w3.org/ns/dcat#Dataset
+
+That will add or modify the `dcterms:created` and `dcterms:modified` properties, and:
+
+* http://schema.org/Dataset
 * https://cube.link/Cube
 
+that will add or modify the `schema:dateCreated` and `schema:dateUpdated` properties.
+  
 ### Named Date Literals
 
 #### TIME_NOW

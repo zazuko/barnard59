@@ -12,7 +12,7 @@ import nock from 'nock'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import append from '../lib/append.js'
-import { schema, xsd } from '../lib/namespaces.js'
+import { schema, xsd, dcterms } from '../lib/namespaces.js'
 
 const dataPath = './support/dataset.ttl'
 new URL(dataPath, import.meta.url).toString()
@@ -174,13 +174,16 @@ describe('File System: metadata.append', () => {
 
     const stats = await fsp.lstat(new URL(metadataPath, import.meta.url))
     const result = await getStream.array(Readable.from(data).pipe(step))
-    strictEqual(result.length, 6)
+    strictEqual(result.length, 7)
 
     strictEqual(result[4].predicate.value, schema.dateModified.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, schema.dateCreated.value)
+    strictEqual(result[5].predicate.value, dcterms.created.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
+
+    strictEqual(result[6].predicate.value, schema.dateCreated.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_FILE_CREATION with dateModified', async () => {
@@ -197,13 +200,16 @@ describe('File System: metadata.append', () => {
     const stats = await fsp.lstat(new URL(metadataPath, import.meta.url))
     const result = await getStream.array(Readable.from(data).pipe(step))
 
-    strictEqual(result.length, 6)
+    strictEqual(result.length, 7)
 
     strictEqual(result[4].predicate.value, schema.dateCreated.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, schema.dateModified.value)
+    strictEqual(result[5].predicate.value, dcterms.modified.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
+
+    strictEqual(result[6].predicate.value, schema.dateModified.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_FILE_MODIFICATION with dateCreated', async () => {
@@ -219,13 +225,16 @@ describe('File System: metadata.append', () => {
 
     const stats = await fsp.lstat(new URL(metadataPath, import.meta.url))
     const result = await getStream.array(Readable.from(data).pipe(step))
-    strictEqual(result.length, 6)
+    strictEqual(result.length, 7)
 
     strictEqual(result[4].predicate.value, schema.dateModified.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, schema.dateCreated.value)
+    strictEqual(result[5].predicate.value, dcterms.created.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
+
+    strictEqual(result[6].predicate.value, schema.dateCreated.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_FILE_MODIFICATION with dateModified', async () => {
@@ -242,13 +251,16 @@ describe('File System: metadata.append', () => {
     const stats = await fsp.lstat(new URL(metadataPath, import.meta.url))
     const result = await getStream.array(Readable.from(data).pipe(step))
 
-    strictEqual(result.length, 6)
+    strictEqual(result.length, 7)
 
     strictEqual(result[4].predicate.value, schema.dateCreated.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, schema.dateModified.value)
+    strictEqual(result[5].predicate.value, dcterms.modified.value)
     strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
+
+    strictEqual(result[6].predicate.value, schema.dateModified.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_NOW with dateModified', async () => {
