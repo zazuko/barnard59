@@ -147,7 +147,7 @@ describe('metadata.append', () => {
         input: 'unknown::protocol'
       })
       await applyStep(step)
-    }, Error, /Could not load unknown::protocol/)
+    }, Error, /unknown protocol/)
   })
 
   it('fails at file not found', async () => {

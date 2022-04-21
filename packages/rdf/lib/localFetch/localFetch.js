@@ -1,21 +1,62 @@
-import fs from 'fs'
 import fsp from 'fs/promises'
 
 import { resolve } from 'path'
 import rdfFetch from '@rdfjs/fetch'
+import fileFetch from 'file-fetch'
 import isStream, { isReadable } from 'isstream'
+import protoFetch from 'proto-fetch'
 import { getParserByExtension } from './lookupParser.js'
 
 function isReadableStream (arg) {
   return isStream(arg) && isReadable(arg)
 }
 
-function isFileProtocol (url) {
-  return (url.protocol === 'file:')
+function isAbsolute (str) {
+  return str.startsWith('https:') || str.startsWith('http:') || str.startsWith('file:')
 }
 
-function isHTTP (url) {
-  return (url.protocol === 'https:' || url.protocol === 'http:')
+async function streamWithMetadata (input) {
+  return {
+    quadStream: input,
+    metadata: {
+      type: input.constructor.name
+    }
+  }
+}
+
+async function fetchHTTPWithMeta (input) {
+  const url = new URL(input, import.meta.url)
+  const res = await rdfFetch(url)
+  return {
+    quadStream: await res.quadStream(),
+    metadata: {
+      type: url.constructor.name,
+      value: url
+    }
+  }
+}
+
+function guessParserForFile (filePath) {
+  const parser = getParserByExtension(filePath)
+  if (!parser) {
+    throw new Error(`No parser could be guessed for ${filePath}`)
+  }
+  return parser
+}
+
+async function fetchFileWithMeta (input) {
+  const filePathURL = new URL(input, import.meta.url)
+  const res = await fileFetch(filePathURL.toString())
+  const stream = res.body
+  const quadStream = await guessParserForFile(input).import(stream)
+  return {
+    quadStream: quadStream,
+    metadata: {
+      type: filePathURL.constructor.name,
+      value: filePathURL.toString(),
+      stats: await fsp.lstat(filePathURL)
+    }
+  }
 }
 
 // Tries to fetch or read locally one file
@@ -26,47 +67,25 @@ async function localFetch (
   if (!(input)) {
     throw new Error('needs input filename or URL')
   }
-
   if (isReadableStream(input)) {
-    return { quadStream: input, metadata: {} }
+    return streamWithMetadata(input, basePath)
   }
-
   if (typeof input !== 'string') {
     throw new Error(`needs input filename or URL, got [${typeof input}]`)
   }
+  const fetch = protoFetch({
+    file: fetchFileWithMeta,
+    http: fetchHTTPWithMeta,
+    https: fetchHTTPWithMeta
+  })
 
-  const url = new URL(input, import.meta.url)
-  if (isHTTP(url)) {
-    const res = await rdfFetch(url)
-    return {
-      quadStream: await res.quadStream(),
-      metadata: {
-        uri: url
-      }
-    }
-  }
+  const url = isAbsolute(input)
+    ? input
+    : basePath
+      ? `file://${resolve(basePath, input)}`
+      : input
 
-  if (!isFileProtocol(new URL(input, import.meta.url))) {
-    throw new Error(`Could not load ${input}`)
-  }
-
-  const filePath = input.startsWith('file://') ? input : (basePath ? resolve(basePath, input) : input)
-
-  const filePathURL = new URL(filePath, import.meta.url)
-
-  const stream = fs.createReadStream(filePathURL)
-  const parser = getParserByExtension(filePath)
-  if (!parser) {
-    throw new Error(`No parser could be guessed for ${filePath}`)
-  }
-  const quadStream = await parser.import(stream)
-  return {
-    quadStream: quadStream,
-    metadata: {
-      stats: await fsp.lstat(filePathURL),
-      uri: filePathURL.toString()
-    }
-  }
+  return fetch(url)
 }
 
 export { localFetch }
