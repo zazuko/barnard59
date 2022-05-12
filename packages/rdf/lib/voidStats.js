@@ -1,7 +1,7 @@
+import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import { Transform } from 'readable-stream'
 import * as ns from './namespaces.js'
-import { xsd } from './namespaces.js'
 
 class VoidStats extends Transform {
   constructor (context, {
@@ -9,12 +9,16 @@ class VoidStats extends Transform {
     classPartitions,
     propertyPartitions,
     includeTotals,
-    graph
+    graph,
+    createClassPartitionUri,
+    createPropertyPartitionUri
   }) {
     super({ objectMode: true })
     this.voidDatasetUri = voidDatasetUri
     this.includeTotals = includeTotals
     this.graph = graph
+    this.createClassPartitionUri = createClassPartitionUri
+    this.createPropertyPartitionUri = createPropertyPartitionUri
 
     this.classPartitionsCounts = new Map()
     classPartitions.forEach(current => {
@@ -56,32 +60,52 @@ class VoidStats extends Transform {
       const datasetUri = toNamedNode(this.voidDatasetUri)
       const datasetGraph = this.graph ? toNamedNode(this.graph) : undefined
 
-      this.push(rdf.quad(datasetUri, ns.rdf.type, ns._void.Dataset, datasetGraph))
+      const stats = clownface({
+        dataset: rdf.dataset(),
+        graph: datasetGraph
+      })
+
+      stats
+        .namedNode(datasetUri)
+        .addOut(ns.rdf.type, ns._void.Dataset)
+
       if (this.includeTotals) {
-        this.push(rdf.quad(datasetUri, ns._void.triples, rdf.literal(this.totalTripleCount, xsd.integer), datasetGraph))
-        this.push(rdf.quad(datasetUri, ns._void.entities, rdf.literal(this.totalEntityCount, xsd.integer), datasetGraph))
+        stats
+          .namedNode(datasetUri)
+          .addOut(ns._void.triples, this.totalTripleCount)
+          .addOut(ns._void.entities, this.totalEntityCount)
       }
 
       if (this.classPartitionsCounts.size) {
-        let i = 0
+        let index = 0
         for (const [currentClass, count] of this.classPartitionsCounts) {
-          const classPartitionUri = rdf.blankNode(`b_class_partition_${i}`)
-          this.push(rdf.quad(datasetUri, ns._void.classPartition, classPartitionUri, datasetGraph))
-          this.push(rdf.quad(classPartitionUri, ns._void.class, currentClass, datasetGraph))
-          this.push(rdf.quad(classPartitionUri, ns._void.entities, rdf.literal(count, xsd.integer), datasetGraph))
-          i += 1
+          stats
+            .namedNode(datasetUri)
+            .addOut(ns._void.classPartition, this.createClassPartitionUri(datasetUri, index), partition => {
+              partition
+                .addOut(ns._void.class, currentClass)
+                .addOut(ns._void.entities, count)
+            })
+          index += 1
         }
       }
 
       if (this.propertyPartitionsCounts.size) {
-        let i = 0
+        let index = 0
         for (const [currentProperty, count] of this.propertyPartitionsCounts) {
-          const propertyPartitionUri = rdf.blankNode(`b_property_partition_${i}`)
-          this.push(rdf.quad(datasetUri, ns._void.propertyPartition, propertyPartitionUri, datasetGraph))
-          this.push(rdf.quad(propertyPartitionUri, ns._void.property, currentProperty, datasetGraph))
-          this.push(rdf.quad(propertyPartitionUri, ns._void.entities, rdf.literal(count, xsd.integer), datasetGraph))
-          i += 1
+          stats
+            .namedNode(datasetUri)
+            .addOut(ns._void.propertyPartition, this.createPropertyPartitionUri(datasetUri, index), partition => {
+              partition
+                .addOut(ns._void.property, currentProperty)
+                .addOut(ns._void.entities, count)
+            })
+          index += 1
         }
+      }
+
+      for (const quad of stats.dataset) {
+        this.push(quad)
       }
     } catch (err) {
       this.destroy(err)
@@ -103,7 +127,9 @@ function graphStats ({
   classPartitions = [],
   propertyPartitions = [],
   includeTotals = true,
-  graph = undefined
+  graph = undefined,
+  createClassPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/classPartition/${index}`),
+  createPropertyPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/propertyPartition/${index}`)
 } = {}) {
   if (!voidDatasetUri) {
     throw new Error('Needs voidDatasetUri as parameter')
@@ -114,7 +140,9 @@ function graphStats ({
     classPartitions: classPartitions.map(toNamedNode),
     propertyPartitions: propertyPartitions.map(toNamedNode),
     includeTotals,
-    graph: toNamedNode(graph)
+    graph: toNamedNode(graph),
+    createClassPartitionUri,
+    createPropertyPartitionUri
   })
 }
 
