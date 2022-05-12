@@ -1,5 +1,4 @@
-import { equal, strictEqual } from 'assert'
-import assert from 'assert/strict'
+import { equal, strictEqual, throws } from 'assert'
 import namespace from '@rdfjs/namespace'
 import getStream from 'get-stream'
 import { isDuplex } from 'isstream'
@@ -31,7 +30,7 @@ describe('membership.toTarget', () => {
   ]
   parameterSet.forEach(params => {
     it('should throw an error if a mandatory parameter is missing', async () => {
-      assert.throws(() => {
+      throws(() => {
         toTarget(params)
       }, Error)
     })
@@ -92,7 +91,7 @@ describe('membership.fromSource', () => {
   ]
   parameterSet.forEach(params => {
     it('should throw an error if a mandatory parameter is missing', async () => {
-      assert.throws(() => {
+      throws(() => {
         fromSource(params)
       }, Error)
     })
