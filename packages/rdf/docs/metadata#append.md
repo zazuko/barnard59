@@ -1,7 +1,5 @@
 
-# Metadata operation
-
-## Append
+# Metadata Append operation
 
 Say you have a `dataset_description.ttl` file containing:
 
@@ -42,23 +40,23 @@ will append the contents of `dataset_description.ttl` to the stream, with new or
 <http://example.org/test> <http://schema.org/dateCreated> "2020-05-30"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ```
 
-### Parameters
+## Parameters
 
-#### input
+### input
 
 The quads to append. Can be a file, a quad stream or an URL pointing to the resource.
 
-### Optional parameters
+## Optional parameters
 
-#### basepath
+### basepath
 
 Sets the base path used to fetch the file.
 
-#### graph
+### graph
 
 The namedgraph used for the incoming metadata quads.
 
-### Dataset Classes
+## Dataset Classes
 
 The operation updates subjects with a type that's a 'well known dataset class', currently:
 
@@ -72,16 +70,16 @@ That will add or modify the `dcterms:created` and `dcterms:modified` properties,
 
 that will add or modify the `schema:dateCreated` and `schema:dateUpdated` properties.
   
-### Named Date Literals
+## Named Date Literals
 
-#### TIME_NOW
+### TIME_NOW
 
 The current time
 
-#### TIME_FILE_CREATION
+### TIME_FILE_CREATION
 
 The file creation time. Applies only to files
 
-#### TIME_FILE_MODIFICATION
+### TIME_FILE_MODIFICATION
 
 The file modification time. Applies only to files

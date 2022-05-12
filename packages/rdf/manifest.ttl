@@ -37,3 +37,10 @@
   code:implementedBy [ a code:EcmaScript;
                        code:link <node:barnard59-rdf/metadata.js#append>
   ].
+
+<metadata.js#voidStats> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+ rdfs:label "Void statistics";
+ rdfs:comment "Appends void statistics, such as counts for entities and properties";
+ code:implementedBy [ a code:EcmaScript;
+                      code:link <node:barnard59-rdf/metadata.js#voidStats>
+                    ].
