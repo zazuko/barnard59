@@ -51,7 +51,7 @@ function toTarget ({
   }
 
   return new AddRelations(this, {
-    createRelation: sourceUri => rdf.quad(sourceUri, property, targetUri),
+    createRelation: sourceUri => rdf.quad(toNamedNode(sourceUri), toNamedNode(property), toNamedNode(targetUri)),
     additionalQuads: [rdf.quad(toNamedNode(targetUri), ns.rdf.type, toNamedNode(targetClass))],
     classes: new TermSet(classes.map(toNamedNode))
   })
@@ -77,7 +77,7 @@ function fromSource ({
   }
 
   return new AddRelations(this, {
-    createRelation: targetUri => rdf.quad(sourceUri, property, targetUri),
+    createRelation: targetUri => rdf.quad(toNamedNode(sourceUri), toNamedNode(property), toNamedNode(targetUri)),
     additionalQuads: [rdf.quad(toNamedNode(sourceUri), ns.rdf.type, toNamedNode(sourceClass))],
     classes: new TermSet(classes.map(toNamedNode))
   })
