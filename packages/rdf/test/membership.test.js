@@ -196,5 +196,4 @@ describe('membership.fromSource', () => {
       toCanonical([...data, ...expectedMetadata])
     )
   })
-
 })
