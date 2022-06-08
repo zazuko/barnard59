@@ -75,6 +75,36 @@ describe('membership.toTarget', () => {
       toCanonical([...data, ...expectedMetadata])
     )
   })
+
+  it('should append meta-data to the data with string parameters', async () => {
+    const data = [
+      rdf.quad(ex.bob, ns.rdf.type, ex.Person),
+      rdf.quad(ex.alice, ns.rdf.type, ex.Person),
+      rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
+      rdf.quad(ex.tom, ns.rdf.type, ex.Cat)
+    ]
+
+    const expectedMetadata = [
+      rdf.quad(ex.bob, ex.in, ex.house),
+      rdf.quad(ex.alice, ex.in, ex.house),
+      rdf.quad(ex.tom, ex.in, ex.house),
+      rdf.quad(ex.house, ns.rdf.type, ex.Container)
+    ]
+
+    const step = toTarget({
+      targetUri: ex.house.value,
+      targetClass: ex.Container.value,
+      property: ex.in.value,
+      classes: [ex.Person.value, ex.Cat.value]
+    })
+
+    const result = await getStream.array(Readable.from(data).pipe(step))
+
+    equal(
+      toCanonical(result),
+      toCanonical([...data, ...expectedMetadata])
+    )
+  })
 })
 
 describe('membership.fromSource', () => {
@@ -127,6 +157,36 @@ describe('membership.fromSource', () => {
       sourceClass: ex.Container,
       property: ex.contains,
       classes: [ex.Person, ex.Cat]
+    })
+
+    const result = await getStream.array(Readable.from(data).pipe(step))
+
+    equal(
+      toCanonical(result),
+      toCanonical([...data, ...expectedMetadata])
+    )
+  })
+
+  it('should append meta-data to the data with string parameters', async () => {
+    const data = [
+      rdf.quad(ex.bob, ns.rdf.type, ex.Person),
+      rdf.quad(ex.alice, ns.rdf.type, ex.Person),
+      rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
+      rdf.quad(ex.tom, ns.rdf.type, ex.Cat)
+    ]
+
+    const expectedMetadata = [
+      rdf.quad(ex.house, ex.contains, ex.bob),
+      rdf.quad(ex.house, ex.contains, ex.alice),
+      rdf.quad(ex.house, ex.contains, ex.tom),
+      rdf.quad(ex.house, ns.rdf.type, ex.Container)
+    ]
+
+    const step = fromSource({
+      sourceUri: ex.house.value,
+      sourceClass: ex.Container.value,
+      property: ex.contains.value,
+      classes: [ex.Person.value, ex.Cat.value]
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
