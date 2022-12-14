@@ -21,7 +21,7 @@
   "homepage": "https://github.com/zazuko/barnard59-formats",
   "dependencies": {
     "@opentelemetry/api": "^1.0.1",
-    "@rdfjs/parser-jsonld": "^1.1.1",
+    "@rdfjs/parser-jsonld": "^2.1.0",
     "@rdfjs/parser-n3": "^1.1.2",
     "@rdfjs/serializer-jsonld": "^1.2.0",
     "@rdfjs/serializer-ntriples": "^1.0.1",
