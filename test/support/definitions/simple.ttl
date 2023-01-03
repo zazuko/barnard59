@@ -6,6 +6,13 @@
 <> a p:Pipeline, p:Readable;
   p:steps [
     p:stepList (<read>)
+  ];
+  p:variables [
+    p:variable [
+      a p:Variable ;
+      p:sensitive true ;
+      p:name "SECRET_VAR" ;
+    ];
   ].
 
 <read> a p:Step;
