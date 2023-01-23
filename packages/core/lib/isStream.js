@@ -1,13 +1,14 @@
-import isStream from 'isstream'
+import {
+  isReadableStream as isReadable,
+  isWritableStream as isWritable,
+  isDuplexStream as isDuplex
+} from 'is-stream'
 
-const isReadable = isStream.isReadable
 const isReadableObjectMode = stream => isReadable(stream) && stream._readableState.objectMode
-const isWritable = isStream.isWritable
 const isWritableObjectMode = stream => isWritable(stream) && stream._writableState.objectMode
-const isDuplex = isStream.isDuplex
 
+export { isStream } from 'is-stream'
 export {
-  isStream,
   isReadable,
   isReadableObjectMode,
   isWritable,
