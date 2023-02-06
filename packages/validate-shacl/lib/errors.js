@@ -19,10 +19,12 @@ function buildErrorMessage (report) {
 }
 
 export class ValidationError extends Error {
-  constructor (report) {
+  constructor (report, shapesGraph, dataGraph) {
     const message = buildErrorMessage(report)
     super(message)
 
     this.report = report
+    this.shapesGraph = shapesGraph
+    this.dataGraph = dataGraph
   }
 }

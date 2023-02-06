@@ -30,8 +30,7 @@ class ValidateChunk extends Transform {
     if (shouldContinue) {
       return callback(null, data)
     }
-
-    this.destroy(new ValidationError(report))
+    this.destroy(new ValidationError(report, this.validator.$shapes.dataset, data))
   }
 }
 

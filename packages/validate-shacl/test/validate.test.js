@@ -93,7 +93,12 @@ describe('validate-shacl', () => {
 
       await assertThrows(async () => {
         await getStream.array(validatedInput)
-      }, Error, /More than 1 values/)
+      }, Error, error => {
+        strictEqual(error.report.dataset.size > 0, true)
+        strictEqual(error.shapesGraph.size > 0, true)
+        strictEqual(error.dataGraph.size > 0, true)
+        strictEqual(error.message.includes('More than 1 values'), true)
+      })
     })
 
     it('does not fail when there are validation errors but callback returns true', async () => {
