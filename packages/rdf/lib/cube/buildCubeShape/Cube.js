@@ -36,7 +36,7 @@ class Cube {
     this.dimension({ predicate, object }).update({ predicate, object })
   }
 
-  toDataset () {
+  toDataset ({ shapeGraph } = { shapeGraph: undefined }) {
     const dataset = rdf.dataset()
 
     const cube = clownface({ dataset, term: this.term })
@@ -49,15 +49,18 @@ class Cube {
     clownface({ dataset, term: this.observationSet })
       .addOut(ns.rdf.type, ns.cube.ObservationSet)
 
-    clownface({ dataset, term: this.shape })
+    const shapeDataset = rdf.dataset()
+
+    clownface({ dataset: shapeDataset, term: this.shape })
       .addOut(ns.rdf.type, [ns.sh.NodeShape, ns.cube.Constraint])
       .addOut(ns.sh.closed, true)
 
     for (const dimension of this.dimensions.values()) {
-      dataset.addAll(dimension.toDataset({ shape: this.shape }))
+      shapeDataset.addAll(dimension.toDataset({ shape: this.shape }))
     }
+    const setGraph = quad => rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
 
-    return dataset
+    return dataset.addAll([...(shapeDataset.map(setGraph))])
   }
 }
 

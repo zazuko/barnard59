@@ -560,4 +560,50 @@ describe('cube.buildCubeShape', () => {
     strictEqual(ns.ex.node.equals(propertyF.term), true)
     strictEqual(propertyG.term, undefined)
   })
+
+  it('should use the graph parameter as named-graph for the produced shapes', async () => {
+    const dataset = rdf.dataset()
+
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property1.value]: rdf.literal('A'),
+        [ns.ex.property2.value]: rdf.literal('B')
+      }]
+    })
+    const targetShapeGraph = rdf.namedNode('http://shapes.org')
+    const transform = buildCubeShape({ metadata: dataset.toStream(), graph: targetShapeGraph })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+    for (const quad of [...result.dataset].slice(0, 8)) {
+      strictEqual(targetShapeGraph.equals(quad.graph), false)
+    }
+    for (const quad of [...result.dataset].slice(8)) {
+      strictEqual(targetShapeGraph.equals(quad.graph), true)
+    }
+  })
+
+  it('should use the graph value as named-graph for the produced shapes, given as string', async () => {
+    const dataset = rdf.dataset()
+
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.property1.value]: rdf.literal('A'),
+        [ns.ex.property2.value]: rdf.literal('B')
+      }]
+    })
+    const targetShapeGraph = 'http://shapes.org'
+    const transform = buildCubeShape({ metadata: dataset.toStream(), graph: targetShapeGraph })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+    for (const quad of [...result.dataset].slice(0, 8)) {
+      strictEqual(rdf.namedNode(targetShapeGraph).equals(quad.graph), false)
+    }
+    for (const quad of [...result.dataset].slice(8)) {
+      strictEqual(rdf.namedNode(targetShapeGraph).equals(quad.graph), true)
+    }
+  })
 })
