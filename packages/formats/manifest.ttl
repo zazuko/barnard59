@@ -45,11 +45,11 @@
     code:link <node:barnard59-formats/ntriples.js#serialize>
   ].
 
-<rdfxml/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
+<rdf-xml/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse RDF/XML";
   rdfs:comment "Parses the given RDF/XML stream.";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-formats/rdfxml.js#parse>
+    code:link <node:barnard59-formats/rdf-xml.js#parse>
   ].
 
 <xlsx/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
