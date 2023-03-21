@@ -58,20 +58,6 @@ describe('read', () => {
       })
     })
 
-  it('fails if file is specified and does not exist', async () => {
-    const serverFactory = () => new SftpServer({ user: 'test', password: '1234' })
-    const additionalOptions = {
-      password: undefined,
-      privateKey: 'test/support/does-not-exist.key'
-    }
-    await withServer(serverFactory, async server => {
-      const options = { ...server.options, ...additionalOptions }
-      await assertThrows(async () => {
-        await read({ filename: 'data/xyz.txt', ...options })
-      }, Error, /ENOENT: no such file or directory/)
-    })
-  })
-
   it('fails if key is malformed', async () => {
     const serverFactory = () => new SftpServer({ user: 'test', password: '1234' })
     const additionalOptions = {
@@ -81,7 +67,7 @@ describe('read', () => {
     await withServer(serverFactory, async server => {
       const options = { ...server.options, ...additionalOptions }
       await assertThrows(async () => {
-         await read({ filename: 'data/xyz.txt', ...options })
+        await read({ filename: 'data/xyz.txt', ...options })
       }, Error, /Cannot parse privateKey/)
     })
   })

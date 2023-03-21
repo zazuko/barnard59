@@ -32,14 +32,20 @@ function getClientClass (protocol = 'ftp') {
   }
 }
 
-const validExtensions = ['.pem', '.key', '.pub']
-
-async function getPrivateKey ({ privateKey }) {
-  if (privateKey && typeof privateKey === 'string' &&
-    validExtensions.includes(path.extname(privateKey).toLowerCase())) {
-    const absolutePath = path.resolve(privateKey)
+async function maybeFromFile (str) {
+  try {
+    const absolutePath = path.resolve(str)
     await fs.access(absolutePath)
     return fs.readFile(absolutePath)
+  } catch (err) {
+    return undefined
+  }
+}
+
+async function getPrivateKey ({ privateKey }) {
+  if (privateKey && typeof privateKey === 'string') {
+    const contents = await maybeFromFile(privateKey)
+    return contents ?? privateKey
   }
   return privateKey
 }
