@@ -1,9 +1,13 @@
+import { promises as fs } from 'fs'
+import path from 'path'
 import FtpClient from './FtpClient.js'
 import SftpClient from './SftpClient.js'
 
 async function command (options, callback, keepAlive = false) {
   const ClientClass = getClientClass(options.protocol)
-  const client = new ClientClass(options)
+  const privateKey = await getPrivateKey(options)
+  const client = new ClientClass(
+    privateKey ? { ...options, privateKey } : options)
   await client.connect()
 
   try {
@@ -26,6 +30,18 @@ function getClientClass (protocol = 'ftp') {
     case 'sftp': return SftpClient
     default: throw Error(`Invalid protocol ${protocol}`)
   }
+}
+
+const validExtensions = ['.pem', '.key', '.pub']
+
+async function getPrivateKey ({ privateKey }) {
+  if (privateKey && typeof privateKey === 'string' &&
+    validExtensions.includes(path.extname(privateKey).toLowerCase())) {
+    const absolutePath = path.resolve(privateKey)
+    await fs.access(absolutePath)
+    return fs.readFile(absolutePath)
+  }
+  return privateKey
 }
 
 export default command

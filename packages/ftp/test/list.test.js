@@ -37,7 +37,10 @@ describe('list', () => {
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
       { password: undefined, privateKey: readFileSync('test/support/test.key') }
-    ]
+    ], [
+      'on a SFTP server with private key specified as a file',
+      () => new SftpServer({ user: 'test', password: '1234' }),
+      { password: undefined, privateKey: 'test/support/test.key' }]
   ].forEach(([label, serverFactory, additionalOptions]) => {
     it(`lists files from the given directory ${label}`, async () => {
       await withServer(serverFactory, async server => {

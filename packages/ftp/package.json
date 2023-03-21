@@ -25,6 +25,7 @@
     "sftp-promises": "^1.4.1"
   },
   "devDependencies": {
+    "assert-throws-async": "^3.0.0",
     "c8": "^7.7.3",
     "codecov": "^3.8.2",
     "ftp-srv": "^4.2.0",

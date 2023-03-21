@@ -41,7 +41,10 @@ describe('move', () => {
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
       { password: undefined, privateKey: fs.readFileSync('test/support/test.key') }
-    ]
+    ], [
+      'on a SFTP server with private key specified as a file',
+      () => new SftpServer({ user: 'test', password: '1234' }),
+      { password: undefined, privateKey: 'test/support/test.key' }]
   ].forEach(([label, serverFactory, additionalOptions]) => {
     it(`moves a file from the given place to another place ${label}`, async () => {
       await withServer(serverFactory, async server => {
