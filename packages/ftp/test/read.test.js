@@ -15,23 +15,36 @@ describe('read', () => {
 
   ;[
     [
-      'on a FTP server with anonymous user', () => new FtpServer(), {}], [
+      'on a FTP server with anonymous user',
+      () => new FtpServer(),
+      {}
+    ],
+    [
       'on a FTP server with username/password',
       () => new FtpServer({ user: 'test', password: '1234' }),
-      {}], [
-      'on a SFTP server with anonymous user', () => new SftpServer(), {}], [
+      {}
+    ],
+    [
+      'on a SFTP server with anonymous user',
+      () => new SftpServer(),
+      {}
+    ],
+    [
       'on a SFTP server with username/password',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      {}], [
+      {}
+    ],
+    [
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      {
-        password: undefined,
-        privateKey: readFileSync('test/support/test.key')
-      }], [
+      { password: undefined, privateKey: readFileSync('test/support/test.key') }
+    ],
+    [
       'on a SFTP server with private key specified as a file',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: 'test/support/test.key' }]].forEach(
+      { password: undefined, privateKey: 'test/support/test.key' }
+    ]
+  ].forEach(
     ([label, serverFactory, additionalOptions]) => {
       it(`read file from the given path ${label}`, async () => {
         await withServer(serverFactory, async server => {
@@ -68,7 +81,7 @@ describe('read', () => {
     await withServer(serverFactory, async server => {
       const options = { ...server.options, ...additionalOptions }
       await assertThrows(async () => {
-        await read({ filename: 'data/xyz.txt', ...options })
+         await read({ filename: 'data/xyz.txt', ...options })
       }, Error, /Cannot parse privateKey/)
     })
   })
