@@ -1,8 +1,16 @@
-# barnard59
+# Meet barnard59: The Ultimate RDF Pipeline Solution
 
-`barnard59` is a toolkit to automate extract, transform and load (ETL) tasks. Its main focus is on creating [Linked Data](http://linked-data-training.zazuko.com/). It allows you to generate RDF out of non-RDF data sources. In doing so, it follows the standard adopted in [Semantic Web](https://www.w3.org/standards/semanticweb/).
+Welcome to barnard59, the toolkit that simplifies and automates extract, transform, and load (ETL) processes while focusing on generating RDF data. Our powerful engine is designed to make creating and executing declarative data pipelines a breeze, transforming your data into the valuable RDF format you need.
 
-More specifically, `barnard59` is an engine to execute data pipelines.
+With barnard59, you can easily create reusable pipelines and steps using a configuration-based approach. This means less time spent on writing complex code and more time focusing on your data. By maintaining configurations instead of code, your pipelines become more transparent, manageable, and easier to update, ensuring that your projects stay agile and adaptable.
+
+And when custom functionality is needed, you can effortlessly extend your pipeline with JavaScript code snippets that integrate harmoniously with existing steps.
+
+Our flexible solution is built to run in any environment: local machines, servers, containers, CI/CD environments, or even as a cron job, making it a perfect fit for your unique setup.
+
+Ready to elevate your data processing? Get started with barnard59 and experience the future of efficient, effective RDF data management today!
+
+A good starting point to try it out is our [xrm-csvw-workflow](https://github.com/zazuko/xrm-csvw-workflow) sample pipeline.
 
 ## Pipeline
 
