@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky install",
     "lint": "eslint . --quiet --ignore-path .gitignore",
     "test": "c8 --reporter=lcov --reporter=text mocha",
     "release": "changeset publish"
@@ -36,10 +37,17 @@
     "c8": "^7.7.3",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
+    "husky": "^8.0.3",
     "isstream": "^0.1.2",
+    "lint-staged": "^13.2.0",
     "mocha": "^9.0.1"
   },
   "engines": {
     "node": ">= 14.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix --quiet"
+    ]
   }
 }
