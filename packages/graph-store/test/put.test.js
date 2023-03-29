@@ -100,7 +100,7 @@ describe('put', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3, ns.graph1),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1),
       ]
       const expected = quads.map(quad => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
@@ -135,7 +135,7 @@ describe('put', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
       const expected = quads.map(quad => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
@@ -173,7 +173,7 @@ describe('put', () => {
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4),
         rdf.quad(ns.subject5, ns.predicate5, ns.object5, ns.graph2),
-        rdf.quad(ns.subject6, ns.predicate6, ns.object6, ns.graph2)
+        rdf.quad(ns.subject6, ns.predicate6, ns.object6, ns.graph2),
       ]
       const expected = quads.reduce((expected, quad) => {
         const graphIri = quad.graph.value || 'default'
@@ -215,7 +215,7 @@ describe('put', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
       const expectedPut = [quadToNTriples(quads[0]) + '\n' + quadToNTriples(quads[1]) + '\n']
       const expectedPost = [quadToNTriples(quads[2]) + '\n' + quadToNTriples(quads[3]) + '\n']

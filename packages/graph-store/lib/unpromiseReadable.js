@@ -1,7 +1,7 @@
 import toReadable from 'duplex-to/readable.js'
 import { PassThrough } from 'readable-stream'
 
-function unpromiseReadable (promise) {
+function unpromiseReadable(promise) {
   const stream = new PassThrough({ objectMode: true })
 
   promise.then(source => {
