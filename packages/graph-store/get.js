@@ -2,11 +2,11 @@ import rdf from '@rdfjs/data-model'
 import Client from 'sparql-http-client'
 import unpromiseReadable from './lib/unpromiseReadable.js'
 
-function get ({ endpoint, graph, user, password }) {
+function get({ endpoint, graph, user, password }) {
   const client = new Client({
     storeUrl: endpoint,
     user,
-    password
+    password,
   })
 
   if (!graph || rdf.defaultGraph().equals(graph)) {

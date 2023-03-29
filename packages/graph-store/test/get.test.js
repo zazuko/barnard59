@@ -89,7 +89,7 @@ describe('get', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3, ns.graph1),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1),
       ]
       const content = expected.map(quad => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
@@ -116,7 +116,7 @@ describe('get', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3, ns.graph1),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1),
       ]
       const content = expected.map(quad => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
@@ -143,7 +143,7 @@ describe('get', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
       const content = expected.map(quad => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
@@ -170,7 +170,7 @@ describe('get', () => {
         rdf.quad(ns.subject1, ns.predicate1, ns.object1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4)
+        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
       const content = expected.map(quad => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'

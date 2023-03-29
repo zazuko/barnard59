@@ -4,7 +4,7 @@ import defer from 'promise-the-world/defer.js'
 import { finished, Readable, Writable } from 'readable-stream'
 
 class SinkToWritable extends Writable {
-  constructor (factory) {
+  constructor(factory) {
     super({
       objectMode: true,
       write: async (chunk, encoding, callback) => {
@@ -31,7 +31,7 @@ class SinkToWritable extends Writable {
         }
 
         callback()
-      }
+      },
     })
 
     const init = once(async () => {
@@ -48,7 +48,7 @@ class SinkToWritable extends Writable {
       objectMode: true,
       read: () => {
         read.resolve()
-      }
+      },
     })
 
     let read = defer()
