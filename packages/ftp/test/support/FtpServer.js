@@ -11,8 +11,8 @@ class FtpServer {
     this.password = password
 
     this.server = new FtpSrv({
-      url: `ftp://localhost:${this.port}`,
-      pasv_url: 'localhost',
+      url: `ftp://0.0.0.0:${this.port}`,
+      pasv_url: '0.0.0.0',
       anonymous: !this.user
     })
 
@@ -22,7 +22,7 @@ class FtpServer {
   get options () {
     return {
       protocol: 'ftp',
-      host: 'localhost',
+      host: '0.0.0.0',
       port: this.port,
       user: this.user || 'anonymous',
       password: this.password
