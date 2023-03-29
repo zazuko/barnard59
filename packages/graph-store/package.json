@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59-graph-store",
   "dependencies": {
-    "@rdfjs/data-model": "^1.2.0",
+    "@rdfjs/data-model": "^2.0.1",
     "duplex-to": "^1.0.0",
     "lodash": "^4.17.21",
     "promise-the-world": "^1.0.1",
