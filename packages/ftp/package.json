@@ -1,6 +1,6 @@
 {
   "name": "barnard59-ftp",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "FTP support for Linked Data pipelines",
   "main": "index.js",
   "type": "module",
