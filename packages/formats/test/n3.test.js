@@ -14,5 +14,16 @@ describe('n3', () => {
 
       strictEqual(dataset.length > 0, true)
     })
+
+    it('forwards argument to parser options', async () => {
+      const input = fs.createReadStream(new URL('./rules/weather.n3', import.meta.url))
+
+      const parser = parse({
+        format: 'text/n3'
+      })
+      const dataset = await rdf.dataset().import(input.pipe(parser))
+
+      strictEqual(dataset.length > 0, true)
+    })
   })
 })

@@ -1,0 +1,8 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix : <http://example.org/>.
+
+{
+  :weather a :Raining
+} => {
+  :weather a :Cloudy
+} .
