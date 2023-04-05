@@ -8,8 +8,8 @@
     "barnard59": "bin/barnard59.js"
   },
   "scripts": {
-    "coverage": "codecov",
-    "test": "stricter-standard && c8 --reporter=lcov --reporter=text mocha"
+    "lint": "stricter-standard",
+    "test": "c8 mocha"
   },
   "repository": {
     "type": "git",
