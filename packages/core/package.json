@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "stricter-standard",
-    "test": "c8 --reporter=lcov --reporter=text mocha"
+    "test": "c8 --reporter=lcov --reporter=text mocha",
+    "release": "changeset publish"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
     "barnard59-base": "^1.0.0",
     "barnard59-http": "^1.0.0",
     "c8": "^7.7.3",
