@@ -23,7 +23,7 @@
       "variable": [{
         "@type": "Variable",
         "name": "url",
-        "value": "http://worldtimeapi.org/api/timezone/UTC"
+        "value": "https://timeapi.io/api/Time/current/zone?timeZone=UTC"
       }, {
         "@id": "dateContext"
       }]
@@ -36,7 +36,7 @@
       "variable": [{
         "@type": "Variable",
         "name": "url",
-        "value": "http://worldtimeapi.org/api/timezone/CET"
+        "value": "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam"
       }, {
         "@id": "dateContext"
       }]
