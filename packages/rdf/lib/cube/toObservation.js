@@ -1,7 +1,4 @@
 import { URL } from 'url'
-import namespace from '@rdfjs/namespace'
-import TermMap from '@rdfjs/term-map'
-import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import { Transform } from 'readable-stream'
@@ -9,9 +6,9 @@ import dateToId from '../dateToId.js'
 import urlJoin from '../urlJoin.js'
 
 const ns = {
-  cube: namespace('https://cube.link/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#')
+  cube: rdf.namespace('https://cube.link/'),
+  rdf: rdf.namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
+  xsd: rdf.namespace('http://www.w3.org/2001/XMLSchema#')
 }
 
 function findRoot ({ dataset }) {
@@ -21,7 +18,7 @@ function findRoot ({ dataset }) {
     subjects.set(quad.subject, count + 1)
 
     return subjects
-  }, new TermMap())
+  }, rdf.termMap())
 
   const subject = [...subjects.entries()].sort((a, b) => a[1] - b[1])[0][0]
 
@@ -109,8 +106,8 @@ class ToObservation extends Transform {
 
     this.options = {
       index: 0,
-      blacklist: new TermSet(),
-      dimensions: new TermSet()
+      blacklist: rdf.termSet(),
+      dimensions: rdf.termSet()
     }
 
     if (blacklist) {
@@ -217,7 +214,7 @@ class ToObservation extends Transform {
         dataset.add(rdf.quad(context.observations, ns.cube.observation, context.observation))
       }
 
-      this.push(dataset.toArray())
+      this.push([...dataset])
 
       this.options.index++
 

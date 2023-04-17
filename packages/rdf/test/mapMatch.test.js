@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
-import { isDuplex } from 'isstream'
+import { isDuplexStream } from 'is-stream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
@@ -15,7 +15,7 @@ describe('mapMatch', () => {
   it('should return a duplex stream', () => {
     const stream = mapMatch({ predicate: '', map: () => {} })
 
-    strictEqual(isDuplex(stream), true)
+    strictEqual(isDuplexStream(stream), true)
   })
 
   it('should not touch any quads not matching the pattern', async () => {

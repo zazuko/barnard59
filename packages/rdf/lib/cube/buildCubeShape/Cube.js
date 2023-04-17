@@ -1,5 +1,3 @@
-import TermMap from '@rdfjs/term-map'
-import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import cbdCopy from '../../cbdCopy.js'
@@ -12,7 +10,7 @@ class Cube {
     this.observationSet = observationSet
     this.shape = shape
     this.term = term
-    this.dimensions = new TermMap()
+    this.dimensions = rdf.termMap()
   }
 
   dimension ({ predicate, object }) {
@@ -44,7 +42,7 @@ class Cube {
       .addOut(ns.cube.observationSet, this.observationSet)
       .addOut(ns.cube.observationConstraint, this.shape)
 
-    cbdCopy(this.metadata, cube, { ignore: new TermSet([ns.cube.observationConstraint]) })
+    cbdCopy(this.metadata, cube, { ignore: rdf.termSet([ns.cube.observationConstraint]) })
 
     clownface({ dataset, term: this.observationSet })
       .addOut(ns.rdf.type, ns.cube.ObservationSet)

@@ -1,5 +1,4 @@
 import { strictEqual } from 'assert'
-import namespace from '@rdfjs/namespace'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
@@ -7,7 +6,7 @@ import { applyOptions } from '../../lib/metadata/applyOptions.js'
 import * as ns from '../../lib/namespaces.js'
 import { xsd } from '../../lib/namespaces.js'
 
-const ex = namespace('http://example.org/')
+const ex = rdf.namespace('http://example.org/')
 
 describe('applyOptions', () => {
   it('should be a function', () => {

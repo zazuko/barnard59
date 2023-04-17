@@ -1,7 +1,6 @@
-import TermSet from '@rdfjs/term-set'
 import rdf from 'rdf-ext'
 
-function cbdCopy (source, target, { ignore = new TermSet() } = {}) {
+function cbdCopy (source, target, { ignore = rdf.termSet() } = {}) {
   for (const quad of source.dataset.match(source.term)) {
     if (ignore.has(quad.predicate)) {
       continue

@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
-import { isDuplex } from 'isstream'
+import { isDuplexStream as isDuplex } from 'is-stream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
