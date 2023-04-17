@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.6
+
+### Patch Changes
+
+- d1cbb01: Updated `rdf-ext` and `@rdfjs/namespace` to v2
+
 ## 1.0.0
 
 ### Added
@@ -9,8 +15,8 @@
 ### Changed
 
 - The package is now an ECMAScript module.
-  The CommonJS interface is no longer available. 
+  The CommonJS interface is no longer available.
 - `forEach` is now part of `barnard59-base`.
 - All variables are handled as RDF/JS Terms.
-  Older versions used plain variable values given in a `Map` to the pipeline factory. 
+  Older versions used plain variable values given in a `Map` to the pipeline factory.
   Variables from the pipeline definition were already handled as RDF/JS Terms.
