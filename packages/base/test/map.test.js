@@ -2,6 +2,8 @@ import { deepStrictEqual } from 'assert'
 import { array } from 'get-stream'
 import { describe, it } from 'mocha'
 import { Readable } from 'readable-stream'
+import getStream from 'get-stream'
+import intoStream from 'into-stream'
 import map from '../map.js'
 
 describe('map', () => {
@@ -34,7 +36,7 @@ describe('map', () => {
     const result = await getStream(input.pipe(map(transform)))
 
     // then
-    strictEqual(result, 'ABC')
+    deepStrictEqual(result, 'ABC')
   })
 
   it('binds pipeline context to transform function', async () => {
@@ -49,7 +51,7 @@ describe('map', () => {
     const result = await getStream(input.pipe(boundMap(transform)))
 
     // then
-    strictEqual(result, 'AxBxCx')
+    deepStrictEqual(result, 'AxBxCx')
   })
 
   it('accepts an option to not retain order', async () => {
@@ -71,7 +73,7 @@ describe('map', () => {
     })))
 
     // then
-    strictEqual(result, 'BCA')
+    deepStrictEqual(result, 'BCA')
   })
 
   it('retains input order by default', async () => {
@@ -92,6 +94,6 @@ describe('map', () => {
     })))
 
     // then
-    strictEqual(result, 'ABC')
+    deepStrictEqual(result, 'ABC')
   })
 })
