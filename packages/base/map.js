@@ -27,7 +27,7 @@ export default function map (options) {
   return transform(concurrency, { ordered, objectMode }, (data, callback) => {
     Promise.resolve().then(() => {
       return func.call(this, data)
-    }).then((result) => {
+    }).then(result => {
       callback(null, result)
     }).catch(callback)
   })

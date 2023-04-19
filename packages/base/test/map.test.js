@@ -1,9 +1,8 @@
 import { deepStrictEqual } from 'assert'
-import { array } from 'get-stream'
+import getStream, { array } from 'get-stream'
+import intoStream from 'into-stream'
 import { describe, it } from 'mocha'
 import { Readable } from 'readable-stream'
-import getStream from 'get-stream'
-import intoStream from 'into-stream'
 import map from '../map.js'
 
 describe('map', () => {
