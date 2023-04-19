@@ -1,10 +1,13 @@
 {
   "name": "barnard59-base",
-  "version": "0.0.4",
+  "version": "1.1.0",
   "description": "Linked Data pipelines",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "standard && nyc --reporter=lcov mocha"
+    "lint": "stricter-standard",
+    "test": "c8 --reporter=lcov --reporter=text mocha",
+    "release": "changeset publish"
   },
   "repository": {
     "type": "git",
@@ -18,23 +21,25 @@
   },
   "homepage": "https://github.com/zazuko/barnard59-base",
   "dependencies": {
-    "@rdfjs/formats-common": "^2.0.0",
-    "duplexify": "^3.6.1",
-    "lodash": "^4.17.15",
-    "nodeify-fetch": "^2.0.0",
+    "@opentelemetry/api": "^1.0.1",
+    "duplexify": "^4.1.1",
+    "glob": "^7.1.7",
     "parallel-transform": "^1.2.0",
-    "rdf-ext": "^1.1.2",
-    "rdf-transform-triple-to-quad": "^1.0.1",
     "readable-stream": "^3.0.6",
-    "through2": "^2.0.3"
+    "through2": "^4.0.2"
   },
   "devDependencies": {
-    "express": "^4.16.4",
-    "get-stream": "^5.1.0",
+    "@changesets/cli": "^2.26.1",
+    "barnard59-core": "^1.0.0",
+    "c8": "^7.7.3",
+    "get-stream": "^6.0.1",
     "isstream": "^0.1.2",
-    "mocha": "^7.0.0",
-    "nyc": "^15.0.0",
-    "standard": "^14.3.1",
+    "mocha": "^9.0.1",
+    "rdf-utils-fs": "^2.1.0",
+    "stricter-standard": "^0.2.0"
+  },
+  "engines": {
+    "node": ">= 14.0.0",
     "into-stream": "^5.1.1"
   }
 }

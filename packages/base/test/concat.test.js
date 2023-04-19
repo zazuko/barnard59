@@ -1,9 +1,9 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const getStream = require('get-stream')
-const { isReadable, isWritable } = require('isstream')
-const { describe, it } = require('mocha')
-const { Readable } = require('readable-stream')
-const concat = require('../lib/concat')
+import { deepStrictEqual, strictEqual, rejects } from 'assert'
+import getStream, { array } from 'get-stream'
+import { isReadable, isWritable } from 'isstream'
+import { describe, it } from 'mocha'
+import { Readable } from 'readable-stream'
+import concat, { object } from '../concat.js'
 
 describe('concat', () => {
   it('should be a function', () => {
@@ -68,13 +68,33 @@ describe('concat', () => {
     strictEqual(result, 'abcd')
   })
 
+  it('should forward error events', async () => {
+    const stream0 = new Readable({
+      read: () => {
+        stream0.destroy(new Error('test'))
+      }
+    })
+
+    const stream1 = new Readable({
+      read: () => {
+        stream1.push('c')
+        stream1.push('d')
+        stream1.push(null)
+      }
+    })
+
+    const s = concat(stream0, stream1)
+
+    await rejects(() => getStream(s))
+  })
+
   describe('object', () => {
     it('should be a function', () => {
-      strictEqual(typeof concat.object, 'function')
+      strictEqual(typeof object, 'function')
     })
 
     it('should return a Readable', () => {
-      const s = concat.object(new Readable({ read: () => {} }))
+      const s = object(new Readable({ read: () => {} }))
 
       strictEqual(isReadable(s), true)
       strictEqual(isWritable(s), false)
@@ -100,7 +120,7 @@ describe('concat', () => {
         }
       })
 
-      const s = concat.object(stream0, stream1)
+      const s = object(stream0, stream1)
 
       await getStream(s)
 
@@ -126,11 +146,33 @@ describe('concat', () => {
         }
       })
 
-      const s = concat.object(stream0, stream1)
+      const s = object(stream0, stream1)
 
-      const result = await getStream.array(s)
+      const result = await array(s)
 
       deepStrictEqual(result, ['a', 'b', 'c', 'd'])
+    })
+
+    it('should forward error events', async () => {
+      const stream0 = new Readable({
+        objectMode: true,
+        read: () => {
+          stream0.destroy(new Error('test'))
+        }
+      })
+
+      const stream1 = new Readable({
+        objectMode: true,
+        read: () => {
+          stream1.push('c')
+          stream1.push('d')
+          stream1.push(null)
+        }
+      })
+
+      const s = object(stream0, stream1)
+
+      await rejects(() => array(s))
     })
   })
 })
