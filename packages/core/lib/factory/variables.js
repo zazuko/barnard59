@@ -16,7 +16,7 @@ async function createVariables (ptr, { basePath, context, loaderRegistry, logger
   return variables
 }
 
-function withValue(variable) {
+function withValue (variable) {
   return !!variable.out(ns.p.value).term
 }
 
