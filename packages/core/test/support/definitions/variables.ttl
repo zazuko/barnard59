@@ -8,6 +8,9 @@
     p:variable [ a p:Variable;
       p:name "foo";
       p:value "bar"
+    ] ;
+    p:variable [ a p:Variable;
+      p:name "bar";
     ]
   ].
 
