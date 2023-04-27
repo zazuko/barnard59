@@ -1,5 +1,5 @@
 class PipelineError extends Error {
-  constructor (message, cause) {
+  constructor(message, cause) {
     super(message)
 
     if (cause) {

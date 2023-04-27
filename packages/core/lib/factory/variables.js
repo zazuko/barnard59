@@ -1,6 +1,6 @@
 import ns from '../namespaces.js'
 
-async function createVariables (ptr, { basePath, context, loaderRegistry, logger }) {
+async function createVariables(ptr, { basePath, context, loaderRegistry, logger }) {
   const variables = new Map()
 
   for (const variablePtr of ptr.out(ns.p.variable).toArray().filter(withValue)) {
@@ -16,7 +16,7 @@ async function createVariables (ptr, { basePath, context, loaderRegistry, logger
   return variables
 }
 
-function withValue (variable) {
+function withValue(variable) {
   return !!variable.out(ns.p.value).term
 }
 

@@ -1,4 +1,4 @@
-function noStream () {
+function noStream() {
   return {}
 }
 

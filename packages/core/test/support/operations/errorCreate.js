@@ -1,4 +1,4 @@
-function errorCreate () {
+function errorCreate() {
   throw new Error('error')
 }
 

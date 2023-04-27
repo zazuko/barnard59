@@ -4,7 +4,7 @@ import ns from '../namespaces.js'
 
 const unknownVariable = Symbol('unknown-variable')
 
-function loader (ptr, { variables = new Map() } = {}) {
+function loader(ptr, { variables = new Map() } = {}) {
   if (ptr.term.termType === 'Literal') {
     const value = variables.get(ptr.value)
 

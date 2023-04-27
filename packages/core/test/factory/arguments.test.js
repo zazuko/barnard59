@@ -52,7 +52,7 @@ describe('factory/arguments', () => {
 
     const args = await createArguments(ptr, {
       context: { variables: new Map([['abcd', '1234']]) },
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     deepStrictEqual(args, ['1234'])

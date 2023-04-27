@@ -21,7 +21,7 @@ describe('factory/step', () => {
     const step = await createStep(ptr, {
       basePath: resolve('test'),
       loaderRegistry: defaultLoaderRegistry(),
-      logger: defaultLogger()
+      logger: defaultLogger(),
     })
 
     strictEqual(step instanceof Step, true)
@@ -35,7 +35,7 @@ describe('factory/step', () => {
       await createStep(ptr, {
         basePath: resolve('test'),
         loaderRegistry: defaultLoaderRegistry(),
-        logger: defaultLogger()
+        logger: defaultLogger(),
       })
     }, err => {
       strictEqual(err.message.includes('step'), true)
@@ -52,7 +52,7 @@ describe('factory/step', () => {
     const step = await createStep(ptr, {
       basePath: resolve('test'),
       loaderRegistry: defaultLoaderRegistry(),
-      logger: defaultLogger()
+      logger: defaultLogger(),
     })
 
     const result = await getStream(step.stream)

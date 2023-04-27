@@ -2,7 +2,7 @@ import parseArguments from 'rdf-loader-code/arguments.js'
 import { unknownVariable } from '../loader/variable.js'
 import ns from '../namespaces.js'
 
-async function createArguments (ptr, { basePath, context, loaderRegistry, logger, variables }) {
+async function createArguments(ptr, { basePath, context, loaderRegistry, logger, variables }) {
   const args = await parseArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
 
   // The variable loader returns the symbol unknownVariable for all unknown variables.

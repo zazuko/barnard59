@@ -2,17 +2,17 @@ import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import ns from './namespaces.js'
 
-function createPipelineDefinition ({
+function createPipelineDefinition({
   dataset,
   term,
   readable,
   readableObjectMode,
   writable,
-  writableObjectMode
+  writableObjectMode,
 } = {}) {
   const ptr = clownface({
     dataset: dataset || rdf.dataset(),
-    term: term || rdf.blankNode()
+    term: term || rdf.blankNode(),
   })
 
   ptr.addOut(ns.rdf.type, ns.p.Pipeline)

@@ -3,15 +3,15 @@ import winston from 'winston'
 const { createLogger, format, transports } = winston
 const { Console, File } = transports
 
-function factory ({ console = true, errorFilename = null, filename = null, level = 'error' } = {}) {
+function factory({ console = true, errorFilename = null, filename = null, level = 'error' } = {}) {
   const transports = []
 
   if (console) {
     transports.push(new Console({
       format: format.combine(
         format.colorize(),
-        format.simple()
-      )
+        format.simple(),
+      ),
     }))
   }
 
@@ -29,9 +29,9 @@ function factory ({ console = true, errorFilename = null, filename = null, level
       format.timestamp(),
       format.errors({ stack: true }),
       format.splat(),
-      format.json()
+      format.json(),
     ),
-    transports
+    transports,
   })
 }
 

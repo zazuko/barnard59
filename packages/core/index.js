@@ -7,5 +7,5 @@ export {
   createPipeline,
   defaultLoaderRegistry,
   defaultLogger,
-  run
+  run,
 }

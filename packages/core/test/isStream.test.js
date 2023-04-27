@@ -8,7 +8,7 @@ import {
   isReadableObjectMode,
   isWritable,
   isWritableObjectMode,
-  isDuplex
+  isDuplex,
 } from '../lib/isStream.js'
 
 describe('isStream', () => {

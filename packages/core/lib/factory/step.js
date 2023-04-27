@@ -7,7 +7,7 @@ import tracer from '../tracer.js'
 import createArguments from './arguments.js'
 import createOperation from './operation.js'
 
-async function createStep (ptr, { basePath, context, loaderRegistry, logger, variables }) {
+async function createStep(ptr, { basePath, context, loaderRegistry, logger, variables }) {
   return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })

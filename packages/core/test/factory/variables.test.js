@@ -17,7 +17,7 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     strictEqual(variables instanceof Map, true)
@@ -29,7 +29,7 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     deepStrictEqual(variables, new Map([['foo', 'bar']]))
@@ -41,12 +41,12 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     deepStrictEqual(variables, new Map([
       ['auth', 'http://auth0.com/connect/token'],
-      ['username', 'tpluscode']
+      ['username', 'tpluscode'],
     ]))
   })
 })

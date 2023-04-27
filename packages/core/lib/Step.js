@@ -3,7 +3,7 @@ import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
 
 class Step extends StreamObject {
-  constructor ({
+  constructor({
     args,
     basePath,
     children,
@@ -13,7 +13,7 @@ class Step extends StreamObject {
     operation,
     ptr,
     stream,
-    variables
+    variables,
   }) {
     super({ basePath, children, context, loaderRegistry, logger, ptr, stream, variables })
 

@@ -3,18 +3,18 @@ import stream from 'readable-stream'
 const { Transform } = stream
 
 class InlineTransformer extends Transform {
-  constructor (func) {
+  constructor(func) {
     super({ objectMode: true })
 
     this.transform = func
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     callback(null, this.transform(chunk))
   }
 }
 
-function factory (func) {
+function factory(func) {
   return new InlineTransformer(func)
 }
 
