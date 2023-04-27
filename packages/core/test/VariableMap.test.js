@@ -39,7 +39,7 @@ describe('VariableMap', () => {
       // then
       expect([...merged.entries()]).to.contain.deep.members([
         ['foo', 5],
-        ['bar', 10]
+        ['bar', 10],
       ])
     })
 
@@ -54,7 +54,7 @@ describe('VariableMap', () => {
       // then
       expect([...merged.entries()]).to.contain.deep.members([
         ['foo', 5],
-        ['bar', 10]
+        ['bar', 10],
       ])
     })
 
@@ -70,7 +70,7 @@ describe('VariableMap', () => {
       // then
       expect([...merged.entries()]).to.contain.deep.members([
         ['foo', 5],
-        ['bar', 10]
+        ['bar', 10],
       ])
       expect(merged.optionalVariables).to.contain('baz')
     })

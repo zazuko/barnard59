@@ -1,11 +1,11 @@
 export class VariableMap extends Map {
-  constructor (...args) {
+  constructor(...args) {
     super(...args)
 
     this.optionalVariables = new Set()
   }
 
-  get (key) {
+  get(key) {
     if (!this.has(key) && !this.optionalVariables.has(key)) {
       throw new Error(`Undefined variable '${key}'`)
     }
@@ -13,7 +13,7 @@ export class VariableMap extends Map {
     return super.get(key)
   }
 
-  set (key, value, { optional = false } = {}) {
+  set(key, value, { optional = false } = {}) {
     if (value) {
       super.set(key, value)
     }
@@ -23,7 +23,7 @@ export class VariableMap extends Map {
     }
   }
 
-  static merge (left, right) {
+  static merge(left, right) {
     const merged = new VariableMap([...left, ...right])
 
     if (left instanceof VariableMap) {
