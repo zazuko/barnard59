@@ -1,5 +1,7 @@
 import { strictEqual, throws } from 'assert'
 import { resolve } from 'path'
+import { expect } from 'chai'
+import sinon from 'sinon'
 import getStream from 'get-stream'
 import { describe, it } from 'mocha'
 import createPipeline from '../../lib/factory/pipeline.js'
@@ -106,5 +108,27 @@ describe('factory/pipeline', () => {
     await pipeline.init()
 
     strictEqual(typeof pipeline.context.createPipeline, 'function')
+  })
+
+  it('should log variables', async () => {
+    // given
+    const definition = await loadPipelineDefinition('nested')
+    const logger = {
+      debug: sinon.spy(),
+      info: sinon.spy(),
+    }
+
+    // when
+    const pipeline = createPipeline(definition, {
+      basePath: resolve('test'),
+      logger,
+      variables: new Map([['bar', 'secret'], ['baz', 'baz']]),
+    })
+    await pipeline.init()
+
+    // then
+    expect(logger.info).to.have.been.calledWith(sinon.match(/foo: foo/))
+    expect(logger.info).to.have.been.calledWith(sinon.match(/bar: \*\*\*/))
+    expect(logger.debug).to.have.been.calledWith(sinon.match(/baz: baz/))
   })
 })

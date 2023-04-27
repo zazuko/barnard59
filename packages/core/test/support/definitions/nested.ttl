@@ -2,7 +2,21 @@
 @prefix code: <https://code.described.at/>.
 @prefix p: <https://pipeline.described.at/>.
 
-<> a p:Pipeline, p:Readable;
+<> a p:Pipeline, p:Readable ;
+  p:variables
+    [
+      p:variable
+        [
+          a p:Variable ;
+          p:name "foo" ;
+          p:value "foo"
+        ] ,
+        [
+          a p:Variable ;
+          p:name "bar" ;
+          p:sensitive true ;
+        ] ;
+    ] ;
   p:steps [
     p:stepList (<subPipeline>)
   ].
