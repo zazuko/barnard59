@@ -5,7 +5,7 @@ import { VariableMap } from '../VariableMap.js'
 
 const unknownVariable = Symbol('unknown-variable')
 
-function loader (ptr, { variables = new VariableMap() } = {}) {
+function loader(ptr, { variables = new VariableMap() } = {}) {
   if (ptr.term.termType === 'Literal') {
     const value = variables.get(ptr.value)
 

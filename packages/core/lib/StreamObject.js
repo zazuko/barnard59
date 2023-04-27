@@ -1,7 +1,7 @@
 import { VariableMap } from './VariableMap.js'
 
 class StreamObject {
-  constructor ({
+  constructor({
     basePath,
     children = [],
     context = {},
@@ -9,7 +9,7 @@ class StreamObject {
     logger,
     ptr,
     variables = new VariableMap(),
-    stream
+    stream,
   }) {
     this.basePath = basePath
     this.children = children

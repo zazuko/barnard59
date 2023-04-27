@@ -1,7 +1,7 @@
 import {
   isReadableStream as isReadable,
   isWritableStream as isWritable,
-  isDuplexStream as isDuplex
+  isDuplexStream as isDuplex,
 } from 'is-stream'
 
 const isReadableObjectMode = stream => isReadable(stream) && stream._readableState.objectMode
@@ -13,5 +13,5 @@ export {
   isReadableObjectMode,
   isWritable,
   isWritableObjectMode,
-  isDuplex
+  isDuplex,
 }

@@ -1,6 +1,6 @@
 import rdf from 'rdf-ext'
 
-function cloneTerm (term) {
+function cloneTerm(term) {
   if (!term) {
     return null
   }

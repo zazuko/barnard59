@@ -3,15 +3,15 @@ import stream from 'readable-stream'
 const { Writable } = stream
 
 class NullStream extends Writable {
-  constructor () {
+  constructor() {
     super({
       objectMode: true,
-      write: (chunk, encoding, callback) => callback()
+      write: (chunk, encoding, callback) => callback(),
     })
   }
 }
 
-function factory () {
+function factory() {
   return new NullStream()
 }
 

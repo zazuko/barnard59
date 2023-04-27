@@ -3,7 +3,7 @@ import { SpanStatusCode } from '@opentelemetry/api'
 import { finished } from 'readable-stream'
 import tracer from './tracer.js'
 
-async function run (pipeline, { end = false, resume = false } = {}) {
+async function run(pipeline, { end = false, resume = false } = {}) {
   await tracer.startActiveSpan('run', async span => {
     try {
       if (end) {

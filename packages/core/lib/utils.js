@@ -1,4 +1,5 @@
-function monitor (stream, prefix) {
+/* eslint-disable no-console */
+function monitor(stream, prefix) {
   stream.on('close', () => {
     console.log(`${prefix}: close`)
   })
@@ -17,5 +18,5 @@ function monitor (stream, prefix) {
 }
 
 export {
-  monitor
+  monitor,
 }

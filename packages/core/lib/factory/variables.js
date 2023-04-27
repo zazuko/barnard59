@@ -4,7 +4,7 @@ import { VariableMap } from '../VariableMap.js'
 
 const FALSE = $rdf.literal('false', ns.xsd.boolean)
 
-async function createVariables (ptr, { basePath, context, loaderRegistry, logger }) {
+async function createVariables(ptr, { basePath, context, loaderRegistry, logger }) {
   const variables = new VariableMap()
 
   for (const variablePtr of ptr.out(ns.p.variable).toArray()) {

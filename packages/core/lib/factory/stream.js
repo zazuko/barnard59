@@ -2,21 +2,21 @@ import streams from 'readable-stream'
 
 const { Duplex, Readable, Writable } = streams
 
-function createStream ({ readable, readableObjectMode, read, writable, writableObjectMode, write, final }) {
+function createStream({ readable, readableObjectMode, read, writable, writableObjectMode, write, final }) {
   if (readable && writable) {
     return new Duplex({
       readableObjectMode,
       writableObjectMode,
       read,
       write,
-      final
+      final,
     })
   }
 
   if (readable) {
     return new Readable({
       objectMode: readableObjectMode,
-      read
+      read,
     })
   }
 
@@ -24,7 +24,7 @@ function createStream ({ readable, readableObjectMode, read, writable, writableO
     return new Writable({
       objectMode: writableObjectMode,
       write,
-      final
+      final,
     })
   }
 

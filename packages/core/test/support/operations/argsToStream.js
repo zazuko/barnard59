@@ -3,10 +3,10 @@ import stream from 'readable-stream'
 const { Readable } = stream
 
 class ArgsToStream extends Readable {
-  constructor (args) {
+  constructor(args) {
     super({
       objectMode: true,
-      read: () => {}
+      read: () => {},
     })
 
     args.forEach(arg => this.push(arg))
@@ -14,7 +14,7 @@ class ArgsToStream extends Readable {
   }
 }
 
-function factory () {
+function factory() {
   return new ArgsToStream(Array.prototype.slice.call(arguments, 0))
 }
 

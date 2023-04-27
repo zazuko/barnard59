@@ -1,6 +1,6 @@
 import ns from '../namespaces.js'
 
-async function createOperation (ptr, { basePath, context, loaderRegistry, logger, variables }) {
+async function createOperation(ptr, { basePath, context, loaderRegistry, logger, variables }) {
   const result = await loaderRegistry.load(ptr, { basePath, context, loaderRegistry, logger, variables })
 
   if (typeof result !== 'function') {

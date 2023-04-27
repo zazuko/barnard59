@@ -14,7 +14,7 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     expect(variables).to.be.instanceOf(VariableMap)
@@ -26,7 +26,7 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     expect(variables.get('optional')).to.be.undefined
@@ -38,7 +38,7 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     expect([...variables.entries()]).to.deep.contain.members([['foo', 'bar']])
@@ -50,12 +50,12 @@ describe('factory/variables', () => {
 
     const variables = await createVariables(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     expect([...variables.entries()]).to.deep.contain.members([
       ['auth', 'http://auth0.com/connect/token'],
-      ['username', 'tpluscode']
+      ['username', 'tpluscode'],
     ])
   })
 })

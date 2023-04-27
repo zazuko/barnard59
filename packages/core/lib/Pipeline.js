@@ -10,7 +10,7 @@ import tracer from './tracer.js'
 const { finished } = streams
 
 class Pipeline extends StreamObject {
-  constructor ({
+  constructor({
     basePath,
     children,
     context,
@@ -22,7 +22,7 @@ class Pipeline extends StreamObject {
     readableObjectMode,
     variables,
     writable,
-    writableObjectMode
+    writableObjectMode,
   }) {
     super({ basePath, children, context, loaderRegistry, logger, ptr, variables })
 
@@ -55,20 +55,20 @@ class Pipeline extends StreamObject {
     this.logger.info({ iri: this.ptr.value, message: 'created new Pipeline' })
   }
 
-  get firstChild () {
+  get firstChild() {
     return this.children[0]
   }
 
-  get lastChild () {
+  get lastChild() {
     return this.children[this.children.length - 1]
   }
 
-  addChild (step) {
+  addChild(step) {
     step.stream.on('error', err => this.destroy(err))
     this.children.push(step)
   }
 
-  async _init () {
+  async _init() {
     this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
 
     try {
@@ -87,7 +87,7 @@ class Pipeline extends StreamObject {
         if (!err) {
           this.finish()
         } else {
-          console.error(err)
+          this.logger.error(err)
         }
       })
     } catch (err) {
@@ -99,13 +99,13 @@ class Pipeline extends StreamObject {
     this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
   }
 
-  destroy (err) {
+  destroy(err) {
     this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
     this._span.end()
     this.stream.destroy(err)
   }
 
-  finish () {
+  finish() {
     this._span.setStatus({ code: otel.SpanStatusCode.OK })
     this._span.end()
     if (isReadable(this.stream)) {
@@ -115,7 +115,7 @@ class Pipeline extends StreamObject {
 
   // stream interface
 
-  async _read (size) {
+  async _read(size) {
     try {
       await this.init()
 
@@ -150,14 +150,14 @@ class Pipeline extends StreamObject {
     }
   }
 
-  async _write (chunk, encoding, callback) {
+  async _write(chunk, encoding, callback) {
     await this.init()
 
     this._span.addEvent('write')
     return this.firstChild.stream.write(chunk, encoding, callback)
   }
 
-  async _final (callback) {
+  async _final(callback) {
     await this.init()
 
     finished(this.lastChild.stream, callback)

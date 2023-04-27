@@ -65,7 +65,7 @@ describe('Pipeline', () => {
 
     const pipeline = createPipeline(ptr, {
       basePath: resolve('test'),
-      context: { result }
+      context: { result },
     })
 
     await getStream(pipeline.stream)
