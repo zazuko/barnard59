@@ -3,19 +3,19 @@ import stream from 'readable-stream'
 const { Writable } = stream
 
 class ToContextStream extends Writable {
-  constructor (result) {
+  constructor(result) {
     super({
       objectMode: true,
       write: (chunk, encoding, callback) => {
         result.push(chunk)
 
         callback()
-      }
+      },
     })
   }
 }
 
-function factory () {
+function factory() {
   return new ToContextStream(this.result)
 }
 

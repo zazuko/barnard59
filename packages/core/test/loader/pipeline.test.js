@@ -14,7 +14,7 @@ describe('loader/pipeline', () => {
 
     const variables = new Map([
       ['foo', 'bar'],
-      ['hello', 'world']
+      ['hello', 'world'],
     ])
 
     const stream = await loader(ptr, { basePath, variables })

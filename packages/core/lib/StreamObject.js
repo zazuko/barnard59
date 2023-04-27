@@ -1,5 +1,5 @@
 class StreamObject {
-  constructor ({
+  constructor({
     basePath,
     children = [],
     context = {},
@@ -7,7 +7,7 @@ class StreamObject {
     logger,
     ptr,
     variables = new Map(),
-    stream
+    stream,
   }) {
     this.basePath = basePath
     this.children = children

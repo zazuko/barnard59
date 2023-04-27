@@ -12,9 +12,9 @@ describe('run', () => {
   it('should wait for the pipeline and the logger', async () => {
     const pipeline = {
       stream: new Readable({
-        read: () => pipeline.stream.push(null)
+        read: () => pipeline.stream.push(null),
       }),
-      logger: defaultLogger()
+      logger: defaultLogger(),
     }
 
     const events = []
@@ -31,9 +31,9 @@ describe('run', () => {
   it('should resume if resume flag is true', async () => {
     const pipeline = {
       stream: new Readable({
-        read: () => pipeline.stream.push(null)
+        read: () => pipeline.stream.push(null),
       }),
-      logger: defaultLogger()
+      logger: defaultLogger(),
     }
 
     const events = []
@@ -48,9 +48,9 @@ describe('run', () => {
     const pipeline = {
       stream: new Writable({
         write: (chunk, encoding, callback) => callback(),
-        final: callback => callback()
+        final: callback => callback(),
       }),
-      logger: defaultLogger()
+      logger: defaultLogger(),
     }
 
     const events = []

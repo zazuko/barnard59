@@ -18,7 +18,7 @@ describe('factory/operation', () => {
 
     const operation = await createOperation(ptr, {
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry()
+      loaderRegistry: defaultLoaderRegistry(),
     })
 
     strictEqual(operation, argsToStream)

@@ -7,11 +7,11 @@ import Pipeline from '../Pipeline.js'
 import createStep from './step.js'
 import createVariables from './variables.js'
 
-async function createPipelineContext (ptr, { basePath, context, logger, variables }) {
+async function createPipelineContext(ptr, { basePath, context, logger, variables }) {
   return { ...context, basePath, logger, variables }
 }
 
-async function createPipelineVariables (ptr, { basePath, context, loaderRegistry, logger, variables }) {
+async function createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables }) {
   let localVariables = []
 
   if (ptr) {
@@ -21,12 +21,12 @@ async function createPipelineVariables (ptr, { basePath, context, loaderRegistry
   return new Map([...localVariables, ...variables])
 }
 
-function createPipeline (ptr, {
+function createPipeline(ptr, {
   basePath,
   context = {},
   loaderRegistry = defaultLoaderRegistry(),
   logger = defaultLogger(),
-  variables = new Map()
+  variables = new Map(),
 } = {}) {
   if (!ptr.term || !ptr.dataset) {
     throw new Error('the given graph pointer is invalid')

@@ -1,4 +1,4 @@
-async function nextLoop () {
+async function nextLoop() {
   return new Promise(resolve => setTimeout(resolve, 0))
 }
 

@@ -1,6 +1,6 @@
 import ns from './namespaces.js'
 
-function metadata (ptr) {
+function metadata(ptr) {
   const readableObjectMode = Boolean(ptr.has(ns.rdf.type, ns.p.ReadableObjectMode).term)
   const readable = Boolean(ptr.has(ns.rdf.type, ns.p.Readable).term) || readableObjectMode
   const writableObjectMode = Boolean(ptr.has(ns.rdf.type, ns.p.WritableObjectMode).term)
@@ -10,7 +10,7 @@ function metadata (ptr) {
     readable,
     readableObjectMode,
     writable,
-    writableObjectMode
+    writableObjectMode,
   }
 }
 

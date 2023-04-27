@@ -9,14 +9,14 @@ import loadPipelineDefinition from './support/loadPipelineDefinition.js'
 
 const dateTimeLd = {
   '@context': {
-    date: 'http://purl.org/dc/elements/1.1/date'
+    date: 'http://purl.org/dc/elements/1.1/date',
   },
   '@id': 'http://worldtimeapi.org/api/timezone/CET',
-  date: '2019-03-07T12:58:54.094127+01:00'
+  date: '2019-03-07T12:58:54.094127+01:00',
 }
 
 const dateTime = {
-  datetime: '2019-03-07T12:58:54.094127+01:00'
+  datetime: '2019-03-07T12:58:54.094127+01:00',
 }
 
 describe('Pipeline', () => {
