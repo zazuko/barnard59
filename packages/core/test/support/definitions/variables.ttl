@@ -11,6 +11,10 @@
     ] ;
     p:variable [ a p:Variable;
       p:name "bar";
+    ] ;
+    p:variable [ a p:Variable;
+      p:name "optional" ;
+      p:required false ;
     ]
   ].
 
