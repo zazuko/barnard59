@@ -1,8 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'assert'
-import TermSet from '@rdfjs/term-set'
-import { termToNTriples as toNT } from '@rdfjs/to-ntriples'
+import toNT from '@rdfjs/to-ntriples'
 import clownface from 'clownface'
-import { isDuplex } from 'isstream'
+import { isDuplexStream as isDuplex } from 'is-stream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
@@ -158,7 +157,7 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const propertyShapes = result.node(ns.ex('cube/shape')).out(ns.sh.property)
-    const pathes = new TermSet(propertyShapes.out(ns.sh.path).terms)
+    const pathes = rdf.termSet(propertyShapes.out(ns.sh.path).terms)
 
     strictEqual(propertyShapes.terms.length, 3)
     strictEqual(pathes.has(ns.rdf.type), true)
@@ -241,7 +240,7 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const propertyShape = result.has(ns.sh.path, ns.ex.property)
-    const values = new TermSet([...propertyShape.out(ns.sh.in).list()].map(ptr => ptr.term))
+    const values = rdf.termSet([...propertyShape.out(ns.sh.in).list()].map(ptr => ptr.term))
 
     strictEqual(values.has(ns.ex.valueA), true)
     strictEqual(values.has(ns.ex.valueB), true)
@@ -388,7 +387,7 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const propertyShape = result.has(ns.sh.path, ns.ex.property)
-    const datatypes = new TermSet([...propertyShape.out(ns.sh.or).list()].map(or => or.out(ns.sh.datatype).term))
+    const datatypes = rdf.termSet([...propertyShape.out(ns.sh.or).list()].map(or => or.out(ns.sh.datatype).term))
 
     strictEqual(datatypes.has(ns.xsd.integer), true)
     strictEqual(datatypes.has(ns.cube.Undefined), true)

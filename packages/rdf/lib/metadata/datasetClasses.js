@@ -1,13 +1,13 @@
-import TermSet from '@rdfjs/term-set'
+import rdf from 'rdf-ext'
 import * as ns from '../namespaces.js'
 
-const wellKnownDatasetClasses = new TermSet([
+const wellKnownDatasetClasses = rdf.termSet([
   ns.schema.Dataset,
   ns.cube.Cube
 ]
 )
 
-const wellKnownDatasetClassesWithDcterms = new TermSet([
+const wellKnownDatasetClassesWithDcterms = rdf.termSet([
   ns._void.Dataset,
   ns.dcat.Dataset
 ]

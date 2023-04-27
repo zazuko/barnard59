@@ -1,4 +1,4 @@
-import TermSet from '@rdfjs/term-set'
+import rdf from 'rdf-ext'
 
 class PatternMatcher {
   constructor ({ subject, predicate, object, graph } = {}) {
@@ -20,9 +20,9 @@ class PatternMatcher {
     }
 
     if (value[Symbol.iterator]) {
-      this.pattern[name] = new TermSet([...value])
+      this.pattern[name] = rdf.termSet([...value])
     } else {
-      this.pattern[name] = new TermSet([value])
+      this.pattern[name] = rdf.termSet([value])
     }
   }
 }

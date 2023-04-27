@@ -3,10 +3,9 @@ import fs from 'fs'
 import fsp from 'fs/promises'
 import { fileURLToPath } from 'url'
 import defaultFormats from '@rdfjs/formats-common'
-import namespace from '@rdfjs/namespace'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
-import { isDuplex } from 'isstream'
+import { isDuplexStream as isDuplex } from 'is-stream'
 import { describe, it } from 'mocha'
 import nock from 'nock'
 import rdf from 'rdf-ext'
@@ -22,7 +21,7 @@ new URL(metadataPath, import.meta.url).toString()
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-const ex = namespace('http://example.org/')
+const ex = rdf.namespace('http://example.org/')
 
 async function getRDFDataset (filePath) {
   return rdf.dataset().import(getRDFStream(filePath))

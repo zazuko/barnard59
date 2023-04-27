@@ -1,15 +1,14 @@
 import { equal, strictEqual } from 'assert'
-import namespace from '@rdfjs/namespace'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
-import { isDuplex } from 'isstream'
+import { isDuplexStream as isDuplex } from 'is-stream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import * as ns from '../lib/namespaces.js'
 import voidStats from '../lib/voidStats.js'
 
-const ex = namespace('http://example.org/')
+const ex = rdf.namespace('http://example.org/')
 /**
  * https://www.w3.org/TR/void/#statistics
  */

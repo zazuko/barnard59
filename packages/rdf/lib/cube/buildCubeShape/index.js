@@ -1,5 +1,3 @@
-import TermMap from '@rdfjs/term-map'
-import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import once from 'lodash/once.js'
 import $rdf from 'rdf-ext'
@@ -33,9 +31,9 @@ class CubeShapeBuilder extends Transform {
     super({ objectMode: true })
 
     this.options = {
-      cubes: new TermMap(),
+      cubes: $rdf.termMap(),
       cube: defaultCube,
-      excludeValuesOf: new TermSet(excludeValuesOf ? excludeValuesOf.map(v => $rdf.namedNode(v)) : []),
+      excludeValuesOf: $rdf.termSet(excludeValuesOf ? excludeValuesOf.map(v => $rdf.namedNode(v)) : []),
       metadataStream: metadata,
       shape: defaultShape,
       graph
@@ -88,7 +86,7 @@ class CubeShapeBuilder extends Transform {
       }
     }
 
-    callback(null, context.dataset.toArray())
+    callback(null, [...context.dataset])
   }
 
   _flush (callback) {

@@ -1,12 +1,10 @@
-import TermMap from '@rdfjs/term-map'
-import TermSet from '@rdfjs/term-set'
 import clownface from 'clownface'
 import rdf from 'rdf-ext'
 import { fromRdf } from 'rdf-literal'
 import cbdCopy from '../../cbdCopy.js'
 import * as ns from '../../namespaces.js'
 
-const datatypeParsers = new TermMap([
+const datatypeParsers = rdf.termMap([
   [ns.xsd.byte, fromRdf],
   [ns.xsd.date, fromRdf],
   [ns.xsd.dateTime, fromRdf],
@@ -36,7 +34,7 @@ class Dimension {
     this.metadata = metadata
     this.predicate = predicate
     this.termType = object.termType
-    this.datatype = new TermSet()
+    this.datatype = rdf.termSet()
 
     if (object.datatype && datatypeParsers.has(object.datatype)) {
       const datatypeParser = datatypeParsers.get(object.datatype)
@@ -48,7 +46,7 @@ class Dimension {
       this.max = object
       this.maxValue = value
     } else {
-      this.in = new TermSet()
+      this.in = rdf.termSet()
     }
   }
 

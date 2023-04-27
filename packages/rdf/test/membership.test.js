@@ -1,7 +1,6 @@
 import { equal, strictEqual, throws } from 'assert'
-import namespace from '@rdfjs/namespace'
 import getStream from 'get-stream'
-import { isDuplex } from 'isstream'
+import { isDuplexStream as isDuplex } from 'is-stream'
 import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
@@ -9,7 +8,7 @@ import append from '../lib/append.js'
 import { toTarget, fromSource } from '../lib/membership.js'
 import * as ns from '../lib/namespaces.js'
 
-const ex = namespace('http://example.org/')
+const ex = rdf.namespace('http://example.org/')
 
 function toCanonical (quads) {
   const dataset = rdf.dataset().addAll(quads)

@@ -1,4 +1,3 @@
-import TermSet from '@rdfjs/term-set'
 import rdf from 'rdf-ext'
 import * as ns from '../namespaces.js'
 import { xsd } from '../namespaces.js'
@@ -6,7 +5,7 @@ import { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms } from './d
 import { namedDateLiterals } from './namedDateLiterals.js'
 
 function subjectsWithDatasetType (dataset, classes) {
-  const result = new TermSet()
+  const result = rdf.termSet()
   dataset
     .filter(quad => (quad.predicate.equals(ns.rdf.type) && classes.has(quad.object)))
     .forEach(quad => {

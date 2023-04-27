@@ -3,13 +3,9 @@ import fsp from 'fs/promises'
 import { resolve } from 'path'
 import rdfFetch from '@rdfjs/fetch'
 import fileFetch from 'file-fetch'
-import isStream, { isReadable } from 'isstream'
+import { isReadableStream } from 'is-stream'
 import protoFetch from 'proto-fetch'
 import { getParserByExtension } from './lookupParser.js'
-
-function isReadableStream (arg) {
-  return isStream(arg) && isReadable(arg)
-}
 
 function isAbsolute (str) {
   return str.startsWith('https:') || str.startsWith('http:') || str.startsWith('file:')
