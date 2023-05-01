@@ -1,7 +1,7 @@
 import clownface from 'clownface'
 import ns from './lib/namespaces.js'
 
-function findPipeline (dataset, iri) {
+function findPipeline(dataset, iri) {
   let ptr = clownface({ dataset })
 
   if (iri) {
