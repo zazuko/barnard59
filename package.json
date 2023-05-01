@@ -8,7 +8,7 @@
     "barnard59": "bin/barnard59.js"
   },
   "scripts": {
-    "lint": "stricter-standard",
+    "lint": "eslint . --quiet --ignore-path .gitignore",
     "test": "c8 mocha",
     "release": "changeset publish"
   },
@@ -43,17 +43,21 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
+    "@tpluscode/eslint-config": "^0.4.3",
     "barnard59-base": "^1.1.0",
     "barnard59-formats": "^1.4.0",
     "barnard59-http": "^1.1.0",
     "barnard59-shell": "^0.1.0",
     "c8": "^7.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
     "mocha": "^10.2.0",
     "shelljs": "^0.8.4",
-    "stricter-standard": "^0.2.0",
     "strip-ansi": "^7.0.0"
   },
-  "engines": {
-    "node": ">= 14.0.0"
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix --quiet"
+    ]
   }
 }

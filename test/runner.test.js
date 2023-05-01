@@ -9,7 +9,7 @@ describe('run', () => {
     const ptr = loadPipelineDefinition('error')
     const run = runner(ptr, {
       outputStream: process.stdout,
-      basePath: resolve('test')
+      basePath: resolve('test'),
     })
 
     try {
