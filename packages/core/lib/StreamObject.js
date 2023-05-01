@@ -1,3 +1,5 @@
+import { VariableMap } from './VariableMap.js'
+
 class StreamObject {
   constructor({
     basePath,
@@ -6,7 +8,7 @@ class StreamObject {
     loaderRegistry,
     logger,
     ptr,
-    variables = new Map(),
+    variables = new VariableMap(),
     stream,
   }) {
     this.basePath = basePath

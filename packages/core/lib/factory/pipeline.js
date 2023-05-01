@@ -4,6 +4,7 @@ import defaultLogger from '../defaultLogger.js'
 import metadata from '../metadata.js'
 import ns from '../namespaces.js'
 import Pipeline from '../Pipeline.js'
+import { VariableMap } from '../VariableMap.js'
 import createStep from './step.js'
 import createVariables from './variables.js'
 
@@ -18,7 +19,7 @@ async function createPipelineVariables(ptr, { basePath, context, loaderRegistry,
     localVariables = await createVariables(ptr.out(ns.p.variables), { basePath, context, loaderRegistry, logger, variables })
   }
 
-  return new Map([...localVariables, ...variables])
+  return VariableMap.merge(localVariables, variables)
 }
 
 function createPipeline(ptr, {
@@ -26,7 +27,7 @@ function createPipeline(ptr, {
   context = {},
   loaderRegistry = defaultLoaderRegistry(),
   logger = defaultLogger(),
-  variables = new Map(),
+  variables = new VariableMap(),
 } = {}) {
   if (!ptr.term || !ptr.dataset) {
     throw new Error('the given graph pointer is invalid')
