@@ -1,4 +1,5 @@
 import { strictEqual } from 'assert'
+import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import shell from 'shelljs'
 import stripAnsi from 'strip-ansi'
@@ -78,12 +79,12 @@ describe('barnard59', () => {
     describe('variable-all', () => {
       it('should import all environment variables', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
-        const command = `abc=123 def=456 ${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable-all`
+        const command = `abc=123 def=456 ${barnard59} run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile} --variable-all`
 
         const result = stripAnsi(shell.exec(command, { silent: true }).toString())
 
-        result.includes('abc: 123')
-        result.includes('def: 456')
+        expect(result).to.match(/info:.+abc: 123/)
+        expect(result).to.match(/debug:.+def: 456/)
       })
     })
   })

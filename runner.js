@@ -9,12 +9,6 @@ function create(ptr, { basePath, outputStream, logger, variables = new Map(), le
         logger = defaultLogger({ level })
       }
 
-      logger.info('variables via runner:', { iri: ptr.value })
-
-      for (const [key, value] of variables) {
-        logger.info(`  ${key}: ${value}`, { iri: ptr.value })
-      }
-
       const pipeline = createPipeline(ptr, {
         basePath,
         logger,
@@ -22,12 +16,6 @@ function create(ptr, { basePath, outputStream, logger, variables = new Map(), le
       })
 
       await pipeline.init()
-
-      logger.info('variables in pipeline instance:', { iri: ptr.value })
-
-      for (const [key, value] of pipeline.variables) {
-        logger.info(`  ${key}: ${value}`, { iri: ptr.value })
-      }
 
       pipeline.stream.pipe(outputStream)
 
