@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- ff7d6f8: Allow annotating sensitive variables in order to avoid exposing their value in the job logs (re zazuko/barnard59#66)
+
+### Patch Changes
+
+- ff7d6f8: Variables from sub-pipelines were not being logged
+- b719456: Skip variables without `p:value`
+
 ## 1.1.6
 
 ### Patch Changes
