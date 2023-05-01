@@ -3,14 +3,14 @@ import Histogram from './Histogram.js'
 
 const { finished } = stream
 
-function bufferStatePair ({ index, mode, state, step }) {
+function bufferStatePair({ index, mode, state, step }) {
   const key = `[${index}] (${mode}) ${step.ptr.value} (${state.length}/${state.highWaterMark})`
   const value = state.length > 0 ? Math.round(state.length / state.highWaterMark * 100.0) : 0
 
   return { key, value }
 }
 
-function bufferInfo (pipeline) {
+function bufferInfo(pipeline) {
   const steps = pipeline.children
 
   if (!steps) {
@@ -23,7 +23,7 @@ function bufferInfo (pipeline) {
         index,
         mode: 'write',
         state: step.stream._writableState,
-        step
+        step,
       })
 
       data[key] = value
@@ -34,7 +34,7 @@ function bufferInfo (pipeline) {
         index,
         mode: 'read',
         state: step.stream._readableState,
-        step
+        step,
       })
 
       data[key] = value
@@ -44,7 +44,7 @@ function bufferInfo (pipeline) {
   }, {})
 }
 
-function bufferDebug (pipeline, { interval = 10 } = {}) {
+function bufferDebug(pipeline, { interval = 10 } = {}) {
   let done = false
 
   finished(pipeline.stream, () => {

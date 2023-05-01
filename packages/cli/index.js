@@ -3,5 +3,5 @@ import runner from './runner.js'
 
 export {
   findPipeline,
-  runner
+  runner,
 }

@@ -16,11 +16,11 @@ const sdk = new NodeSDK({
   autoDetectResources: false,
   instrumentations: [
     new HttpInstrumentation(),
-    new WinstonInstrumentation()
+    new WinstonInstrumentation(),
   ],
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'barnard59'
-  })
+    [SemanticResourceAttributes.SERVICE_NAME]: 'barnard59',
+  }),
 })
 
 const onError = async err => {
@@ -30,6 +30,7 @@ const onError = async err => {
   process.off('SIGTERM', onError)
 
   if (err) {
+    // eslint-disable-next-line no-console
     console.log(err)
   }
   await sdk.shutdown()
@@ -81,7 +82,7 @@ const onError = async err => {
     const exporter = new CollectorMetricExporter()
     sdk.configureMeterProvider({
       exporter,
-      interval: otelMetricsInterval
+      interval: otelMetricsInterval,
     })
   }
 
