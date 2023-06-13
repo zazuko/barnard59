@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+### Patch Changes
+
+- 2a99cab: Sending logs to standard error so that output quads can be redirected to a file
+
 ## 2.0.0
 
 ### Major Changes
