@@ -8,6 +8,7 @@ function factory({ console = true, errorFilename = null, filename = null, level 
 
   if (console) {
     transports.push(new Console({
+      consoleWarnLevels: ['warn', 'debug', 'log', 'info', 'error'],
       format: format.combine(
         format.colorize(),
         format.simple(),
