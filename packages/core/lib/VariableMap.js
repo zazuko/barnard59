@@ -14,7 +14,7 @@ export class VariableMap extends Map {
   }
 
   set(key, value, { optional = false } = {}) {
-    if (value) {
+    if (typeof value !== 'undefined') {
       super.set(key, value)
     }
 

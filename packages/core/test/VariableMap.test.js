@@ -27,6 +27,20 @@ describe('VariableMap', () => {
     })
   })
 
+  describe('set', () => {
+    it('sets empty string value', () => {
+      // given
+      const vars = new VariableMap()
+
+      // when
+      vars.set('foo', '')
+
+      // then
+      expect(vars.has('foo')).to.be.true
+      expect(vars.get('foo')).to.eq('')
+    })
+  })
+
   describe('merge', () => {
     it('merges arrays of entries', () => {
       // given
