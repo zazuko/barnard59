@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.2
+
+### Patch Changes
+
+- 18989fc: An empty string variable would have been treated as undefined
+
 ## 2.0.1
 
 ### Patch Changes
