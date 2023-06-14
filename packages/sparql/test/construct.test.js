@@ -26,7 +26,7 @@ describe('construct', () => {
     strictEqual(isWritable(result), false)
   })
 
-  it('should send a request', async () => {
+  it('should send a GET request', async () => {
     let called = false
     const endpoint = new URL('http://example.org/send-request')
     const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
@@ -40,6 +40,24 @@ describe('construct', () => {
       })
 
     await getStream.array(await construct({ endpoint, query }))
+
+    strictEqual(called, true)
+  })
+
+  it('should send a POST request', async () => {
+    let called = false
+    const endpoint = new URL('http://example.org/send-request')
+    const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
+
+    nock(endpoint.origin)
+      .post(endpoint.pathname, query)
+      .reply(200, () => {
+        called = true
+
+        return '{}'
+      })
+
+    await getStream.array(await construct({ endpoint, query, operation: 'postDirect' }))
 
     strictEqual(called, true)
   })
