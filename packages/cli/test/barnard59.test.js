@@ -5,6 +5,7 @@ import stripAnsi from 'strip-ansi'
 import filenamePipelineDefinition from './support/filenamePipelineDefinition.js'
 
 const barnard59 = (new URL('../bin/barnard59.js', import.meta.url)).pathname
+const cwd = new URL('..', import.meta.url).pathname
 
 describe('barnard59', () => {
   describe('run', () => {
@@ -12,7 +13,7 @@ describe('barnard59', () => {
       const pipelineFile = filenamePipelineDefinition('simple')
       const command = `${barnard59} run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
-      const result = shell.exec(command, { silent: true })
+      const result = shell.exec(command, { silent: true, cwd })
 
       strictEqual(result.code, 0)
     })
@@ -21,7 +22,7 @@ describe('barnard59', () => {
       const pipelineFile = filenamePipelineDefinition('error')
       const command = `${barnard59} run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
-      const result = shell.exec(command, { silent: true })
+      const result = shell.exec(command, { silent: true, cwd })
 
       strictEqual(result.code, 1)
     })
@@ -31,7 +32,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
         strictEqual((/^info: /m).test(result), true)
       })
@@ -40,7 +41,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
         strictEqual((/^debug: /m).test(result), false)
       })
@@ -49,7 +50,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose --verbose ${pipelineFile}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
         strictEqual((/^debug: /m).test(result), true)
       })
@@ -60,7 +61,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc=123`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
         strictEqual(result.includes('abc: 123'), true)
       })
@@ -69,7 +70,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `abc=123 ${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
         strictEqual(result.includes('abc: 123'), true)
       })
@@ -96,7 +97,7 @@ describe('barnard59', () => {
       const pipelineFile = (new URL('../examples/fetch-json-to-ntriples.json', import.meta.url)).pathname
       const command = `${barnard59} run --pipeline=http://example.org/pipeline/cet ${pipelineFile}`
 
-      const result = shell.exec(command, { silent: true })
+      const result = shell.exec(command, { silent: true, cwd })
 
       strictEqual(result.code, 0)
     })
@@ -105,7 +106,7 @@ describe('barnard59', () => {
       const pipelineFile = (new URL('../examples/fetch-json-to-ntriples.ttl', import.meta.url)).pathname
       const command = `${barnard59} run --pipeline=http://example.org/pipeline/utc ${pipelineFile}`
 
-      const result = shell.exec(command, { silent: true })
+      const result = shell.exec(command, { silent: true, cwd })
 
       strictEqual(result.code, 0)
     })
@@ -114,7 +115,7 @@ describe('barnard59', () => {
       const pipelineFile = (new URL('../examples/parse-csvw.ttl', import.meta.url)).pathname
       const command = `${barnard59} run --pipeline=http://example.org/pipeline/parseCsvw ${pipelineFile}`
 
-      const result = shell.exec(command, { silent: true })
+      const result = shell.exec(command, { silent: true, cwd })
 
       strictEqual(result.code, 0)
     })
