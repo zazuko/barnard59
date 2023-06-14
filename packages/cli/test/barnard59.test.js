@@ -32,7 +32,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         strictEqual((/^info: /m).test(result), true)
       })
@@ -41,7 +41,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         strictEqual((/^debug: /m).test(result), false)
       })
@@ -50,7 +50,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose --verbose ${pipelineFile}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         strictEqual((/^debug: /m).test(result), true)
       })
@@ -61,7 +61,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc=123`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         strictEqual(result.includes('abc: 123'), true)
       })
@@ -70,7 +70,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `abc=123 ${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         strictEqual(result.includes('abc: 123'), true)
       })
@@ -81,7 +81,7 @@ describe('barnard59', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `abc=123 def=456 ${barnard59} run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile} --variable-all`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).toString())
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         expect(result).to.match(/info:.+abc: 123/)
         expect(result).to.match(/debug:.+def: 456/)
