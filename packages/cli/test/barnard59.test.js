@@ -1,6 +1,5 @@
 import { strictEqual } from 'assert'
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import shell from 'shelljs'
 import stripAnsi from 'strip-ansi'
 import filenamePipelineDefinition from './support/filenamePipelineDefinition.js'

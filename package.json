@@ -1,0 +1,31 @@
+{
+  "name": "barnard59-root",
+  "private": true,
+  "version": "1.1.4",
+  "description": "Barnard59 Linked Data pipelines",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --quiet --ignore-path .gitignore",
+    "test": "c8 mocha packages/*/test --recursive",
+    "release": "changeset publish"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "@changesets/cli": "^2.26.1",
+    "@tpluscode/eslint-config": "^0.4.3",
+    "c8": "^7.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "mocha": "^10.2.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix --quiet"
+    ]
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

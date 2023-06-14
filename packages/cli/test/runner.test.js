@@ -1,6 +1,5 @@
 import { strictEqual } from 'assert'
 import { resolve } from 'path'
-import { describe, it } from 'mocha'
 import runner from '../runner.js'
 import loadPipelineDefinition from './support/loadPipelineDefinition.js'
 
