@@ -4,14 +4,14 @@ import { Transform } from 'readable-stream'
 import * as ns from './namespaces.js'
 
 class VoidStats extends Transform {
-  constructor (context, {
+  constructor(context, {
     voidDatasetUri,
     classPartitions,
     propertyPartitions,
     includeTotals,
     graph,
     createClassPartitionUri,
-    createPropertyPartitionUri
+    createPropertyPartitionUri,
   }) {
     super({ objectMode: true })
     this.voidDatasetUri = voidDatasetUri
@@ -34,7 +34,7 @@ class VoidStats extends Transform {
     this.totalEntityCount = 0
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     this.totalTripleCount++
 
     if (chunk.predicate.equals(ns.rdf.type)) {
@@ -55,14 +55,14 @@ class VoidStats extends Transform {
     callback(null, chunk)
   }
 
-  async _flush (callback) {
+  async _flush(callback) {
     try {
       const datasetUri = toNamedNode(this.voidDatasetUri)
       const datasetGraph = this.graph ? toNamedNode(this.graph) : undefined
 
       const stats = clownface({
         dataset: rdf.dataset(),
-        graph: datasetGraph
+        graph: datasetGraph,
       })
 
       stats
@@ -115,21 +115,21 @@ class VoidStats extends Transform {
   }
 }
 
-function toNamedNode (item) {
+function toNamedNode(item) {
   if (item === undefined) {
     return undefined
   }
   return typeof item === 'string' ? rdf.namedNode(item) : item
 }
 
-function graphStats ({
+function graphStats({
   voidDatasetUri = undefined,
   classPartitions = [],
   propertyPartitions = [],
   includeTotals = true,
   graph = undefined,
   createClassPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/classPartition/${index}`),
-  createPropertyPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/propertyPartition/${index}`)
+  createPropertyPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/propertyPartition/${index}`),
 } = {}) {
   if (!voidDatasetUri) {
     throw new Error('Needs voidDatasetUri as parameter')
@@ -142,7 +142,7 @@ function graphStats ({
     includeTotals,
     graph: toNamedNode(graph),
     createClassPartitionUri,
-    createPropertyPartitionUri
+    createPropertyPartitionUri,
   })
 }
 

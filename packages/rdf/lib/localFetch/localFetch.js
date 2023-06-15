@@ -7,32 +7,32 @@ import { isReadableStream } from 'is-stream'
 import protoFetch from 'proto-fetch'
 import { getParserByExtension } from './lookupParser.js'
 
-function isAbsolute (str) {
+function isAbsolute(str) {
   return str.startsWith('https:') || str.startsWith('http:') || str.startsWith('file:')
 }
 
-async function streamWithMetadata (input) {
+async function streamWithMetadata(input) {
   return {
     quadStream: input,
     metadata: {
-      type: input.constructor.name
-    }
+      type: input.constructor.name,
+    },
   }
 }
 
-async function fetchHTTPWithMeta (input) {
+async function fetchHTTPWithMeta(input) {
   const url = new URL(input, import.meta.url)
   const res = await rdfFetch(url)
   return {
     quadStream: await res.quadStream(),
     metadata: {
       type: url.constructor.name,
-      value: url
-    }
+      value: url,
+    },
   }
 }
 
-function guessParserForFile (filePath) {
+function guessParserForFile(filePath) {
   const parser = getParserByExtension(filePath)
   if (!parser) {
     throw new Error(`No parser could be guessed for ${filePath}`)
@@ -40,7 +40,7 @@ function guessParserForFile (filePath) {
   return parser
 }
 
-async function fetchFileWithMeta (input) {
+async function fetchFileWithMeta(input) {
   const filePathURL = new URL(input, import.meta.url)
   const res = await fileFetch(filePathURL.toString())
   const stream = res.body
@@ -50,15 +50,15 @@ async function fetchFileWithMeta (input) {
     metadata: {
       type: filePathURL.constructor.name,
       value: filePathURL.toString(),
-      stats: await fsp.lstat(filePathURL)
-    }
+      stats: await fsp.lstat(filePathURL),
+    },
   }
 }
 
 // Tries to fetch or read locally one file
-async function localFetch (
+async function localFetch(
   input,
-  basePath
+  basePath,
 ) {
   if (!(input)) {
     throw new Error('needs input filename or URL')
@@ -72,7 +72,7 @@ async function localFetch (
   const fetch = protoFetch({
     file: fetchFileWithMeta,
     http: fetchHTTPWithMeta,
-    https: fetchHTTPWithMeta
+    https: fetchHTTPWithMeta,
   })
 
   const url = isAbsolute(input)

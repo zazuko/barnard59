@@ -3,10 +3,10 @@ import { Transform } from 'readable-stream'
 import * as ns from './namespaces.js'
 
 class AddRelations extends Transform {
-  constructor (context, {
+  constructor(context, {
     createRelation,
     additionalQuads,
-    classes
+    classes,
   }) {
     super({ objectMode: true })
     this.classes = classes
@@ -14,7 +14,7 @@ class AddRelations extends Transform {
     this.additionalQuads = additionalQuads
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     if (chunk.predicate.equals(ns.rdf.type) && this.classes.has(chunk.object)) {
       const quad = this.createRelation(chunk.subject)
       this.push(quad)
@@ -22,7 +22,7 @@ class AddRelations extends Transform {
     callback(null, chunk)
   }
 
-  async _flush (callback) {
+  async _flush(callback) {
     this.additionalQuads.forEach(quad => this.push(quad))
     callback()
   }
@@ -30,11 +30,11 @@ class AddRelations extends Transform {
 
 const toNamedNode = item => typeof item === 'string' ? rdf.namedNode(item) : item
 
-function toTarget ({
+function toTarget({
   targetUri,
   targetClass,
   property,
-  classes = []
+  classes = [],
 } = {}) {
   if (!targetUri) {
     throw new Error('Needs targetUri as parameter')
@@ -52,15 +52,15 @@ function toTarget ({
   return new AddRelations(this, {
     createRelation: sourceUri => rdf.quad(toNamedNode(sourceUri), toNamedNode(property), toNamedNode(targetUri)),
     additionalQuads: [rdf.quad(toNamedNode(targetUri), ns.rdf.type, toNamedNode(targetClass))],
-    classes: rdf.termSet(classes.map(toNamedNode))
+    classes: rdf.termSet(classes.map(toNamedNode)),
   })
 }
 
-function fromSource ({
+function fromSource({
   sourceUri,
   sourceClass,
   property,
-  classes = []
+  classes = [],
 } = {}) {
   if (!sourceUri) {
     throw new Error('Needs sourceUri as parameter')
@@ -78,7 +78,7 @@ function fromSource ({
   return new AddRelations(this, {
     createRelation: targetUri => rdf.quad(toNamedNode(sourceUri), toNamedNode(property), toNamedNode(targetUri)),
     additionalQuads: [rdf.quad(toNamedNode(sourceUri), ns.rdf.type, toNamedNode(sourceClass))],
-    classes: rdf.termSet(classes.map(toNamedNode))
+    classes: rdf.termSet(classes.map(toNamedNode)),
   })
 }
 

@@ -5,7 +5,7 @@ import * as ns from '../../namespaces.js'
 import Dimension from './Dimension.js'
 
 class Cube {
-  constructor ({ metadata, observationSet, shape, term }) {
+  constructor({ metadata, observationSet, shape, term }) {
     this.metadata = metadata
     this.observationSet = observationSet
     this.shape = shape
@@ -13,7 +13,7 @@ class Cube {
     this.dimensions = rdf.termMap()
   }
 
-  dimension ({ predicate, object }) {
+  dimension({ predicate, object }) {
     let dimension = this.dimensions.get(predicate)
 
     if (!dimension) {
@@ -30,11 +30,11 @@ class Cube {
     return dimension
   }
 
-  update ({ predicate, object }) {
+  update({ predicate, object }) {
     this.dimension({ predicate, object }).update({ predicate, object })
   }
 
-  toDataset ({ shapeGraph } = { shapeGraph: undefined }) {
+  toDataset({ shapeGraph } = { shapeGraph: undefined }) {
     const dataset = rdf.dataset()
 
     const cube = clownface({ dataset, term: this.term })

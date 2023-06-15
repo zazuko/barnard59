@@ -3,13 +3,13 @@ import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import * as ns from './namespaces.js'
 
-function createObservationsStream ({ observations = [{ [ns.ex.property.value]: rdf.literal('test') }] } = {}) {
+function createObservationsStream({ observations = [{ [ns.ex.property.value]: rdf.literal('test') }] } = {}) {
   const datasets = []
 
   observations.forEach((observation, index) => {
     const observationPtr = clownface({
       dataset: rdf.dataset(),
-      term: ns.ex(`cube/observation/${index + 1}`)
+      term: ns.ex(`cube/observation/${index + 1}`),
     })
 
     observationPtr.addIn(ns.cube.observation, ns.ex('cube/observation/'))

@@ -1,7 +1,6 @@
 import { equal, strictEqual, throws } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import append from '../lib/append.js'
@@ -10,7 +9,7 @@ import * as ns from '../lib/namespaces.js'
 
 const ex = rdf.namespace('http://example.org/')
 
-function toCanonical (quads) {
+function toCanonical(quads) {
   const dataset = rdf.dataset().addAll(quads)
   return dataset.toCanonical()
 }
@@ -25,7 +24,7 @@ describe('membership.toTarget', () => {
     { targetUri: ex.targetUri, targetClass: undefined, property: ex.property, classes: [ex.class] },
     { targetUri: ex.targetUri, targetClass: ex.targetClass, property: undefined, classes: [ex.class] },
     { targetUri: ex.targetUri, targetClass: ex.targetClass, property: ex.property, classes: undefined },
-    { targetUri: ex.targetUri, targetClass: ex.targetClass, property: ex.property, classes: [] }
+    { targetUri: ex.targetUri, targetClass: ex.targetClass, property: ex.property, classes: [] },
   ]
   parameterSet.forEach(params => {
     it('should throw an error if a mandatory parameter is missing', async () => {
@@ -40,7 +39,7 @@ describe('membership.toTarget', () => {
       targetUri: ex.targetUri,
       targetClass: ex.targetClass,
       property: ex.property,
-      classes: [ex.class]
+      classes: [ex.class],
     })
     strictEqual(isDuplex(step), true)
   })
@@ -50,28 +49,28 @@ describe('membership.toTarget', () => {
       rdf.quad(ex.bob, ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, ns.rdf.type, ex.Person),
       rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat)
+      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.bob, ex.in, ex.house),
       rdf.quad(ex.alice, ex.in, ex.house),
       rdf.quad(ex.tom, ex.in, ex.house),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container)
+      rdf.quad(ex.house, ns.rdf.type, ex.Container),
     ]
 
     const step = toTarget({
       targetUri: ex.house,
       targetClass: ex.Container,
       property: ex.in,
-      classes: [ex.Person, ex.Cat]
+      classes: [ex.Person, ex.Cat],
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata])
+      toCanonical([...data, ...expectedMetadata]),
     )
   })
 
@@ -80,28 +79,28 @@ describe('membership.toTarget', () => {
       rdf.quad(ex.bob, ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, ns.rdf.type, ex.Person),
       rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat)
+      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.bob, ex.in, ex.house),
       rdf.quad(ex.alice, ex.in, ex.house),
       rdf.quad(ex.tom, ex.in, ex.house),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container)
+      rdf.quad(ex.house, ns.rdf.type, ex.Container),
     ]
 
     const step = toTarget({
       targetUri: ex.house.value,
       targetClass: ex.Container.value,
       property: ex.in.value,
-      classes: [ex.Person.value, ex.Cat.value]
+      classes: [ex.Person.value, ex.Cat.value],
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata])
+      toCanonical([...data, ...expectedMetadata]),
     )
   })
 })
@@ -116,7 +115,7 @@ describe('membership.fromSource', () => {
     { sourceUri: ex.sourceUri, sourceClass: undefined, property: ex.property, classes: [ex.class] },
     { sourceUri: ex.sourceUri, sourceClass: ex.sourceClass, property: undefined, classes: [ex.class] },
     { sourceUri: ex.sourceUri, sourceClass: ex.sourceClass, property: ex.property, classes: undefined },
-    { sourceUri: ex.sourceUri, sourceClass: ex.sourceClass, property: ex.property, classes: [] }
+    { sourceUri: ex.sourceUri, sourceClass: ex.sourceClass, property: ex.property, classes: [] },
   ]
   parameterSet.forEach(params => {
     it('should throw an error if a mandatory parameter is missing', async () => {
@@ -131,7 +130,7 @@ describe('membership.fromSource', () => {
       sourceUri: ex.house,
       sourceClass: ex.Container,
       property: ex.contains,
-      classes: [ex.Person, ex.Cat]
+      classes: [ex.Person, ex.Cat],
     })
     strictEqual(isDuplex(step), true)
   })
@@ -141,28 +140,28 @@ describe('membership.fromSource', () => {
       rdf.quad(ex.bob, ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, ns.rdf.type, ex.Person),
       rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat)
+      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.house, ex.contains, ex.bob),
       rdf.quad(ex.house, ex.contains, ex.alice),
       rdf.quad(ex.house, ex.contains, ex.tom),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container)
+      rdf.quad(ex.house, ns.rdf.type, ex.Container),
     ]
 
     const step = fromSource({
       sourceUri: ex.house,
       sourceClass: ex.Container,
       property: ex.contains,
-      classes: [ex.Person, ex.Cat]
+      classes: [ex.Person, ex.Cat],
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata])
+      toCanonical([...data, ...expectedMetadata]),
     )
   })
 
@@ -171,28 +170,28 @@ describe('membership.fromSource', () => {
       rdf.quad(ex.bob, ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, ns.rdf.type, ex.Person),
       rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat)
+      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.house, ex.contains, ex.bob),
       rdf.quad(ex.house, ex.contains, ex.alice),
       rdf.quad(ex.house, ex.contains, ex.tom),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container)
+      rdf.quad(ex.house, ns.rdf.type, ex.Container),
     ]
 
     const step = fromSource({
       sourceUri: ex.house.value,
       sourceClass: ex.Container.value,
       property: ex.contains.value,
-      classes: [ex.Person.value, ex.Cat.value]
+      classes: [ex.Person.value, ex.Cat.value],
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata])
+      toCanonical([...data, ...expectedMetadata]),
     )
   })
 })

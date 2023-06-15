@@ -1,7 +1,7 @@
 import rdf from 'rdf-ext'
 import TripleToQuadTransform from 'rdf-transform-triple-to-quad'
 
-function setGraph (graph) {
+function setGraph(graph) {
   const iri = (graph && graph.value) || (graph && graph.toString()) || ''
 
   if (iri === '') {

@@ -3,5 +3,5 @@ import toObservation from './lib/cube/toObservation.js'
 
 export {
   buildCubeShape,
-  toObservation
+  toObservation,
 }

@@ -3,18 +3,17 @@ import toNT from '@rdfjs/to-ntriples'
 import clownface from 'clownface'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import toObservation from '../../lib/cube/toObservation.js'
 import dateToId from '../../lib/dateToId.js'
 import * as ns from '../support/namespaces.js'
 
-function createMeasure ({ term = ns.ex('topic/a') } = {}) {
+function createMeasure({ term = ns.ex('topic/a') } = {}) {
   return clownface({ dataset: rdf.dataset(), term })
 }
 
-function findObservation (result) {
+function findObservation(result) {
   return clownface({ dataset: rdf.dataset(result[0]) }).has(ns.rdf.type, ns.cube.Observation)
 }
 
@@ -96,7 +95,7 @@ describe('cube.toObservation', () => {
       const dataset2 = createMeasure().addOut(ns.ex.property, 'value').dataset
 
       const transform = toObservation({
-        useIndex: true
+        useIndex: true,
       })
 
       Readable.from([dataset1, dataset2]).pipe(transform)
@@ -211,7 +210,7 @@ describe('cube.toObservation', () => {
       const transform = toObservation({
         useDate: () => {
           return rdf.literal(date.toISOString(), ns.xsd.dateTime)
-        }
+        },
       })
 
       Readable.from([dataset]).pipe(transform)
@@ -269,7 +268,7 @@ describe('cube.toObservation', () => {
       const transform = toObservation({
         observations: () => {
           return ns.ex('observation/')
-        }
+        },
       })
 
       Readable.from([dataset]).pipe(transform)
@@ -314,7 +313,7 @@ describe('cube.toObservation', () => {
       const transform = toObservation({
         observation: () => {
           return ns.ex('observation/123')
-        }
+        },
       })
 
       Readable.from([dataset]).pipe(transform)
@@ -354,7 +353,7 @@ describe('cube.toObservation', () => {
         .dataset
 
       const transform = toObservation({
-        blacklist: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })]
+        blacklist: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })],
       })
 
       Readable.from([dataset]).pipe(transform)
@@ -392,7 +391,7 @@ describe('cube.toObservation', () => {
         .dataset
 
       const transform = toObservation({
-        dimensions: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })]
+        dimensions: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })],
       })
 
       Readable.from([dataset]).pipe(transform)

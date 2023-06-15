@@ -4,7 +4,7 @@ import { xsd } from '../namespaces.js'
 import { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms } from './datasetClasses.js'
 import { namedDateLiterals } from './namedDateLiterals.js'
 
-function subjectsWithDatasetType (dataset, classes) {
+function subjectsWithDatasetType(dataset, classes) {
   const result = rdf.termSet()
   dataset
     .filter(quad => (quad.predicate.equals(ns.rdf.type) && classes.has(quad.object)))
@@ -14,7 +14,7 @@ function subjectsWithDatasetType (dataset, classes) {
   return result
 }
 
-function updateOrInsert (dataset, datasetClasses, predicate, object) {
+function updateOrInsert(dataset, datasetClasses, predicate, object) {
   const targetSubjects = subjectsWithDatasetType(dataset, datasetClasses)
 
   // Remove existent
@@ -30,19 +30,19 @@ function updateOrInsert (dataset, datasetClasses, predicate, object) {
   return dataset
 }
 
-function toDateLiteral (item) {
+function toDateLiteral(item) {
   return typeof item === 'string' ? rdf.literal(item, xsd.dateTime) : item
 }
 
-function toNamedNode (item) {
+function toNamedNode(item) {
   return typeof item === 'string' ? rdf.namedNode(item) : item
 }
 
-function resolveNamedDate (value, metadata) {
+function resolveNamedDate(value, metadata) {
   return namedDateLiterals.has(value) ? namedDateLiterals.get(value)(metadata) : toDateLiteral(value)
 }
 
-async function applyOptions (quadStream, metadata = {}, options = {}) {
+async function applyOptions(quadStream, metadata = {}, options = {}) {
   let dataset = await rdf.dataset().import(quadStream)
 
   // dateModified

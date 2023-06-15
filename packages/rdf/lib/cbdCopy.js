@@ -1,6 +1,6 @@
 import rdf from 'rdf-ext'
 
-function cbdCopy (source, target, { ignore = rdf.termSet() } = {}) {
+function cbdCopy(source, target, { ignore = rdf.termSet() } = {}) {
   for (const quad of source.dataset.match(source.term)) {
     if (ignore.has(quad.predicate)) {
       continue
@@ -11,7 +11,7 @@ function cbdCopy (source, target, { ignore = rdf.termSet() } = {}) {
     if (quad.object.termType === 'BlankNode') {
       cbdCopy(
         { dataset: source.dataset, term: quad.object },
-        { dataset: target.dataset, term: quad.object }
+        { dataset: target.dataset, term: quad.object },
       )
     }
   }

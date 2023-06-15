@@ -6,7 +6,7 @@ import * as ns from '../../namespaces.js'
 import urlJoin from '../../urlJoin.js'
 import Cube from './Cube.js'
 
-function defaultCube ({ observationSet }) {
+function defaultCube({ observationSet }) {
   const observationSetIri = observationSet && observationSet.value
 
   if (!observationSetIri) {
@@ -16,7 +16,7 @@ function defaultCube ({ observationSet }) {
   return $rdf.namedNode(urlJoin(observationSetIri, '..'))
 }
 
-function defaultShape ({ term }) {
+function defaultShape({ term }) {
   const cubeIri = term && term.value
 
   if (!cubeIri) {
@@ -27,7 +27,7 @@ function defaultShape ({ term }) {
 }
 
 class CubeShapeBuilder extends Transform {
-  constructor ({ excludeValuesOf, metadata, graph } = {}) {
+  constructor({ excludeValuesOf, metadata, graph } = {}) {
     super({ objectMode: true })
 
     this.options = {
@@ -36,13 +36,13 @@ class CubeShapeBuilder extends Transform {
       excludeValuesOf: $rdf.termSet(excludeValuesOf ? excludeValuesOf.map(v => $rdf.namedNode(v)) : []),
       metadataStream: metadata,
       shape: defaultShape,
-      graph
+      graph,
     }
 
     this.init = once(() => this._init())
   }
 
-  async _init () {
+  async _init() {
     if (this.options.metadataStream) {
       this.options.metadata = await $rdf.dataset().import(this.options.metadataStream)
     } else {
@@ -50,7 +50,7 @@ class CubeShapeBuilder extends Transform {
     }
   }
 
-  async _transform (chunk, encoding, callback) {
+  async _transform(chunk, encoding, callback) {
     try {
       await this.init()
     } catch (err) {
@@ -61,7 +61,7 @@ class CubeShapeBuilder extends Transform {
 
     const context = {
       dataset,
-      ptr: clownface({ dataset }).has(ns.rdf.type, ns.cube.Observation)
+      ptr: clownface({ dataset }).has(ns.rdf.type, ns.cube.Observation),
     }
 
     context.observationSet = context.ptr.in(ns.cube.observation).term
@@ -74,7 +74,7 @@ class CubeShapeBuilder extends Transform {
         term: context.term,
         metadata: clownface({ dataset: this.options.metadata, term: context.term }),
         observationSet: context.observationSet,
-        shape: context.shape
+        shape: context.shape,
       })
 
       this.options.cubes.set(context.term, context.cube)
@@ -89,7 +89,7 @@ class CubeShapeBuilder extends Transform {
     callback(null, [...context.dataset])
   }
 
-  _flush (callback) {
+  _flush(callback) {
     for (const cube of this.options.cubes.values()) {
       const dataset = cube.toDataset({ shapeGraph: toNamedNode(this.options.graph) })
       this.push(dataset)
@@ -99,11 +99,11 @@ class CubeShapeBuilder extends Transform {
   }
 }
 
-function toNamedNode (item) {
+function toNamedNode(item) {
   return typeof item === 'string' ? $rdf.namedNode(item) : item
 }
 
-function buildCubeShape ({ excludeValuesOf, metadata, graph } = {}) {
+function buildCubeShape({ excludeValuesOf, metadata, graph } = {}) {
   return new CubeShapeBuilder({ excludeValuesOf, metadata, graph })
 }
 

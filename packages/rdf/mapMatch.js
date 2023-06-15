@@ -2,7 +2,7 @@ import rdf from 'rdf-ext'
 import { Transform } from 'readable-stream'
 import PatternMatcher from './lib/PatternMatcher.js'
 
-function mapMatch ({ map, subject, predicate, object, graph }) {
+function mapMatch({ map, subject, predicate, object, graph }) {
   const matcher = new PatternMatcher({ subject, predicate, object, graph })
 
   return new Transform({
@@ -18,7 +18,7 @@ function mapMatch ({ map, subject, predicate, object, graph }) {
       } catch (err) {
         callback(err)
       }
-    }
+    },
   })
 }
 

@@ -8,10 +8,10 @@ import urlJoin from '../urlJoin.js'
 const ns = {
   cube: rdf.namespace('https://cube.link/'),
   rdf: rdf.namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  xsd: rdf.namespace('http://www.w3.org/2001/XMLSchema#')
+  xsd: rdf.namespace('http://www.w3.org/2001/XMLSchema#'),
 }
 
-function findRoot ({ dataset }) {
+function findRoot({ dataset }) {
   const subjects = [...dataset.filter(quad => quad.subject.termType === 'NamedNode')].reduce((subjects, quad) => {
     const count = subjects.get(quad.subject) || 0
 
@@ -25,7 +25,7 @@ function findRoot ({ dataset }) {
   return subject
 }
 
-function defaultObserver ({ dataset, subject }) {
+function defaultObserver({ dataset, subject }) {
   const observer = clownface({ dataset }).out(ns.cube.observedBy).term
 
   if (observer) {
@@ -39,7 +39,7 @@ function defaultObserver ({ dataset, subject }) {
   return rdf.namedNode(iri.toString())
 }
 
-function defaultObservations ({ subject }) {
+function defaultObservations({ subject }) {
   const iri = urlJoin(subject.value, '..')
 
   if (iri.endsWith('/observation')) {
@@ -49,24 +49,24 @@ function defaultObservations ({ subject }) {
   return rdf.namedNode(`${iri}/observation/`)
 }
 
-function defaultObservation ({ observations, subject }) {
+function defaultObservation({ observations, subject }) {
   const url = new URL(subject.value)
   const id = url.pathname.split('/').slice(-1)[0]
 
   return rdf.namedNode(urlJoin(observations.value, id))
 }
 
-function dateByProperty (property) {
+function dateByProperty(property) {
   return ({ dataset }) => {
     return clownface({ dataset }).out(property).term
   }
 }
 
-function dateNow () {
+function dateNow() {
   return rdf.literal((new Date()).toISOString(), ns.xsd.dateTime)
 }
 
-function dateByDatatype ({ dataset }) {
+function dateByDatatype({ dataset }) {
   const terms = clownface({ dataset }).out().filter(ptr => ns.xsd.dateTime.equals(ptr.term.datatype)).terms
 
   if (terms.length === 0) {
@@ -80,17 +80,17 @@ function dateByDatatype ({ dataset }) {
   return terms[0]
 }
 
-function dateObservation ({ dataset, observations, useDate }) {
+function dateObservation({ dataset, observations, useDate }) {
   const date = useDate({ dataset })
 
   return rdf.namedNode(urlJoin(observations.value, dateToId(date.value)))
 }
 
-function indexObservation ({ index, observations }) {
+function indexObservation({ index, observations }) {
   return rdf.namedNode(urlJoin(observations.value, `./${index.toString()}`))
 }
 
-function asTermObject (value) {
+function asTermObject(value) {
   if (typeof value === 'string') {
     value = rdf.namedNode(value)
   }
@@ -101,13 +101,13 @@ function asTermObject (value) {
 }
 
 class ToObservation extends Transform {
-  constructor ({ blacklist, dimensions, observation, observations, observer, useDate, useIndex } = {}) {
+  constructor({ blacklist, dimensions, observation, observations, observer, useDate, useIndex } = {}) {
     super({ objectMode: true })
 
     this.options = {
       index: 0,
       blacklist: rdf.termSet(),
-      dimensions: rdf.termSet()
+      dimensions: rdf.termSet(),
     }
 
     if (blacklist) {
@@ -169,11 +169,11 @@ class ToObservation extends Transform {
     }
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     try {
       const context = {
         dataset: rdf.dataset([...chunk]),
-        ...this.options
+        ...this.options,
       }
 
       context.subject = findRoot(context)
@@ -188,7 +188,7 @@ class ToObservation extends Transform {
           return rdf.quad(
             quad.subject.termType === 'NamedNode' ? context.observation : quad.subject,
             quad.predicate,
-            quad.object
+            quad.object,
           )
         })
 
@@ -225,7 +225,7 @@ class ToObservation extends Transform {
   }
 }
 
-function toObservation ({
+function toObservation({
   blacklist,
   dimensions,
   observation,
@@ -233,7 +233,7 @@ function toObservation ({
   observer,
   useDate,
   dateProperty,
-  useIndex
+  useIndex,
 } = {}) {
   return new ToObservation({ blacklist, dimensions, observation, observations, observer, useDate, dateProperty, useIndex })
 }

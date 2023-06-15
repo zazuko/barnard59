@@ -1,5 +1,4 @@
 import { strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import { applyOptions } from '../../lib/metadata/applyOptions.js'
@@ -15,7 +14,7 @@ describe('applyOptions', () => {
 
   it('should return the same data if no options given', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ex.type0, ex.graph1)
+      rdf.quad(ex.subject0, ns.rdf.type, ex.type0, ex.graph1),
     ]
 
     const options = {}
@@ -31,11 +30,11 @@ describe('applyOptions', () => {
       rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
       rdf.quad(ex.subject0, ns.schema.dateCreated, rdf.literal('Not me'), ex.graph0),
       rdf.quad(ex.subject1, ns.rdf.type, ex.type1, ex.graph0),
-      rdf.quad(ex.subject3, ns.rdf.type, ns.schema.Dataset, ex.graph0)
+      rdf.quad(ex.subject3, ns.rdf.type, ns.schema.Dataset, ex.graph0),
     ]
 
     const options = {
-      dateCreated: rdf.literal('1999-12-31', xsd.dateTime)
+      dateCreated: rdf.literal('1999-12-31', xsd.dateTime),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -50,11 +49,11 @@ describe('applyOptions', () => {
 
   it('should update or append schema:dateCreated for known classes (string)', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
     ]
 
     const options = {
-      dateCreated: rdf.literal('1999-12-31', xsd.dateTime).toString()
+      dateCreated: rdf.literal('1999-12-31', xsd.dateTime).toString(),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -69,11 +68,11 @@ describe('applyOptions', () => {
       rdf.quad(ex.subject0, ns.rdf.type, ns.dcat.Dataset, ex.graph1),
       rdf.quad(ex.subject0, ns.dcterms.created, rdf.literal('Not me'), ex.graph0),
       rdf.quad(ex.subject1, ns.rdf.type, ex.type1, ex.graph0),
-      rdf.quad(ex.subject3, ns.rdf.type, ns.dcat.Dataset, ex.graph0)
+      rdf.quad(ex.subject3, ns.rdf.type, ns.dcat.Dataset, ex.graph0),
     ]
 
     const options = {
-      dateCreated: rdf.literal('1999-12-31', xsd.dateTime)
+      dateCreated: rdf.literal('1999-12-31', xsd.dateTime),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -91,11 +90,11 @@ describe('applyOptions', () => {
       rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
       rdf.quad(ex.subject0, ns.schema.dateModified, rdf.literal('Not me'), ex.graph0),
       rdf.quad(ex.subject1, ns.rdf.type, ex.type1, ex.graph0),
-      rdf.quad(ex.subject3, ns.rdf.type, ns.schema.Dataset, ex.graph0)
+      rdf.quad(ex.subject3, ns.rdf.type, ns.schema.Dataset, ex.graph0),
     ]
 
     const options = {
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime)
+      dateModified: rdf.literal('1999-12-31', xsd.dateTime),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -113,11 +112,11 @@ describe('applyOptions', () => {
       rdf.quad(ex.subject0, ns.rdf.type, ns.dcat.Dataset, ex.graph1),
       rdf.quad(ex.subject0, ns.dcterms.modified, rdf.literal('Not me'), ex.graph0),
       rdf.quad(ex.subject1, ns.rdf.type, ex.type1, ex.graph0),
-      rdf.quad(ex.subject3, ns.rdf.type, ns.dcat.Dataset, ex.graph0)
+      rdf.quad(ex.subject3, ns.rdf.type, ns.dcat.Dataset, ex.graph0),
     ]
 
     const options = {
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime)
+      dateModified: rdf.literal('1999-12-31', xsd.dateTime),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -133,11 +132,11 @@ describe('applyOptions', () => {
   it('should update or append both dcterms:modified and schema:modified for known classes', async () => {
     const data = [
       rdf.quad(ex.subject0, ns.rdf.type, ns.dcat.Dataset, ex.graph1),
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
     ]
 
     const options = {
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime)
+      dateModified: rdf.literal('1999-12-31', xsd.dateTime),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -151,11 +150,11 @@ describe('applyOptions', () => {
 
   it('should update or append schema:dateModified for known (string)', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
     ]
 
     const options = {
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime).toString()
+      dateModified: rdf.literal('1999-12-31', xsd.dateTime).toString(),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -170,12 +169,12 @@ describe('applyOptions', () => {
       rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
       rdf.quad(ex.subject0, ns.schema.dateModified, rdf.literal('Not me'), ex.graph0),
       rdf.quad(ex.subject1, ns.rdf.type, ex.type1, ex.graph0),
-      rdf.quad(ex.subject3, ns.rdf.type, ns.schema.Dataset, ex.graph0)
+      rdf.quad(ex.subject3, ns.rdf.type, ns.schema.Dataset, ex.graph0),
     ]
 
     const options = {
       graph: ex.graph2,
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime)
+      dateModified: rdf.literal('1999-12-31', xsd.dateTime),
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
@@ -190,11 +189,11 @@ describe('applyOptions', () => {
 
   it('should set the corresponding graph (string)', async () => {
     const data = [
-      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1)
+      rdf.quad(ex.subject0, ns.rdf.type, ns.schema.Dataset, ex.graph1),
     ]
 
     const options = {
-      graph: ex.graph2.value
+      graph: ex.graph2.value,
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]

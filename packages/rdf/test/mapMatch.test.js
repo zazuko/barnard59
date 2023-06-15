@@ -1,7 +1,6 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream } from 'is-stream'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import mapMatch from '../mapMatch.js'
@@ -21,12 +20,12 @@ describe('mapMatch', () => {
   it('should not touch any quads not matching the pattern', async () => {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
-      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2)
+      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
     ]
 
     const map = mapMatch({
       predicate: ns.ex.map,
-      map: () => rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
+      map: () => rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped),
     })
 
     Readable.from(quads).pipe(map)
@@ -41,7 +40,7 @@ describe('mapMatch', () => {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
       rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
-      rdf.quad(ns.ex.subject3, ns.ex.predicate3, ns.ex.object3, ns.ex.graph3)
+      rdf.quad(ns.ex.subject3, ns.ex.predicate3, ns.ex.object3, ns.ex.graph3),
     ]
     const mapped = rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
 
@@ -50,7 +49,7 @@ describe('mapMatch', () => {
       predicate: ns.ex.predicate2,
       object: ns.ex.object2,
       graph: ns.ex.graph2,
-      map: () => mapped
+      map: () => mapped,
     })
 
     Readable.from(quads).pipe(map)
@@ -66,7 +65,7 @@ describe('mapMatch', () => {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
       rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
-      rdf.quad(ns.ex.subject3, ns.ex.predicate3, ns.ex.object3, ns.ex.graph3)
+      rdf.quad(ns.ex.subject3, ns.ex.predicate3, ns.ex.object3, ns.ex.graph3),
     ]
     const mapped = rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
 
@@ -75,7 +74,7 @@ describe('mapMatch', () => {
       predicate: [ns.ex.predicate1, ns.ex.predicate2],
       object: [ns.ex.object1, ns.ex.object2],
       graph: [ns.ex.graph1, ns.ex.graph2],
-      map: () => mapped
+      map: () => mapped,
     })
 
     Readable.from(quads).pipe(map)
@@ -89,13 +88,13 @@ describe('mapMatch', () => {
 
   it('should support async map functions', async () => {
     const quads = [
-      rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1)
+      rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
     ]
     const mapped = rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
 
     const map = mapMatch({
       subject: ns.ex.subject1,
-      map: async () => mapped
+      map: async () => mapped,
     })
 
     Readable.from(quads).pipe(map)
@@ -109,7 +108,7 @@ describe('mapMatch', () => {
     const seen = []
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
-      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2)
+      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
     ]
     const mapped = rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
 
@@ -119,7 +118,7 @@ describe('mapMatch', () => {
         seen.push(quad)
 
         return mapped
-      }
+      },
     })
 
     Readable.from(quads).pipe(map)
@@ -133,7 +132,7 @@ describe('mapMatch', () => {
   it('should assign rdf-ext as rdf to the this context', async () => {
     let context = null
     const quads = [
-      rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1)
+      rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
     ]
     const mapped = rdf.quad(ns.ex.mapped, ns.ex.mapped, ns.ex.mapped)
 
@@ -143,7 +142,7 @@ describe('mapMatch', () => {
         context = this
 
         return mapped
-      }
+      },
     })
 
     Readable.from(quads).pipe(map)

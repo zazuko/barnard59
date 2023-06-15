@@ -1,5 +1,4 @@
 import { strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import { getParserByExtension } from '../../lib/localFetch/lookupParser.js'
 
 describe('metadata.lfetch.lookupParser', () => {
@@ -15,7 +14,7 @@ describe('metadata.lfetch.lookupParser', () => {
       'nt',
       'n3',
       'ttl',
-      'rdf'
+      'rdf',
     ]
 
     rdfExtensions.forEach(extension => {
@@ -27,7 +26,7 @@ describe('metadata.lfetch.lookupParser', () => {
   it('should return undefined for non standard RDF extensions', async () => {
     const nonRdfExtensions = [
       'xml',
-      'turtle'
+      'turtle',
     ]
 
     nonRdfExtensions.forEach(extension => {

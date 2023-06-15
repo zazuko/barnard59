@@ -3,7 +3,7 @@ import { localFetch } from './localFetch/localFetch.js'
 import { applyOptions } from './metadata/applyOptions.js'
 
 class MetadataAppend extends Transform {
-  constructor (context, basePath, input, options) {
+  constructor(context, basePath, input, options) {
     super({ objectMode: true })
     this.context = context
     this.basePath = basePath
@@ -11,11 +11,11 @@ class MetadataAppend extends Transform {
     this.options = options
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     callback(null, chunk)
   }
 
-  async _flush (callback) {
+  async _flush(callback) {
     try {
       const { quadStream, metadata } = await localFetch(this.input, this.basePath)
       for (const quad of await applyOptions(quadStream, metadata, this.options)) {
@@ -29,12 +29,12 @@ class MetadataAppend extends Transform {
   }
 }
 
-async function append ({
+async function append({
   input,
   basepath,
   dateModified = undefined,
   dateCreated = undefined,
-  graph = undefined
+  graph = undefined,
 } = {}) {
   if (!input) {
     throw new Error('Needs input as parameter (url or filename)')

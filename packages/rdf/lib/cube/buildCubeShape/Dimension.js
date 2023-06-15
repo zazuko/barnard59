@@ -26,11 +26,11 @@ const datatypeParsers = rdf.termMap([
   [ns.xsd.unsignedByte, fromRdf],
   [ns.xsd.unsignedInt, fromRdf],
   [ns.xsd.unsignedLong, fromRdf],
-  [ns.xsd.unsignedShort, fromRdf]
+  [ns.xsd.unsignedShort, fromRdf],
 ])
 
 class Dimension {
-  constructor ({ metadata, predicate, object }) {
+  constructor({ metadata, predicate, object }) {
     this.metadata = metadata
     this.predicate = predicate
     this.termType = object.termType
@@ -50,7 +50,7 @@ class Dimension {
     }
   }
 
-  update ({ object }) {
+  update({ object }) {
     if (object.datatype) {
       this.datatype.add(object.datatype)
     }
@@ -76,7 +76,7 @@ class Dimension {
     }
   }
 
-  toDataset ({ shape }) {
+  toDataset({ shape }) {
     const dataset = rdf.dataset()
 
     const ptr = clownface({ dataset }).blankNode()

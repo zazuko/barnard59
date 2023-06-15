@@ -3,7 +3,6 @@ import fs from 'fs'
 import { resolve } from 'path'
 import defaultFormats from '@rdfjs/formats-common'
 import assertThrows from 'assert-throws-async'
-import { describe, it } from 'mocha'
 import nock from 'nock'
 import rdf from 'rdf-ext'
 import { localFetch } from '../../lib/localFetch/localFetch.js'
@@ -11,11 +10,11 @@ import { localFetch } from '../../lib/localFetch/localFetch.js'
 const datasetPath = '../support/dataset.ttl'
 const datasetAbsolutePath = new URL(datasetPath, import.meta.url).toString()
 
-async function getRDFDataset (filePath) {
+async function getRDFDataset(filePath) {
   return rdf.dataset().import(getRDFStream(filePath))
 }
 
-function getRDFStream (filePath) {
+function getRDFStream(filePath) {
   const stream = fs.createReadStream(new URL(filePath, import.meta.url))
   const parser = defaultFormats.parsers.get('text/turtle')
   return parser.import(stream)

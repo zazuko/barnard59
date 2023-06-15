@@ -1,7 +1,7 @@
 import rdf from 'rdf-ext'
 
 class PatternMatcher {
-  constructor ({ subject, predicate, object, graph } = {}) {
+  constructor({ subject, predicate, object, graph } = {}) {
     this.pattern = {}
 
     this.set('subject', subject)
@@ -10,11 +10,11 @@ class PatternMatcher {
     this.set('graph', graph)
   }
 
-  test (quad) {
+  test(quad) {
     return Object.entries(this.pattern).every(([name, values]) => values.has(quad[name]))
   }
 
-  set (name, value) {
+  set(name, value) {
     if (!value) {
       return
     }

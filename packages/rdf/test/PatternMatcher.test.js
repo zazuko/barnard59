@@ -1,5 +1,4 @@
 import { strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import PatternMatcher from '../lib/PatternMatcher.js'
 import { ex } from './support/namespaces.js'
@@ -37,7 +36,7 @@ describe('PatternMatcher', () => {
       subject: [subject1, subject2],
       predicate: [predicate1, predicate2],
       object: [object1, object2],
-      graph: [graph1, graph2]
+      graph: [graph1, graph2],
     })
 
     strictEqual(matcher.pattern.subject.has(subject1), true)

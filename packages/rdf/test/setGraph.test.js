@@ -1,7 +1,6 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import { Readable } from 'readable-stream'
 import setGraph from '../setGraph.js'
@@ -21,7 +20,7 @@ describe('setGraph', () => {
   it('should set the graph of all quads', async () => {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
-      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2)
+      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
     ]
 
     const map = setGraph(ns.ex.graph)
@@ -37,7 +36,7 @@ describe('setGraph', () => {
   it('should accept string values', async () => {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
-      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2)
+      rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
     ]
 
     const map = setGraph(ns.ex.graph.value)
@@ -52,7 +51,7 @@ describe('setGraph', () => {
 
   it('should use default graph if an empty string is given', async () => {
     const quads = [
-      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph)
+      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph),
     ]
 
     const map = setGraph('')
@@ -66,7 +65,7 @@ describe('setGraph', () => {
 
   it('should use default graph if null is given', async () => {
     const quads = [
-      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph)
+      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph),
     ]
 
     const map = setGraph(null)
@@ -80,7 +79,7 @@ describe('setGraph', () => {
 
   it('should use default graph if undefined is given', async () => {
     const quads = [
-      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph)
+      rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph),
     ]
 
     const map = setGraph()

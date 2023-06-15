@@ -13,5 +13,5 @@ export {
   rdf,
   schema,
   sh,
-  xsd
+  xsd,
 }
