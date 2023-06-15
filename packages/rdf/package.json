@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/zazuko/barnard59-rdf.git",
+    "url": "git://github.com/zazuko/barnard59.git",
     "directory": "packages/rdf"
   },
   "keywords": [],
