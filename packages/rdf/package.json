@@ -4,6 +4,9 @@
   "description": "RDF support for Linked Data pipelines",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "test": "mocha"
+  },
   "publishConfig": {
     "access": "public"
   },
