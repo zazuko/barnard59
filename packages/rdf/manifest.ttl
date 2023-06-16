@@ -44,3 +44,14 @@
  code:implementedBy [ a code:EcmaScript;
                       code:link <node:barnard59-rdf/metadata.js#voidStats>
                     ].
+
+<fs.js#parse>
+  a p:Operation, p:ReadableObjectMode ;
+  rdfs:label "Parse RDF file" ;
+  rdfs:comment "Opens and parses an RDF file, choosing the correct parser based on the extension" ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:barnard59-rdf/fs.js#parse>
+    ] ;
+.
