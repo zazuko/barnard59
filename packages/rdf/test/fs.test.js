@@ -58,5 +58,21 @@ describe('fs', () => {
         done()
       })
     })
+
+    it('fails when extensions is unrecognised', (done) => {
+      // given
+      const files = Readable.from([
+        resolve(__dirname, 'support/file.unknown.extension'),
+      ])
+
+      // when
+      const stream = files.pipe(parse())
+
+      // then
+      stream.on('error', (err) => {
+        expect(err.message).to.match(/Unknown file extension/)
+        done()
+      })
+    })
   })
 })

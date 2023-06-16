@@ -5,10 +5,14 @@ export function parse() {
   return new Transform({
     objectMode: true,
     transform: async (path, encoding, callback) => {
-      const fileStream = fromFile(path)
+      try {
+        const fileStream = fromFile(path)
 
-      fileStream.on('data', quad => callback(null, quad))
-      fileStream.on('error', callback)
+        fileStream.on('data', quad => callback(null, quad))
+        fileStream.on('error', callback)
+      } catch (e) {
+        callback(e)
+      }
     },
   })
 }
