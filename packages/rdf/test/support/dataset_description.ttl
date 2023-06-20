@@ -1,0 +1,11 @@
+BASE <http://example.org/>
+PREFIX void:   <http://rdfs.org/ns/void#>
+PREFIX dcat:   <http://www.w3.org/ns/dcat#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+
+<data>
+    a                    void:Dataset, dcat:Dataset, schema:Dataset ;
+    schema:dateCreated   "2020-05-30"^^xsd:date ; # The date on which the CreativeWork was created or the item was added to a DataFeed.
+    schema:dateModified  "2020-05-30"^^xsd:date ; # The date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed.
+.
