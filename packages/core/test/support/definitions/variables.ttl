@@ -1,0 +1,32 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix vars: <http://example.org/variables/>.
+
+<inline> a p:Pipeline;
+  p:variables [
+    p:variable [ a p:Variable;
+      p:name "foo";
+      p:value "bar"
+    ] ;
+    p:variable [ a p:Variable;
+      p:name "bar";
+    ] ;
+    p:variable [ a p:Variable;
+      p:name "optional" ;
+      p:required false ;
+    ]
+  ].
+
+<multiset>  a p:Pipeline;
+  p:variables vars:credentials, vars:endpoints.
+
+vars:credentials p:variable [ a p:Variable;
+  p:name "username";
+  p:value "tpluscode"
+].
+
+vars:endpoints p:variable [ a p:Variable;
+  p:name "auth";
+  p:value "http://auth0.com/connect/token"
+].

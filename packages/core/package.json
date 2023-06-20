@@ -1,0 +1,62 @@
+{
+  "name": "barnard59-core",
+  "version": "2.0.2",
+  "description": "Core component of Barnard59 Linked Data pipelines",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint . --quiet --ignore-path .gitignore",
+    "test": "c8 --reporter=lcov --reporter=text mocha",
+    "release": "changeset publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59-core.git"
+  },
+  "keywords": [],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59-core/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59-core",
+  "dependencies": {
+    "@opentelemetry/api": "^1.0.1",
+    "@rdfjs/namespace": "^2.0.0",
+    "clownface": "^1.4.0",
+    "duplex-to": "^1.0.1",
+    "duplexify": "^4.1.1",
+    "is-stream": "^3.0.0",
+    "lodash": "^4.17.21",
+    "rdf-ext": "^2.2.0",
+    "rdf-loader-code": "^0.3.2",
+    "rdf-loaders-registry": "^0.3.0",
+    "readable-stream": "^3.6.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.1",
+    "@tpluscode/eslint-config": "^0.4.3",
+    "barnard59-base": "^1.0.0",
+    "barnard59-http": "^1.0.0",
+    "c8": "^7.7.3",
+    "chai": "^4.3.7",
+    "get-stream": "^6.0.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "mocha": "^9.0.1",
+    "nock": "^13.1.0",
+    "rdf-utils-fs": "^2.1.0",
+    "sinon": "^15.0.4",
+    "sinon-chai": "^3.7.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix --quiet"
+    ]
+  },
+  "mocha": {
+    "require": "test/mocha-setup.cjs"
+  }
+}
