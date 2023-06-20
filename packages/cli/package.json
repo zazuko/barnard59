@@ -7,6 +7,9 @@
   "bin": {
     "barnard59": "bin/barnard59.js"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/zazuko/barnard59.git",
