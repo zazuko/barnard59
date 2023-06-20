@@ -1,0 +1,46 @@
+@base <http://barnard59.zazuko.com/operations/rdf/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<mapMatch> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Map (RDF/JS Quad)";
+  rdfs:comment "Calls a map function only for quads matching the given triple pattern.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/mapMatch.js#default>
+  ].
+
+<cube.js#buildCubeShape> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "build Cube Shape";
+  rdfs:comment "Builds a Cube Shape based on Cube Observation datasets";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/cube.js#buildCubeShape>
+  ].
+
+<cube.js#toObservation> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "to Cube Observation";
+  rdfs:comment "Converts a set of quads to a Cube Observation";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/cube.js#toObservation>
+  ].
+
+<setGraph> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Set Graph";
+  rdfs:comment "Sets the graph of all quads to the given fixed value.";
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:barnard59-rdf/setGraph.js#default>
+  ].
+
+<metadata.js#append> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Append metadata";
+  rdfs:comment "Fetches, updates and appends a metadata resource";
+  code:implementedBy [ a code:EcmaScript;
+                       code:link <node:barnard59-rdf/metadata.js#append>
+  ].
+
+<metadata.js#voidStats> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+ rdfs:label "Void statistics";
+ rdfs:comment "Appends void statistics, such as counts for entities and properties";
+ code:implementedBy [ a code:EcmaScript;
+                      code:link <node:barnard59-rdf/metadata.js#voidStats>
+                    ].
