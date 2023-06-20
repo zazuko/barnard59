@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --quiet --ignore-path .gitignore",
-    "test": "c8 --reporter lcovonly mocha packages/*/test --recursive",
+    "test": "c8 --reporter lcovonly wsrun test",
     "release": "changeset publish"
   },
   "workspaces": [
@@ -18,7 +18,8 @@
     "c8": "^7.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "wsrun": "^5.2.4"
   },
   "lint-staged": {
     "*.js": [
