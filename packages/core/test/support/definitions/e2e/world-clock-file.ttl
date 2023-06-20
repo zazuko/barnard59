@@ -19,7 +19,7 @@
 
 <fetch> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:./node_modules/barnard59-http/index.js#get>
+    code:link <file:./test/support/barnard59-http.js#get>
   ];
   code:arguments [
     code:name "url";
