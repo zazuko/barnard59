@@ -13,6 +13,7 @@ Runs a construct or describe query and parses the response into RDF/JS Quad stre
 - `query`: The SPARQL construct or describe query as a string.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
+- `operation`: The HTTP operation to use ('get' | 'postUrlencoded' | 'postDirect').
 
 ### select
 
@@ -23,3 +24,4 @@ The chunk object contains key-value pairs for each variable of the select query.
 - `query`: The SPARQL select query as a string.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
+- `operation`: The HTTP operation to use ('get' | 'postUrlencoded' | 'postDirect').
