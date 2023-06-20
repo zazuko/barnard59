@@ -6,9 +6,10 @@ More specifically, `barnard59` is an engine to execute data pipelines.
 
 In this monorepo you will find the various `barnard59-*` packages:
 
-| Package                         | Latest version                                                                  |                                          |
-|---------------------------------|---------------------------------------------------------------------------------|------------------------------------------|
-| [`barnard59`](packages/cli)     | [![](https://badge.fury.io/js/barnard59.svg)](https://npm.im/barnard59)         | CLI to run pipelines                     |
+| Package                               | Latest version                                                                  |                                     |
+|---------------------------------------|---------------------------------------------------------------------------------|-------------------------------------|
+| [`barnard59`](packages/cli)           | [![](https://badge.fury.io/js/barnard59.svg)](https://npm.im/barnard59)         | CLI to run pipelines                |
+| [`barnard59-sparql`](packages/sparql) | [![](https://badge.fury.io/js/barnard59-sparql.svg)](https://npm.im/barnard59-sparql) | Query SPARQL endpoint from pipeline |
 | [`barnard59-rdf`](packages/rdf) | [![](https://badge.fury.io/js/barnard59-rdf.svg)](https://npm.im/barnard59-rdf) | Operations for RDF/JS quads and datasets |
 
 More to come as we gradually consolidate other, initially separate repositories.
