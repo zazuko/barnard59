@@ -1,4 +1,4 @@
-import construct from './construct'
-import select from './select'
+import construct from './construct.js'
+import select from './select.js'
 
 export { construct, select }

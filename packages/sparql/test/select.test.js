@@ -66,11 +66,11 @@ describe('select', () => {
     const content = {
       results: {
         bindings: [{
-          a: { type: 'uri', value: 'http://example.org/0' }
+          a: { type: 'uri', value: 'http://example.org/0' },
         }, {
-          a: { type: 'uri', value: 'http://example.org/1' }
-        }]
-      }
+          a: { type: 'uri', value: 'http://example.org/1' },
+        }],
+      },
     }
 
     nock(endpoint.origin)
