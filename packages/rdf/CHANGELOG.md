@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 1.4.1
+
+### Patch Changes
+
+- ddd091c: Fixes "Callback called multiple times" when parsing
+
 ## 1.4.0
 
 ### Minor Changes
