@@ -1,0 +1,42 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+<> a p:Pipeline, p:ReadableObjectMode;
+  p:variables [
+    p:variable [ a p:Variable;
+      p:name "root";
+      p:value "/root/"
+    ]
+  ];
+  p:steps [
+    p:stepList (<glob> <loop>)
+  ] .
+
+<glob> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:../glob.js#default>
+  ];
+  code:arguments [
+    code:name "pattern";
+    code:value "test/support/definitions/e2e/*"
+  ].
+
+<loop> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:../forEach.js#default>
+  ];
+  code:arguments (<printFilename>).
+
+<printFilename> a p:Pipeline, p:WritableObjectMode, p:ReadableObjectMode;
+  p:steps [
+    p:stepList (<rootAndFilename>)
+  ].
+
+<rootAndFilename> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:../map.js#default>
+  ];
+  code:arguments ("filename => this.variables.get('root') + filename"^^code:EcmaScript).
+

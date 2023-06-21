@@ -1,0 +1,46 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+
+<> a p:Pipeline, p:Readable;
+  p:variables [
+    p:variable [ a p:Variable;
+      p:name "filename" ;
+      p:value "test/support/data/test.csv"
+    ]
+  ];
+  p:steps [
+    p:stepList (<readFile> <parseCsv> <forEach> <serializeJson>)
+  ].
+
+<readFile> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:fs#createReadStream>
+  ];
+  code:arguments ("${filename}"^^code:EcmaScriptTemplateLiteral).
+
+<parseCsv> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/parseCsv.js#default>
+  ].
+
+<forEach> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:../forEach.js#default>
+  ];
+  code:arguments (<subPipeline>).
+
+<serializeJson> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/serializeJson.js#default>
+  ].
+
+<subPipeline> a p:Pipeline, p:ReadableObjectMode, p:WritableObjectMode;
+  p:steps [
+    p:stepList (<duplicate>)
+  ].
+
+<duplicate> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <file:support/operations/duplicate.js#default>
+  ].
