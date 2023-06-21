@@ -1,1 +1,2 @@
 <http://example.org/C> <http://www.w3.org/2000/01/rdf-schema#label> "C" <http://example.org/> .
+<http://example.org/C> <http://www.w3.org/2000/01/rdf-schema#label> "c" <http://example.org/> .

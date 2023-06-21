@@ -2,3 +2,4 @@
 @prefix ex: <http://example.org/> .
 
 ex:A rdfs:label "A" .
+ex:A rdfs:label "a" .
