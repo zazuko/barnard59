@@ -1,0 +1,8 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+
+<> a p:Pipeline;
+  p:steps [
+    p:stepList ()
+  ] .

@@ -1,0 +1,35 @@
+{
+  "name": "barnard59-sparql",
+  "version": "1.0.0",
+  "description": "SPARQL support for Barnard59 Linked Data pipelines",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59-sparql.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59-sparql/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59-sparql",
+  "dependencies": {
+    "@rdfjs/namespace": "^2.0.0",
+    "duplex-to": "^1.0.1",
+    "sparql-http-client": "^2.4.0"
+  },
+  "devDependencies": {
+    "get-stream": "^6.0.0",
+    "isstream": "^0.1.2",
+    "mocha": "^9.0.2",
+    "nock": "^13.1.1",
+    "rdf-ext": "^2.2.0"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
+  }
+}
