@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fs parse parses files from input chunks paths 1`] = `
+"<http://example.org/A> <http://www.w3.org/2000/01/rdf-schema#label> \\"A\\" .
+<http://example.org/B> <http://www.w3.org/2000/01/rdf-schema#label> \\"B\\" .
+<http://example.org/C> <http://www.w3.org/2000/01/rdf-schema#label> \\"C\\" <http://example.org/> .
+"
+`;
