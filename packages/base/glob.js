@@ -1,16 +1,16 @@
 import { promisify } from 'util'
 import { SpanStatusCode } from '@opentelemetry/api'
 import globFn from 'glob'
-import once from 'lodash/once.js'
+import onetime from 'onetime'
 import { Readable } from 'readable-stream'
 import tracer from './lib/tracer.js'
 
-function glob ({ pattern, ...options }) {
+function glob({ pattern, ...options }) {
   let filenames = null
 
   const span = tracer.startSpan('glob')
 
-  const init = once(async () => {
+  const init = onetime(async () => {
     span.addEvent('init')
     filenames = await promisify(globFn)(pattern, options)
   })
@@ -37,7 +37,7 @@ function glob ({ pattern, ...options }) {
       } finally {
         span.end()
       }
-    }
+    },
   })
 
   return stream

@@ -2,13 +2,14 @@ import { strictEqual, rejects } from 'assert'
 import { resolve } from 'path'
 import { promisify } from 'util'
 import getStream from 'get-stream'
-import { describe, it } from 'mocha'
 import stream from 'readable-stream'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import createPipeline from '../lib/factory/pipeline.js'
 import { isStream } from '../lib/isStream.js'
 import Pipeline from '../lib/Pipeline.js'
 import eventToPromise from './support/eventToPromise.js'
-import loadPipelineDefinition from './support/loadPipelineDefinition.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url)
 
 const finished = promisify(stream.finished)
 

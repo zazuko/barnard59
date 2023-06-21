@@ -1,19 +1,19 @@
 import { Transform } from 'readable-stream'
 
 class ToString extends Transform {
-  constructor () {
+  constructor() {
     super({
       writableObjectMode: true,
-      readableObjectMode: false
+      readableObjectMode: false,
     })
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     callback(null, chunk.toString())
   }
 }
 
-function factory () {
+function factory() {
   return new ToString()
 }
 

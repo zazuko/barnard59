@@ -1,7 +1,7 @@
 import { finished, Readable } from 'readable-stream'
 
 class ConcatStream extends Readable {
-  constructor (streams, { objectMode = false } = {}) {
+  constructor(streams, { objectMode = false } = {}) {
     super({ objectMode })
 
     this.streams = streams
@@ -10,7 +10,7 @@ class ConcatStream extends Readable {
     this.next()
   }
 
-  _read () {
+  _read() {
     if (!this.current) {
       return this.push(null)
     }
@@ -26,7 +26,7 @@ class ConcatStream extends Readable {
     }
   }
 
-  next () {
+  next() {
     this.current = this.streams.shift()
 
     if (this.current) {
@@ -37,7 +37,7 @@ class ConcatStream extends Readable {
   }
 }
 
-function factory (...streams) {
+function factory(...streams) {
   return new ConcatStream(streams)
 }
 

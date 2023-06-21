@@ -5,10 +5,10 @@ import stream from 'readable-stream'
 const { Readable } = stream
 
 class FileIterator extends Readable {
-  constructor (dirName, basePath) {
+  constructor(dirName, basePath) {
     super({
       objectMode: true,
-      read: () => {}
+      read: () => {},
     })
 
     const directory = resolve(basePath, dirName)
@@ -23,7 +23,7 @@ class FileIterator extends Readable {
   }
 }
 
-function factory (dirName) {
+function factory(dirName) {
   return new FileIterator(dirName, this.basePath)
 }
 

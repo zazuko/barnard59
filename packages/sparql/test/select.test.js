@@ -1,7 +1,6 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
 import nock from 'nock'
 import select from '../select.js'
 

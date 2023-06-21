@@ -1,6 +1,5 @@
 import { strictEqual } from 'assert'
 import { EventEmitter } from 'events'
-import { describe, it } from 'mocha'
 import { Duplex, Readable, Writable } from 'readable-stream'
 import {
   isStream,

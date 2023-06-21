@@ -1,0 +1,12 @@
+{
+  "name": "barnard59-test-support",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@rdfjs/namespace": "^2.0.0",
+    "clownface": "^1.5.1",
+    "rdf-ext": "^2.2.0",
+    "rdf-utils-fs": "^2.3.0"
+  }
+}

@@ -1,7 +1,6 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
 import glob from '../glob.js'
 
 describe('glob', () => {
@@ -17,29 +16,29 @@ describe('glob', () => {
   })
 
   it('should emit each file name as a chunk', async () => {
-    const s = glob({ pattern: 'test/support/definitions/e2e/*' })
+    const s = glob({ pattern: '../../test/e2e/definitions/foreach/*' })
 
     const filenames = await array(s)
 
     deepStrictEqual(filenames, [
-      'test/support/definitions/e2e/foreach-csv-duplicate.ttl',
-      'test/support/definitions/e2e/foreach-with-handler.ttl',
-      'test/support/definitions/e2e/foreach-with-variable.ttl'
+      '../../test/e2e/definitions/foreach/csv-duplicate.ttl',
+      '../../test/e2e/definitions/foreach/with-handler.ttl',
+      '../../test/e2e/definitions/foreach/with-variable.ttl',
     ])
   })
 
   it('should forward additional options', async () => {
     const s = glob({
-      cwd: 'test/support/definitions/e2e',
-      pattern: '*'
+      cwd: '../../test/e2e/definitions/foreach',
+      pattern: '*',
     })
 
     const filenames = await array(s)
 
     deepStrictEqual(filenames, [
-      'foreach-csv-duplicate.ttl',
-      'foreach-with-handler.ttl',
-      'foreach-with-variable.ttl'
+      'csv-duplicate.ttl',
+      'with-handler.ttl',
+      'with-variable.ttl',
     ])
   })
 })

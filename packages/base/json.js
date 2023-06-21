@@ -1,36 +1,36 @@
 import { Transform } from 'readable-stream'
 
 class JsonParse extends Transform {
-  constructor () {
+  constructor() {
     super({
       writableObjectMode: false,
-      readableObjectMode: true
+      readableObjectMode: true,
     })
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     callback(null, JSON.parse(chunk.toString()))
   }
 }
 
 class JsonStringify extends Transform {
-  constructor () {
+  constructor() {
     super({
       writableObjectMode: true,
-      readableObjectMode: false
+      readableObjectMode: false,
     })
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     callback(null, JSON.stringify(chunk))
   }
 }
 
-function parse () {
+function parse() {
   return new JsonParse()
 }
 
-function stringify () {
+function stringify() {
   return new JsonStringify()
 }
 

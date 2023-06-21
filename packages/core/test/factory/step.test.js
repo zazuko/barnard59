@@ -1,13 +1,14 @@
 import { strictEqual, rejects } from 'assert'
 import { resolve } from 'path'
 import getStream from 'get-stream'
-import { describe, it } from 'mocha'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
 import defaultLogger from '../../lib/defaultLogger.js'
 import createStep from '../../lib/factory/step.js'
 import Step from '../../lib/Step.js'
-import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
 import ns from '../support/namespaces.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 
 describe('factory/step', () => {
   it('should be a method', () => {

@@ -1,6 +1,6 @@
 import { obj } from 'through2'
 
-function flatten () {
+function flatten() {
   return obj(function (chunk, encoding, callback) {
     if (typeof chunk[Symbol.iterator] === 'function') {
       for (const item of chunk) {

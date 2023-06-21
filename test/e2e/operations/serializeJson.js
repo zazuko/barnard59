@@ -3,13 +3,13 @@ import stream from 'readable-stream'
 const { Transform } = stream
 
 class JsonSerializer extends Transform {
-  constructor () {
+  constructor() {
     super({ writableObjectMode: true })
 
     this.first = true
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     if (this.first) {
       this.push('[\n')
 
@@ -23,14 +23,14 @@ class JsonSerializer extends Transform {
     callback()
   }
 
-  _flush (callback) {
+  _flush(callback) {
     this.push('\n]')
 
     callback()
   }
 }
 
-function factory () {
+function factory() {
   return new JsonSerializer()
 }
 

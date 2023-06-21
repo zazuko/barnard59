@@ -1,5 +1,4 @@
 import { notStrictEqual, strictEqual, throws } from 'assert'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
 import cloneTerm from '../lib/cloneTerm.js'
 import ns from './support/namespaces.js'

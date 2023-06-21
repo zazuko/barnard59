@@ -6,7 +6,7 @@
   p:variables [
     p:variable [ a p:Variable;
       p:name "filename" ;
-      p:value "test/support/data/test.csv"
+      p:value "data/test.csv"
     ]
   ];
   p:steps [
@@ -21,18 +21,18 @@
 
 <parseCsv> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:support/operations/parseCsv.js#default>
+    code:link <file:operations/parseCsv.js#default>
   ].
 
 <forEach> a p:Step ;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:../forEach.js#default>
+    code:link <node:barnard59-base/forEach.js#default>
   ];
   code:arguments (<subPipeline>).
 
 <serializeJson> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:support/operations/serializeJson.js#default>
+    code:link <file:operations/serializeJson.js#default>
   ].
 
 <subPipeline> a p:Pipeline, p:ReadableObjectMode, p:WritableObjectMode;
@@ -42,5 +42,5 @@
 
 <duplicate> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:support/operations/duplicate.js#default>
+    code:link <file:operations/duplicate.js#default>
   ].

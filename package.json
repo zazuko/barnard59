@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --quiet --ignore-path .gitignore",
-    "test": "c8 --reporter lcovonly wsrun test",
+    "test": "c8 --reporter lcovonly wsrun -sm test",
     "release": "changeset publish"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "test/*"
   ],
   "dependencies": {
     "@changesets/cli": "^2.26.1",

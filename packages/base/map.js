@@ -10,7 +10,7 @@ import transform from 'parallel-transform'
  * @param {Boolean} [options.objectMode=true] Option to transform chunks in object mode
  * @return {ReadableStream}
  */
-export default function map (options) {
+export default function map(options) {
   let func
   let concurrency = 1
   let ordered = true

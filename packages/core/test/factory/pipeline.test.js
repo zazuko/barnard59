@@ -3,11 +3,12 @@ import { resolve } from 'path'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import getStream from 'get-stream'
-import { describe, it } from 'mocha'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import createPipeline from '../../lib/factory/pipeline.js'
 import { isReadable, isReadableObjectMode, isWritable, isWritableObjectMode } from '../../lib/isStream.js'
 import Pipeline from '../../lib/Pipeline.js'
-import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 
 describe('factory/pipeline', () => {
   it('should be a method', () => {

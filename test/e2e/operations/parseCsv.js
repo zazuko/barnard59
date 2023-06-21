@@ -3,13 +3,13 @@ import stream from 'readable-stream'
 const { Transform } = stream
 
 class CsvParser extends Transform {
-  constructor () {
+  constructor() {
     super({ readableObjectMode: true })
 
     this.content = ''
   }
 
-  _transform (chunk, encoding, callback) {
+  _transform(chunk, encoding, callback) {
     this.content += chunk.toString()
 
     this.nextLine()
@@ -17,7 +17,7 @@ class CsvParser extends Transform {
     callback()
   }
 
-  _flush (callback) {
+  _flush(callback) {
     if (this.content) {
       this.pushLine(this.content)
     }
@@ -25,7 +25,7 @@ class CsvParser extends Transform {
     callback()
   }
 
-  nextLine () {
+  nextLine() {
     const index = this.content.indexOf('\n')
 
     if (index === -1) {
@@ -37,12 +37,12 @@ class CsvParser extends Transform {
     this.nextLine()
   }
 
-  pushLine (line) {
+  pushLine(line) {
     this.push(line.split(','))
   }
 }
 
-function factory () {
+function factory() {
   return new CsvParser()
 }
 

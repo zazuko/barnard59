@@ -1,6 +1,6 @@
 import { obj } from 'through2'
 
-function offset (offset) {
+function offset(offset) {
   const t = obj(function (chunk, encoding, callback) {
     t.count++
 

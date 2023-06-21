@@ -5,12 +5,12 @@ import ReadableToReadable from 'readable-to-readable'
 
 const { finished, Duplex } = stream
 
-async function nextLoop () {
+async function nextLoop() {
   return new Promise(resolve => setTimeout(resolve, 0))
 }
 
 class ForEach extends Duplex {
-  constructor ({ createPipeline, pipeline, step, variable, variables }) {
+  constructor({ createPipeline, pipeline, step, variable, variables }) {
     super({ objectMode: true })
 
     // Bind the read and write function to the current context so the trace ID
@@ -31,15 +31,15 @@ class ForEach extends Duplex {
     this.pull = null
   }
 
-  get subPipeline () {
+  get subPipeline() {
     return this.step.children[0]
   }
 
-  set subPipeline (subPipeline) {
+  set subPipeline(subPipeline) {
     this.step.children[0] = subPipeline
   }
 
-  async _write (chunk, encoding, callback) {
+  async _write(chunk, encoding, callback) {
     try {
       const variables = new Map(this.variables)
 
@@ -69,7 +69,7 @@ class ForEach extends Duplex {
     }
   }
 
-  async _read () {
+  async _read() {
     if (this._writableState.finished) {
       return this.push(null)
     }
@@ -84,13 +84,13 @@ class ForEach extends Duplex {
   }
 }
 
-function factory (pipeline, variable) {
+function factory(pipeline, variable) {
   return new ForEach({
     pipeline,
     createPipeline: this.createPipeline,
     step: this.step,
     variable,
-    variables: this.variables
+    variables: this.variables,
   })
 }
 

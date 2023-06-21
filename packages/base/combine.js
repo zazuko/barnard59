@@ -1,6 +1,6 @@
 import duplexify from 'duplexify'
 
-function combine (streams, options) {
+function combine(streams, options) {
   if (streams.length === 0) {
     throw new Error('no streams to combine')
   }

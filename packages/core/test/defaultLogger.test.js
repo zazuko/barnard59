@@ -1,5 +1,4 @@
 import { strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import defaultLogger from '../lib/defaultLogger.js'
 
 describe('defaultLogger', () => {

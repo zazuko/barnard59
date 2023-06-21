@@ -1,5 +1,4 @@
 import { deepStrictEqual, strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import { Readable, Writable } from 'readable-stream'
 import { defaultLogger } from '../index.js'
 import run from '../lib/run.js'

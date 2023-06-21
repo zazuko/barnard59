@@ -1,16 +1,16 @@
 import { Writable } from 'readable-stream'
 
 class Nul extends Writable {
-  constructor () {
+  constructor() {
     super({ objectMode: true })
   }
 
-  _write (chunk, encoding, callback) {
+  _write(chunk, encoding, callback) {
     callback()
   }
 }
 
-function factory () {
+function factory() {
   return new Nul()
 }
 

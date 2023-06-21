@@ -1,10 +1,10 @@
 import Readable from 'readable-stream'
 
 class ToReadable extends Readable {
-  constructor (content, { objectMode = false } = {}) {
+  constructor(content, { objectMode = false } = {}) {
     super({
       objectMode,
-      read: () => {}
+      read: () => {},
     })
 
     this.push(content)
@@ -12,11 +12,11 @@ class ToReadable extends Readable {
   }
 }
 
-function stringToReadable (str) {
+function stringToReadable(str) {
   return new ToReadable(str)
 }
 
-function objectToReadable (obj) {
+function objectToReadable(obj) {
   return new ToReadable(obj, { objectMode: true })
 }
 

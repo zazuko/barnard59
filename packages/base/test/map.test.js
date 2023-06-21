@@ -1,7 +1,6 @@
 import { deepStrictEqual } from 'assert'
 import getStream, { array } from 'get-stream'
 import intoStream from 'into-stream'
-import { describe, it } from 'mocha'
 import { Readable } from 'readable-stream'
 import map from '../map.js'
 
@@ -12,10 +11,10 @@ describe('map', () => {
         input.push('a')
         input.push('b')
         input.push(null)
-      }
+      },
     })
     const context = {
-      variable: new Map().set('prefix', 'foo_')
+      variable: new Map().set('prefix', 'foo_'),
     }
 
     const outStream = input.pipe(map.call(context, function (chunk) {
@@ -40,7 +39,7 @@ describe('map', () => {
 
   it('binds pipeline context to transform function', async () => {
     // const
-    function transform (letter) {
+    function transform(letter) {
       return letter + this.suffix
     }
     const input = intoStream.object(['A', 'B', 'C'])
@@ -68,7 +67,7 @@ describe('map', () => {
     const result = await getStream(input.pipe(map({
       map: transform,
       ordered: false,
-      concurrency: 3
+      concurrency: 3,
     })))
 
     // then
@@ -89,7 +88,7 @@ describe('map', () => {
     // when
     const result = await getStream(input.pipe(map({
       map: transform,
-      concurrency: 3
+      concurrency: 3,
     })))
 
     // then

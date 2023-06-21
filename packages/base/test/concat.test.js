@@ -1,7 +1,6 @@
 import { deepStrictEqual, strictEqual, rejects } from 'assert'
 import getStream, { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
 import { Readable } from 'readable-stream'
 import concat, { object } from '../concat.js'
 
@@ -27,14 +26,14 @@ describe('concat', () => {
           end0 = Date.now()
           stream0.push(null)
         }, 50)
-      }
+      },
     })
 
     const stream1 = new Readable({
       read: () => {
         start1 = Date.now()
         stream1.push(null)
-      }
+      },
     })
 
     const s = concat(stream0, stream1)
@@ -50,7 +49,7 @@ describe('concat', () => {
         stream0.push('a')
         stream0.push('b')
         stream0.push(null)
-      }
+      },
     })
 
     const stream1 = new Readable({
@@ -58,7 +57,7 @@ describe('concat', () => {
         stream1.push('c')
         stream1.push('d')
         stream1.push(null)
-      }
+      },
     })
 
     const s = concat(stream0, stream1)
@@ -72,7 +71,7 @@ describe('concat', () => {
     const stream0 = new Readable({
       read: () => {
         stream0.destroy(new Error('test'))
-      }
+      },
     })
 
     const stream1 = new Readable({
@@ -80,7 +79,7 @@ describe('concat', () => {
         stream1.push('c')
         stream1.push('d')
         stream1.push(null)
-      }
+      },
     })
 
     const s = concat(stream0, stream1)
@@ -110,14 +109,14 @@ describe('concat', () => {
             end0 = Date.now()
             stream0.push(null)
           }, 50)
-        }
+        },
       })
 
       const stream1 = new Readable({
         read: () => {
           start1 = Date.now()
           stream1.push(null)
-        }
+        },
       })
 
       const s = object(stream0, stream1)
@@ -134,7 +133,7 @@ describe('concat', () => {
           stream0.push('a')
           stream0.push('b')
           stream0.push(null)
-        }
+        },
       })
 
       const stream1 = new Readable({
@@ -143,7 +142,7 @@ describe('concat', () => {
           stream1.push('c')
           stream1.push('d')
           stream1.push(null)
-        }
+        },
       })
 
       const s = object(stream0, stream1)
@@ -158,7 +157,7 @@ describe('concat', () => {
         objectMode: true,
         read: () => {
           stream0.destroy(new Error('test'))
-        }
+        },
       })
 
       const stream1 = new Readable({
@@ -167,7 +166,7 @@ describe('concat', () => {
           stream1.push('c')
           stream1.push('d')
           stream1.push(null)
-        }
+        },
       })
 
       const s = object(stream0, stream1)

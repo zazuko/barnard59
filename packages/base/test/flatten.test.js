@@ -1,7 +1,6 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
 import { Readable } from 'readable-stream'
 import flatten from '../flatten.js'
 
@@ -22,7 +21,7 @@ describe('flatten', () => {
       objectMode: true,
       read: () => {
         input.push(null)
-      }
+      },
     })
 
     const result = await array(input.pipe(flatten()))
@@ -33,7 +32,7 @@ describe('flatten', () => {
   it('should flatten object with a iterator interface', async () => {
     const toIterator = input => {
       return {
-        [Symbol.iterator]: input[Symbol.iterator].bind(input)
+        [Symbol.iterator]: input[Symbol.iterator].bind(input),
       }
     }
     const expected = ['a', 'b', 'c', 'd']
@@ -43,7 +42,7 @@ describe('flatten', () => {
         input.push(toIterator(['a', 'b']))
         input.push(toIterator(['c', 'd']))
         input.push(null)
-      }
+      },
     })
 
     const result = await array(input.pipe(flatten()))
@@ -54,7 +53,7 @@ describe('flatten', () => {
   it('should flatten object with a forEach method', async () => {
     const toForEach = input => {
       return {
-        forEach: input.forEach.bind(input)
+        forEach: input.forEach.bind(input),
       }
     }
     const expected = ['a', 'b', 'c', 'd']
@@ -64,7 +63,7 @@ describe('flatten', () => {
         input.push(toForEach(['a', 'b']))
         input.push(toForEach(['c', 'd']))
         input.push(null)
-      }
+      },
     })
 
     const result = await array(input.pipe(flatten()))
@@ -79,7 +78,7 @@ describe('flatten', () => {
       read: () => {
         input.push({})
         input.push(null)
-      }
+      },
     })
 
     try {
