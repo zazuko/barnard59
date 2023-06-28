@@ -1,11 +1,12 @@
 import { resolve } from 'path'
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
 import createVariables from '../../lib/factory/variables.js'
 import { VariableMap } from '../../lib/VariableMap.js'
-import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
 import ns from '../support/namespaces.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 
 describe('factory/variables', () => {
   it('should return a VariableMap', async () => {

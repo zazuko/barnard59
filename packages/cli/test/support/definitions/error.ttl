@@ -16,7 +16,7 @@
 
 <error> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:../operations/error.js#default>
+    code:link <file:support/operations/error.js#default>
   ].
 
 <passthrough> a p:Step;

@@ -1,11 +1,12 @@
 import { deepStrictEqual } from 'assert'
 import getStream from 'get-stream'
-import { beforeEach, describe, it } from 'mocha'
 import nock from 'nock'
-import defaultLoaderRegistry from '../lib/defaultLoaderRegistry.js'
-import createPipeline from '../lib/factory/pipeline.js'
-import { promisedEcmaScriptLoader, promisedUrlLoader } from './support/asyncLoaders.js'
-import loadPipelineDefinition from './support/loadPipelineDefinition.js'
+import createPipeline from 'barnard59-core/lib/factory/pipeline.js'
+import defaultLoaderRegistry from 'barnard59-core/lib/defaultLoaderRegistry.js'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
+import { promisedEcmaScriptLoader, promisedUrlLoader } from './asyncLoaders.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'definitions')
 
 const dateTimeLd = {
   '@context': {
@@ -27,7 +28,7 @@ describe('Pipeline', () => {
   })
 
   it('should load code using node: scheme', async () => {
-    const ptr = await loadPipelineDefinition('e2e/world-clock-node')
+    const ptr = await loadPipelineDefinition('world-clock/node')
     const pipeline = await createPipeline(ptr)
 
     const out = await getStream(pipeline.stream)
@@ -36,7 +37,7 @@ describe('Pipeline', () => {
   })
 
   it('should load code using file: scheme', async () => {
-    const ptr = await loadPipelineDefinition('e2e/world-clock-file')
+    const ptr = await loadPipelineDefinition('world-clock/file')
     const pipeline = await createPipeline(ptr, { basePath: process.cwd() })
 
     const out = await getStream(pipeline.stream)
@@ -45,7 +46,7 @@ describe('Pipeline', () => {
   })
 
   it('should load code using async loaders', async () => {
-    const ptr = await loadPipelineDefinition('e2e/world-clock-async')
+    const ptr = await loadPipelineDefinition('world-clock/async')
     const loaderRegistry = defaultLoaderRegistry()
 
     promisedEcmaScriptLoader.register(loaderRegistry)

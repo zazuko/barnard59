@@ -1,5 +1,4 @@
 import { strictEqual } from 'assert'
-import { describe, it } from 'mocha'
 import metadata from '../lib/metadata.js'
 import createPipelineDefinition from './support/createPipelineDefinition.js'
 

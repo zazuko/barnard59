@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { VariableMap } from '../lib/VariableMap.js'
 
 describe('VariableMap', () => {

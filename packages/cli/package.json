@@ -45,6 +45,7 @@
     "barnard59-formats": "^1.4.0",
     "barnard59-http": "^1.1.0",
     "barnard59-shell": "^0.1.0",
+    "barnard59-test-support": "^0.0.0",
     "chai": "^4.3.7",
     "shelljs": "^0.8.4",
     "strip-ansi": "^7.0.0"

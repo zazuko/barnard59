@@ -1,10 +1,11 @@
 import { deepStrictEqual, strictEqual } from 'assert'
-import { describe, it } from 'mocha'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
 import createArguments from '../../lib/factory/arguments.js'
-import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
 import ns from '../support/namespaces.js'
 import { VariableMap } from '../../lib/VariableMap.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 
 describe('factory/arguments', () => {
   it('should be a method', () => {

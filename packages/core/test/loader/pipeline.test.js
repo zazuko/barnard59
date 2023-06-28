@@ -1,11 +1,12 @@
 import { strictEqual, rejects } from 'assert'
 import { resolve } from 'path'
 import clownface from 'clownface'
-import { describe, it } from 'mocha'
 import rdf from 'rdf-ext'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { run } from '../../index.js'
 import loader from '../../lib/loader/pipeline.js'
-import loadPipelineDefinition from '../support/loadPipelineDefinition.js'
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 
 describe('loader/pipeline', () => {
   it('should use the given variables', async () => {
