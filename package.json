@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --quiet --ignore-path .gitignore",
-    "test": "c8 --reporter lcovonly wsrun -sm test",
+    "test": "wsrun -sm test",
     "release": "changeset publish"
   },
   "workspaces": [
