@@ -8,17 +8,23 @@ jobs:
         node:
           - '18'
           - '16'
+        package:
+          - barnard59
+          - barnard59-core
+          - barnard59-rdf
+          - barnard59-sparql
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
       - run: npm install
-      - run: npm test
+      - run: npx c8 --reporter lcovonly wsrun --no-prefix -p ${{ matrix.package }} -c test
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.package }}
 
   lint:
     runs-on: ubuntu-20.04

@@ -1,0 +1,8 @@
+flag_management:
+  default_rules:
+    carryforward: true
+  individual_flags:
+    - name: barnard59
+    - name: barnard59-core
+    - name: barnard59-rdf
+    - name: barnard59-sparql
