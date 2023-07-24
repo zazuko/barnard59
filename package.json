@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --quiet --ignore-path .gitignore",
-    "test": "wsrun -sm test",
+    "test": "wsrun -sm --report test",
     "release": "changeset publish"
   },
   "workspaces": [
