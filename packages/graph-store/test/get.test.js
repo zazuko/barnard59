@@ -1,11 +1,10 @@
 import { strictEqual } from 'assert'
 import rdf from '@rdfjs/data-model'
 import namespace from '@rdfjs/namespace'
-import { quadToNTriples } from '@rdfjs/to-ntriples'
+import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
 import get from '../get.js'
 
 const ns = namespace('http://example.org/')
