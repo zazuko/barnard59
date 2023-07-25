@@ -13,6 +13,8 @@ jobs:
           - barnard59-core
           - barnard59-rdf
           - barnard59-sparql
+          - barnard59-base
+          - barnard59-graph-store
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
