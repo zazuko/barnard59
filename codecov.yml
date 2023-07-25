@@ -6,3 +6,5 @@ flag_management:
     - name: barnard59-core
     - name: barnard59-rdf
     - name: barnard59-sparql
+    - name: barnard59-base
+    - name: barnard59-graph-store
