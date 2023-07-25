@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm install
-      - run: npx c8 --reporter lcovonly wsrun --no-prefix -p ${{ matrix.package }} -c test
+      - run: npx c8 --reporter lcovonly --reporter text wsrun --no-prefix -p ${{ matrix.package }} -c test
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
