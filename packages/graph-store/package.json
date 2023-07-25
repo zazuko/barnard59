@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/zazuko/barnard59-graph-store.git",
+    "url": "git://github.com/zazuko/barnard59.git",
     "directory": "packages/graph-store"
   },
   "keywords": [],
