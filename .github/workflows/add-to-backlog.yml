@@ -4,9 +4,9 @@ on:
   issues:
     types:
       - opened
-  pull_request:  
-    branches-ignore: 
-      - "dependabot/*"
+  pull_request:
+    branches-ignore:
+      - "dependabot/**/*"
     types:
       - opened
 
