@@ -11,7 +11,7 @@ In this monorepo you will find the various `barnard59-*` packages:
 | [`barnard59`](packages/cli)              | [![](https://badge.fury.io/js/barnard59.svg)](https://npm.im/barnard59)                         | CLI to run pipelines                     |
 | [`barnard59-core`](packages/core)        | [![](https://badge.fury.io/js/barnard59-core.svg)](https://npm.im/barnard59-core)               | Core package                             |
 | [`barnard59-base`](packages/base)        | [![](https://badge.fury.io/js/barnard59-base.svg)](https://npm.im/barnard59-base)               | Provides the basic pipeline steps        |
-| [`barnard59-graph-store`](packages/base) | [![](https://badge.fury.io/js/barnard59-graph-store.svg)](https://npm.im/barnard59-graph-store) | graph-store                              |
+| [`barnard59-graph-store`](packages/graph-store) | [![](https://badge.fury.io/js/barnard59-graph-store.svg)](https://npm.im/barnard59-graph-store) | [SPARQL Graph Store Protocol](https://www.w3.org/TR/sparql11-http-rdf-update/) support                              |
 | [`barnard59-sparql`](packages/sparql)    | [![](https://badge.fury.io/js/barnard59-sparql.svg)](https://npm.im/barnard59-sparql)           | Query SPARQL endpoint from pipeline      |
 | [`barnard59-rdf`](packages/rdf)          | [![](https://badge.fury.io/js/barnard59-rdf.svg)](https://npm.im/barnard59-rdf)                 | Operations for RDF/JS quads and datasets |
 
