@@ -52,7 +52,6 @@
     code:link <node:barnard59-base/map.js#default>
   ];
   code:arguments ("""json => {
-          debugger
           return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.dateTime } }"""^^code:EcmaScript).
 
 <parse> a p:Step ;
