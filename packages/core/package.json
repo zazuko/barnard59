@@ -22,15 +22,17 @@
   "dependencies": {
     "@opentelemetry/api": "^1.0.1",
     "@rdfjs/namespace": "^2.0.0",
+    "@zazuko/env": "^1.0.1",
     "clownface": "^1.4.0",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.1.1",
+    "is-graph-pointer": "^2.0.0",
     "is-stream": "^3.0.0",
     "lodash": "^4.17.21",
-    "rdf-ext": "^2.2.0",
     "rdf-loader-code": "^0.3.2",
     "rdf-loaders-registry": "^0.3.0",
     "readable-stream": "^3.6.0",
+    "untildify": "^5.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
