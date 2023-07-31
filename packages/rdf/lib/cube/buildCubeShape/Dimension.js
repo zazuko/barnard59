@@ -1,5 +1,5 @@
 import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { fromRdf } from 'rdf-literal'
 import cbdCopy from '../../cbdCopy.js'
 import * as ns from '../../namespaces.js'

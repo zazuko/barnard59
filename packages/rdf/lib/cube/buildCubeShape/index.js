@@ -1,7 +1,8 @@
 import clownface from 'clownface'
 import once from 'lodash/once.js'
-import $rdf from 'rdf-ext'
+import $rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
 import * as ns from '../../namespaces.js'
 import urlJoin from '../../urlJoin.js'
 import Cube from './Cube.js'
@@ -44,7 +45,7 @@ class CubeShapeBuilder extends Transform {
 
   async _init() {
     if (this.options.metadataStream) {
-      this.options.metadata = await $rdf.dataset().import(this.options.metadataStream)
+      this.options.metadata = await fromStream($rdf.dataset(), this.options.metadataStream)
     } else {
       this.options.metadata = $rdf.dataset()
     }

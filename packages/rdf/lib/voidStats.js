@@ -1,5 +1,5 @@
 import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
 import * as ns from './namespaces.js'
 

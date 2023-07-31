@@ -1,7 +1,7 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream } from 'is-stream'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
 import mapMatch from '../mapMatch.js'
 import * as ns from './support/namespaces.js'
@@ -129,7 +129,7 @@ describe('mapMatch', () => {
     strictEqual(quads[1].equals(seen[1]), true)
   })
 
-  it('should assign rdf-ext as rdf to the this context', async () => {
+  it('should assign @zazuko/env as rdf to the this context', async () => {
     let context = null
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),

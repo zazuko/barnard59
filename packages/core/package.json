@@ -23,7 +23,7 @@
     "@opentelemetry/api": "^1.0.1",
     "@rdfjs/namespace": "^2.0.0",
     "@zazuko/env": "^1.0.1",
-    "clownface": "^1.4.0",
+    "clownface": "^2.0.0",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.1.1",
     "is-graph-pointer": "^2.0.0",

@@ -32,11 +32,12 @@
     "@opentelemetry/semantic-conventions": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "@rdfjs/namespace": "^2.0.0",
+    "@zazuko/env": "^1.0.1",
     "barnard59-core": "1 - 2",
-    "clownface": "^1.5.1",
+    "clownface": "^2.0.0",
     "commander": "^7.1.0",
     "lodash": "^4.17.21",
-    "rdf-ext": "^2.2.0",
+    "rdf-dataset-ext": "^1.0.1",
     "rdf-utils-fs": "^2.2.0",
     "readable-stream": "^3.6.0"
   },
@@ -47,6 +48,7 @@
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.0",
     "chai": "^4.3.7",
+    "rdf-ext": "^2",
     "shelljs": "^0.8.4",
     "strip-ansi": "^7.0.0"
   }

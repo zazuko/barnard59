@@ -1,5 +1,5 @@
 import { strictEqual } from 'assert'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import PatternMatcher from '../lib/PatternMatcher.js'
 import { ex } from './support/namespaces.js'
 

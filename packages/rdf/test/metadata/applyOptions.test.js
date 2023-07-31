@@ -1,5 +1,5 @@
 import { strictEqual } from 'assert'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
 import { applyOptions } from '../../lib/metadata/applyOptions.js'
 import * as ns from '../../lib/namespaces.js'

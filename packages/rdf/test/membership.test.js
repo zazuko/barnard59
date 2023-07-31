@@ -1,18 +1,14 @@
 import { equal, strictEqual, throws } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
+import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import append from '../lib/append.js'
 import { toTarget, fromSource } from '../lib/membership.js'
 import * as ns from '../lib/namespaces.js'
 
 const ex = rdf.namespace('http://example.org/')
-
-function toCanonical(quads) {
-  const dataset = rdf.dataset().addAll(quads)
-  return dataset.toCanonical()
-}
 
 describe('membership.toTarget', () => {
   it('should be a factory', () => {
@@ -70,7 +66,7 @@ describe('membership.toTarget', () => {
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata]),
+      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
     )
   })
 
@@ -100,7 +96,7 @@ describe('membership.toTarget', () => {
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata]),
+      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
     )
   })
 })
@@ -161,7 +157,7 @@ describe('membership.fromSource', () => {
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata]),
+      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
     )
   })
 
@@ -191,7 +187,7 @@ describe('membership.fromSource', () => {
 
     equal(
       toCanonical(result),
-      toCanonical([...data, ...expectedMetadata]),
+      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
     )
   })
 })

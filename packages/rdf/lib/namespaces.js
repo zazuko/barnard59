@@ -1,4 +1,4 @@
-import $rdf from 'rdf-ext'
+import $rdf from '@zazuko/env'
 
 const cube = $rdf.namespace('https://cube.link/')
 const rdf = $rdf.namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')

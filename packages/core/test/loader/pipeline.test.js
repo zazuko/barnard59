@@ -1,7 +1,7 @@
 import { strictEqual, rejects } from 'assert'
 import { resolve } from 'path'
 import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { run } from '../../index.js'
 import loader from '../../lib/loader/pipeline.js'

@@ -1,5 +1,5 @@
 import { notStrictEqual, strictEqual, throws } from 'assert'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import cloneTerm from '../lib/cloneTerm.js'
 import ns from './support/namespaces.js'
 

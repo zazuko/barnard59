@@ -2,7 +2,8 @@ import { strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
 import nock from 'nock'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import { turtle } from '@tpluscode/rdf-string'
 import construct from '../construct.js'
 import * as ns from './support/namespaces.js'
 
@@ -62,11 +63,13 @@ describe('construct', () => {
   })
 
   it('should parse the response', async () => {
-    const quad0 = rdf.quad(ns.ex(''), ns.ex.p, rdf.literal('0'))
-    const quad1 = rdf.quad(ns.ex(''), ns.ex.p, rdf.literal('0'))
+    const quads = [
+      rdf.quad(ns.ex(''), ns.ex.p, rdf.literal('0')),
+      rdf.quad(ns.ex(''), ns.ex.p, rdf.literal('0')),
+    ]
     const endpoint = new URL('http://example.org/parse-response')
     const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
-    const content = [quad0.toString(), quad1.toString()].join('\n')
+    const content = turtle`${quads}`.toString()
 
     nock(endpoint.origin)
       .get(`${endpoint.pathname}?query=${encodeURIComponent(query)}`)
@@ -75,8 +78,8 @@ describe('construct', () => {
     const result = await getStream.array(await construct({ endpoint, query }))
 
     strictEqual(result.length, 2)
-    strictEqual(quad0.equals(result[0]), true)
-    strictEqual(quad0.equals(result[1]), true)
+    strictEqual(quads[0].equals(result[0]), true)
+    strictEqual(quads[0].equals(result[1]), true)
   })
 
   it('should support authentication headers', async () => {

@@ -6,7 +6,7 @@ import { namedDateLiterals } from './namedDateLiterals.js'
 
 function subjectsWithDatasetType(dataset, classes) {
   const result = rdf.termSet()
-  dataset
+  ;[...dataset]
     .filter(quad => (quad.predicate.equals(ns.rdf.type) && classes.has(quad.object)))
     .forEach(quad => {
       result.add(quad.subject)

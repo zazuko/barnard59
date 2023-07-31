@@ -5,13 +5,14 @@ import defaultFormats from '@rdfjs/formats-common'
 import assertThrows from 'assert-throws-async'
 import nock from 'nock'
 import rdf from 'rdf-ext'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
 import { localFetch } from '../../lib/localFetch/localFetch.js'
 
 const datasetPath = '../support/dataset.ttl'
 const datasetAbsolutePath = new URL(datasetPath, import.meta.url).toString()
 
 async function getRDFDataset(filePath) {
-  return rdf.dataset().import(getRDFStream(filePath))
+  return fromStream(rdf.dataset(), getRDFStream(filePath))
 }
 
 function getRDFStream(filePath) {
@@ -40,14 +41,14 @@ describe('metadata.lfetch', () => {
   it('with defaults, should get the same dataset', async () => {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(getRDFStream(datasetPath))
-    const actual = await rdf.dataset().import(quadStream)
+    const actual = await fromStream(rdf.dataset(), quadStream)
     equal(expected.equals(actual), true)
   })
 
   it('with filename and base, should get the same dataset', async () => {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(datasetPath, resolve('./test/ldfetch'))
-    const actual = await rdf.dataset().import(quadStream)
+    const actual = await fromStream(rdf.dataset(), quadStream)
 
     equal(expected.equals(actual), true)
   })
@@ -55,7 +56,7 @@ describe('metadata.lfetch', () => {
   it('with absolute filename, should get the same dataset', async () => {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(datasetAbsolutePath)
-    const actual = await rdf.dataset().import(quadStream)
+    const actual = await fromStream(rdf.dataset(), quadStream)
 
     equal(expected.equals(actual), true)
   })
@@ -63,7 +64,7 @@ describe('metadata.lfetch', () => {
   it('with absolute filename, should ignore basePath and get the same dataset', async () => {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(datasetAbsolutePath, '/unknown/')
-    const actual = await rdf.dataset().import(quadStream)
+    const actual = await fromStream(rdf.dataset(), quadStream)
 
     equal(expected.equals(actual), true)
   })
@@ -89,7 +90,7 @@ describe('metadata.lfetch', () => {
 
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch('https://example.com/metadata.ttl')
-    const actual = await rdf.dataset().import(quadStream)
+    const actual = await fromStream(rdf.dataset(), quadStream)
 
     equal(expected.equals(actual), true)
   })
