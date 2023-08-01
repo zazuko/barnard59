@@ -1,4 +1,4 @@
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
 import PatternMatcher from './lib/PatternMatcher.js'
 

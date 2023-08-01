@@ -2,8 +2,9 @@ import { equal, strictEqual } from 'assert'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
+import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import * as ns from '../lib/namespaces.js'
 import voidStats from '../lib/voidStats.js'
 
@@ -29,11 +30,6 @@ describe('metadata.voidStats', () => {
       })
     strictEqual(isDuplex(step), true)
   })
-
-  function toCanonical(quads) {
-    const dataset = rdf.dataset().addAll(quads)
-    return dataset.toCanonical()
-  }
 
   it('includes counts at the end of the stream', async () => {
     const data = [

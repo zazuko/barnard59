@@ -1,4 +1,5 @@
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
 import * as ns from '../namespaces.js'
 import { xsd } from '../namespaces.js'
 import { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms } from './datasetClasses.js'
@@ -6,7 +7,7 @@ import { namedDateLiterals } from './namedDateLiterals.js'
 
 function subjectsWithDatasetType(dataset, classes) {
   const result = rdf.termSet()
-  dataset
+  ;[...dataset]
     .filter(quad => (quad.predicate.equals(ns.rdf.type) && classes.has(quad.object)))
     .forEach(quad => {
       result.add(quad.subject)
@@ -18,9 +19,9 @@ function updateOrInsert(dataset, datasetClasses, predicate, object) {
   const targetSubjects = subjectsWithDatasetType(dataset, datasetClasses)
 
   // Remove existent
-  dataset = dataset.filter(quad => {
+  dataset = rdf.dataset([...dataset].filter(quad => {
     return !(quad.predicate.equals(predicate) && targetSubjects.has(quad.subject))
-  })
+  }))
 
   // Append
   for (const subject of targetSubjects) {
@@ -43,7 +44,7 @@ function resolveNamedDate(value, metadata) {
 }
 
 async function applyOptions(quadStream, metadata = {}, options = {}) {
-  let dataset = await rdf.dataset().import(quadStream)
+  let dataset = await fromStream(rdf.dataset(), quadStream)
 
   // dateModified
   if (options.dateModified) {
@@ -62,7 +63,7 @@ async function applyOptions(quadStream, metadata = {}, options = {}) {
 
   // Sets graph
   if (options.graph) {
-    dataset = dataset.map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(options.graph)))
+    return rdf.dataset([...dataset].map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(options.graph))))
   }
 
   return dataset

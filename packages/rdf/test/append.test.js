@@ -7,8 +7,11 @@ import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import nock from 'nock'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
+import addAll from 'rdf-dataset-ext/addAll.js'
+import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import append from '../lib/append.js'
 import { schema, xsd, dcterms } from '../lib/namespaces.js'
 
@@ -23,7 +26,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const ex = rdf.namespace('http://example.org/')
 
 async function getRDFDataset(filePath) {
-  return rdf.dataset().import(getRDFStream(filePath))
+  return fromStream(rdf.dataset(), getRDFStream(filePath))
 }
 
 function getRDFStream(filePath) {
@@ -79,8 +82,8 @@ describe('metadata.append', () => {
 
   it('should append data and metadata with default values', async () => {
     const all = rdf.dataset()
-    all.addAll(await getRDFDataset(dataPath))
-    all.addAll(await getRDFDataset(metadataPath))
+    addAll(all, await getRDFDataset(dataPath))
+    addAll(all, await getRDFDataset(metadataPath))
 
     const step = await append({
       input: getRDFStream(metadataPath),
@@ -88,15 +91,15 @@ describe('metadata.append', () => {
     const { final } = await applyStep(step)
 
     equal(
-      final.toCanonical(),
-      all.toCanonical(), 'appended quads not as expected',
+      toCanonical(final),
+      toCanonical(all), 'appended quads not as expected',
     )
   })
 
   it('should append data and metadata with default values, and path as string', async () => {
     const all = rdf.dataset()
-    all.addAll(await getRDFDataset(dataPath))
-    all.addAll(await getRDFDataset(metadataPath))
+    addAll(all, await getRDFDataset(dataPath))
+    addAll(all, await getRDFDataset(metadataPath))
 
     const step = await append({
       input: metadataPath,
@@ -105,8 +108,8 @@ describe('metadata.append', () => {
     const { final } = await applyStep(step)
 
     equal(
-      final.toCanonical(),
-      all.toCanonical(), 'appended quads not as expected',
+      toCanonical(final),
+      toCanonical(all), 'appended quads not as expected',
     )
   })
 

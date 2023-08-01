@@ -1,6 +1,6 @@
 import { URL } from 'url'
 import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
 import dateToId from '../dateToId.js'
 import urlJoin from '../urlJoin.js'
@@ -12,7 +12,7 @@ const ns = {
 }
 
 function findRoot({ dataset }) {
-  const subjects = [...dataset.filter(quad => quad.subject.termType === 'NamedNode')].reduce((subjects, quad) => {
+  const subjects = [...dataset].filter(quad => quad.subject.termType === 'NamedNode').reduce((subjects, quad) => {
     const count = subjects.get(quad.subject) || 0
 
     subjects.set(quad.subject, count + 1)
@@ -181,7 +181,7 @@ class ToObservation extends Transform {
       context.observations = this.options.observations(context)
       context.observation = this.options.observation(context)
 
-      const dataset = context.dataset
+      const dataset = rdf.dataset([...context.dataset]
         .filter(quad => !quad.predicate.equals(ns.rdf.type))
         .filter(quad => !this.options.blacklist.has(quad.predicate))
         .map(quad => {
@@ -190,7 +190,7 @@ class ToObservation extends Transform {
             quad.predicate,
             quad.object,
           )
-        })
+        }))
 
       dataset.add(rdf.quad(context.observation, ns.rdf.type, ns.cube.Observation))
 

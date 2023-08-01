@@ -1,5 +1,4 @@
-import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 // eslint-disable-next-line import/default
 import ecmaScriptModuleLoader from 'rdf-loader-code/ecmaScriptModule.js'
 
@@ -12,7 +11,7 @@ promisedEcmaScriptLoader.register = registry => {
 }
 
 async function promisedUrlLoader({ term, dataset }) {
-  return clownface({ dataset, term })
+  return rdf.clownface({ dataset, term })
     .out(rdf.namedNode('http://example.org/url'))
     .value
 }

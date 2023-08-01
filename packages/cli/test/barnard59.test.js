@@ -113,7 +113,7 @@ describe('barnard59', () => {
 
     it('should run the parse-csvw.ttl example without error', () => {
       const pipelineFile = (new URL('../examples/parse-csvw.ttl', import.meta.url)).pathname
-      const command = `${barnard59} run --pipeline=http://example.org/pipeline/parseCsvw ${pipelineFile}`
+      const command = `${barnard59} run -vv --pipeline=http://example.org/pipeline/parseCsvw ${pipelineFile}`
 
       const result = shell.exec(command, { silent: true, cwd })
 

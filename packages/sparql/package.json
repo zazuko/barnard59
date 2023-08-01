@@ -23,11 +23,12 @@
     "sparql-http-client": "^2.4.0"
   },
   "devDependencies": {
+    "@tpluscode/rdf-string": "^1.0.3",
+    "@zazuko/env": "^1.0.1",
     "get-stream": "^6.0.0",
     "isstream": "^0.1.2",
     "mocha": "^9.0.2",
-    "nock": "^13.1.1",
-    "rdf-ext": "^2.2.0"
+    "nock": "^13.1.1"
   },
   "engines": {
     "node": ">= 14.0.0"

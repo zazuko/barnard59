@@ -3,16 +3,17 @@ import { dirname, resolve } from 'path'
 import { promisify } from 'util'
 import { SpanStatusCode } from '@opentelemetry/api'
 import program from 'commander'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import fromFile from 'rdf-utils-fs/fromFile.js'
 import { finished, PassThrough } from 'readable-stream'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
 import findPipeline from '../findPipeline.js'
 import runner from '../runner.js'
 import bufferDebug from './bufferDebug.js'
 import tracer from './tracer.js'
 
 async function fileToDataset(filename) {
-  return rdf.dataset().import(fromFile(filename))
+  return fromStream(rdf.dataset(), fromFile(filename))
 }
 
 function createOutputStream(output) {

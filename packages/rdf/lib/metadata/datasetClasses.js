@@ -1,4 +1,4 @@
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import * as ns from '../namespaces.js'
 
 const wellKnownDatasetClasses = rdf.termSet([

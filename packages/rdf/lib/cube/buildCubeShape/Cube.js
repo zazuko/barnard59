@@ -1,5 +1,6 @@
 import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import addAll from 'rdf-dataset-ext/addAll.js'
 import cbdCopy from '../../cbdCopy.js'
 import * as ns from '../../namespaces.js'
 import Dimension from './Dimension.js'
@@ -54,11 +55,11 @@ class Cube {
       .addOut(ns.sh.closed, true)
 
     for (const dimension of this.dimensions.values()) {
-      shapeDataset.addAll(dimension.toDataset({ shape: this.shape }))
+      addAll(shapeDataset, dimension.toDataset({ shape: this.shape }))
     }
     const setGraph = quad => rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
 
-    return dataset.addAll([...(shapeDataset.map(setGraph))])
+    return addAll(dataset, [...shapeDataset].map(setGraph))
   }
 }
 
