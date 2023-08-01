@@ -1,5 +1,11 @@
 # barnard59-sparql
 
+## 1.1.1
+
+### Patch Changes
+
+- b5e23e2: Update clownface to `v2`, use `@zazuko/env` instead of `rdf-ext`
+
 ## 1.1.0
 
 ### Minor Changes
