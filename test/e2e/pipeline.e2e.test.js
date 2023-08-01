@@ -4,6 +4,11 @@ import nock from 'nock'
 import createPipeline from 'barnard59-core/lib/factory/pipeline.js'
 import defaultLoaderRegistry from 'barnard59-core/lib/defaultLoaderRegistry.js'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
+import { expect } from 'chai'
+import formats from '@rdfjs/formats-common'
+import toCanonical from 'rdf-dataset-ext/toCanonical.js'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
+import rdf from '@zazuko/env'
 import { promisedEcmaScriptLoader, promisedUrlLoader } from './asyncLoaders.js'
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'definitions')
@@ -57,5 +62,21 @@ describe('Pipeline', () => {
     const out = await getStream(pipeline.stream)
 
     deepStrictEqual(JSON.parse(out), dateTimeLd)
+  })
+
+  it('should load file contents using loader', async () => {
+    // given
+    const ptr = await loadPipelineDefinition('file-loader')
+    const loaderRegistry = defaultLoaderRegistry()
+    const pipeline = await createPipeline(ptr, {
+      loaderRegistry,
+      basePath: process.cwd(),
+    })
+
+    // when
+    const out = await fromStream(rdf.dataset(), formats.parsers.import('text/turtle', pipeline.stream))
+
+    // then
+    expect(toCanonical(out)).to.eq(toCanonical(ptr.dataset))
   })
 })

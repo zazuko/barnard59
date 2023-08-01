@@ -7,13 +7,18 @@
     "test": "mocha *.test.js"
   },
   "dependencies": {
+    "@rdfjs/formats-common": "^3.1.0",
     "@zazuko/env": "^1.0.1",
     "barnard59-core": "^2.0.2",
+    "barnard59-formats": "^1.4.0",
     "barnard59-http": "^1.1.0",
+    "chai": "^4.3.7",
     "get-stream": "^6.0.0",
     "nock": "^13.3.1",
     "barnard59-test-support": "^0.0.0",
     "readable-stream": "^3",
-    "rdf-loader-code": "^0.3.3"
+    "rdf-dataset-ext": "^1.0.1",
+    "rdf-loader-code": "github:zazuko/rdf-loader-code#master",
+    "string-to-stream": "^3.0.1"
   }
 }

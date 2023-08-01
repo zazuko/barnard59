@@ -5,8 +5,8 @@ export class VariableMap extends Map {
     this.optionalVariables = new Set()
   }
 
-  get(key) {
-    if (!this.has(key) && !this.optionalVariables.has(key)) {
+  get(key, { allowMissing } = {}) {
+    if (!this.has(key) && !this.optionalVariables.has(key) && !allowMissing) {
       throw new Error(`Undefined variable '${key}'`)
     }
 

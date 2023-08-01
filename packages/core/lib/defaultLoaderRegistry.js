@@ -5,6 +5,7 @@ import ecmaScriptModuleLoader from 'rdf-loader-code/ecmaScriptModule.js'
 import LoaderRegistry from 'rdf-loaders-registry'
 import pipelineLoader from './loader/pipeline.js'
 import variableLoader from './loader/variable.js'
+import fileLoader from './loader/file.js'
 
 function factory() {
   const registry = new LoaderRegistry()
@@ -14,6 +15,7 @@ function factory() {
   ecmaScriptModuleLoader.register(registry)
   pipelineLoader.register(registry)
   variableLoader.register(registry)
+  fileLoader.register(registry)
 
   return registry
 }
