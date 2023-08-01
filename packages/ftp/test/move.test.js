@@ -1,7 +1,6 @@
 import { strictEqual } from 'assert'
 import { resolve, dirname } from 'path'
 import getStream from 'get-stream'
-import { describe, it } from 'mocha'
 import { Readable } from 'readable-stream'
 import move from '../move.js'
 import fs from './support/fs.js'
@@ -20,32 +19,32 @@ describe('move', () => {
     [
       'on a FTP server with anonymous user',
       () => new FtpServer(),
-      {}
+      {},
     ],
     [
       'on a FTP server with username/password',
       () => new FtpServer({ user: 'test', password: '1234' }),
-      {}
+      {},
     ],
     [
       'on a SFTP server with anonymous user',
       () => new SftpServer(),
-      {}
+      {},
     ],
     [
       'on a SFTP server with username/password',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      {}
+      {},
     ],
     [
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: fs.readFileSync('test/support/test.key') }
+      { password: undefined, privateKey: fs.readFileSync(resolve(__dirname, 'support/test.key')) },
     ], [
       'on a SFTP server with private key specified as a file',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: 'test/support/test.key' }
-    ]
+      { password: undefined, privateKey: resolve(__dirname, 'support/test.key') },
+    ],
   ].forEach(([label, serverFactory, additionalOptions]) => {
     it(`moves a file from the given place to another place ${label}`, async () => {
       await withServer(serverFactory, async server => {

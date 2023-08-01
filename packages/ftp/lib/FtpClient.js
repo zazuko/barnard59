@@ -3,7 +3,7 @@ import Ftp from 'ftp'
 import { PassThrough, Readable, Writable } from 'readable-stream'
 
 class FtpClient {
-  constructor ({ host, port = 21, user, password }) {
+  constructor({ host, port = 21, user, password }) {
     this.host = host
     this.port = port
     this.user = user
@@ -11,12 +11,12 @@ class FtpClient {
     this.client = new Ftp()
   }
 
-  async connect () {
+  async connect() {
     this.client.connect({
       host: this.host,
       port: this.port,
       user: this.user,
-      password: this.password
+      password: this.password,
     })
 
     return new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@ class FtpClient {
     })
   }
 
-  async disconnect () {
+  async disconnect() {
     this.client.end()
 
     return new Promise(resolve => {
@@ -33,32 +33,33 @@ class FtpClient {
     })
   }
 
-  async list (path) {
+  async list(path) {
     return promisify(this.client.list.bind(this.client))(path)
   }
 
-  async move (source, target) {
+  async move(source, target) {
     return promisify(this.client.rename.bind(this.client))(source, target)
   }
 
-  async read (path) {
+  async read(path) {
     return new Readable().wrap(await promisify(this.client.get.bind(this.client))(path))
   }
 
-  async write (path) {
+  async write(path) {
     const output = new PassThrough()
     const input = new Writable({
-      final (callback) {
+      final(callback) {
         output.end(callback)
       },
-      write (chunk, encoding, callback) {
+      write(chunk, encoding, callback) {
         output.write(chunk, encoding, callback)
-      }
+      },
     })
 
     const finished = require('readable-stream').finished
 
     finished(output, () => {
+      // eslint-disable-next-line no-console
       console.log('finished')
     })
 

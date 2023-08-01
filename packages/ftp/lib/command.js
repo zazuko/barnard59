@@ -3,7 +3,7 @@ import path from 'path'
 import FtpClient from './FtpClient.js'
 import SftpClient from './SftpClient.js'
 
-async function command (options, callback, keepAlive = false) {
+async function command(options, callback, keepAlive = false) {
   const ClientClass = getClientClass(options.protocol)
   const privateKey = await getPrivateKey(options)
   const client = new ClientClass(
@@ -24,15 +24,15 @@ async function command (options, callback, keepAlive = false) {
   }
 }
 
-function getClientClass (protocol = 'ftp') {
+function getClientClass(protocol = 'ftp') {
   switch (protocol) {
-    case 'ftp': return FtpClient
-    case 'sftp': return SftpClient
-    default: throw Error(`Invalid protocol ${protocol}`)
+  case 'ftp': return FtpClient
+  case 'sftp': return SftpClient
+  default: throw Error(`Invalid protocol ${protocol}`)
   }
 }
 
-async function maybeFromFile (str) {
+async function maybeFromFile(str) {
   try {
     const absolutePath = path.resolve(str)
     await fs.access(absolutePath)
@@ -42,7 +42,7 @@ async function maybeFromFile (str) {
   }
 }
 
-async function getPrivateKey ({ privateKey }) {
+async function getPrivateKey({ privateKey }) {
   if (privateKey && typeof privateKey === 'string') {
     const contents = await maybeFromFile(privateKey)
     return contents ?? privateKey

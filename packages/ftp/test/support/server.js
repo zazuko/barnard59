@@ -1,4 +1,4 @@
-export async function withServer (serverFactory, callback) {
+export async function withServer(serverFactory, callback) {
   const server = serverFactory()
   await server.start()
 

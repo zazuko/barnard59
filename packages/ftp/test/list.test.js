@@ -1,11 +1,14 @@
 import { deepStrictEqual, rejects, strictEqual } from 'assert'
 import { readFileSync } from 'fs'
+import { resolve } from 'path'
+import * as url from 'url'
 import getStream from 'get-stream'
-import { describe, it } from 'mocha'
 import list from '../list.js'
 import FtpServer from './support/FtpServer.js'
 import { withServer } from './support/server.js'
 import SftpServer from './support/SftpServer.js'
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 describe('list', () => {
   it('is a function', () => {
@@ -16,32 +19,32 @@ describe('list', () => {
     [
       'on a FTP server with anonymous user',
       () => new FtpServer(),
-      {}
+      {},
     ],
     [
       'on a FTP server with username/password',
       () => new FtpServer({ user: 'test', password: '1234' }),
-      {}
+      {},
     ],
     [
       'on a SFTP server with anonymous user',
       () => new SftpServer(),
-      {}
+      {},
     ],
     [
       'on a SFTP server with username/password',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      {}
+      {},
     ],
     [
       'on a SFTP server with private key',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: readFileSync('test/support/test.key') }
+      { password: undefined, privateKey: readFileSync(resolve(__dirname, 'support/test.key')) },
     ], [
       'on a SFTP server with private key specified as a file',
       () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: 'test/support/test.key' }
-    ]
+      { password: undefined, privateKey: resolve(__dirname, 'support/test.key') },
+    ],
   ].forEach(([label, serverFactory, additionalOptions]) => {
     it(`lists files from the given directory ${label}`, async () => {
       await withServer(serverFactory, async server => {

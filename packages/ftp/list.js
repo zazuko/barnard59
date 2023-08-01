@@ -2,7 +2,7 @@ import { join } from 'path'
 import { Readable } from 'readable-stream'
 import command from './lib/command.js'
 
-async function list ({ pathname, ...options }) {
+async function list({ pathname, ...options }) {
   const files = await command(options, async client => {
     return client.list(pathname)
   })
@@ -17,7 +17,7 @@ async function list ({ pathname, ...options }) {
       }
 
       stream.push(null)
-    }
+    },
   })
 
   return stream

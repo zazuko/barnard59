@@ -1,4 +1,4 @@
-import { join, dirname } from 'path'
+import { join, dirname, resolve } from 'path'
 import fs from 'fs-extra'
 import sftpFS from 'sftp-fs'
 import { PermissionDeniedError } from 'sftp-fs/lib/errors.js'
@@ -6,7 +6,7 @@ import { PermissionDeniedError } from 'sftp-fs/lib/errors.js'
 const __dirname = dirname(new URL(import.meta.url).pathname)
 let OPEN_MODE = null
 
-async function loadOpenMode () {
+async function loadOpenMode() {
   let openModeLegacyModule = null
   let openModeNewModule = null
 
@@ -20,28 +20,28 @@ async function loadOpenMode () {
 }
 
 class SftpServer {
-  constructor ({ path = __dirname, user, password } = {}) {
+  constructor({ path = __dirname, user, password } = {}) {
     this.port = 8020
     this.path = path
     this.user = user
     this.password = password
 
-    this.keyFile = 'test/support/test.key'
+    this.keyFile = resolve(__dirname, 'test.key')
 
     this.server = new sftpFS.Server(new FileSystem(this.user, this.password, this.path))
   }
 
-  get options () {
+  get options() {
     return {
       protocol: 'sftp',
       host: 'localhost',
       port: this.port,
       user: this.user || 'anonymous',
-      password: this.password
+      password: this.password,
     }
   }
 
-  async start () {
+  async start() {
     await loadOpenMode()
 
     this.server.on('error', error => {
@@ -51,20 +51,20 @@ class SftpServer {
     return this.server.start(this.keyFile, this.port)
   }
 
-  async stop () {
+  async stop() {
     return this.server.stop()
   }
 }
 
 // Extend reference file system implementation to add the notion of "root directory"
 class FileSystem extends sftpFS.ImplFileSystem {
-  constructor (username, password, rootPath) {
+  constructor(username, password, rootPath) {
     super(username, password)
 
     this.rootPath = rootPath
   }
 
-  async authenticate (session, request) {
+  async authenticate(session, request) {
     const validMethods = ['password', 'publickey', 'none']
     const method = request.method
 
@@ -83,7 +83,7 @@ class FileSystem extends sftpFS.ImplFileSystem {
     }
   }
 
-  async open (session, handle, flags, attrs) {
+  async open(session, handle, flags, attrs) {
     const fullPath = this.getFullPath(handle.pathname)
 
     const id = await fs.open(fullPath, convFlags(flags), attrs.mode)
@@ -92,17 +92,17 @@ class FileSystem extends sftpFS.ImplFileSystem {
     handle.addDisposable(async () => fs.close(id))
   }
 
-  async stat (session, pathname) {
+  async stat(session, pathname) {
     const fullPath = this.getFullPath(pathname)
     return super.stat(session, fullPath)
   }
 
-  async lstat (session, pathname) {
+  async lstat(session, pathname) {
     const fullPath = this.getFullPath(pathname)
     return super.lstat(session, fullPath)
   }
 
-  async listdir (session, handle) {
+  async listdir(session, handle) {
     const fullPath = this.getFullPath(handle.pathname)
 
     if (handle.getParam('eof')) {
@@ -119,7 +119,7 @@ class FileSystem extends sftpFS.ImplFileSystem {
       list.push({
         filename,
         longname: longname(filename, attrs, num),
-        attrs
+        attrs,
       })
     }
 
@@ -128,54 +128,54 @@ class FileSystem extends sftpFS.ImplFileSystem {
     return list
   }
 
-  async mkdir (session, pathname, attrs) {
+  async mkdir(session, pathname, attrs) {
     const fullPath = this.getFullPath(pathname)
     return super.mkdir(session, fullPath, attrs)
   }
 
-  async setstat (session, pathname, attrs) {
+  async setstat(session, pathname, attrs) {
     const fullPath = this.getFullPath(pathname)
     return super.setstat(session, fullPath, attrs)
   }
 
-  async rename (session, oldPathname, newPathname) {
+  async rename(session, oldPathname, newPathname) {
     const fullOldPath = this.getFullPath(oldPathname)
     const fullNewPath = this.getFullPath(newPathname)
     await super.rename(session, fullOldPath, fullNewPath)
   }
 
-  async rmdir (session, pathname) {
+  async rmdir(session, pathname) {
     const fullPath = this.getFullPath(pathname)
     return super.rmdir(session, fullPath)
   }
 
-  async remove (session, pathname) {
+  async remove(session, pathname) {
     const fullPath = this.getFullPath(pathname)
     return super.remove(session, fullPath)
   }
 
-  async realpath (session, pathname) {
+  async realpath(session, pathname) {
     const fullPath = this.getFullPath(pathname)
     return super.realpath(session, fullPath)
   }
 
-  async readlink (session, pathname) {
+  async readlink(session, pathname) {
     const fullPath = this.getFullPath(pathname)
     return super.readlink(session, fullPath)
   }
 
-  async symlink (session, targetPathname, linkPathname) {
+  async symlink(session, targetPathname, linkPathname) {
     const fullTargetPath = this.getFullPath(targetPathname)
     const fullLinkPath = this.getFullPath(linkPathname)
     return super.symlink(session, fullTargetPath, fullLinkPath)
   }
 
-  getFullPath (pathname) {
+  getFullPath(pathname) {
     return join(this.rootPath, pathname)
   }
 }
 
-function convFlags (flags) {
+function convFlags(flags) {
   let mode = 0
 
   if ((flags & OPEN_MODE.READ) && (flags & OPEN_MODE.WRITE)) {
@@ -205,7 +205,7 @@ function convFlags (flags) {
   return mode
 }
 
-function longname (name, attrs, num) {
+function longname(name, attrs, num) {
   let str = '-'
 
   if (attrs.isDirectory()) {

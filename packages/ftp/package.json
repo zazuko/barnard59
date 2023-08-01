@@ -27,6 +27,10 @@
   "devDependencies": {
     "assert-throws-async": "^3.0.0",
     "ftp-srv": "^4.6.2",
-    "sftp-fs": "^0.0.7"
+    "fs-extra": "^11.1.1",
+    "get-stream": "^6.0.1",
+    "rimraf": "^5.0.1",
+    "sftp-fs": "^0.0.7",
+    "ssh2": "^1.14.0"
   }
 }

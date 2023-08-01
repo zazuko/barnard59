@@ -1,7 +1,7 @@
 import { Transform } from 'readable-stream'
 import command from './lib/command.js'
 
-function move ({ source, target, ...options }) {
+function move({ source, target, ...options }) {
   return new Transform({
     objectMode: true,
     flush: async callback => {
@@ -14,7 +14,7 @@ function move ({ source, target, ...options }) {
 
     transform: (chunk, encoding, callback) => {
       callback(null, chunk)
-    }
+    },
   })
 }
 

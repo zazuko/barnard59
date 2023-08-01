@@ -4,7 +4,7 @@ import FtpSrv from 'ftp-srv'
 const __dirname = dirname(new URL(import.meta.url).pathname)
 
 class FtpServer {
-  constructor ({ path = __dirname, user, password } = {}) {
+  constructor({ path = __dirname, user, password } = {}) {
     this.port = 8020
     this.path = path
     this.user = user
@@ -13,23 +13,23 @@ class FtpServer {
     this.server = new FtpSrv({
       url: `ftp://0.0.0.0:${this.port}`,
       pasv_url: '0.0.0.0',
-      anonymous: !this.user
+      anonymous: !this.user,
     })
 
     this.server.log.streams[0].level = 1000
   }
 
-  get options () {
+  get options() {
     return {
       protocol: 'ftp',
       host: '0.0.0.0',
       port: this.port,
       user: this.user || 'anonymous',
-      password: this.password
+      password: this.password,
     }
   }
 
-  async start () {
+  async start() {
     this.server.on('login', ({ connection, username, password }, resolve, reject) => {
       if (this.user) {
         if (username !== this.user || password !== this.password) {
@@ -47,7 +47,7 @@ class FtpServer {
     await this.server.listen()
   }
 
-  async stop () {
+  async stop() {
     await this.server.close()
   }
 }
