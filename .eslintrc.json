@@ -2,5 +2,11 @@
   "extends": [ "@tpluscode/eslint-config/js" ],
   "env": {
     "mocha": true
-  }
+  },
+  "overrides": [{
+    "files": "**/test/**",
+    "rules": {
+      "no-console": "off"
+    }
+  }]
 }

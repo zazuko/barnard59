@@ -1,0 +1,36 @@
+{
+  "name": "barnard59-ftp",
+  "version": "1.0.2",
+  "description": "FTP support for Linked Data pipelines",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/ftp"
+  },
+  "keywords": [],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59",
+  "dependencies": {
+    "ftp": "^0.3.10",
+    "readable-stream": "^3.6.0",
+    "sftp-promises": "^1.8.0"
+  },
+  "devDependencies": {
+    "assert-throws-async": "^3.0.0",
+    "ftp-srv": "^4.6.2",
+    "fs-extra": "^11.1.1",
+    "get-stream": "^6.0.1",
+    "rimraf": "^5.0.1",
+    "sftp-fs": "^0.0.7",
+    "ssh2": "^1.14.0"
+  }
+}
