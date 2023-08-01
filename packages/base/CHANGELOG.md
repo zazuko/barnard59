@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 1.2.1
+
+### Patch Changes
+
+- 4bbf8f2: Added missing dependency on `readable-to-readable`, and replaced `lodash/once.js` with `onetime` (also missing as dependency)
+
 ## 1.2.0
 
 ### Minor Changes

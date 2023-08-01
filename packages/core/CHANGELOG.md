@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- 22f897d: Added a file loader for `p:FileContents` arguments (closes #31)
+
+### Patch Changes
+
+- b5e23e2: Update clownface to `v2`, use `@zazuko/env` instead of `rdf-ext`
+
 ## 2.0.2
 
 ### Patch Changes
