@@ -29,7 +29,7 @@
     "is-graph-pointer": "^2.0.0",
     "is-stream": "^3.0.0",
     "lodash": "^4.17.21",
-    "rdf-loader-code": "^0.3.2",
+    "rdf-loader-code": "^1.0.0",
     "rdf-loaders-registry": "^0.3.0",
     "readable-stream": "^3.6.0",
     "untildify": "^5.0.0",

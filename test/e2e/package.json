@@ -18,7 +18,7 @@
     "barnard59-test-support": "^0.0.1",
     "readable-stream": "^3",
     "rdf-dataset-ext": "^1.0.1",
-    "rdf-loader-code": "github:zazuko/rdf-loader-code#master",
+    "rdf-loader-code": "^1.0.0",
     "string-to-stream": "^3.0.1"
   }
 }
