@@ -7,7 +7,7 @@
     "test": "mocha *.test.js"
   },
   "dependencies": {
-    "@rdfjs/formats-common": "^3.1.0",
+    "@rdfjs/formats-common": "^2.2.0",
     "@zazuko/env": "^1.0.1",
     "barnard59-core": "^2.0.2",
     "barnard59-formats": "^1.4.0",
