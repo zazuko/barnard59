@@ -78,7 +78,7 @@ async function localFetch(
     // in case of error, the input must be path string
     const absolutPath = basePath ? resolve(basePath, input) : input
 
-    return fetch(pathToFileURL(absolutPath).toString())
+    return fetch(pathToFileURL(absolutePath).toString())
   }
 }
 
