@@ -1,6 +1,7 @@
 import fsp from 'fs/promises'
 
 import { resolve } from 'path'
+import { pathToFileURL } from 'url'
 import rdfFetch from '@rdfjs/fetch'
 import fileFetch from 'file-fetch'
 import { isReadableStream } from 'is-stream'
@@ -46,7 +47,7 @@ async function fetchFileWithMeta(input) {
   const stream = res.body
   const quadStream = await guessParserForFile(input).import(stream)
   return {
-    quadStream: quadStream,
+    quadStream,
     metadata: {
       type: filePathURL.constructor.name,
       value: filePathURL.toString(),
@@ -75,13 +76,17 @@ async function localFetch(
     https: fetchHTTPWithMeta,
   })
 
-  const url = isAbsolute(input)
-    ? input
-    : basePath
-      ? `file://${resolve(basePath, input)}`
-      : input
+  try {
+    return fetch(new URL(input).toString())
+  } catch (e) {
+    const url = isAbsolute(input)
+      ? input
+      : basePath
+        ? pathToFileURL(resolve(basePath, input)).toString()
+        : pathToFileURL(input).toString()
 
-  return fetch(url)
+    return fetch(url)
+  }
 }
 
 export { localFetch }

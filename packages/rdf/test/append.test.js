@@ -2,6 +2,7 @@ import { equal, strictEqual } from 'assert'
 import fs from 'fs'
 import fsp from 'fs/promises'
 import { fileURLToPath } from 'url'
+import { resolve } from 'path'
 import defaultFormats from '@rdfjs/formats-common'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
@@ -16,10 +17,8 @@ import append from '../lib/append.js'
 import { schema, xsd, dcterms } from '../lib/namespaces.js'
 
 const dataPath = './support/dataset.ttl'
-new URL(dataPath, import.meta.url).toString()
 
 const metadataPath = './support/dataset_description.ttl'
-new URL(metadataPath, import.meta.url).toString()
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -30,7 +29,7 @@ async function getRDFDataset(filePath) {
 }
 
 function getRDFStream(filePath) {
-  const stream = fs.createReadStream(new URL(filePath, import.meta.url))
+  const stream = fs.createReadStream(resolve(__dirname, filePath))
   const parser = defaultFormats.parsers.get('text/turtle')
   return parser.import(stream)
 }
