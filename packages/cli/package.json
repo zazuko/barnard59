@@ -1,6 +1,6 @@
 {
   "name": "barnard59",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -33,7 +33,7 @@
     "@opentelemetry/tracing": "^0.24.0",
     "@rdfjs/namespace": "^2.0.0",
     "@zazuko/env": "^1.0.1",
-    "barnard59-core": "1 - 2",
+    "barnard59-core": "2.1.0",
     "clownface": "^2.0.0",
     "commander": "^7.1.0",
     "lodash": "^4.17.21",
@@ -42,11 +42,11 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
-    "barnard59-base": "^1.1.0",
+    "barnard59-base": "^1.2.1",
     "barnard59-formats": "^1.4.0",
     "barnard59-http": "^1.1.0",
     "barnard59-shell": "^0.1.0",
-    "barnard59-test-support": "^0.0.0",
+    "barnard59-test-support": "^0.0.1",
     "chai": "^4.3.7",
     "rdf-ext": "^2",
     "shelljs": "^0.8.4",
