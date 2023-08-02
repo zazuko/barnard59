@@ -8,10 +8,6 @@ import { isReadableStream } from 'is-stream'
 import protoFetch from 'proto-fetch'
 import { getParserByExtension } from './lookupParser.js'
 
-function isAbsolute(str) {
-  return str.startsWith('https:') || str.startsWith('http:') || str.startsWith('file:')
-}
-
 async function streamWithMetadata(input) {
   return {
     quadStream: input,
@@ -78,14 +74,11 @@ async function localFetch(
 
   try {
     return fetch(new URL(input).toString())
-  } catch (e) {
-    const url = isAbsolute(input)
-      ? input
-      : basePath
-        ? pathToFileURL(resolve(basePath, input)).toString()
-        : pathToFileURL(input).toString()
+  } catch {
+    // in case of error, the input must be path string
+    const absolutPath = basePath ? resolve(basePath, input) : input
 
-    return fetch(url)
+    return fetch(pathToFileURL(absolutPath).toString())
   }
 }
 
