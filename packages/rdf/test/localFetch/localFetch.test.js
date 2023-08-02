@@ -1,27 +1,35 @@
 import { equal, strictEqual } from 'assert'
 import fs from 'fs'
 import { resolve } from 'path'
+import { fileURLToPath } from 'url'
+import { expect } from 'chai'
 import defaultFormats from '@rdfjs/formats-common'
 import assertThrows from 'assert-throws-async'
 import nock from 'nock'
 import rdf from 'rdf-ext'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
+import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import { localFetch } from '../../lib/localFetch/localFetch.js'
 
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const datasetPath = '../support/dataset.ttl'
-const datasetAbsolutePath = new URL(datasetPath, import.meta.url).toString()
+const datasetAbsolutePath = resolve(__dirname, datasetPath)
 
 async function getRDFDataset(filePath) {
   return fromStream(rdf.dataset(), getRDFStream(filePath))
 }
 
 function getRDFStream(filePath) {
-  const stream = fs.createReadStream(new URL(filePath, import.meta.url))
+  const stream = fs.createReadStream(resolve(__dirname, filePath))
   const parser = defaultFormats.parsers.get('text/turtle')
   return parser.import(stream)
 }
 
 describe('metadata.lfetch', () => {
+  beforeEach(() => {
+    nock.cleanAll()
+  })
+
   it('should be a function', () => {
     strictEqual(typeof localFetch, 'function')
   })
@@ -47,7 +55,7 @@ describe('metadata.lfetch', () => {
 
   it('with filename and base, should get the same dataset', async () => {
     const expected = await getRDFDataset(datasetPath)
-    const { quadStream } = await localFetch(datasetPath, resolve('./test/ldfetch'))
+    const { quadStream } = await localFetch(datasetPath, __dirname)
     const actual = await fromStream(rdf.dataset(), quadStream)
 
     equal(expected.equals(actual), true)
@@ -92,7 +100,7 @@ describe('metadata.lfetch', () => {
     const { quadStream } = await localFetch('https://example.com/metadata.ttl')
     const actual = await fromStream(rdf.dataset(), quadStream)
 
-    equal(expected.equals(actual), true)
+    expect(toCanonical(actual)).to.eq(toCanonical(expected))
   })
 
   it('fails at unknown file extension', async () => {

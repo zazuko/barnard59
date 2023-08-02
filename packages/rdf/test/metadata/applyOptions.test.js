@@ -1,4 +1,5 @@
 import { strictEqual } from 'assert'
+import { expect } from 'chai'
 import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
 import { applyOptions } from '../../lib/metadata/applyOptions.js'
@@ -53,14 +54,14 @@ describe('applyOptions', () => {
     ]
 
     const options = {
-      dateCreated: rdf.literal('1999-12-31', xsd.dateTime).toString(),
+      dateCreated: '1999-12-31',
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
 
     strictEqual(result.length, 2)
     strictEqual(result[0].equals(data[0]), true)
-    strictEqual(result[1].equals(rdf.quad(ex.subject0, ns.schema.dateCreated, rdf.literal('1999-12-31', xsd.dateTime))), true)
+    expect(result[1]).to.deep.equal(rdf.quad(ex.subject0, ns.schema.dateCreated, rdf.literal('1999-12-31', xsd.dateTime)))
   })
 
   it('should update or append dcterms:created for known classes', async () => {
@@ -154,14 +155,14 @@ describe('applyOptions', () => {
     ]
 
     const options = {
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime).toString(),
+      dateModified: '1999-12-31',
     }
     const quadStream = Readable.from(data)
     const result = [...await applyOptions(quadStream, {}, options)]
 
     strictEqual(result.length, 2)
     strictEqual(result[0].equals(data[0]), true)
-    strictEqual(result[1].equals(rdf.quad(ex.subject0, ns.schema.dateModified, rdf.literal('1999-12-31', xsd.dateTime))), true)
+    expect(result[1]).to.deep.equal(rdf.quad(ex.subject0, ns.schema.dateModified, rdf.literal('1999-12-31', xsd.dateTime)))
   })
 
   it('should set the corresponding graph', async () => {
