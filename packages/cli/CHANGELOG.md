@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.6
+
+### Patch Changes
+
+- Updated dependencies [6d71d5d]
+  - barnard59-core@2.1.1
+
 ## 1.1.5
 
 ### Patch Changes
