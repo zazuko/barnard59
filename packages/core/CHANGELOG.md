@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- 6d71d5d: Missing code to wire-up file loader
+
 ## 2.1.0
 
 ### Minor Changes
