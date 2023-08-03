@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.2
+
+### Patch Changes
+
+- a33e942: Update rdf-loader-code to ESM version
+
 ## 2.1.1
 
 ### Patch Changes
