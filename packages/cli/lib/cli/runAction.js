@@ -6,6 +6,7 @@ import { SpanStatusCode } from '@opentelemetry/api'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 import rdf from '@zazuko/env'
 import fromFile from 'rdf-utils-fs/fromFile.js'
+import program from 'commander'
 import runner from '../../runner.js'
 import findPipeline from '../../findPipeline.js'
 import bufferDebug from './../bufferDebug.js'
@@ -29,7 +30,12 @@ function createOutputStream(output) {
   return createWriteStream(output)
 }
 
-export default async function (filename, { output, pipeline: iri, variable: variables, variableAll, verbose, enableBufferMonitor } = {}) {
+export default async function (filename, options = {}) {
+  const { output, pipeline: iri, variable: variables, variableAll, verbose, enableBufferMonitor } = {
+    ...program.opts(),
+    ...options,
+  }
+
   await tracer.startActiveSpan('barnard59 run', async span => {
     try {
       const level = ['error', 'info', 'debug'][verbose] || 'error'

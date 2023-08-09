@@ -10,7 +10,7 @@ import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
 import { Command } from 'commander'
-import * as otelOptions from '../lib/cli/otelOptions.js'
+import * as monitoringOptions from '../lib/cli/monitoringOptions.js'
 
 const sdk = new NodeSDK({
   // Automatic detection is disabled, see comment below
@@ -45,10 +45,12 @@ const onError = async err => {
   // before starting the SDK and loading any other code.
   const program = new Command()
 
-  program.addOption(otelOptions.tracesExporter)
-  program.addOption(otelOptions.metricsExporter)
-  program.addOption(otelOptions.metricsInterval)
-  program.addOption(otelOptions.debug)
+  program
+    .addOption(monitoringOptions.enableBufferMonitor)
+    .addOption(monitoringOptions.tracesExporter)
+    .addOption(monitoringOptions.metricsExporter)
+    .addOption(monitoringOptions.metricsInterval)
+    .addOption(monitoringOptions.debug)
 
   // Command#parseOptions() does not handle --help or run anything, which fits
   // well for this use case. The options used here are then passed to the

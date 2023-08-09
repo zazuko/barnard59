@@ -16,3 +16,5 @@ export const metricsInterval = new Option('--otel-metrics-interval <milliseconds
 export const debug = new Option('--otel-debug <level>', 'Enable OpenTelemetry console diagnostic output')
   .choices([...Object.keys(DiagLogLevel)].filter(opt => isNaN(Number.parseInt(opt, 10))))
   .default('ERROR')
+
+export const enableBufferMonitor = new Option('--enable-buffer-monitor', 'enable histogram of buffer usage')
