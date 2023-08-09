@@ -1,22 +1,13 @@
-import { dirname, resolve } from 'path'
 import { promisify } from 'util'
 import { createWriteStream } from 'fs'
 import { finished, PassThrough } from 'readable-stream'
 import { SpanStatusCode } from '@opentelemetry/api'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
-import rdf from '@zazuko/env'
-import fromFile from 'rdf-utils-fs/fromFile.js'
-import program from 'commander'
+import { program } from 'commander'
 import runner from '../../runner.js'
-import findPipeline from '../../findPipeline.js'
 import bufferDebug from './../bufferDebug.js'
 import tracer from './../tracer.js'
 
-async function fileToDataset(filename) {
-  return fromStream(rdf.dataset(), fromFile(filename))
-}
-
-function createOutputStream(output) {
+function createOutputStream(output = '-') {
   if (output === '-') {
     // Use a PassThrough stream instead of just process.stdout to avoid closing
     // stdout too early
@@ -30,18 +21,21 @@ function createOutputStream(output) {
   return createWriteStream(output)
 }
 
-export default async function (filename, options = {}) {
-  const { output, pipeline: iri, variable: variables, variableAll, verbose, enableBufferMonitor } = {
+export default async function (ptr, basePath, options = {}) {
+  const programOpts = program.opts()
+  const { output, variableAll, enableBufferMonitor } = {
     ...program.opts(),
     ...options,
   }
+  const variables = new Map([
+    ...programOpts.variable.entries(),
+    ...options.variable.entries(),
+  ])
+  const verbose = Math.max(programOpts.verbose, options.verbose)
 
   await tracer.startActiveSpan('barnard59 run', async span => {
     try {
       const level = ['error', 'info', 'debug'][verbose] || 'error'
-
-      const dataset = await fileToDataset(filename)
-      const ptr = findPipeline(dataset, iri)
 
       if (variableAll) {
         for (const [key, value] of Object.entries(process.env)) {
@@ -53,7 +47,7 @@ export default async function (filename, options = {}) {
 
       const outputStream = createOutputStream(output)
       const { finished: runFinished, pipeline } = await runner(ptr, {
-        basePath: resolve(dirname(filename)),
+        basePath,
         level,
         outputStream,
         variables,

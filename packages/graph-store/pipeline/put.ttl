@@ -1,0 +1,91 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+@base <http://barnard59.zazuko.com/pipeline/graph-store/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+
+<put> a p:Pipeline ;
+  p:variables
+    [
+      p:variable
+        [
+          a p:Variable ;
+          p:name "source" ;
+          rdfs:label "Glob of RDF documents to upload" ;
+        ],
+        [
+          a p:Variable ;
+          p:name "graph" ;
+          p:required false ;
+        ],
+        [
+          a p:Variable ;
+          p:name "ENDPOINT" ;
+        ],
+        [
+          a p:Variable ;
+          p:name "USER" ;
+          p:required false ;
+        ],
+        [
+          a p:Variable ;
+          p:name "PASSWORD" ;
+          p:required false ;
+        ] ;
+    ] ;
+  p:steps
+    [
+      p:stepList ( _:loadFiles _:parse _:setGraph _:upload )
+    ] ;
+.
+
+_:loadFiles a p:Step ;
+  code:implementedBy
+    [
+      code:link <node:barnard59-base/glob.js#default> ;
+      a code:EcmaScriptModule
+    ] ;
+  code:arguments
+    [
+      code:name "pattern" ;
+      code:value "source"^^p:VariableName ;
+    ] ;
+.
+
+_:parse
+  a p:Step ;
+  code:implementedBy
+    [
+      a code:EcmaScriptModule ;
+      code:link <node:barnard59-rdf/fs.js#parse>
+    ] ;
+.
+
+_:setGraph a p:Step ;
+  code:implementedBy
+    [
+      a code:EcmaScriptModule ;
+      code:link <node:barnard59-rdf/setGraph.js#default>
+    ] ;
+  code:arguments ( "graph"^^p:VariableName ) ;
+.
+
+_:upload a p:Step ;
+  code:implementedBy
+    [
+      a code:EcmaScriptModule ;
+      code:link <file:../put.js#default> ;
+    ] ;
+  code:arguments
+    [
+      code:name "endpoint" ;
+      code:value "ENDPOINT"^^p:VariableName ;
+    ],
+    [
+      code:name "user" ;
+      code:value "USER"^^p:VariableName ;
+    ],
+    [
+      code:name "password" ;
+      code:value "PASSWORD"^^p:VariableName ;
+    ] ;
+.
