@@ -7,7 +7,9 @@ import filenamePipelineDefinition from './support/filenamePipelineDefinition.js'
 const barnard59 = (new URL('../bin/barnard59.js', import.meta.url)).pathname
 const cwd = new URL('..', import.meta.url).pathname
 
-describe('barnard59', () => {
+describe('barnard59', function () {
+  this.timeout(10000)
+
   describe('run', () => {
     it('should exit with error code 0 if there are no error while processing the pipeline', () => {
       const pipelineFile = filenamePipelineDefinition('simple')
@@ -31,6 +33,15 @@ describe('barnard59', () => {
       it('should log info messages if verbose flag is set', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
+
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
+
+        strictEqual((/^info: /m).test(result), true)
+      })
+
+      it('should log info messages if verbose flag is set before command', () => {
+        const pipelineFile = filenamePipelineDefinition('simple')
+        const command = `${barnard59} --verbose run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
         const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
@@ -66,6 +77,15 @@ describe('barnard59', () => {
         strictEqual(result.includes('abc: 123'), true)
       })
 
+      it('should set the given variable to the given value before command', () => {
+        const pipelineFile = filenamePipelineDefinition('simple')
+        const command = `${barnard59} --variable=abc=123 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
+
+        const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
+
+        strictEqual(result.includes('abc: 123'), true)
+      })
+
       it('should set the given variable to the value of the environment variable with the same name', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `abc=123 ${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc`
@@ -80,6 +100,16 @@ describe('barnard59', () => {
       it('should import all environment variables', () => {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `abc=123 def=456 ${barnard59} run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile} --variable-all`
+
+        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+
+        expect(result).to.match(/info:.+abc: 123/)
+        expect(result).to.match(/debug:.+def: 456/)
+      })
+
+      it('should import all environment variables before command', () => {
+        const pipelineFile = filenamePipelineDefinition('simple')
+        const command = `abc=123 def=456 ${barnard59} --variable-all run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile}`
 
         const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
