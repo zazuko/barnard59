@@ -3,6 +3,7 @@ import runAction from './cli/runAction.js'
 import * as monitoringOptions from './cli/monitoringOptions.js'
 import * as commonOptions from './cli/commonOptions.js'
 import { discoverCommands } from './cli/dynamicCommands.js'
+import discoverManifests from './discoverManifests.js'
 import { parse } from './pipeline.js'
 
 program
@@ -25,7 +26,7 @@ const runCommand = program
   })
 
 export default async function () {
-  for await (const command of discoverCommands()) {
+  for await (const command of discoverCommands(discoverManifests())) {
     command
       .addOption(commonOptions.variable)
       .addOption(commonOptions.variableAll)
