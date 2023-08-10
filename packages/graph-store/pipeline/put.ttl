@@ -19,16 +19,16 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         ],
         [
           a p:Variable ;
-          p:name "ENDPOINT" ;
+          p:name "endpoint" ;
         ],
         [
           a p:Variable ;
-          p:name "USER" ;
+          p:name "user" ;
           p:required false ;
         ],
         [
           a p:Variable ;
-          p:name "PASSWORD" ;
+          p:name "password" ;
           p:required false ;
         ] ;
     ] ;
@@ -78,14 +78,14 @@ _:upload a p:Step ;
   code:arguments
     [
       code:name "endpoint" ;
-      code:value "ENDPOINT"^^p:VariableName ;
+      code:value "endpoint"^^p:VariableName ;
     ],
     [
       code:name "user" ;
-      code:value "USER"^^p:VariableName ;
+      code:value "user"^^p:VariableName ;
     ],
     [
       code:name "password" ;
-      code:value "PASSWORD"^^p:VariableName ;
+      code:value "password"^^p:VariableName ;
     ] ;
 .
