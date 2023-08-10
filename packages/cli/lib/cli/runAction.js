@@ -35,7 +35,7 @@ export default async function (ptr, basePath, options = {}) {
 
   await tracer.startActiveSpan('barnard59 run', async span => {
     try {
-      const level = ['error', 'info', 'debug'][verbose] || 'error'
+      const level = ['error', 'info', 'debug', 'trace'][verbose] || 'error'
 
       if (variableAll) {
         for (const [key, value] of Object.entries(process.env)) {
