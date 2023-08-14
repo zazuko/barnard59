@@ -1,6 +1,6 @@
 {
   "name": "barnard59",
-  "version": "1.1.7",
+  "version": "2.0.0",
   "description": "Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "barnard59-base": "^1.2.1",
     "barnard59-formats": "^1.4.0",
-    "barnard59-graph-store": "^1.0.2",
+    "barnard59-graph-store": "^1.1.0",
     "barnard59-http": "^1.1.0",
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.1",
