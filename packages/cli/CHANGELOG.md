@@ -1,5 +1,43 @@
 # Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- ec47a51: Monitoring flags moved before commands:
+
+  - `--enable-buffer-monitor`
+  - `--otel-debug`
+  - `--otel-metrics-exporter`
+  - `--otel-metrics-interval`
+  - `--otel-traces-exporter`
+
+  Update scripts like
+
+  ```diff
+  -barnard59 run pipeline.ttl --enable-buffer-monitor
+  +barnard59 --enable-buffer-monitor run pipeline.ttl
+  ```
+
+### Minor Changes
+
+- ec47a51: Common CLI flags are now support both when before and after the `run` command.
+
+  For example, these two commands are now equivalent:
+
+  ```shell
+  barnard59 run file.ttl --verbose
+  barnard59 --verbose run file.ttl
+  ```
+
+- 03fd12a: The CLI will now discover new commands from other `barnard59-*` packages (re #85)
+
+  See [here](https://data-centric.zazuko.com/docs/workflows/how-to/extend-banard59-cli) for more details
+
+### Patch Changes
+
+- 9bdcb64: Enable TRACE logging level
+
 ## 1.1.7
 
 ### Patch Changes
