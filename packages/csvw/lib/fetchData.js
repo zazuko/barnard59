@@ -1,7 +1,7 @@
 import checkResponse from './checkResponse.js'
 import commonFetch from './commonFetch.js'
 
-async function fetchData (url) {
+async function fetchData(url) {
   const res = await commonFetch(url)
 
   await checkResponse(res)

@@ -4,11 +4,11 @@ import rdf from 'rdf-ext'
 import checkResponse from './checkResponse.js'
 import commonFetch from './commonFetch.js'
 
-async function fetchMetadata (url) {
+async function fetchMetadata(url) {
   const res = await rdfFetch(url.toString(), {
     contentTypeLookup: extension => extension === '.json' ? 'application/ld+json' : undefined,
     factory: rdf,
-    fetch: commonFetch
+    fetch: commonFetch,
   })
 
   await checkResponse(res)

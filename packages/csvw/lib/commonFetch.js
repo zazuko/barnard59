@@ -5,7 +5,7 @@ import protoFetch from 'proto-fetch'
 const commonFetch = protoFetch({
   file: fileFetch,
   http: httpFetch,
-  https: httpFetch
+  https: httpFetch,
 })
 
 export default commonFetch

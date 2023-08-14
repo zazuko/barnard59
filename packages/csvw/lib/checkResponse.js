@@ -1,4 +1,4 @@
-async function checkResponse (res) {
+async function checkResponse(res) {
   if (!res.ok) {
     throw new Error(`${res.statusText}(${res.status}): ${await res.text()}`)
   }

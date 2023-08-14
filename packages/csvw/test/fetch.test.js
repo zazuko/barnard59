@@ -1,8 +1,7 @@
 import { rejects, strictEqual } from 'assert'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
-import { isReadable } from 'isstream'
-import { describe, it } from 'mocha'
+import { isReadableStream } from 'is-stream'
 import fetch from '../fetch.js'
 
 const csvContent = 'id,text\n1,abc\n'
@@ -17,7 +16,7 @@ describe('fetch', () => {
   it('should return a readable stream', () => {
     const result = fetch({ csvw: fileMetdataUrl })
 
-    strictEqual(isReadable(result), true)
+    strictEqual(isReadableStream(result), true)
   })
 
   it('should process file: url', async () => {
@@ -51,7 +50,7 @@ describe('fetch', () => {
       server.app.get('/metadata', (req, res) => {
         res.set('content-type', 'application/ld+json').json({
           '@context': 'http://www.w3.org/ns/csvw',
-          url: new URL('/data', baseUrl)
+          url: new URL('/data', baseUrl),
         })
       })
 
@@ -101,7 +100,7 @@ describe('fetch', () => {
       server.app.get('/metadata', (req, res) => {
         res.set('content-type', 'application/ld+json').json({
           '@context': 'http://www.w3.org/ns/csvw',
-          url: new URL('/data', baseUrl)
+          url: new URL('/data', baseUrl),
         })
       })
 
@@ -117,7 +116,7 @@ describe('fetch', () => {
       server.app.get('/metadata', (req, res) => {
         res.set('content-type', 'application/ld+json').json({
           '@context': 'http://www.w3.org/ns/csvw',
-          url: new URL('/data', baseUrl)
+          url: new URL('/data', baseUrl),
         })
       })
 

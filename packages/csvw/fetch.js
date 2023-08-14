@@ -5,10 +5,10 @@ import fetchData from './lib/fetchData.js'
 import fetchMetadata from './lib/fetchMetadata.js'
 
 const ns = {
-  csvw: namespace('http://www.w3.org/ns/csvw#')
+  csvw: namespace('http://www.w3.org/ns/csvw#'),
 }
 
-function fetch ({ csvw }) {
+function fetch({ csvw }) {
   const output = new PassThrough()
 
   Promise.resolve().then(async () => {
