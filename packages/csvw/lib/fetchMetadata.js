@@ -1,6 +1,5 @@
 import rdfFetch from '@rdfjs/fetch'
-import clownface from 'clownface'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import checkResponse from './checkResponse.js'
 import commonFetch from './commonFetch.js'
 
@@ -17,7 +16,7 @@ async function fetchMetadata(url) {
     throw new Error('response is empty')
   }
 
-  return clownface({ dataset: await res.dataset() })
+  return rdf.clownface({ dataset: await res.dataset() })
 }
 
 export default fetchMetadata
