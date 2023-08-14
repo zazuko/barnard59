@@ -1,0 +1,19 @@
+@base <http://example.org/pipeline/>.
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+<> a p:Pipeline, p:Readable;
+  p:variables
+    [
+      p:variable [ p:name "abc" ; p:value "foobar" ; ];
+    ] ;
+  p:steps [
+    p:stepList (<read>)
+  ].
+
+<read> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:fs#createReadStream>
+  ];
+  code:arguments ("test/support/definitions/simple.ttl").
