@@ -3,8 +3,10 @@ flag_management:
     carryforward: true
   individual_flags:
     - name: barnard59
+    - name: barnard59-base
     - name: barnard59-core
+    - name: barnard59-csvw
+    - name: barnard59-ftp
+    - name: barnard59-graph-store
     - name: barnard59-rdf
     - name: barnard59-sparql
-    - name: barnard59-base
-    - name: barnard59-graph-store

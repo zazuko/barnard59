@@ -1,0 +1,3 @@
+[
+  <http://www.w3.org/ns/csvw#url> <file:./test/support/test.csv>
+].

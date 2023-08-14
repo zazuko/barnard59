@@ -1,0 +1,39 @@
+{
+  "name": "barnard59-csvw",
+  "version": "1.0.0",
+  "description": "Simplifies handling CSVW mapping documents in barnard59 pipelines",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/csvw"
+  },
+  "keywords": [],
+  "author": "Zazuko GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59",
+  "dependencies": {
+    "@rdfjs/fetch": "^2.1.0",
+    "@zazuko/env": "^1.0.1",
+    "duplex-to": "^1.0.1",
+    "file-fetch": "^1.7.0",
+    "node-fetch": "^3.0.0",
+    "proto-fetch": "^1.0.0",
+    "readable-stream": "^3.6.0"
+  },
+  "devDependencies": {
+    "express-as-promise": "^1.2.0",
+    "get-stream": "^7.0.1",
+    "is-stream": "^3.0.0"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
+  }
+}
