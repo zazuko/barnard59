@@ -20,7 +20,7 @@ class StreamObject {
     this.variables = variables
     this.stream = stream
 
-    this.logger.debug({ iri: this.ptr.value, message: 'created new StreamObject' })
+    this.logger.trace({ iri: this.ptr.value, message: 'created new StreamObject' })
   }
 }
 

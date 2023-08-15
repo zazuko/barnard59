@@ -40,7 +40,7 @@ class Step extends StreamObject {
       stream.on(event, () => this._span.addEvent(event))
     }
 
-    this.logger.info({ iri: this.ptr.value, message: 'created new Step' })
+    this.logger.trace({ iri: this.ptr.value, message: 'created new Step' })
   }
 }
 

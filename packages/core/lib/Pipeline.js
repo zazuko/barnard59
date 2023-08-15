@@ -26,7 +26,7 @@ class Pipeline extends StreamObject {
   }) {
     super({ basePath, children, context, loaderRegistry, logger, ptr, variables })
 
-    this.logger.debug({ iri: this.ptr.value, message: 'create new Pipeline' })
+    this.logger.trace({ iri: this.ptr.value, message: 'create new Pipeline' })
 
     this.readable = readable
     this.readableObjectMode = readableObjectMode
@@ -52,7 +52,7 @@ class Pipeline extends StreamObject {
 
     this._chunks = 0
 
-    this.logger.info({ iri: this.ptr.value, message: 'created new Pipeline' })
+    this.logger.trace({ iri: this.ptr.value, message: 'created new Pipeline' })
   }
 
   get firstChild() {
@@ -69,7 +69,7 @@ class Pipeline extends StreamObject {
   }
 
   async _init() {
-    this.logger.debug({ iri: this.ptr.value, message: 'initialize Pipeline' })
+    this.logger.trace({ iri: this.ptr.value, message: 'initialize Pipeline' })
 
     try {
       await this.onInit(this)
@@ -96,7 +96,7 @@ class Pipeline extends StreamObject {
       this.logger.error(err, { iri: this.ptr.value })
     }
 
-    this.logger.debug({ iri: this.ptr.value, message: 'initialized Pipeline' })
+    this.logger.trace({ iri: this.ptr.value, message: 'initialized Pipeline' })
   }
 
   destroy(err) {

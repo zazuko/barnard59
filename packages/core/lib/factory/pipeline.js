@@ -64,7 +64,7 @@ function logVariables(ptr, logger, variables) {
   if (variables.size) {
     logger.info('variables in pipeline:', { iri: ptr.value })
     for (const [key, value] of variables) {
-      let level = 'debug'
+      let level = 'verbose'
       if (ptr.out(ns.p.variables).out(ns.p.variable).has(ns.p.name, key).term) {
         level = 'info'
       }

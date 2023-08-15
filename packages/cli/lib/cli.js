@@ -10,6 +10,7 @@ program
   .addOption(commonOptions.variable)
   .addOption(commonOptions.variableAll)
   .addOption(commonOptions.verbose)
+  .addOption(commonOptions.quiet)
   .addOption(monitoringOptions.enableBufferMonitor)
   .addOption(monitoringOptions.debug)
   .addOption(monitoringOptions.metricsExporter)
@@ -37,6 +38,7 @@ export default async function () {
     .addOption(commonOptions.variable)
     .addOption(commonOptions.variableAll)
     .addOption(commonOptions.verbose)
+    .addOption(commonOptions.quiet)
 
   await program.parseAsync(process.argv)
 }
