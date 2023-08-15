@@ -31,39 +31,48 @@ describe('barnard59', function () {
 
     describe('verbose', () => {
       it('should log info messages if verbose flag is set', () => {
-        const pipelineFile = filenamePipelineDefinition('simple')
+        const pipelineFile = filenamePipelineDefinition('logs')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
+
+        const result = stripAnsi(shell.exec(command, { cwd }).stderr)
+
+        expect(result).to.match(/^info: /m)
+      })
+
+      it('all logs suppressed with --quiet flag', () => {
+        const pipelineFile = filenamePipelineDefinition('logs')
+        const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} -q`
 
         const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
-        strictEqual((/^info: /m).test(result), true)
+        expect(result).to.be.empty
       })
 
       it('should log info messages if verbose flag is set before command', () => {
-        const pipelineFile = filenamePipelineDefinition('simple')
+        const pipelineFile = filenamePipelineDefinition('logs')
         const command = `${barnard59} --verbose run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
         const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
-        strictEqual((/^info: /m).test(result), true)
+        expect(result).to.match(/^info: /m)
       })
 
       it('should not log debug messages if verbose flag is set', () => {
-        const pipelineFile = filenamePipelineDefinition('simple')
+        const pipelineFile = filenamePipelineDefinition('logs')
         const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
         const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
-        strictEqual((/^debug: /m).test(result), false)
+        expect(result).not.to.match(/^debug: /m)
       })
 
-      it('should log debug messages if verbose flag is set twice', () => {
-        const pipelineFile = filenamePipelineDefinition('simple')
-        const command = `${barnard59} run --pipeline=http://example.org/pipeline/ --verbose --verbose ${pipelineFile}`
+      it('should log trace messages if verbose flag is set 4 times', () => {
+        const pipelineFile = filenamePipelineDefinition('logs')
+        const command = `${barnard59} run --pipeline=http://example.org/pipeline/ -vvvv ${pipelineFile}`
 
         const result = stripAnsi(shell.exec(command, { silent: true, cwd }).stderr)
 
-        strictEqual((/^debug: /m).test(result), true)
+        expect(result).to.match(/^trace: /m)
       })
     })
 
@@ -104,7 +113,7 @@ describe('barnard59', function () {
         const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         expect(result).to.match(/info:.+abc: 123/)
-        expect(result).to.match(/debug:.+def: 456/)
+        expect(result).to.match(/verbose:.+def: 456/)
       })
 
       it('should import all environment variables before command', () => {
@@ -114,7 +123,7 @@ describe('barnard59', function () {
         const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
         expect(result).to.match(/info:.+abc: 123/)
-        expect(result).to.match(/debug:.+def: 456/)
+        expect(result).to.match(/verbose:.+def: 456/)
       })
     })
   })

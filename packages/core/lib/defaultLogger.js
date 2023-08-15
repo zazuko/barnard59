@@ -3,12 +3,21 @@ import winston from 'winston'
 const { createLogger, format, transports } = winston
 const { Console, File } = transports
 
-function factory({ console = true, errorFilename = null, filename = null, level = 'error' } = {}) {
+const levels = {
+  error: 0,
+  warn: 1,
+  info: 2,
+  verbose: 3,
+  debug: 4,
+  trace: 5,
+}
+
+function factory({ console = true, errorFilename = null, filename = null, level = 'error', quiet } = {}) {
   const transports = []
 
   if (console) {
     transports.push(new Console({
-      consoleWarnLevels: ['warn', 'debug', 'log', 'info', 'error'],
+      consoleWarnLevels: Object.keys(levels),
       format: format.combine(
         format.colorize(),
         format.simple(),
@@ -24,7 +33,11 @@ function factory({ console = true, errorFilename = null, filename = null, level 
     transports.push(new File({ filename }))
   }
 
+  winston.addColors({
+    trace: 'blue',
+  })
   return createLogger({
+    levels,
     level,
     format: format.combine(
       format.timestamp(),
@@ -33,6 +46,7 @@ function factory({ console = true, errorFilename = null, filename = null, level 
       format.json(),
     ),
     transports,
+    silent: quiet,
   })
 }
 

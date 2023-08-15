@@ -117,6 +117,9 @@ describe('factory/pipeline', () => {
     const logger = {
       debug: sinon.spy(),
       info: sinon.spy(),
+      error: sinon.spy(),
+      trace: sinon.spy(),
+      verbose: sinon.spy(),
     }
 
     // when
@@ -130,6 +133,6 @@ describe('factory/pipeline', () => {
     // then
     expect(logger.info).to.have.been.calledWith(sinon.match(/foo: foo/))
     expect(logger.info).to.have.been.calledWith(sinon.match(/bar: \*\*\*/))
-    expect(logger.debug).to.have.been.calledWith(sinon.match(/baz: baz/))
+    expect(logger.verbose).to.have.been.calledWith(sinon.match(/baz: baz/))
   })
 })

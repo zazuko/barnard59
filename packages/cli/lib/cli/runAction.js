@@ -23,7 +23,7 @@ function createOutputStream(output = '-') {
 
 export default async function (ptr, basePath, options = {}) {
   const programOpts = program.opts()
-  const { output, variableAll, enableBufferMonitor } = {
+  const { output, variableAll, enableBufferMonitor, quiet } = {
     ...program.opts(),
     ...options,
   }
@@ -35,8 +35,7 @@ export default async function (ptr, basePath, options = {}) {
 
   await tracer.startActiveSpan('barnard59 run', async span => {
     try {
-      const level = ['error', 'info', 'debug', 'trace'][verbose] || 'error'
-
+      const level = ['warn', 'info', 'debug', 'verbose', 'trace'][verbose] || 'warn'
       if (variableAll) {
         for (const [key, value] of Object.entries(process.env)) {
           variables.set(key, value)
@@ -49,6 +48,7 @@ export default async function (ptr, basePath, options = {}) {
       const { finished: runFinished, pipeline } = await runner(ptr, {
         basePath,
         level,
+        quiet,
         outputStream,
         variables,
       })

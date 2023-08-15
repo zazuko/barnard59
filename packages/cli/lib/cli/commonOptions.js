@@ -19,3 +19,5 @@ export const variableAll = new Option('--variable-all', 'Import all environment 
 export const verbose = new Option('-v, --verbose', 'enable diagnostic console output')
   .default(0)
   .argParser((v, total) => ++total)
+
+export const quiet = new Option('-q, --quiet', 'Disable all logging')
