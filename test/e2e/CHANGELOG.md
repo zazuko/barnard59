@@ -1,5 +1,12 @@
 # barnard59-test-e2e
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [028126d]
+  - barnard59-core@3.0.0
+
 ## 0.0.1
 
 ### Patch Changes

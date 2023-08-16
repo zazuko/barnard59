@@ -1,6 +1,6 @@
 {
   "name": "barnard59-test-e2e",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
   "dependencies": {
     "@rdfjs/formats-common": "^2.2.0",
     "@zazuko/env": "^1.0.1",
-    "barnard59-core": "^2.1.0",
+    "barnard59-core": "^3.0.0",
     "barnard59-formats": "^1.4.0",
     "barnard59-http": "^1.1.0",
     "chai": "^4.3.7",
