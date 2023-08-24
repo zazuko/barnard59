@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+ <!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY BioRDFMicroarray "http://purl.org/BioRDFMicroarray.owl#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY biordfmicroarray "http://purl.org/net/biordfmicroarray.owl#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+<rdf:RDF xmlns="http://purl.org/net/biordfmicroarray.owl#"
+     xml:base="http://purl.org/net/biordfmicroarray.owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:BioRDFMicroarray="http://purl.org/BioRDFMicroarray.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:biordfmicroarray="http://purl.org/net/biordfmicroarray.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="">
+        <dc:creator rdf:datatype="&xsd;string"
+            >Satya S. Sahoo, Kei Cheung, Jun Zhao</dc:creator>
+    </owl:Ontology>
+<!--
+    ///////////////////////////////////////////////////////////////////////
+////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////
+////////////////
+     -->
+    <owl:AnnotationProperty rdf:about="&dc;creator"/>
+<!--
+    ///////////////////////////////////////////////////////////////////////
+////////////////
+//
+
+     // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////
+////////////////
+     -->
+    <!-- http://purl.org/net/biordfmicroarray.owl#derives_from -->
+    <owl:ObjectProperty rdf:about="#derives_from">
+        <rdfs:range rdf:resource="&BioRDFMicroarray;Detection"/>
+        <rdfs:range rdf:resource="&BioRDFMicroarray;Entorhinal_Cortex"/>
+        <rdfs:domain rdf:resource="&BioRDFMicroarray;expression_value"/>
+        <rdfs:domain rdf:resource="&BioRDFMicroarray;sample"/>
+        <rdfs:range rdf:resource="&BioRDFMicroarray;signal"/>
+    </owl:ObjectProperty>
+    <!-- http://purl.org/net/biordfmicroarray.owl#expressed_in -->
+    <owl:ObjectProperty rdf:about="#expressed_in">
+        <rdfs:domain rdf:resource="&BioRDFMicroarray;gene"/>
+        <rdfs:range rdf:resource="&BioRDFMicroarray;sample"/>
+    </owl:ObjectProperty>
+    <!-- http://purl.org/net/biordfmicroarray.owl#has_disease_state -->
+    <owl:ObjectProperty rdf:about="#has_disease_state">
+        <rdfs:range rdf:resource="&BioRDFMicroarray;Alzheimers_disease"/>
+        <rdfs:domain rdf:resource="&BioRDFMicroarray;Organism"/>
+    </owl:ObjectProperty>
+    <!-- http://purl.org/net/biordfmicroarray.owl#has_input_value -->
+    <owl:ObjectProperty rdf:about="#has_input_value">
+        <rdfs:range rdf:resource="&BioRDFMicroarray;gene"/>
+        <rdfs:domain
+rdf:resource="&BioRDFMicroarray;microarray_expression_experiment"/>
+        <rdfs:range rdf:resource="&BioRDFMicroarray;sample"/>
+        <rdfs:range rdf:resource="#probeID"/>
+    </owl:ObjectProperty>
+
+     <!-- http://purl.org/net/biordfmicroarray.owl#has_output_value -->
+    <owl:ObjectProperty rdf:about="#has_output_value">
+        <rdfs:range rdf:resource="&BioRDFMicroarray;Detection"/>
+        <rdfs:domain
+rdf:resource="&BioRDFMicroarray;microarray_expression_experiment"/>
+        <rdfs:range rdf:resource="&BioRDFMicroarray;signal"/>
+    </owl:ObjectProperty>
+    <!-- http://purl.org/net/biordfmicroarray.owl#part_of -->
+    <owl:ObjectProperty rdf:about="#part_of">
+        <rdfs:domain rdf:resource="&BioRDFMicroarray;Entorhinal_Cortex"/>
+        <rdfs:range rdf:resource="&BioRDFMicroarray;Organism"/>
+    </owl:ObjectProperty>
+<!--
+    ///////////////////////////////////////////////////////////////////////
+////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////
+////////////////
+     -->
+    <!-- http://purl.org/BioRDFMicroarray.owl#Alzheimers_disease -->
+    <owl:Class rdf:about="&BioRDFMicroarray;Alzheimers_disease">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+        <rdfs:comment
+            >http://ontology.neuinfo.org/NIF/Dysfunction/NIF-
+Dysfunction.owl#birnlex_2092</rdfs:comment>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#Detection -->
+    <owl:Class rdf:about="&BioRDFMicroarray;Detection">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+    </owl:Class>
+
+     <!-- http://purl.org/BioRDFMicroarray.owl#Entorhinal_Cortex -->
+    <owl:Class rdf:about="&BioRDFMicroarray;Entorhinal_Cortex">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+        <rdfs:comment
+            >http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-
+GrossAnatomy.owl#birnlex_1508</rdfs:comment>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#Human -->
+    <owl:Class rdf:about="&BioRDFMicroarray;Human">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;Organism"/>
+        <rdfs:comment
+            >http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-
+Organism.owl#birnlex_516</rdfs:comment>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#Organism -->
+    <owl:Class rdf:about="&BioRDFMicroarray;Organism">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#continuant -->
+    <owl:Class rdf:about="&BioRDFMicroarray;continuant"/>
+    <!-- http://purl.org/BioRDFMicroarray.owl#expression_value -->
+    <owl:Class rdf:about="&BioRDFMicroarray;expression_value">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#derives_from"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description
+
+ rdf:about="&BioRDFMicroarray;Detection"/>
+                            <rdf:Description
+rdf:about="&BioRDFMicroarray;sample"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#gene -->
+    <owl:Class rdf:about="&BioRDFMicroarray;gene">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+        <rdfs:comment
+            >http://purl.org/obo/owl/SO#SO_0000704</rdfs:comment>
+    </owl:Class>
+    <!-- http://purl.org/
+BioRDFMicroarray.owl#microarray_expression_experiment -->
+    <owl:Class
+rdf:about="&BioRDFMicroarray;microarray_expression_experiment">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;occurrent"/>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#occurrent -->
+    <owl:Class rdf:about="&BioRDFMicroarray;occurrent"/>
+    <!-- http://purl.org/BioRDFMicroarray.owl#sample -->
+    <owl:Class rdf:about="&BioRDFMicroarray;sample">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#derives_from"/>
+                <owl:allValuesFrom
+rdf:resource="&BioRDFMicroarray;Entorhinal_Cortex"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment
+
+             >http://knoesis.wright.edu/ParasiteExperiment.owl#sample</
+rdfs:comment>
+    </owl:Class>
+    <!-- http://purl.org/BioRDFMicroarray.owl#signal -->
+    <owl:Class rdf:about="&BioRDFMicroarray;signal">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+        <rdfs:comment
+            >http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Signal</
+rdfs:comment>
+    </owl:Class>
+    <!-- http://purl.org/net/biordfmicroarray.owl#probeID -->
+    <owl:Class rdf:about="#probeID">
+        <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
+    </owl:Class>
+</rdf:RDF>
+<!-- Generated by the OWL API (version 2.2.1.1138) http://
+owlapi.sourceforge.net -->
