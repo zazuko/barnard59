@@ -1,0 +1,193 @@
+# Saved by TopBraid on Sun Feb 10 12:28:48 PST 2008
+# baseURI: http://www.workingontologist.org/Examples/Chapter3/Product.owl
+
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix mfg:     <http://www.workingontologist.org/Examples/Chapter3/Product.owl#> .
+@prefix daml:    <http://www.daml.org/2001/03/daml+oil#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+
+<http://www.workingontologist.org/Examples/Chapter3/Product.owl>
+      a       owl:Ontology ;
+      owl:versionInfo "Created with TopBraid Spreadsheet converter"^^xsd:string .
+
+mfg:Product
+      a       owl:Class .
+
+mfg:Product1
+      a       mfg:Product ;
+      rdfs:label "Product 1"^^xsd:string ;
+      mfg:Product_Available
+              "23"^^xsd:string ;
+      mfg:Product_Division
+              "Manufacturing support"^^xsd:string ;
+      mfg:Product_ID "1"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Sacramento"^^xsd:string ;
+      mfg:Product_ModelNo "ZX-3"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Papermachine"^^xsd:string ;
+      mfg:Product_SKU "FB3524"^^xsd:string .
+
+mfg:Product2
+      a       mfg:Product ;
+      rdfs:label "Product 2"^^xsd:string ;
+      mfg:Product_Available
+              "4"^^xsd:string ;
+      mfg:Product_Division
+              "Manufacturing support"^^xsd:string ;
+      mfg:Product_ID "2"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Sacramento"^^xsd:string ;
+      mfg:Product_ModelNo "ZX-3P"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Paper machine"^^xsd:string ;
+      mfg:Product_SKU "KD5243"^^xsd:string .
+
+mfg:Product3
+      a       mfg:Product ;
+      rdfs:label "Product 3"^^xsd:string ;
+      mfg:Product_Available
+              "34"^^xsd:string ;
+      mfg:Product_Division
+              "Manufacturing support"^^xsd:string ;
+      mfg:Product_ID "3"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Sacramento"^^xsd:string ;
+      mfg:Product_ModelNo "ZX-3S"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Paper machine"^^xsd:string ;
+      mfg:Product_SKU "IL4028"^^xsd:string .
+
+mfg:Product4
+      a       mfg:Product ;
+      rdfs:label "Product 4"^^xsd:string ;
+      mfg:Product_Available
+              "23"^^xsd:string ;
+      mfg:Product_Division
+              "Control Engineering"^^xsd:string ;
+      mfg:Product_ID "4"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Elizabeth"^^xsd:string ;
+      mfg:Product_ModelNo "B-1430"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Feedback line"^^xsd:string ;
+      mfg:Product_SKU "KS4520"^^xsd:string .
+
+mfg:Product5
+      a       mfg:Product ;
+      rdfs:label "Product 5"^^xsd:string ;
+      mfg:Product_Available
+              "14"^^xsd:string ;
+      mfg:Product_Division
+              "Control Engineering"^^xsd:string ;
+      mfg:Product_ID "5"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Elizabeth"^^xsd:string ;
+      mfg:Product_ModelNo "B-1430X"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Feedback line"^^xsd:string ;
+      mfg:Product_SKU "CL5934"^^xsd:string .
+
+mfg:Product6
+      a       mfg:Product ;
+      rdfs:label "Product 6"^^xsd:string ;
+      mfg:Product_Available
+              "0"^^xsd:string ;
+      mfg:Product_Division
+              "Control Engineering"^^xsd:string ;
+      mfg:Product_ID "6"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Seoul"^^xsd:string ;
+      mfg:Product_ModelNo "B-1431"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Active sensor"^^xsd:string ;
+      mfg:Product_SKU "KK3945"^^xsd:string .
+
+mfg:Product7
+      a       mfg:Product ;
+      rdfs:label "Product 7"^^xsd:string ;
+      mfg:Product_Available
+              "100"^^xsd:string ;
+      mfg:Product_Division
+              "Accessories"^^xsd:string ;
+      mfg:Product_ID "7"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "Hong Kong"^^xsd:string ;
+      mfg:Product_ModelNo "DBB-12"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Monitor"^^xsd:string ;
+      mfg:Product_SKU "ND5520"^^xsd:string .
+
+mfg:Product8
+      a       mfg:Product ;
+      rdfs:label "Product 8"^^xsd:string ;
+      mfg:Product_Available
+              "HI4554"^^xsd:string ;
+      mfg:Product_Division
+              "Safety"^^xsd:string ;
+      mfg:Product_ID "8"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "valve"^^xsd:string ;
+      mfg:Product_ModelNo "SP-1234"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Safety"^^xsd:string ;
+      mfg:Product_SKU "Cleveland"^^xsd:string .
+
+mfg:Product9
+      a       mfg:Product ;
+      rdfs:label "Product 9"^^xsd:string ;
+      mfg:Product_Available
+              "OP5333"^^xsd:string ;
+      mfg:Product_Division
+              "Safety"^^xsd:string ;
+      mfg:Product_ID "9"^^xsd:string ;
+      mfg:Product_Manufacture_Location
+              "valve"^^xsd:string ;
+      mfg:Product_ModelNo "SPX-1234"^^xsd:string ;
+      mfg:Product_Product_Line
+              "Safety"^^xsd:string ;
+      mfg:Product_SKU "Cleveland"^^xsd:string .
+
+mfg:Product_Available
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "Available"^^xsd:string ;
+      rdfs:range xsd:string .
+
+mfg:Product_Division
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "Division"^^xsd:string ;
+      rdfs:range xsd:string .
+
+mfg:Product_ID
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "ID"^^xsd:string ;
+      rdfs:range xsd:string .
+
+mfg:Product_Manufacture_Location
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "Manufacture Location"^^xsd:string ;
+      rdfs:range xsd:string .
+
+mfg:Product_ModelNo
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "ModelNo"^^xsd:string ;
+      rdfs:range xsd:string .
+
+mfg:Product_Product_Line
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "Product Line"^^xsd:string ;
+      rdfs:range xsd:string .
+
+mfg:Product_SKU
+      a       owl:DatatypeProperty ;
+      rdfs:domain mfg:Product ;
+      rdfs:label "SKU"^^xsd:string ;
+      rdfs:range xsd:string .
