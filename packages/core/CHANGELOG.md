@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.1
+
+### Patch Changes
+
+- 91b225c: Remove log message `'variables in pipeline:'` and prefix each variable logged instead
+
 ## 3.0.0
 
 ### Major Changes
