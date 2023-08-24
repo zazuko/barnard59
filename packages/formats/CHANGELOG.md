@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 1.4.1
+
+### Patch Changes
+
+- 93b33d0: The package would use `rdf-ext` but it was not a dependency. Using `@zazuko/env` instead
+
 ## 1.4.0
 
 ### Minor Changes
