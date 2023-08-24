@@ -62,7 +62,6 @@ function createPipeline(ptr, {
 
 function logVariables(ptr, logger, variables) {
   if (variables.size) {
-    logger.info('variables in pipeline:', { iri: ptr.value })
     for (const [key, value] of variables) {
       let level = 'verbose'
       if (ptr.out(ns.p.variables).out(ns.p.variable).has(ns.p.name, key).term) {
@@ -75,7 +74,7 @@ function logVariables(ptr, logger, variables) {
         .has(ns.p.sensitive, true)
         .term
 
-      logger[level](`  ${key}: ${isSensitive ? '***' : value}`, { iri: ptr.value })
+      logger[level](`variable ${key}: ${isSensitive ? '***' : value}`, { iri: ptr.value })
     }
   }
 }
