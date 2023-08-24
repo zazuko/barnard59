@@ -28,13 +28,13 @@
     "@rdfjs/sink-to-duplex": "^1.0.0",
     "@zazuko/env": "^1.1.0",
     "barnard59-base": "^1.0.0",
+    "rdf-dataset-ext": "^1.0.1",
     "rdf-parser-csvw": "^0.15.0",
     "rdf-parser-csvw-xlsx": "^0.1.0",
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
-    "chai": "^4.3.7",
-    "rdf-dataset-ext": "^1.0.1"
+    "chai": "^4.3.7"
   },
   "engines": {
     "node": ">= 14.0.0"

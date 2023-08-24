@@ -1,15 +1,7 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
-import rdf from '@zazuko/env'
 import CsvwParser from 'rdf-parser-csvw'
 import tracer from './lib/tracer.js'
-
-function toDataset(streamOrDataset) {
-  if (!streamOrDataset.readable) {
-    return Promise.resolve(streamOrDataset)
-  }
-
-  return rdf.dataset().import(streamOrDataset)
-}
+import { toDataset } from './lib/stream.js'
 
 function parse(args) {
   let metadata
