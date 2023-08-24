@@ -1,10 +1,10 @@
 import Serializer from '@rdfjs/serializer-ntriples'
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
 
-function serialize () {
+function serialize() {
   return sinkToDuplex(new Serializer(), {
     readableObjectMode: true,
-    writableObjectMode: true
+    writableObjectMode: true,
   })
 }
 

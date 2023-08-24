@@ -1,9 +1,9 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import CsvwParser from 'rdf-parser-csvw'
 import tracer from './lib/tracer.js'
 
-function toDataset (streamOrDataset) {
+function toDataset(streamOrDataset) {
   if (!streamOrDataset.readable) {
     return Promise.resolve(streamOrDataset)
   }
@@ -11,7 +11,7 @@ function toDataset (streamOrDataset) {
   return rdf.dataset().import(streamOrDataset)
 }
 
-function parse (args) {
+function parse(args) {
   let metadata
   let relaxColumnCount = false
   let skipLinesWithError = false
@@ -43,9 +43,9 @@ function parse (args) {
         metadata: dataset,
         relaxColumnCount,
         skipLinesWithError,
-        timezone
+        timezone,
       }), {
-        readableObjectMode: true
+        readableObjectMode: true,
       })
     } finally {
       span.end()
@@ -54,5 +54,5 @@ function parse (args) {
 }
 
 export {
-  parse
+  parse,
 }

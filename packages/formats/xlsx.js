@@ -1,9 +1,9 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import CsvwXlsxParser from 'rdf-parser-csvw-xlsx'
 import tracer from './lib/tracer.js'
 
-function toDataset (streamOrDataset) {
+function toDataset(streamOrDataset) {
   if (!streamOrDataset.readable) {
     return Promise.resolve(streamOrDataset)
   }
@@ -11,7 +11,7 @@ function toDataset (streamOrDataset) {
   return rdf.dataset().import(streamOrDataset)
 }
 
-function parse (args) {
+function parse(args) {
   let metadata
   let timezone = 'local'
 
@@ -31,9 +31,9 @@ function parse (args) {
       span.addEvent('metadata')
       return sinkToDuplex(new CsvwXlsxParser({
         metadata: dataset,
-        timezone
+        timezone,
       }), {
-        readableObjectMode: true
+        readableObjectMode: true,
       })
     } finally {
       span.end()
@@ -42,5 +42,5 @@ function parse (args) {
 }
 
 export {
-  parse
+  parse,
 }

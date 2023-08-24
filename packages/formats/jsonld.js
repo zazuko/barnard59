@@ -6,7 +6,7 @@ import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import { combine, jsonStringify } from 'barnard59-base'
 import tracer from './lib/tracer.js'
 
-function parse ({ localContext } = {}) {
+function parse({ localContext } = {}) {
   let documentLoader = null
 
   if (localContext) {
@@ -44,7 +44,7 @@ const parseObject = () => {
 
 parse.object = parseObject
 
-function serialize () {
+function serialize() {
   return sinkToDuplex(new Serializer(), { objectMode: true })
 }
 

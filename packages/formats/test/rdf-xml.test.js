@@ -1,7 +1,7 @@
-import { strictEqual } from 'assert'
 import fs from 'fs'
-import { describe, it } from 'mocha'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
+import { expect } from 'chai'
 import { parse } from '../rdf-xml.js'
 
 describe('rdf/xml', () => {
@@ -10,9 +10,9 @@ describe('rdf/xml', () => {
       const input = fs.createReadStream(new URL('./datasets/bioinformatics.rdf', import.meta.url))
 
       const parser = parse()
-      const dataset = await rdf.dataset().import(input.pipe(parser))
+      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
 
-      strictEqual(dataset.length > 0, true)
+      expect(dataset).to.have.property('size').gt(0)
     })
   })
 })

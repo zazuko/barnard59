@@ -1,7 +1,7 @@
-import { strictEqual } from 'assert'
 import fs from 'fs'
-import { describe, it } from 'mocha'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
+import { expect } from 'chai'
 import { parse } from '../n3.js'
 
 describe('n3', () => {
@@ -10,20 +10,20 @@ describe('n3', () => {
       const input = fs.createReadStream(new URL('./datasets/ontologist.n3', import.meta.url))
 
       const parser = parse()
-      const dataset = await rdf.dataset().import(input.pipe(parser))
+      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
 
-      strictEqual(dataset.length > 0, true)
+      expect(dataset).to.have.property('size').gt(0)
     })
 
     it('forwards argument to parser options', async () => {
       const input = fs.createReadStream(new URL('./rules/weather.n3', import.meta.url))
 
       const parser = parse({
-        format: 'text/n3'
+        format: 'text/n3',
       })
-      const dataset = await rdf.dataset().import(input.pipe(parser))
+      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
 
-      strictEqual(dataset.length > 0, true)
+      expect(dataset).to.have.property('size').gt(0)
     })
   })
 })

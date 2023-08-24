@@ -1,10 +1,10 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import { RdfXmlParser } from 'rdfxml-streaming-parser'
 
-function parse () {
+function parse() {
   return sinkToDuplex(new RdfXmlParser(), {
     readableObjectMode: true,
-    writableObjectMode: true
+    writableObjectMode: true,
   })
 }
 

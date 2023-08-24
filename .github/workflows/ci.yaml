@@ -14,6 +14,7 @@ jobs:
           - barnard59-base
           - barnard59-core
           - barnard59-csvw
+          - barnard59-formats
           - barnard59-ftp
           - barnard59-graph-store
           - barnard59-rdf

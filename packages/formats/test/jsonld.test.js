@@ -1,7 +1,7 @@
-import { strictEqual } from 'assert'
 import fs from 'fs'
-import { describe, it } from 'mocha'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
+import { expect } from 'chai'
 import { parse } from '../jsonld.js'
 
 describe('jsonld', () => {
@@ -10,9 +10,9 @@ describe('jsonld', () => {
       const input = fs.createReadStream(new URL('./assets/remote.json', import.meta.url))
 
       const parser = parse()
-      const dataset = await rdf.dataset().import(input.pipe(parser))
+      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
 
-      strictEqual(dataset.length > 0, true)
+      expect(dataset).to.have.property('size').gt(0)
     })
 
     it('should load a file with a local context', async () => {
@@ -20,12 +20,12 @@ describe('jsonld', () => {
 
       const parser = parse({
         localContext: {
-          'http://example.org/ns/csvw': './test/assets/csvw.context.json'
-        }
+          'http://example.org/ns/csvw': './test/assets/csvw.context.json',
+        },
       })
-      const dataset = await rdf.dataset().import(input.pipe(parser))
+      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
 
-      strictEqual(dataset.length > 0, true)
+      expect(dataset).to.have.property('size').gt(0)
     })
 
     it('should load a file with a local context given as string', async () => {
@@ -33,12 +33,12 @@ describe('jsonld', () => {
 
       const parser = parse({
         localContext: JSON.stringify({
-          'http://example.org/ns/csvw': './test/assets/csvw.context.json'
-        })
+          'http://example.org/ns/csvw': './test/assets/csvw.context.json',
+        }),
       })
-      const dataset = await rdf.dataset().import(input.pipe(parser))
+      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
 
-      strictEqual(dataset.length > 0, true)
+      expect(dataset).to.have.property('size').gt(0)
     })
   })
 })
