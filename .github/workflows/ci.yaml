@@ -50,7 +50,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: barnard59-cli
+          flags: barnard59
 
   lint:
     runs-on: ubuntu-20.04
