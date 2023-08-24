@@ -33,6 +33,12 @@ jobs:
 
   test-cli:
     runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - '18'
+          - '16'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
