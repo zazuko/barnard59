@@ -1,0 +1,9 @@
+@base <http://barnard59.zazuko.com/operations/base/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<drink> a p:Operation, p:Writable, p:Readable;
+  code:implementedBy [ a code:EcmaScript;
+    code:link <node:party-module#drink>
+  ].
