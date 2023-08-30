@@ -1,0 +1,6 @@
+@base <http://example.org/pipeline/>.
+@prefix p: <https://pipeline.described.at/>.
+
+<p1> a p:Pipeline.
+<p2> a p:Pipeline.
+

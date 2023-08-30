@@ -32,7 +32,11 @@ const onError = async err => {
 
   if (err) {
     // eslint-disable-next-line no-console
-    console.log(err)
+    if (err.skipTrace) {
+      console.log(err.message)
+    } else {
+      console.log(err)
+    }
   }
   await sdk.shutdown()
   process.exit(1)

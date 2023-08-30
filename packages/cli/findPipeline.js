@@ -19,7 +19,10 @@ function findPipeline(dataset, iri) {
   }
 
   if (ptr.terms.length > 1) {
-    throw new Error('Multiple root pipelines found.')
+    const alternatives = ptr.values.map(x => `\n\t--pipeline ${x}`).join('')
+    const error = new Error(`Multiple root pipelines found. Try one of these:${alternatives}`)
+    error.skipTrace = true
+    throw error
   }
 
   return ptr
