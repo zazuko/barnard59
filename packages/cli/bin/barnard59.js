@@ -31,10 +31,11 @@ const onError = async err => {
   process.off('SIGTERM', onError)
 
   if (err) {
-    // eslint-disable-next-line no-console
     if (err.skipTrace) {
+      // eslint-disable-next-line no-console
       console.log(err.message)
     } else {
+      // eslint-disable-next-line no-console
       console.log(err)
     }
   }
