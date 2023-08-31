@@ -1,7 +1,6 @@
-const { describe, it } = require('mocha')
-const assert = require('assert')
-const ChecksCollection = require('../lib/checksCollection')
-const { containsMessage } = require('./helpers')
+import assert from 'assert'
+import ChecksCollection from '../lib/checksCollection.js'
+import { containsMessage } from './helpers.js'
 
 let checks
 beforeEach(() => {

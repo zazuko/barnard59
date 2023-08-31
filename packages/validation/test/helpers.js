@@ -1,42 +1,33 @@
-const cf = require('clownface')
-const deepEqual = require('deep-equal')
-const formats = require('@rdfjs/formats-common')
+import { Readable } from 'stream'
+import deepEqual from 'deep-equal'
+import formats from '@rdfjs/formats-common'
+import rdf from '@zazuko/env'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
 const parser = formats.parsers.get('text/turtle')
-const rdf = require('rdf-ext')
-const { Readable } = require('stream')
 
-module.exports = {
-  turtleToCF,
-  genericContainsMessage,
-  pipelineContainsMessage,
-  containsMessage,
-  checkArrayContainsField,
-  checkArrayContainsObject
-}
-
-async function turtleToCF (str) {
+export async function turtleToCF(str) {
   const stream = Readable.from([str])
   const quadStream = parser.import(stream)
-  return cf({ dataset: await rdf.dataset().import(quadStream) })
+  return rdf.clownface({ dataset: await fromStream(rdf.dataset(), quadStream) })
 }
 
-function checkArrayContainsField (array, field, value) {
+export function checkArrayContainsField(array, field, value) {
   return Boolean(array.find((element) => element[field] === value))
 }
 
-function checkArrayContainsObject (array, obj) {
+export function checkArrayContainsObject(array, obj) {
   return Boolean(array.find((element) => deepEqual(element, obj)))
 }
 
-function genericContainsMessage (checksCollection, mssg) {
+export function genericContainsMessage(checksCollection, mssg) {
   return checkArrayContainsField(checksCollection.generic, 'message', mssg)
 }
 
-function pipelineContainsMessage (checksCollection, mssg, pipeline) {
+export function pipelineContainsMessage(checksCollection, mssg, pipeline) {
   return checkArrayContainsField(checksCollection.pipelines[pipeline], 'message', mssg)
 }
 
-function containsMessage (checksCollection, mssg) {
+export function containsMessage(checksCollection, mssg) {
   if (genericContainsMessage(checksCollection, mssg)) {
     return true
   }

@@ -1,64 +1,59 @@
-const cf = require('clownface')
-const fs = require('fs')
-const namespace = require('@rdfjs/namespace')
-const rdf = require('rdf-ext')
-const readline = require('readline')
-const fromFile = require('rdf-utils-fs/fromFile')
-const iriResolve = require('rdf-loader-code/lib/iriResolve')
-const Issue = require('./issue')
-const utils = require('./utils')
-const validatePipelineProperty = require('./validatePipelineProperty')
-const validators = require('./validators')
+import fs from 'fs'
+import readline from 'readline'
+import rdf from '@zazuko/env'
+import fromFile from 'rdf-utils-fs/fromFile.js'
+import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
+import fromStream from 'rdf-dataset-ext/fromStream.js'
+import Issue from './issue.js'
+import * as utils from './utils.js'
+import validatePipelineProperty from './validatePipelineProperty.js'
+import * as validators from './validators/index.js'
 
 const ns = {
-  schema: namespace('http://schema.org/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  p: namespace('https://pipeline.described.at/'),
-  code: namespace('https://code.described.at/')
+  p: rdf.namespace('https://pipeline.described.at/'),
+  code: rdf.namespace('https://code.described.at/'),
 }
 
-async function readGraph (file, checks) {
+export async function readGraph(file, checks) {
   const quadStream = fromFile(file)
   const parserPromise = new Promise((resolve, reject) => {
     quadStream.on('error', reject)
     quadStream.on('end', resolve)
   })
-  const datasetPromise = rdf.dataset().import(quadStream)
+  const datasetPromise = fromStream(rdf.dataset(), quadStream)
 
-  let issue, dataset, _err
+  let issue, dataset
   try {
-    [_err, dataset] = await Promise.all([parserPromise, datasetPromise])
+    [, dataset] = await Promise.all([parserPromise, datasetPromise])
     issue = Issue.info({
-      message: `File ${file} parsed successfully`
+      message: `File ${file} parsed successfully`,
     })
-  }
-  catch (err) {
+  } catch (err) {
     if (err.stack.includes('at N3')) {
       const error = await parseError(file, err)
       issue = Issue.error({
-        message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`
+        message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`,
       })
-    }
-    else {
+    } else {
       issue = Issue.error({
-        message: err.message
+        message: err.message,
       })
     }
   }
 
   checks.addGenericCheck(issue)
-  const clownfaceObj = cf({ dataset })
+  const clownfaceObj = rdf.clownface({ dataset })
 
   return clownfaceObj
 }
 
-function parseError (path, error) {
-  const { line, token: _token } = error.context
+export function parseError(path, error) {
+  const { line } = error.context
   if (typeof line === 'number') {
     const rl = readline.createInterface({
       input: fs.createReadStream(path),
       output: process.stdout,
-      terminal: false
+      terminal: false,
     })
 
     let lineNumber = 0
@@ -73,11 +68,11 @@ function parseError (path, error) {
   }
 }
 
-function getIdentifiers (graph, checks, pipeline2find = null) {
+export function getIdentifiers(graph, checks, pipeline2find = null) {
   const pipeline2identifier = {}
 
   graph
-    .has(ns.rdf.type, ns.p.Pipeline)
+    .has(rdf.ns.rdf.type, ns.p.Pipeline)
     .forEach(pipeline => {
       if (pipeline2find === null || pipeline2find === pipeline.term.value) {
         const steps = pipeline
@@ -101,7 +96,7 @@ function getIdentifiers (graph, checks, pipeline2find = null) {
           if (ib && identifier) {
             pipeline2identifier[pipeline.term.value].push({
               stepName: currStepName,
-              stepOperation: identifier.value
+              stepOperation: identifier.value,
             })
           }
         }
@@ -111,7 +106,7 @@ function getIdentifiers (graph, checks, pipeline2find = null) {
   return pipeline2identifier
 }
 
-function getModuleOperationProperties (graph, identifiers) {
+export function getModuleOperationProperties(graph, identifiers) {
   const operation2properties = {}
 
   for (const id of identifiers) {
@@ -121,7 +116,7 @@ function getModuleOperationProperties (graph, identifiers) {
       .namedNode(id)
       .in(ns.code.link)
       .in(ns.code.implementedBy)
-      .out(ns.rdf.type)
+      .out(rdf.ns.rdf.type)
       .forEach(node => {
         const nodeComponents = node.term.value.split('/')
         const property = nodeComponents[nodeComponents.length - 1]
@@ -139,7 +134,7 @@ function getModuleOperationProperties (graph, identifiers) {
   return operation2properties
 }
 
-function getAllCodeLinks (pipelines) {
+export function getAllCodeLinks(pipelines) {
   const codelinks = new Set()
   for (const key in pipelines) {
     pipelines[key].forEach(step => codelinks.add(step))
@@ -147,7 +142,7 @@ function getAllCodeLinks (pipelines) {
   return codelinks
 }
 
-function getDependencies (codelinks, pipelineDir) {
+export function getDependencies(codelinks, pipelineDir) {
   const dependencies = {}
 
   codelinks.forEach(({ stepOperation: codelink }) => {
@@ -165,7 +160,7 @@ function getDependencies (codelinks, pipelineDir) {
   return dependencies
 }
 
-function getPipelineProperties (graph, pipelines) {
+export function getPipelineProperties(graph, pipelines) {
   const pipeline2properties = {}
 
   for (const id of pipelines) {
@@ -173,7 +168,7 @@ function getPipelineProperties (graph, pipelines) {
 
     graph
       .namedNode(id)
-      .out(ns.rdf.type)
+      .out(rdf.ns.rdf.type)
       .forEach(node => {
         const nodeComponents = node.term.value.split('/')
         const property = nodeComponents[nodeComponents.length - 1]
@@ -190,7 +185,7 @@ function getPipelineProperties (graph, pipelines) {
   return pipeline2properties
 }
 
-async function getAllOperationProperties (dependencies, checks) {
+export async function getAllOperationProperties(dependencies, checks) {
   const results = {}
   for (const protocol in dependencies) {
     for (const library in dependencies[protocol]) {
@@ -211,8 +206,7 @@ async function getAllOperationProperties (dependencies, checks) {
         const manifestGraph = await readGraph(manifestPath, checks)
         const tempResults = getModuleOperationProperties(manifestGraph, dependencies[protocol][library].values())
         Object.assign(results, tempResults)
-      }
-      else {
+      } else {
         for (const codelink of dependencies[protocol][library]) {
           results[codelink] = null
         }
@@ -222,7 +216,7 @@ async function getAllOperationProperties (dependencies, checks) {
   return results
 }
 
-function validatePipelines (pipelines, operation2properties, pipeline2properties, checks) {
+export function validatePipelines(pipelines, operation2properties, pipeline2properties, checks) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     const firstOpProperties = operation2properties[steps[0].stepOperation]
     const lastOpProperties = operation2properties[steps[steps.length - 1].stepOperation]
@@ -240,7 +234,7 @@ function validatePipelines (pipelines, operation2properties, pipeline2properties
   })
 }
 
-function validateSteps ({ pipelines, properties }, checks) {
+export function validateSteps({ pipelines, properties }, checks) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
     steps.reduce((lastOp, { stepName: step, stepOperation: operation }, idx) => {
       const lastOperationProperties = properties[lastOp]
@@ -311,17 +305,4 @@ function validateSteps ({ pipelines, properties }, checks) {
       return operation
     }, '')
   })
-}
-
-module.exports = {
-  readGraph,
-  getIdentifiers,
-  getAllCodeLinks,
-  getDependencies,
-  getModuleOperationProperties,
-  getAllOperationProperties,
-  getPipelineProperties,
-  validateSteps,
-  validatePipelines,
-  parseError
 }

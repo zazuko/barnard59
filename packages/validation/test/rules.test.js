@@ -1,7 +1,6 @@
-const { describe, it } = require('mocha')
-const assert = require('assert')
-const { rules } = require('../lib/rules')
-const validators = require('../lib/validators')
+import assert from 'assert'
+import { rules } from '../lib/rules.js'
+import * as validators from '../lib/validators/index.js'
 
 describe('rules', () => {
   const requiredFields = ['ruleId', 'ruleDescription', 'messageSuccess', 'messageFailure']

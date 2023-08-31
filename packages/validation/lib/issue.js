@@ -1,20 +1,20 @@
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 const colors = {
   info: chalk.grey,
   warning: chalk.yellow,
-  error: chalk.red
+  error: chalk.red,
 }
 
 const levelsTemplates = {
   info: 'messageSuccessTemplate',
   warning: 'messageFailureTemplate',
-  error: 'messageFailureTemplate'
+  error: 'messageFailureTemplate',
 }
 
-class Issue {
-  constructor ({ step, operation, message, level, id, templateData } = {}) {
-    this.id = id
+export default class Issue {
+  constructor({ step, operation, message, level, rule, templateData } = {}) {
+    this.id = rule?.ruleId
     this.level = level
     this.operation = operation
     this.step = step
@@ -26,16 +26,15 @@ class Issue {
     }
 
     if (this.id) {
-      const { rulesById } = require('./rules')
       const template = levelsTemplates[this.level]
-      this.message = rulesById[this.id][template]({
+      this.message = rule[template]({
         ...this.templateData,
-        operation: this.operation
+        operation: this.operation,
       })
     }
   }
 
-  toString () {
+  toString() {
     let msg = this.message
     if (this.step) {
       msg += ` [at step <${this.step}>]`
@@ -46,17 +45,15 @@ class Issue {
     return colors[this.level](msg)
   }
 
-  static info ({ step, operation, message, id, templateData }) {
-    return new Issue({ step, operation, message, id, templateData, level: 'info' })
+  static info({ step, operation, message, rule, templateData }) {
+    return new Issue({ step, operation, message, rule, templateData, level: 'info' })
   }
 
-  static warning ({ step, operation, message, id, templateData }) {
-    return new Issue({ step, operation, message, id, templateData, level: 'warning' })
+  static warning({ step, operation, message, rule, templateData }) {
+    return new Issue({ step, operation, message, rule, templateData, level: 'warning' })
   }
 
-  static error ({ step, operation, message, id, templateData }) {
-    return new Issue({ step, operation, message, id, templateData, level: 'error' })
+  static error({ step, operation, message, rule, templateData }) {
+    return new Issue({ step, operation, message, rule, templateData, level: 'error' })
   }
 }
-
-module.exports = Issue

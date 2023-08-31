@@ -1,9 +1,8 @@
-const { describe, it } = require('mocha')
-const assert = require('assert')
-const parser = require('../lib/parser')
-const ChecksCollection = require('../lib/checksCollection.js')
-const validators = require('../lib/validators')
-const { pipelineContainsMessage, checkArrayContainsObject } = require('./helpers')
+import assert from 'assert'
+import * as parser from '../lib/parser.js'
+import ChecksCollection from '../lib/checksCollection.js'
+import * as validators from '../lib/validators/index.js'
+import { pipelineContainsMessage, checkArrayContainsObject } from './helpers.js'
 
 const properties = {
   o: ['Operation'],
@@ -24,14 +23,14 @@ const properties = {
   rW: ['Readable', 'WritableObjectMode'],
 
   e: [],
-  n: null
+  n: null,
 }
 
-function opToStep (operation) {
+function opToStep(operation) {
   return { stepName: `${operation}-step`, stepOperation: operation }
 }
 
-function pipelinesToSteps (pipelines) {
+function pipelinesToSteps(pipelines) {
   const pipelinesWithSteps = {}
   Object.entries(pipelines).forEach(([key, value]) => {
     pipelinesWithSteps[key] = value.map(opToStep)
@@ -52,7 +51,7 @@ describe('parser.validateSteps', () => {
       p2: ['or', 'orw', 'orw', 'orw', 'orw', 'ow'],
       p3: ['or'],
       p4: ['orw'],
-      p5: ['o']
+      p5: ['o'],
     })
 
     Object.keys(pipelines).forEach((pipeline) => {
@@ -66,7 +65,7 @@ describe('parser.validateSteps', () => {
       p1: ['oR', 'oRW', 'oW'],
       p2: ['oR', 'oRW', 'oRW', 'oRW', 'oRW', 'oW'],
       p3: ['oR'],
-      p4: ['oRW']
+      p4: ['oRW'],
     })
     parser.validateSteps({ pipelines, properties }, checks)
     Object.keys(pipelines).forEach((pipeline) => {
@@ -78,8 +77,8 @@ describe('parser.validateSteps', () => {
   it('should report missing metadata', () => {
     const pipelines = pipelinesToSteps({
       p1: [
-        'n'
-      ]
+        'n',
+      ],
     })
 
     parser.validateSteps({ pipelines, properties }, checks)
@@ -89,8 +88,8 @@ describe('parser.validateSteps', () => {
   it('should report found metadata', () => {
     const pipelines = pipelinesToSteps({
       p1: [
-        'rw'
-      ]
+        'rw',
+      ],
     })
     parser.validateSteps({ pipelines, properties }, checks)
 
@@ -101,8 +100,8 @@ describe('parser.validateSteps', () => {
   it('should report operations missing p:Operation', () => {
     const pipelines = pipelinesToSteps({
       p1: [
-        'e'
-      ]
+        'e',
+      ],
     })
     parser.validateSteps({ pipelines, properties }, checks)
 
@@ -115,8 +114,8 @@ describe('parser.validateSteps', () => {
       p1: [
         'or',
         'orw',
-        'or'
-      ]
+        'or',
+      ],
     })
     parser.validateSteps({ pipelines, properties }, checks)
     const expIssue = validators.writableAfterReadable.validate(false, 'or-step', 'or')
@@ -127,8 +126,8 @@ describe('parser.validateSteps', () => {
     const pipelines = pipelinesToSteps({
       p1: [
         'ow',
-        'orw'
-      ]
+        'orw',
+      ],
     })
     parser.validateSteps({ pipelines, properties }, checks)
 
@@ -139,21 +138,21 @@ describe('parser.validateSteps', () => {
     const pipelines = pipelinesToSteps({
       p1: [
         'or',
-        'orW'
+        'orW',
       ],
       p2: [
         'oR',
-        'orw'
+        'orw',
       ],
       p3: [
         'oR',
-        'oRw'
+        'oRw',
       ],
       p4: [
         'or',
         'orw',
-        'orW'
-      ]
+        'orW',
+      ],
     })
     parser.validateSteps({ pipelines, properties }, checks)
 
@@ -161,11 +160,11 @@ describe('parser.validateSteps', () => {
       p1: ['orW', validators.readableObjectModeBeforeWritableObjectMode.messageFailureTemplate({ operation: 'orW' })],
       p2: ['orw', validators.readableBeforeWritable.messageFailureTemplate({ operation: 'orw' })],
       p3: ['oRw', validators.readableBeforeWritable.messageFailureTemplate({ operation: 'oRw' })],
-      p4: ['orW', validators.readableObjectModeBeforeWritableObjectMode.messageFailureTemplate({ operation: 'orW' })]
+      p4: ['orW', validators.readableObjectModeBeforeWritableObjectMode.messageFailureTemplate({ operation: 'orW' })],
     }
 
     Object.keys(pipelines).forEach((pipeline) => {
-      const [_erroredOp, errorMessage] = expectedErrors[pipeline]
+      const [, errorMessage] = expectedErrors[pipeline]
       pipelineContainsMessage(checks, errorMessage, pipeline)
     })
   })

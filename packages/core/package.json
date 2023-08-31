@@ -26,7 +26,7 @@
     "clownface": "^2.0.0",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.1.1",
-    "is-graph-pointer": "^2.0.0",
+    "is-graph-pointer": "^2.1.0",
     "is-stream": "^3.0.0",
     "lodash": "^4.17.21",
     "rdf-loader-code": "^1.0.0",

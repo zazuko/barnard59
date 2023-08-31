@@ -7,12 +7,12 @@
   rdfs:label "Exported with a named export";
   rdfs:comment "and imported with a named import";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:fixtures/namedexport.mjs#myexport>
+    code:link <node:fixtures/namedexport.js#myexport>
   ].
 
 <a3> a p:Operation, p:Writable, p:Readable;
   rdfs:label "Exported with a default export";
   rdfs:comment "and imported with a default import";
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:fixtures/defaultexport.mjs>
+    code:link <node:fixtures/defaultexport.js>
   ].

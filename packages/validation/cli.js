@@ -1,16 +1,23 @@
 #!/usr/bin/env node
-const path = require('path')
-const { Command } = require('commander')
-const parser = require('./lib/parser')
-const { version } = require(path.join(__dirname, 'package.json'))
-const ChecksCollection = require('./lib/checksCollection.js')
-const { removeFilePart } = require('./lib/utils')
-const validate = require('./lib/manifest')
+import 'anylogger-console'
+import path from 'path'
+import fs from 'fs'
+import * as module from 'module'
+import * as url from 'url'
+import { Command } from 'commander'
+import * as parser from './lib/parser.js'
+import ChecksCollection from './lib/checksCollection.js'
+import { removeFilePart } from './lib/utils.js'
+import * as validate from './lib/manifest.js'
+import { log } from './lib/log.js'
+
+const require = module.createRequire(url.fileURLToPath(import.meta.url))
+const { version } = JSON.parse(fs.readFileSync(require.resolve('./package.json')))
 
 const program = new Command()
 program.version(version)
 
-async function validatePipeline (file, options) {
+async function validatePipeline(file, options) {
   const pipelineFile = path.resolve(file)
   const pipelineDir = removeFilePart(pipelineFile)
   const checks = new ChecksCollection()
@@ -26,17 +33,16 @@ async function validatePipeline (file, options) {
 
     const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
     parser.validatePipelines(pipelines, operationProperties, pipelineProperties, checks)
-  }
-  catch (err) {
+  } catch (err) {
     if (options.debug) {
-      console.error(err)
+      log.error(err)
     }
   }
 
   checks.print(options.levels)
 
   if (!process.stdout.isTTY) {
-    console.log(checks.filterToJSON(options.levels))
+    log.log(checks.filterToJSON(options.levels))
   }
 
   if (checks.countIssues(options.strict)) {
@@ -44,12 +50,11 @@ async function validatePipeline (file, options) {
   }
 }
 
-async function validateManifest (file, options) {
+async function validateManifest(file, options) {
   const checks = new ChecksCollection()
   try {
     await validate({ file, checks })
-  }
-  catch (err) {
+  } catch (err) {
     if (options.debug) {
       console.error(err)
     }
@@ -87,8 +92,7 @@ program
     }
     if (!options.manifest) {
       validatePipeline(file, options)
-    }
-    else {
+    } else {
       await validateManifest(file, options)
     }
   })

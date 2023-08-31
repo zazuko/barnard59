@@ -1,29 +1,27 @@
-const { template } = require('../utils')
-const Issue = require('../issue')
+import { template } from '../utils.js'
+import Issue from '../issue.js'
 
-const operationIsImportable = {
+export default {
   ruleId: 14,
   ruleDescription: 'Operation defined in manifest can be imported',
   messageSuccessTemplate: template`${'filename'} can be imported for operation ${'op'}`,
   messageFailureTemplate: template`Cannot import ${'filename'} for operation ${'op'}`,
-  async validate ({ op, filename }) {
-    let issue = Issue.error({ id: this.ruleId, templateData: { op, filename } })
+  async validate({ op, filename }) {
+    let issue = Issue.error({ rule: this, templateData: { op, filename } })
 
     try {
       await import(filename)
-      issue = Issue.info({ id: this.ruleId, templateData: { op, filename } })
-    }
-    catch (err) { }
+      issue = Issue.info({ rule: this, templateData: { op, filename } })
+    } catch (err) { }
 
     return issue
   },
-  describeRule () {
+  describeRule() {
     return {
       ruleId: this.ruleId,
       ruleDescription: this.ruleDescription,
       messageSuccess: this.messageSuccessTemplate(),
-      messageFailure: this.messageFailureTemplate()
+      messageFailure: this.messageFailureTemplate(),
     }
-  }
+  },
 }
-module.exports = operationIsImportable

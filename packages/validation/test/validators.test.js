@@ -1,6 +1,6 @@
-const { describe, it } = require('mocha')
-const assert = require('assert')
-const validators = require('../lib/validators')
+/* eslint import/namespace: ['error', { allowComputed: true }] */
+import assert from 'assert'
+import * as validators from '../lib/validators/index.js'
 
 describe('validators', () => {
   const requiredFields = ['ruleDescription',

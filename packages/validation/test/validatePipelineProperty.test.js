@@ -1,9 +1,8 @@
-const { describe, it } = require('mocha')
-const assert = require('assert')
-const validatePipelineProperty = require('../lib/validatePipelineProperty')
-const validators = require('../lib/validators')
-const ChecksCollection = require('../lib/checksCollection')
-const { checkArrayContainsObject } = require('./helpers')
+import assert from 'assert'
+import validatePipelineProperty from '../lib/validatePipelineProperty.js'
+import * as validators from '../lib/validators/index.js'
+import ChecksCollection from '../lib/checksCollection.js'
+import { checkArrayContainsObject } from './helpers.js'
 let checks
 
 describe('validatePipelinePropertyModeFirst', () => {

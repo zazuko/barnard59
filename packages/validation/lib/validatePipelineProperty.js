@@ -1,6 +1,6 @@
-const validators = require('./validators')
+import * as validators from './validators/index.js'
 
-function validatePipelineProperty (pipeline, pipelineProperties, opProperties, mode, checks) {
+export default function validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks) {
   const canBeWritable = opProperties.includes('Writable')
   const canBeReadable = opProperties.includes('Readable')
   const canBeWritableObjectMode = opProperties.includes('WritableObjectMode')
@@ -15,12 +15,10 @@ function validatePipelineProperty (pipeline, pipelineProperties, opProperties, m
     if (isWritableOnly) {
       issue = validators.pipelinePropertiesMatchFirstStrict.validate(pipeline, pipelineProperties, 'Writable')
       checks.addPipelineCheck(issue, pipeline)
-    }
-    else if (isWritableObjectModeOnly) {
+    } else if (isWritableObjectModeOnly) {
       issue = validators.pipelinePropertiesMatchFirstStrict.validate(pipeline, pipelineProperties, 'WritableObjectMode')
       checks.addPipelineCheck(issue, pipeline)
-    }
-    else if (isWritableOrWritableObjectMode) {
+    } else if (isWritableOrWritableObjectMode) {
       issue = validators.pipelinePropertiesMatchFirstFlex.validate(pipeline, pipelineProperties)
       checks.addPipelineCheck(issue, pipeline)
     }
@@ -34,16 +32,12 @@ function validatePipelineProperty (pipeline, pipelineProperties, opProperties, m
     if (isReadableOnly) {
       issue = validators.pipelinePropertiesMatchLastStrict.validate(pipeline, pipelineProperties, 'Readable')
       checks.addPipelineCheck(issue, pipeline)
-    }
-    else if (isReadableObjectModeOnly) {
+    } else if (isReadableObjectModeOnly) {
       issue = validators.pipelinePropertiesMatchLastStrict.validate(pipeline, pipelineProperties, 'ReadableObjectMode')
       checks.addPipelineCheck(issue, pipeline)
-    }
-    else if (isReadableOrReadableObjectMode) {
+    } else if (isReadableOrReadableObjectMode) {
       issue = validators.pipelinePropertiesMatchLastFlex.validate(pipeline, pipelineProperties)
       checks.addPipelineCheck(issue, pipeline)
     }
   }
 }
-
-module.exports = validatePipelineProperty

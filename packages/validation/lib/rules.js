@@ -1,21 +1,12 @@
-const validators = require('./validators')
+import { fileURLToPath } from 'url'
+import process from 'process'
+import * as validators from './validators/index.js'
+import { log } from './log.js'
 
-// { [ruleId]: validator }
-const rulesById = Object.values(validators)
-  .reduce((acc, rule) => {
-    acc[rule.ruleId] = rule
-    return acc
-  }, {})
-
-const rules = Object.values(validators)
+export const rules = Object.values(validators)
   .map((validator) => validator.describeRule())
   .sort(({ ruleId: a }, { ruleId: b }) => a - b)
 
-if (require.main === module) {
-  console.log(JSON.stringify(rules, null, 2))
-}
-
-module.exports = {
-  rules,
-  rulesById
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  log(JSON.stringify(rules, null, 2))
 }

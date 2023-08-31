@@ -1,8 +1,10 @@
-const { describe, it } = require('mocha')
-const path = require('path')
-const assert = require('assert')
-const validateManifest = require('../lib/manifest')
-const ChecksCollection = require('../lib/checksCollection.js')
+import path from 'path'
+import assert from 'assert'
+import * as url from 'url'
+import validateManifest from '../lib/manifest.js'
+import ChecksCollection from '../lib/checksCollection.js'
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 describe('manifest', () => {
   it('finds import errors', async () => {

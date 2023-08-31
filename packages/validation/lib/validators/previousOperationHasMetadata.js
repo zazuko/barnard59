@@ -1,28 +1,26 @@
-const { template } = require('../utils')
-const Issue = require('../issue')
+import { template } from '../utils.js'
+import Issue from '../issue.js'
 
-const previousOperationHasMetadata = {
+export default {
   ruleId: 100,
   ruleDescription: 'Previous operation should have metadata',
   messageSuccessTemplate: template`Validation can be performed for operation ${'operation'}: previous operation has metadata`,
   messageFailureTemplate: template`Cannot validate operation ${'operation'}: previous operation does not have metadata`,
-  validate (lastOperationProperties, step, operation) {
+  validate(lastOperationProperties, step, operation) {
     let issue
     if (lastOperationProperties === null) {
-      issue = Issue.warning({ id: this.ruleId, step, operation })
-    }
-    else {
-      issue = Issue.info({ id: this.ruleId, step, operation })
+      issue = Issue.warning({ rule: this, step, operation })
+    } else {
+      issue = Issue.info({ rule: this, step, operation })
     }
     return issue
   },
-  describeRule () {
+  describeRule() {
     return {
       ruleId: this.ruleId,
       ruleDescription: this.ruleDescription,
       messageSuccess: this.messageSuccessTemplate(),
-      messageFailure: this.messageFailureTemplate()
+      messageFailure: this.messageFailureTemplate(),
     }
-  }
+  },
 }
-module.exports = previousOperationHasMetadata

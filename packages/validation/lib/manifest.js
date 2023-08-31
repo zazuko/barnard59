@@ -1,24 +1,22 @@
-const path = require('path')
-const parser = require('./parser')
-const namespace = require('@rdfjs/namespace')
-const { removeFilePart } = require('./utils')
-const iriResolve = require('rdf-loader-code/lib/iriResolve')
-const validators = require('./validators')
+import path from 'path'
+import rdf from '@zazuko/env'
+import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
+import * as parser from './parser.js'
+import { removeFilePart } from './utils.js'
+import * as validators from './validators/index.js'
 
 const ns = {
-  schema: namespace('http://schema.org/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  p: namespace('https://pipeline.described.at/'),
-  code: namespace('https://code.described.at/')
+  p: rdf.namespace('https://pipeline.described.at/'),
+  code: rdf.namespace('https://code.described.at/'),
 }
 
-async function validate ({ file, checks }) {
+export default async function validate({ file, checks }) {
   const manifestPath = path.resolve(file)
   const manifestDir = removeFilePart(manifestPath)
   const manifestDirPart = manifestDir.substr(manifestDir.lastIndexOf('/') + 1)
 
   const manifestGraph = await parser.readGraph(manifestPath, checks)
-  const operations = manifestGraph.has(ns.rdf.type, ns.p.Operation)
+  const operations = manifestGraph.has(rdf.ns.rdf.type, ns.p.Operation)
     .map(operation => {
       const implementedBy = operation.out(ns.code.implementedBy)
       const codeLink = implementedBy.out(ns.code.link)
@@ -42,5 +40,3 @@ async function validate ({ file, checks }) {
     }
   }, Promise.resolve())
 }
-
-module.exports = validate
