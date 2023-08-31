@@ -11,3 +11,6 @@ flag_management:
     - name: barnard59-graph-store
     - name: barnard59-rdf
     - name: barnard59-sparql
+ignore:
+  - test
+  - "packages/*/test/**/*"
