@@ -56,14 +56,14 @@ async function validateManifest(file, options) {
     await validate({ file, checks })
   } catch (err) {
     if (options.debug) {
-      console.error(err)
+      log.error(err)
     }
   }
 
   checks.print(options.levels)
 
   if (!process.stdout.isTTY) {
-    console.log(checks.filterToJSON(options.levels))
+    log.log(checks.filterToJSON(options.levels))
   }
 
   if (checks.countIssues(options.strict)) {
