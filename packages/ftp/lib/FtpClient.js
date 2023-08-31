@@ -56,7 +56,7 @@ class FtpClient {
       },
     })
 
-    const finished = require('readable-stream').finished
+    const { finished } = await import('readable-stream')
 
     finished(output, () => {
       // eslint-disable-next-line no-console
