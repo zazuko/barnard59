@@ -18,6 +18,7 @@ jobs:
           - graph-store
           - rdf
           - sparql
+          - validation
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

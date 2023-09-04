@@ -1,0 +1,49 @@
+{
+  "name": "barnard59-validation",
+  "version": "0.2.0",
+  "type": "module",
+  "main": "cli.js",
+  "bin": {
+    "barnard59-validate": "./cli.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "posttest": "npm run generate-rules",
+    "generate-rules": "node lib/rules.js > ./rules.json"
+  },
+  "author": "Zazuko GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@jsdevtools/chai-exec": "^2.1.1",
+    "barnard59-base": "^1.2.1",
+    "barnard59-core": "^3.0.1",
+    "barnard59-formats": "^1.4.1",
+    "chai": "^4.3.0",
+    "deep-equal": "^2.0.5",
+    "esmock": "^2.3.8",
+    "sinon": "^15.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/validation"
+  },
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59",
+  "dependencies": {
+    "@rdfjs/formats-common": "^2",
+    "@zazuko/env": "^1.1.1",
+    "anylogger": "^1.0.11",
+    "anylogger-console": "^1.0.0",
+    "chalk": "^4.1.0",
+    "commander": "^11.0.0",
+    "rdf-dataset-ext": "^1.0.1",
+    "rdf-loader-code": "^1.0.0",
+    "rdf-utils-fs": "^2.1.0"
+  },
+  "mocha": {
+    "loader": "esmock"
+  }
+}
