@@ -1,6 +1,14 @@
 import clownface from 'clownface'
 import ns from './lib/namespaces.js'
 
+export class MultipleRootsError extends Error {
+  constructor(alternatives) {
+    super('Multiple root pipelines found')
+    this.name = 'MultipleRootsError'
+    this.alternatives = alternatives
+  }
+}
+
 function findPipeline(dataset, iri) {
   let ptr = clownface({ dataset })
 
@@ -19,10 +27,7 @@ function findPipeline(dataset, iri) {
   }
 
   if (ptr.terms.length > 1) {
-    const alternatives = ptr.values.map(x => `\n\t--pipeline ${x}`).join('')
-    const error = new Error(`Multiple root pipelines found. Try one of these:${alternatives}`)
-    error.skipTrace = true
-    throw error
+    throw new MultipleRootsError(ptr.values)
   }
 
   return ptr

@@ -11,6 +11,7 @@ import { BatchSpanProcessor } from '@opentelemetry/tracing'
 
 import { Command } from 'commander'
 import * as monitoringOptions from '../lib/cli/monitoringOptions.js'
+import { MultipleRootsError } from '../findPipeline.js'
 
 const sdk = new NodeSDK({
   // Automatic detection is disabled, see comment below
@@ -31,9 +32,10 @@ const onError = async err => {
   process.off('SIGTERM', onError)
 
   if (err) {
-    if (err.skipTrace) {
+    if (err instanceof MultipleRootsError) {
+      const alternatives = err.alternatives.map(x => `\n\t--pipeline ${x}`).join('')
       // eslint-disable-next-line no-console
-      console.log(err.message)
+      console.log(`Multiple root pipelines found. Try one of these:${alternatives}`)
     } else {
       // eslint-disable-next-line no-console
       console.log(err)
