@@ -11,6 +11,15 @@ describe('barnard59', function () {
   this.timeout(10000)
 
   describe('run', () => {
+    it('should suggest alternatives when multiple root pipelines exist', () => {
+      const pipelineFile = filenamePipelineDefinition('multiple-root')
+      const command = `${barnard59} run ${pipelineFile}`
+
+      const result = shell.exec(command, { silent: true, cwd })
+
+      strictEqual(result.code, 1)
+      expect(result.stdout).to.equal('Multiple root pipelines found. Try one of these:\n\t--pipeline http://example.org/pipeline/p1\n\t--pipeline http://example.org/pipeline/p2\n')
+    })
     it('should exit with error code 0 if there are no error while processing the pipeline', () => {
       const pipelineFile = filenamePipelineDefinition('simple')
       const command = `${barnard59} run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
