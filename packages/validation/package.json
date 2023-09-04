@@ -23,6 +23,15 @@
     "esmock": "^2.3.8",
     "sinon": "^15.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/validation"
+  },
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@rdfjs/formats-common": "^2",
     "@zazuko/env": "^1.1.1",
