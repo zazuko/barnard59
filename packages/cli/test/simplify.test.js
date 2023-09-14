@@ -11,14 +11,21 @@ const knownOperations = rdf.termMap([
   [rdf.namedNode('http://barnard59.zazuko.com/operations/concat'), rdf.namedNode('node:barnard59-base#concat')],
 ])
 
+const check = async name => {
+  const expected = await loadPipelineDefinition(`${name}-expected`)
+  const pipeline = await loadPipelineDefinition(name)
+  const sut = desugarWith({ knownOperations })
+
+  const result = sut(pipeline)
+
+  expect(toCanonical(result.dataset)).to.eq(toCanonical(expected.dataset))
+}
+
 describe('simplified syntax', () => {
   it('should desugar simplified syntax', async () => {
-    const expected = await loadPipelineDefinition('simplified-step-args-expected')
-    const pipeline = await loadPipelineDefinition('simplified-step-args')
-    const sut = desugarWith({ knownOperations })
-
-    const result = sut(pipeline)
-
-    expect(toCanonical(result.dataset)).to.eq(toCanonical(expected.dataset))
+    await check('simplified-step-args')
+  })
+  it('should ignore empty arguments', async () => {
+    await check('simplified-step-noargs')
   })
 })

@@ -3,6 +3,8 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
+@prefix csvw: <http://barnard59.zazuko.com/operations/formats/csvw/> .
+@prefix ntriples: <http://barnard59.zazuko.com/operations/formats/ntriples/> .
 
 <parseCsvw> a p:Pipeline, p:Readable;
   p:variables [
@@ -19,8 +21,8 @@
   p:steps [
     p:stepList ( 
       [ fs:createReadStream ("filename"^^p:VariableName) ] 
-      <parse>
-      <serialize>
+      [ csvw:parse (<parseMetadata>) ]
+      [ ntriples:serialize () ]
     )
   ].
 
@@ -31,16 +33,16 @@
 #   ];
 #   code:arguments ("filename"^^p:VariableName).
 
-<parse> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-formats/csvw.js#parse>
-  ];
-  code:arguments ( <parseMetadata> ).
+# <parse> a p:Step;
+#   code:implementedBy [ a code:EcmaScriptModule;
+#     code:link <node:barnard59-formats/csvw.js#parse>
+#   ];
+#   code:arguments ( <parseMetadata> ).
 
-<serialize> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-formats/ntriples.js#serialize>
-  ].
+# <serialize> a p:Step;
+#   code:implementedBy [ a code:EcmaScriptModule;
+#     code:link <node:barnard59-formats/ntriples.js#serialize>
+#   ].
 
 <parseMetadata> a p:Pipeline, p:ReadableObjectMode;
   p:steps [

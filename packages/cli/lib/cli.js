@@ -48,7 +48,10 @@ export const desugarWith = context => ptr => {
       if (knownStep) {
         const args = step.out(quad.predicate)
         step.deleteOut(quad.predicate)
-        step.addOut(ns.code.arguments, args)
+        // keep args only if non-empty
+        if (!ns.rdf.nil.equals(args.term)) {
+          step.addOut(ns.code.arguments, args)
+        }
         step.addOut(ns.rdf.type, ns.p.Step)
         const moduleNode = ptr.blankNode(`impl_${n++}`)
         moduleNode.addOut(ns.rdf.type, ns.code.EcmaScriptModule)
