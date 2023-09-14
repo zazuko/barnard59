@@ -2,6 +2,7 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
 
 <parseCsvw> a p:Pipeline, p:Readable;
   p:variables [
@@ -16,14 +17,19 @@
     ]
   ];
   p:steps [
-    p:stepList ( <readFile> <parse> <serialize> )
+    p:stepList ( 
+      [ fs:createReadStream ("filename"^^p:VariableName) ] 
+      <parse>
+      <serialize>
+    )
   ].
 
-<readFile> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:fs#createReadStream>
-  ];
-  code:arguments ("filename"^^p:VariableName).
+
+# <readFile> a p:Step;
+#   code:implementedBy [ a code:EcmaScriptModule;
+#     code:link <node:fs#createReadStream>
+#   ];
+#   code:arguments ("filename"^^p:VariableName).
 
 <parse> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
