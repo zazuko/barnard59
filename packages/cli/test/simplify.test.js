@@ -1,8 +1,11 @@
-import { expect } from 'chai'
+import { resolve } from 'path'
+import approvals from 'approvals'
 import rdf from '@zazuko/env'
 import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { desugarWith } from '../lib/cli.js'
+
+const dirname = resolve('test', 'support', 'approvals')
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url)
 
@@ -12,13 +15,12 @@ const knownOperations = rdf.termMap([
 ])
 
 const check = async name => {
-  const expected = await loadPipelineDefinition(`${name}-expected`)
   const pipeline = await loadPipelineDefinition(name)
   const sut = desugarWith({ knownOperations })
 
   const result = sut(pipeline)
 
-  expect(toCanonical(result.dataset)).to.eq(toCanonical(expected.dataset))
+  approvals.verify(dirname, name, toCanonical(result.dataset))
 }
 
 describe('simplified syntax', () => {
