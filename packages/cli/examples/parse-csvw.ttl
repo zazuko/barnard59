@@ -5,6 +5,7 @@
 @prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
 @prefix csvw: <http://barnard59.zazuko.com/operations/formats/csvw/> .
 @prefix ntriples: <http://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix jsonld: <http://barnard59.zazuko.com/operations/formats/jsonld/> .
 
 <parseCsvw> a p:Pipeline, p:Readable;
   p:variables [
@@ -26,36 +27,10 @@
     )
   ].
 
-
-# <readFile> a p:Step;
-#   code:implementedBy [ a code:EcmaScriptModule;
-#     code:link <node:fs#createReadStream>
-#   ];
-#   code:arguments ("filename"^^p:VariableName).
-
-# <parse> a p:Step;
-#   code:implementedBy [ a code:EcmaScriptModule;
-#     code:link <node:barnard59-formats/csvw.js#parse>
-#   ];
-#   code:arguments ( <parseMetadata> ).
-
-# <serialize> a p:Step;
-#   code:implementedBy [ a code:EcmaScriptModule;
-#     code:link <node:barnard59-formats/ntriples.js#serialize>
-#   ].
-
 <parseMetadata> a p:Pipeline, p:ReadableObjectMode;
   p:steps [
-    p:stepList ( <readMetadata> <parseMetadataStep> )
-  ].
-
-<readMetadata> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:fs#createReadStream>
-  ];
-  code:arguments ("metadata"^^p:VariableName).
-
-<parseMetadataStep> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-formats/jsonld.js#parse>
+    p:stepList ( 
+      [ fs:createReadStream ("metadata"^^p:VariableName) ] 
+      [ jsonld:parse () ] 
+    )
   ].

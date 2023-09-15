@@ -3,7 +3,7 @@ import approvals from 'approvals'
 import rdf from '@zazuko/env'
 import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
-import { desugarWith } from '../lib/cli.js'
+import { desugarWith } from '../lib/pipeline.js'
 
 const dirname = resolve('test', 'support', 'approvals')
 
@@ -18,9 +18,9 @@ const check = async name => {
   const pipeline = await loadPipelineDefinition(name)
   const sut = desugarWith({ knownOperations })
 
-  const result = sut(pipeline)
+  const result = sut(pipeline.dataset)
 
-  approvals.verify(dirname, name, toCanonical(result.dataset))
+  approvals.verify(dirname, name, toCanonical(result))
 }
 
 describe('simplified syntax', () => {
@@ -29,5 +29,8 @@ describe('simplified syntax', () => {
   })
   it('should ignore empty arguments', async () => {
     await check('simplified-step-noargs')
+  })
+  it('should process also sub-pipelines', async () => {
+    await check('simplified-step-sub')
   })
 })

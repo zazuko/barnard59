@@ -1,0 +1,18 @@
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix op: <http://barnard59.zazuko.com/operations/>.
+@base <http://example.org/pipeline/>.
+
+<> a p:Pipeline ;
+  p:steps [
+    p:stepList (
+      [ op:concat (<sub>) ]
+    )
+  ] .
+
+<sub> a p:Pipeline ;
+    p:steps [
+    p:stepList (
+      [ op:concat () ]
+    )
+  ] .
