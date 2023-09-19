@@ -12,10 +12,11 @@ const discoverOperations = async () => {
   for await (const { manifest } of discoverManifests()) {
     manifest
       .has(rdf.ns.rdf.type, ns.p.Operation)
-      .forEach(x => { // distinguish EcmaScript and EcmaScriptModule?
-        const link = x.out(ns.code.implementedBy).out(ns.code.link).term
-
-        ops.set(x.term, link)
+      .forEach(x => {
+        const impl = x.out(ns.code.implementedBy)
+        const type = impl.out(ns.rdf.type).term
+        const link = impl.out(ns.code.link).term
+        ops.set(x.term, { type, link })
       })
   }
 
@@ -36,6 +37,7 @@ export const desugarWith = context => dataset => {
           const [quad] = step.dataset.match(step.term)
           const knownStep = knownOperations.get(quad.predicate)
           if (knownStep) {
+            const { type, link } = knownStep
             const args = step.out(quad.predicate)
             step.deleteOut(quad.predicate)
             // keep args only if non-empty
@@ -44,8 +46,8 @@ export const desugarWith = context => dataset => {
             }
             step.addOut(ns.rdf.type, ns.p.Step)
             const moduleNode = ptr.blankNode(`impl_${n++}`)
-            moduleNode.addOut(ns.rdf.type, ns.code.EcmaScriptModule)
-            moduleNode.addOut(ns.code.link, knownStep)
+            moduleNode.addOut(ns.rdf.type, type)
+            moduleNode.addOut(ns.code.link, link)
             step.addOut(ns.code.implementedBy, moduleNode)
           }
         }

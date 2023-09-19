@@ -6,55 +6,55 @@
 <csvw/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse CSV on the Web";
   rdfs:comment "Parses the given CSV stream using the given metadata.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/csvw.js#parse>
   ].
 
 <jsonld/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse JSON-LD";
   rdfs:comment "Parses the given JSON-LD stream.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/jsonld.js#parse>
   ].
 
 <jsonld/parse/object> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Parse JSON-LD (Object)";
   rdfs:comment "Parses the given JSON-LD stream.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/jsonld.js#parseObject>
   ].
 
 <jsonld/serialize> a p:Operation, p:WritableObjectMode, p:Readable;
   rdfs:label "Serialize JSON-LD";
   rdfs:comment "Serializes the given RDF/JS Quads to JSON-LD.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/jsonld.js#serialize>
   ].
 
 <n3/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse N3";
   rdfs:comment "Parses the given N3 stream.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/n3.js#parse>
   ].
 
 <ntriples/serialize> a p:Operation, p:WritableObjectMode, p:Readable;
   rdfs:label "Serialize N-Triples";
   rdfs:comment "Serializes the given RDF/JS Quads to N-Triples.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/ntriples.js#serialize>
   ].
 
 <rdf-xml/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse RDF/XML";
   rdfs:comment "Parses the given RDF/XML stream.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/rdf-xml.js#parse>
   ].
 
 <xlsx/parse> a p:Operation, p:Writable, p:ReadableObjectMode;
   rdfs:label "Parse XSLX files based on the CSV on the Web standard";
   rdfs:comment "Parses the given XLSX stream using the given metadata.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-formats/xlsx.js#parse>
   ].
