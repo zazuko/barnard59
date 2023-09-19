@@ -33,4 +33,7 @@ describe('simplified syntax', () => {
   it('should process also sub-pipelines', async () => {
     await check('simplified-step-sub')
   })
+  it('should handle named arguments', async () => {
+    await check('simplified-step-args-named')
+  })
 })
