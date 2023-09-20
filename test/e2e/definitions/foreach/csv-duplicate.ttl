@@ -1,6 +1,8 @@
 @base <http://example.org/pipeline/>.
 @prefix code: <https://code.described.at/>.
 @prefix p: <https://pipeline.described.at/>.
+@prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
+@prefix base: <http://barnard59.zazuko.com/operations/base/> .
 
 <> a p:Pipeline, p:Readable;
   p:variables [
@@ -10,25 +12,19 @@
     ]
   ];
   p:steps [
-    p:stepList (<readFile> <parseCsv> <forEach> <serializeJson>)
+    p:stepList
+    (
+      [ fs:createReadStream("${filename}"^^code:EcmaScriptTemplateLiteral) ]
+      <parseCsv>
+      [ base:forEach(<subPipeline>) ]
+      <serializeJson>
+    )
   ].
-
-<readFile> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:fs#createReadStream>
-  ];
-  code:arguments ("${filename}"^^code:EcmaScriptTemplateLiteral).
 
 <parseCsv> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <file:operations/parseCsv.js#default>
   ].
-
-<forEach> a p:Step ;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-base/forEach.js#default>
-  ];
-  code:arguments (<subPipeline>).
 
 <serializeJson> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;

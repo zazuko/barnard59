@@ -58,7 +58,7 @@ export const desugarWith = context => dataset => {
   return ptr.dataset
 }
 
-const desugar = async dataset => {
+export const desugar = async dataset => {
   const knownOperations = await discoverOperations()
   return desugarWith({ knownOperations })(dataset)
 }

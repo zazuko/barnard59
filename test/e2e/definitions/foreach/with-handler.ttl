@@ -2,10 +2,16 @@
 @prefix code: <https://code.described.at/>.
 @prefix p: <https://pipeline.described.at/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix base: <http://barnard59.zazuko.com/operations/base/> .
+@prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
 
 <> a p:Pipeline, p:Readable;
   p:steps [
-    p:stepList (<iterateDirectory> <printLength>)
+    p:stepList
+    (
+      <iterateDirectory>
+      [ base:forEach ( <Print> "file" ) ]
+    )
   ] .
 
 <iterateDirectory> a p:Step;
@@ -14,22 +20,14 @@
   ];
   code:arguments ("definitions/foreach").
 
-<printLength> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-base/forEach.js#default>
-  ];
-  code:arguments (<Print> "file").
-
 <Print> a p:Pipeline, p:ReadableObjectMode;
   p:steps [
-    p:stepList (<readFile> <getLength>)
+    p:stepList
+    (
+      [ fs:createReadStream("file"^^p:VariableName) ]
+      <getLength>
+    )
   ].
-
-<readFile> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:fs#createReadStream>
-  ];
-  code:arguments ("file"^^p:VariableName).
 
 <getLength> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
