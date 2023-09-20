@@ -1,6 +1,6 @@
 import fetch from './lib/fetch.js'
 
-function get (options) {
+function get(options) {
   return fetch(options)
 }
 

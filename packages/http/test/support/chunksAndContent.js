@@ -1,6 +1,6 @@
 import { Readable } from 'readable-stream'
 
-function chunksAndContent () {
+function chunksAndContent() {
   const chunks = []
 
   for (let i = 0; i < 1000; i++) {
@@ -9,7 +9,7 @@ function chunksAndContent () {
 
   return {
     content: Buffer.concat(chunks).toString(),
-    stream: Readable.from(chunks)
+    stream: Readable.from(chunks),
   }
 }
 

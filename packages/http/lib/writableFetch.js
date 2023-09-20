@@ -3,7 +3,7 @@ import nodeFetch from 'node-fetch'
 import { PassThrough } from 'readable-stream'
 import tracer from './tracer.js'
 
-async function fetch ({ method = 'POST', url, ...options } = {}) {
+async function fetch({ method = 'POST', url, ...options } = {}) {
   const inputStream = new PassThrough()
   const outputStream = new PassThrough()
 

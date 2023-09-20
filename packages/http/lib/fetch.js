@@ -3,7 +3,7 @@ import toReadable from 'duplex-to/readable.js'
 import nodeFetch from 'node-fetch'
 import tracer from './tracer.js'
 
-async function fetch ({ method = 'GET', url, ...options } = {}) {
+async function fetch({ method = 'GET', url, ...options } = {}) {
   return await tracer.startActiveSpan('fetch', async span => {
     try {
       const response = await nodeFetch(url, { method, ...options })
