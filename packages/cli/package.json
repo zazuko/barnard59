@@ -37,6 +37,7 @@
     "clownface": "^2.0.0",
     "commander": "^11.0.0",
     "find-plugins": "^1.1.7",
+    "is-graph-pointer": "^2.1.0",
     "lodash": "^4.17.21",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-utils-fs": "^2.2.0",

@@ -1,8 +1,8 @@
 import { dirname, resolve } from 'path'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 import rdf from '@zazuko/env'
+import { isGraphPointer } from 'is-graph-pointer'
 import fromFile from 'rdf-utils-fs/fromFile.js'
-import clownface from 'clownface'
 import findPipeline from '../findPipeline.js'
 import discoverManifests from './discoverManifests.js'
 import ns from './namespaces.js'
@@ -12,11 +12,11 @@ const discoverOperations = async () => {
   for await (const { manifest } of discoverManifests()) {
     manifest
       .has(rdf.ns.rdf.type, ns.p.Operation)
-      .forEach(x => {
-        const impl = x.out(ns.code.implementedBy)
+      .forEach(operation => {
+        const impl = operation.out(ns.code.implementedBy)
         const type = impl.out(ns.rdf.type).term
         const link = impl.out(ns.code.link).term
-        ops.set(x.term, { type, link })
+        ops.set(operation.term, { type, link })
       })
   }
 
@@ -25,34 +25,35 @@ const discoverOperations = async () => {
 
 export const desugarWith = context => dataset => {
   const { knownOperations } = context
-  const ptr = clownface({ dataset })
+  const ptr = rdf.clownface({ dataset })
   let n = 0
-  ptr.has(ns.rdf.type, ns.p.Pipeline)
-    .out(ns.p.steps)
-    .out(ns.p.stepList)
-    .forEach(x => {
-      for (const step of x.list()) {
-        if (step.out(ns.code.implementedBy).terms.length === 0) {
-          // when there is no implementation, we expect a known operation
-          const [quad] = step.dataset.match(step.term)
-          const knownStep = knownOperations.get(quad.predicate)
-          if (knownStep) {
-            const { type, link } = knownStep
-            const args = step.out(quad.predicate)
-            step.deleteOut(quad.predicate)
-            // keep args only if non-empty
-            if (!ns.rdf.nil.equals(args.term)) {
-              step.addOut(ns.code.arguments, args)
-            }
-            step.addOut(ns.rdf.type, ns.p.Step)
-            const moduleNode = ptr.blankNode(`impl_${n++}`)
-            moduleNode.addOut(ns.rdf.type, type)
-            moduleNode.addOut(ns.code.link, link)
-            step.addOut(ns.code.implementedBy, moduleNode)
-          }
-        }
+  ptr.has(ns.p.stepList).out(ns.p.stepList).forEach(listPointer => {
+    for (const step of listPointer.list()) {
+      if (isGraphPointer(step.has(ns.rdf.type, ns.p.Step)) ||
+          isGraphPointer(step.has(ns.rdf.type, ns.p.Pipeline))) {
+        continue
       }
-    })
+      // we expect a known operation
+      const [quad] = step.dataset.match(step.term)
+      const knownStep = knownOperations.get(quad?.predicate)
+      if (!knownStep) {
+        continue // log warning
+      }
+
+      const { type, link } = knownStep
+      const args = step.out(quad.predicate)
+      step.deleteOut(quad.predicate)
+      // keep args only if non-empty
+      if (!ns.rdf.nil.equals(args.term)) {
+        step.addOut(ns.code.arguments, args)
+      }
+      step.addOut(ns.rdf.type, ns.p.Step)
+      const moduleNode = ptr.blankNode(`impl_${n++}`)
+      moduleNode.addOut(ns.rdf.type, type)
+      moduleNode.addOut(ns.code.link, link)
+      step.addOut(ns.code.implementedBy, moduleNode)
+    }
+  })
 
   return ptr.dataset
 }
