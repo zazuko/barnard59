@@ -1,8 +1,7 @@
 import { strictEqual } from 'assert'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
-import { describe, it } from 'mocha'
+import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import post from '../post.js'
 import chunksAndContent from './support/chunksAndContent.js'
 

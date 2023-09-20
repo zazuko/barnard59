@@ -23,12 +23,12 @@
     "@opentelemetry/api": "^1.0.1",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.0.0",
-    "node-fetch": "^2.6.1",
-    "readable-stream": "^3.6.0"
+    "node-fetch": "^3.3.2",
+    "readable-stream": ">=3"
   },
   "devDependencies": {
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
-    "isstream": "^0.1.2"
+    "is-stream": "^3.0.0"
   }
 }
