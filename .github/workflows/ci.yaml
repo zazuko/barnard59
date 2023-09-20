@@ -16,6 +16,7 @@ jobs:
           - formats
           - ftp
           - graph-store
+          - http
           - rdf
           - sparql
           - validation
