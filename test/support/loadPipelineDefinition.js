@@ -4,6 +4,7 @@ import rdf from '@zazuko/env'
 import fromFile from 'rdf-utils-fs/fromFile.js'
 import namespace from '@rdfjs/namespace'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { desugar } from 'barnard59/lib/pipeline.js'
 
 const ex = namespace('http://example.org/pipeline/')
