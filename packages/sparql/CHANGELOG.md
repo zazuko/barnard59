@@ -1,5 +1,11 @@
 # barnard59-sparql
 
+## 1.1.2
+
+### Patch Changes
+
+- f0814d5: Operations in manifest had wrong types
+
 ## 1.1.1
 
 ### Patch Changes

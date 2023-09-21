@@ -1,6 +1,6 @@
 {
   "name": "barnard59-formats",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -27,7 +27,7 @@
     "@rdfjs/serializer-ntriples": "^2.0.0",
     "@rdfjs/sink-to-duplex": "^1.0.0",
     "@zazuko/env": "^1.1.0",
-    "barnard59-base": "^1.0.0",
+    "barnard59-base": "^1.2.2",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-parser-csvw": "^0.15.0",
     "rdf-parser-csvw-xlsx": "^0.1.0",

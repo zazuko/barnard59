@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 1.4.3
+
+### Patch Changes
+
+- f0814d5: Operations in manifest had wrong types
+
 ## 1.4.2
 
 ### Patch Changes

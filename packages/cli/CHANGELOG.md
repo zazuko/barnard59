@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.2
+
+### Patch Changes
+
+- a0935df: Improve error output when multiple pipelines are found (fixes #160)
+- ddcbd04: Introduce a simpler syntax for pipeline steps (resolves #131)
+- Updated dependencies [249b8ea]
+  - barnard59-core@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes
