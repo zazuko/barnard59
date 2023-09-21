@@ -4,6 +4,7 @@ import { program } from 'commander'
 import { parse } from '../pipeline.js'
 import ns from '../namespaces.js'
 import runAction from './runAction.js'
+import { combine } from './options.js'
 
 const FALSE = rdf.literal('false', rdf.ns.xsd.boolean)
 const require = module.createRequire(import.meta.url)
@@ -44,13 +45,13 @@ export async function * discoverCommands(manifests) {
 
       yield pipelineSubCommand
         .action(async (options) => {
-          return runAction(ptr, basePath, {
+          return runAction(ptr, basePath, combine({
             ...options,
             variable: new Map([
               ...options.variable,
               ...Object.entries(options).filter(([key]) => variables.some(v => v.name === key)),
             ]),
-          })
+          }))
         })
     }
   }
