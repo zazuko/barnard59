@@ -1,6 +1,6 @@
 {
   "name": "barnard59-core",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Core component of Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -36,7 +36,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "barnard59-http": "^1.0.0",
+    "barnard59-http": "^1.1.1",
     "barnard59-test-support": "^0.0.1",
     "chai": "^4.3.7",
     "get-stream": "^6.0.1",

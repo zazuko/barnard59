@@ -1,5 +1,13 @@
 # v1.0.0
 
+## 1.4.2
+
+### Patch Changes
+
+- f0814d5: Operations in manifest had wrong types
+- Updated dependencies [f0814d5]
+  - barnard59-base@1.2.2
+
 ## 1.4.1
 
 ### Patch Changes
