@@ -3,7 +3,7 @@ import approvals from 'approvals'
 import rdf from '@zazuko/env'
 import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
-import { desugarWith } from '../lib/pipeline.js'
+import { desugar } from '../lib/pipeline.js'
 
 const dirname = resolve('test', 'support', 'approvals')
 
@@ -18,10 +18,9 @@ const knownOperations = rdf.termMap([
 ])
 
 const check = async name => {
-  const pipeline = await loadPipelineDefinition(name)
-  const sut = desugarWith({ knownOperations })
+  const pipeline = await loadPipelineDefinition(name, { desugar: false })
 
-  const result = sut(pipeline.dataset)
+  const result = await desugar(pipeline.dataset, { knownOperations })
 
   approvals.verify(dirname, name, toCanonical(result))
 }

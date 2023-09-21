@@ -23,8 +23,8 @@ const discoverOperations = async () => {
   return ops
 }
 
-export const desugarWith = context => dataset => {
-  const { knownOperations, logger } = context
+export const desugar = async (dataset, { logger, knownOperations } = {}) => {
+  knownOperations = knownOperations ?? await discoverOperations()
   const ptr = rdf.clownface({ dataset })
   let n = 0
   ptr.has(ns.p.stepList).out(ns.p.stepList).forEach(listPointer => {
@@ -59,18 +59,13 @@ export const desugarWith = context => dataset => {
   return ptr.dataset
 }
 
-export const desugar = async ({ logger }, dataset) => {
-  const knownOperations = await discoverOperations()
-  return desugarWith({ knownOperations, logger })(dataset)
-}
-
 async function fileToDataset(filename) {
   return fromStream(rdf.dataset(), fromFile(filename))
 }
 
 export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
-  const ptr = findPipeline(await desugar({ logger }, dataset), iri)
+  const ptr = findPipeline(await desugar(dataset, { logger }), iri)
 
   return {
     basePath: resolve(dirname(filename)),

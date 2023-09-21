@@ -55,5 +55,8 @@
     "rdf-ext": "^2",
     "shelljs": "^0.8.4",
     "strip-ansi": "^7.0.0"
+  },
+  "mocha": {
+    "loader": "esmock"
   }
 }
