@@ -24,7 +24,7 @@ const discoverOperations = async () => {
 }
 
 export const desugarWith = context => dataset => {
-  const { knownOperations } = context
+  const { knownOperations, logger } = context
   const ptr = rdf.clownface({ dataset })
   let n = 0
   ptr.has(ns.p.stepList).out(ns.p.stepList).forEach(listPointer => {
@@ -37,7 +37,8 @@ export const desugarWith = context => dataset => {
       const [quad] = step.dataset.match(step.term)
       const knownStep = knownOperations.get(quad?.predicate)
       if (!knownStep) {
-        continue // log warning
+        logger?.warn(`Operation <${quad?.predicate.value}> not found in known manifests. Have you added the right \`branard59-*\` package as dependency?`)
+        continue
       }
 
       const { type, link } = knownStep
@@ -58,18 +59,18 @@ export const desugarWith = context => dataset => {
   return ptr.dataset
 }
 
-export const desugar = async dataset => {
+export const desugar = async ({ logger }, dataset) => {
   const knownOperations = await discoverOperations()
-  return desugarWith({ knownOperations })(dataset)
+  return desugarWith({ knownOperations, logger })(dataset)
 }
 
 async function fileToDataset(filename) {
   return fromStream(rdf.dataset(), fromFile(filename))
 }
 
-export async function parse(filename, iri) {
+export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
-  const ptr = findPipeline(await desugar(dataset), iri)
+  const ptr = findPipeline(await desugar({ logger }, dataset), iri)
 
   return {
     basePath: resolve(dirname(filename)),

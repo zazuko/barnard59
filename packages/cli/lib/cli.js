@@ -1,4 +1,5 @@
 import { program } from 'commander'
+import { defaultLogger } from 'barnard59-core'
 import runAction from './cli/runAction.js'
 import * as monitoringOptions from './cli/monitoringOptions.js'
 import * as commonOptions from './cli/commonOptions.js'
@@ -22,7 +23,8 @@ const runCommand = program
   .option('--output [filename]', 'output file', '-')
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .action(async (filename, options) => {
-    const { basePath, ptr } = await parse(filename, options.pipeline)
+    const logger = defaultLogger()
+    const { basePath, ptr } = await parse(filename, options.pipeline, { logger })
     return runAction(ptr, basePath, options)
   })
 

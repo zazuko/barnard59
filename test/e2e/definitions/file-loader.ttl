@@ -11,7 +11,6 @@
         (
           _:openSelf
           [ op:formats\/n3\/parse() ]
-          _:serialize
           [ op:formats\/ntriples\/serialize() ]
         )
     ] .

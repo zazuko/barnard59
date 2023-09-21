@@ -7,6 +7,7 @@
     "@rdfjs/namespace": "^2.0.0",
     "@zazuko/env": "^1.0.1",
     "barnard59": "^3.0.1",
+    "barnard59-core": "^3.0.1",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-utils-fs": "^2.3.0"
   }
