@@ -7,21 +7,21 @@
 <operation/graph-store/get> a p:Operation, p:ReadableObjectMode;
   rdfs:label "Read RDF/JS Quads (Graph Store)";
   rdfs:comment "Reads RDF/JS Quads from the given named graph using the SPARQL Graph Store Protocol.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-graph-store/get.js#default>
   ].
 
 <operation/graph-store/post> a p:Operation, p:WritableObjectMode;
   rdfs:label "Append RDF/JS Quads (Graph Store)";
   rdfs:comment "Appends RDF/JS Quads to the given named graph using the SPARQL Graph Store Protocol.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-graph-store/post.js#default>
   ].
 
 <operation/graph-store/put> a p:Operation, p:WritableObjectMode;
   rdfs:label "Write RDF/JS Quads (Graph Store)";
   rdfs:comment "Writes RDF/JS Quads to the given named graph using the SPARQL Graph Store Protocol.";
-  code:implementedBy [ a code:EcmaScript;
+  code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-graph-store/put.js#default>
   ].
 

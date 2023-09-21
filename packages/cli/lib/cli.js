@@ -5,6 +5,7 @@ import * as commonOptions from './cli/commonOptions.js'
 import { discoverCommands } from './cli/dynamicCommands.js'
 import discoverManifests from './discoverManifests.js'
 import { parse } from './pipeline.js'
+import { combine } from './cli/options.js'
 
 program
   .addOption(commonOptions.variable)
@@ -22,8 +23,9 @@ const runCommand = program
   .option('--output [filename]', 'output file', '-')
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .action(async (filename, options) => {
-    const { basePath, ptr } = await parse(filename, options.pipeline)
-    return runAction(ptr, basePath, options)
+    const combinedOptions = combine(options)
+    const { basePath, ptr } = await parse(filename, options.pipeline, combinedOptions)
+    return runAction(ptr, basePath, combinedOptions)
   })
 
 export default async function () {

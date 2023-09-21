@@ -9,6 +9,7 @@ import formats from '@rdfjs/formats-common'
 import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 import rdf from '@zazuko/env'
+import fromFile from 'rdf-utils-fs/fromFile.js'
 import { promisedEcmaScriptLoader, promisedUrlLoader } from './asyncLoaders.js'
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'definitions')
@@ -77,6 +78,7 @@ describe('Pipeline', () => {
     const out = await fromStream(rdf.dataset(), formats.parsers.import('text/turtle', pipeline.stream))
 
     // then
-    expect(toCanonical(out)).to.eq(toCanonical(ptr.dataset))
+    const source = await fromStream(rdf.dataset(), fromFile('definitions/file-loader.ttl'))
+    expect(toCanonical(out)).to.eq(toCanonical(source))
   })
 })

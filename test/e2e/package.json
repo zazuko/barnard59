@@ -9,6 +9,7 @@
   "dependencies": {
     "@rdfjs/formats-common": "^2.2.0",
     "@zazuko/env": "^1.0.1",
+    "barnard59-base": "^1.2.1",
     "barnard59-core": "^3.0.0",
     "barnard59-formats": "^1.4.0",
     "barnard59-http": "^1.1.0",
@@ -19,6 +20,7 @@
     "readable-stream": "^3",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-loader-code": "^1.0.0",
+    "rdf-utils-fs": "^2.3.0",
     "string-to-stream": "^3.0.1"
   }
 }

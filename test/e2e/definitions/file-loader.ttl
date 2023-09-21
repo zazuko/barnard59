@@ -2,13 +2,16 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix op: <http://barnard59.zazuko.com/operations/> .
 
 <> a p:Pipeline, p:Readable ;
   p:steps
     [
       p:stepList
         (
-          _:openSelf _:parse _:serialize
+          _:openSelf
+          [ op:formats\/n3\/parse() ]
+          [ op:formats\/ntriples\/serialize() ]
         )
     ] .
 
@@ -22,22 +25,4 @@ _:openSelf
     (
       "definitions/file-loader.ttl"^^p:FileContents
     )
-.
-
-_:parse
-  a p:Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <node:barnard59-formats/n3.js#parse> ;
-    ] ;
-.
-
-_:serialize
-  a p:Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <node:barnard59-formats/ntriples.js#serialize> ;
-    ] ;
 .
