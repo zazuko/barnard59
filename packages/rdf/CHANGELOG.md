@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 1.4.4
+
+### Patch Changes
+
+- 0c07f01: Updated `rdf-transform-triple-to-quad` to v2
+
 ## 1.4.3
 
 ### Patch Changes
