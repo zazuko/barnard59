@@ -34,7 +34,7 @@
     "proto-fetch": "^1.0.0",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-literal": "^1.3.0",
-    "rdf-transform-triple-to-quad": "^1.0.2",
+    "rdf-transform-triple-to-quad": "^2.0.0",
     "rdf-utils-fs": "^2.3.0",
     "readable-stream": "^3.6.0"
   },
@@ -44,8 +44,7 @@
     "chai": "^4.3.7",
     "get-stream": "^6.0.1",
     "mocha-chai-jest-snapshot": "^1.1.4",
-    "nock": "^13.2.4",
-    "rdf-ext": "^2.2.0"
+    "nock": "^13.2.4"
   },
   "engines": {
     "node": ">= 14.0.0"

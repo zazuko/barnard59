@@ -2,7 +2,8 @@ import { deepStrictEqual, strictEqual } from 'assert'
 import toNT from '@rdfjs/to-ntriples'
 import clownface from 'clownface'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
+import toStream from 'rdf-dataset-ext/toStream.js'
 import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
 import createObservationsStream from '../support/createObservationsStream.js'
 import datasetStreamToClownface from '../support/datasetStreamToClownface.js'
@@ -393,10 +394,10 @@ describe('cube.buildCubeShape', () => {
   })
 
   it('should merge given metadata to cube metadata', async () => {
-    const metadata = rdf.dataset([
+    const metadata = toStream(rdf.dataset([
       rdf.quad(ns.ex.cube, ns.schema.name, rdf.literal('Test Cube')),
       rdf.quad(ns.ex.other, ns.schema.name, rdf.literal('Test Other')),
-    ]).toStream()
+    ]))
     const input = createObservationsStream({
       observations: [{
         [ns.ex.property.value]: rdf.literal('test'),
@@ -414,9 +415,9 @@ describe('cube.buildCubeShape', () => {
   })
 
   it('should ignore cube:observationConstraint property in cube metadata', async () => {
-    const metadata = rdf.dataset([
+    const metadata = toStream(rdf.dataset([
       rdf.quad(ns.ex.cube, ns.cube.observationConstraint, ns.ex.shape),
-    ]).toStream()
+    ]))
     const input = createObservationsStream({
       observations: [{
         [ns.ex.property.value]: rdf.literal('test'),
@@ -455,7 +456,7 @@ describe('cube.buildCubeShape', () => {
         [ns.ex.property.value]: rdf.literal('test'),
       }],
     })
-    const transform = buildCubeShape({ metadata: dataset.toStream() })
+    const transform = buildCubeShape({ metadata: toStream(dataset) })
 
     input.pipe(transform)
 
@@ -503,7 +504,7 @@ describe('cube.buildCubeShape', () => {
         [ns.ex.property2.value]: rdf.literal('B'),
       }],
     })
-    const transform = buildCubeShape({ metadata: dataset.toStream() })
+    const transform = buildCubeShape({ metadata: toStream(dataset) })
 
     input.pipe(transform)
 
@@ -538,7 +539,7 @@ describe('cube.buildCubeShape', () => {
         [ns.ex.property2.value]: rdf.literal('B'),
       }],
     })
-    const transform = buildCubeShape({ metadata: dataset.toStream() })
+    const transform = buildCubeShape({ metadata: toStream(dataset) })
 
     input.pipe(transform)
 
@@ -569,7 +570,7 @@ describe('cube.buildCubeShape', () => {
       }],
     })
     const targetShapeGraph = rdf.namedNode('http://shapes.org')
-    const transform = buildCubeShape({ metadata: dataset.toStream(), graph: targetShapeGraph })
+    const transform = buildCubeShape({ metadata: toStream(dataset), graph: targetShapeGraph })
 
     input.pipe(transform)
 
@@ -592,7 +593,7 @@ describe('cube.buildCubeShape', () => {
       }],
     })
     const targetShapeGraph = 'http://shapes.org'
-    const transform = buildCubeShape({ metadata: dataset.toStream(), graph: targetShapeGraph })
+    const transform = buildCubeShape({ metadata: toStream(dataset), graph: targetShapeGraph })
 
     input.pipe(transform)
 
