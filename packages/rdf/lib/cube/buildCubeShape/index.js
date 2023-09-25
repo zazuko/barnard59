@@ -27,7 +27,7 @@ function defaultShape({ term }) {
 }
 
 class CubeShapeBuilder extends Transform {
-  constructor({ excludeValuesOf, metadata, graph } = {}) {
+  constructor({ excludeValuesOf, metadata, graph, propertyShapeId } = {}) {
     super({ objectMode: true })
 
     this.options = {
@@ -37,6 +37,7 @@ class CubeShapeBuilder extends Transform {
       metadataStream: metadata,
       shape: defaultShape,
       graph,
+      propertyShapeId,
     }
 
     this.init = once(() => this._init())
@@ -75,6 +76,7 @@ class CubeShapeBuilder extends Transform {
         metadata: $rdf.clownface({ dataset: this.options.metadata, term: context.term }),
         observationSet: context.observationSet,
         shape: context.shape,
+        propertyShapeId: this.options.propertyShapeId,
       })
 
       this.options.cubes.set(context.term, context.cube)
@@ -103,8 +105,8 @@ function toNamedNode(item) {
   return typeof item === 'string' ? $rdf.namedNode(item) : item
 }
 
-function buildCubeShape({ excludeValuesOf, metadata, graph } = {}) {
-  return new CubeShapeBuilder({ excludeValuesOf, metadata, graph })
+function buildCubeShape({ excludeValuesOf, metadata, graph, propertyShapeId } = {}) {
+  return new CubeShapeBuilder({ excludeValuesOf, metadata, graph, propertyShapeId })
 }
 
 export default buildCubeShape
