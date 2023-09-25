@@ -1,6 +1,5 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import toNT from '@rdfjs/to-ntriples'
-import clownface from 'clownface'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from '@zazuko/env'
 import toStream from 'rdf-dataset-ext/toStream.js'
@@ -438,7 +437,7 @@ describe('cube.buildCubeShape', () => {
   it('should merge given metadata with blank nodes to cube metadata', async () => {
     const dataset = rdf.dataset()
 
-    clownface({ dataset, term: ns.ex.cube })
+    rdf.clownface({ dataset, term: ns.ex.cube })
       .addOut(ns.ex.propertyA, null, ptr => {
         ptr
           .addOut(ns.ex.propertyB, 'Text B')
@@ -480,7 +479,7 @@ describe('cube.buildCubeShape', () => {
   it('should merge given metadata to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
-    clownface({ dataset, term: ns.ex.cube })
+    rdf.clownface({ dataset, term: ns.ex.cube })
       .addOut(ns.cube.observationConstraint, shape => {
         shape.addOut(ns.sh.property, property => {
           property
@@ -489,7 +488,7 @@ describe('cube.buildCubeShape', () => {
         })
       })
 
-    clownface({ dataset, term: ns.ex.otherCube })
+    rdf.clownface({ dataset, term: ns.ex.otherCube })
       .addOut(ns.cube.observationConstraint, shape => {
         shape.addOut(ns.sh.property, property => {
           property
@@ -519,7 +518,7 @@ describe('cube.buildCubeShape', () => {
   it('should merge given metadata with blank nodes to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
-    clownface({ dataset, term: ns.ex.cube })
+    rdf.clownface({ dataset, term: ns.ex.cube })
       .addOut(ns.cube.observationConstraint, shape => {
         shape.addOut(ns.sh.property, property => {
           property

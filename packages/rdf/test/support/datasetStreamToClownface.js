@@ -1,4 +1,3 @@
-import clownface from 'clownface'
 import getStream from 'get-stream'
 import rdf from '@zazuko/env'
 import addAll from 'rdf-dataset-ext/addAll.js'
@@ -6,7 +5,7 @@ import addAll from 'rdf-dataset-ext/addAll.js'
 async function datasetStreamToClownface(stream) {
   const datasets = await getStream.array(stream)
 
-  return clownface({ dataset: datasets.reduce((all, current) => addAll(all, current), rdf.dataset()) })
+  return rdf.clownface({ dataset: datasets.reduce((all, current) => addAll(all, current), rdf.dataset()) })
 }
 
 export default datasetStreamToClownface
