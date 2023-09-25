@@ -3,6 +3,7 @@ import toNT from '@rdfjs/to-ntriples'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from '@zazuko/env'
 import toStream from 'rdf-dataset-ext/toStream.js'
+import { expect } from 'chai'
 import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
 import createObservationsStream from '../support/createObservationsStream.js'
 import datasetStreamToClownface from '../support/datasetStreamToClownface.js'
@@ -162,6 +163,32 @@ describe('cube.buildCubeShape', () => {
     strictEqual(pathes.has(ns.rdf.type), true)
     strictEqual(pathes.has(ns.ex.propertyA), true)
     strictEqual(pathes.has(ns.ex.propertyB), true)
+  })
+
+  it('should generate a NamedNode property shape for each dimension', async () => {
+    const input = createObservationsStream({
+      observations: [{
+        [ns.ex.propertyA.value]: rdf.literal('A'),
+        [ns.ex.propertyB.value]: rdf.literal('B'),
+      }],
+    })
+    const transform = buildCubeShape({
+      propertyShapeId(cube, dimension) {
+        return rdf.namedNode(`${cube.term.value}/dim?id=${dimension.predicate.value}`)
+      },
+    })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const propertyShapes = result.node(ns.ex('cube/shape')).out(ns.sh.property)
+
+    expect(propertyShapes.terms).to.deep.contain.all.members([
+      rdf.namedNode('http://example.org/cube/dim?id=http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+      rdf.namedNode('http://example.org/cube/dim?id=http://example.org/propertyA'),
+      rdf.namedNode('http://example.org/cube/dim?id=http://example.org/propertyB'),
+    ])
   })
 
   it('should generate nodeKind for literal values', async () => {
