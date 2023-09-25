@@ -1,4 +1,3 @@
-import clownface from 'clownface'
 import once from 'lodash/once.js'
 import $rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
@@ -62,7 +61,7 @@ class CubeShapeBuilder extends Transform {
 
     const context = {
       dataset,
-      ptr: clownface({ dataset }).has(ns.rdf.type, ns.cube.Observation),
+      ptr: $rdf.clownface({ dataset }).has(ns.rdf.type, ns.cube.Observation),
     }
 
     context.observationSet = context.ptr.in(ns.cube.observation).term
@@ -73,7 +72,7 @@ class CubeShapeBuilder extends Transform {
     if (!context.cube) {
       context.cube = new Cube({
         term: context.term,
-        metadata: clownface({ dataset: this.options.metadata, term: context.term }),
+        metadata: $rdf.clownface({ dataset: this.options.metadata, term: context.term }),
         observationSet: context.observationSet,
         shape: context.shape,
       })

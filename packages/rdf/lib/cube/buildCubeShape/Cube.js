@@ -1,4 +1,3 @@
-import clownface from 'clownface'
 import rdf from '@zazuko/env'
 import addAll from 'rdf-dataset-ext/addAll.js'
 import cbdCopy from '../../cbdCopy.js'
@@ -38,19 +37,19 @@ class Cube {
   toDataset({ shapeGraph } = { shapeGraph: undefined }) {
     const dataset = rdf.dataset()
 
-    const cube = clownface({ dataset, term: this.term })
+    const cube = rdf.clownface({ dataset, term: this.term })
       .addOut(ns.rdf.type, ns.cube.Cube)
       .addOut(ns.cube.observationSet, this.observationSet)
       .addOut(ns.cube.observationConstraint, this.shape)
 
     cbdCopy(this.metadata, cube, { ignore: rdf.termSet([ns.cube.observationConstraint]) })
 
-    clownface({ dataset, term: this.observationSet })
+    rdf.clownface({ dataset, term: this.observationSet })
       .addOut(ns.rdf.type, ns.cube.ObservationSet)
 
     const shapeDataset = rdf.dataset()
 
-    clownface({ dataset: shapeDataset, term: this.shape })
+    rdf.clownface({ dataset: shapeDataset, term: this.shape })
       .addOut(ns.rdf.type, [ns.sh.NodeShape, ns.cube.Constraint])
       .addOut(ns.sh.closed, true)
 
