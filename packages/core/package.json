@@ -22,7 +22,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.0.1",
     "@rdfjs/namespace": "^2.0.0",
-    "@zazuko/env": "^1.0.1",
+    "@zazuko/env": "^1.3.2",
     "clownface": "^2.0.0",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.1.1",

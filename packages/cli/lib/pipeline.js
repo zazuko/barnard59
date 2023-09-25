@@ -26,7 +26,6 @@ const discoverOperations = async () => {
 export const desugar = async (dataset, { logger, knownOperations } = {}) => {
   knownOperations = knownOperations ?? await discoverOperations()
   const ptr = rdf.clownface({ dataset })
-  let n = 0
   ptr.has(ns.p.stepList).out(ns.p.stepList).forEach(listPointer => {
     for (const step of listPointer.list()) {
       if (isGraphPointer(step.has(ns.rdf.type, ns.p.Step)) ||
@@ -49,10 +48,10 @@ export const desugar = async (dataset, { logger, knownOperations } = {}) => {
         step.addOut(ns.code.arguments, args)
       }
       step.addOut(ns.rdf.type, ns.p.Step)
-      const moduleNode = ptr.blankNode(`impl_${n++}`)
-      moduleNode.addOut(ns.rdf.type, type)
-      moduleNode.addOut(ns.code.link, link)
-      step.addOut(ns.code.implementedBy, moduleNode)
+      step.addOut(ns.code.implementedBy, moduleNode => {
+        moduleNode.addOut(ns.rdf.type, type)
+        moduleNode.addOut(ns.code.link, link)
+      })
     }
   })
 
