@@ -1,6 +1,5 @@
 import { rejects, strictEqual } from 'assert'
 import toNT from '@rdfjs/to-ntriples'
-import clownface from 'clownface'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from '@zazuko/env'
@@ -10,11 +9,11 @@ import dateToId from '../../lib/dateToId.js'
 import * as ns from '../support/namespaces.js'
 
 function createMeasure({ term = ns.ex('topic/a') } = {}) {
-  return clownface({ dataset: rdf.dataset(), term })
+  return rdf.clownface({ dataset: rdf.dataset(), term })
 }
 
 function findObservation(result) {
-  return clownface({ dataset: rdf.dataset(result[0]) }).has(ns.rdf.type, ns.cube.Observation)
+  return rdf.clownface({ dataset: rdf.dataset(result[0]) }).has(ns.rdf.type, ns.cube.Observation)
 }
 
 describe('cube.toObservation', () => {
@@ -353,7 +352,7 @@ describe('cube.toObservation', () => {
         .dataset
 
       const transform = toObservation({
-        blacklist: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })],
+        blacklist: [rdf.clownface({ term: ns.ex.property1 }), rdf.clownface({ term: ns.ex.property3 })],
       })
 
       Readable.from([dataset]).pipe(transform)
@@ -391,7 +390,7 @@ describe('cube.toObservation', () => {
         .dataset
 
       const transform = toObservation({
-        dimensions: [clownface({ term: ns.ex.property1 }), clownface({ term: ns.ex.property3 })],
+        dimensions: [rdf.clownface({ term: ns.ex.property1 }), rdf.clownface({ term: ns.ex.property3 })],
       })
 
       Readable.from([dataset]).pipe(transform)

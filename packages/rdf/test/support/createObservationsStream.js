@@ -1,4 +1,3 @@
-import clownface from 'clownface'
 import rdf from '@zazuko/env'
 import { Readable } from 'readable-stream'
 import * as ns from './namespaces.js'
@@ -7,7 +6,7 @@ function createObservationsStream({ observations = [{ [ns.ex.property.value]: rd
   const datasets = []
 
   observations.forEach((observation, index) => {
-    const observationPtr = clownface({
+    const observationPtr = rdf.clownface({
       dataset: rdf.dataset(),
       term: ns.ex(`cube/observation/${index + 1}`),
     })
