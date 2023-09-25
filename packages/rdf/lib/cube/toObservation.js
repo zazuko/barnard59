@@ -1,5 +1,4 @@
 import { URL } from 'url'
-import clownface from 'clownface'
 import rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
 import dateToId from '../dateToId.js'
@@ -26,7 +25,7 @@ function findRoot({ dataset }) {
 }
 
 function defaultObserver({ dataset, subject }) {
-  const observer = clownface({ dataset }).out(ns.cube.observedBy).term
+  const observer = rdf.clownface({ dataset }).out(ns.cube.observedBy).term
 
   if (observer) {
     return observer
@@ -58,7 +57,7 @@ function defaultObservation({ observations, subject }) {
 
 function dateByProperty(property) {
   return ({ dataset }) => {
-    return clownface({ dataset }).out(property).term
+    return rdf.clownface({ dataset }).out(property).term
   }
 }
 
@@ -67,7 +66,7 @@ function dateNow() {
 }
 
 function dateByDatatype({ dataset }) {
-  const terms = clownface({ dataset }).out().filter(ptr => ns.xsd.dateTime.equals(ptr.term.datatype)).terms
+  const terms = rdf.clownface({ dataset }).out().filter(ptr => ns.xsd.dateTime.equals(ptr.term.datatype)).terms
 
   if (terms.length === 0) {
     throw new Error('now date value found')

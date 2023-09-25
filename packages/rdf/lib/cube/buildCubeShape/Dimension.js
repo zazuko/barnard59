@@ -1,4 +1,3 @@
-import clownface from 'clownface'
 import rdf from '@zazuko/env'
 import { fromRdf } from 'rdf-literal'
 import cbdCopy from '../../cbdCopy.js'
@@ -79,7 +78,7 @@ class Dimension {
   toDataset({ shape }) {
     const dataset = rdf.dataset()
 
-    const ptr = clownface({ dataset }).blankNode()
+    const ptr = rdf.clownface({ dataset }).blankNode()
 
     ptr
       .addIn(ns.sh.property, shape)

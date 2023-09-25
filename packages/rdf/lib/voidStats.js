@@ -1,4 +1,3 @@
-import clownface from 'clownface'
 import rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
 import * as ns from './namespaces.js'
@@ -60,7 +59,7 @@ class VoidStats extends Transform {
       const datasetUri = toNamedNode(this.voidDatasetUri)
       const datasetGraph = this.graph ? toNamedNode(this.graph) : undefined
 
-      const stats = clownface({
+      const stats = rdf.clownface({
         dataset: rdf.dataset(),
         graph: datasetGraph,
       })
