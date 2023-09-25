@@ -29,11 +29,12 @@ const datatypeParsers = rdf.termMap([
 ])
 
 class Dimension {
-  constructor({ metadata, predicate, object }) {
+  constructor({ metadata, predicate, object, shapeId = () => rdf.blankNode() }) {
     this.metadata = metadata
     this.predicate = predicate
     this.termType = object.termType
     this.datatype = rdf.termSet()
+    this.shapeId = shapeId
 
     if (object.datatype && datatypeParsers.has(object.datatype)) {
       const datatypeParser = datatypeParsers.get(object.datatype)
@@ -75,10 +76,11 @@ class Dimension {
     }
   }
 
-  toDataset({ shape }) {
+  toDataset({ cube, shape }) {
     const dataset = rdf.dataset()
 
-    const ptr = rdf.clownface({ dataset }).blankNode()
+    const graph = rdf.clownface({ dataset })
+    const ptr = graph.node(this.shapeId(cube, this))
 
     ptr
       .addIn(ns.sh.property, shape)

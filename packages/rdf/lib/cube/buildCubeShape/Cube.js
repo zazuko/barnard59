@@ -5,12 +5,13 @@ import * as ns from '../../namespaces.js'
 import Dimension from './Dimension.js'
 
 class Cube {
-  constructor({ metadata, observationSet, shape, term }) {
+  constructor({ metadata, observationSet, shape, term, propertyShapeId }) {
     this.metadata = metadata
     this.observationSet = observationSet
     this.shape = shape
     this.term = term
     this.dimensions = rdf.termMap()
+    this.propertyShapeId = propertyShapeId
   }
 
   dimension({ predicate, object }) {
@@ -22,7 +23,7 @@ class Cube {
         .out(ns.sh.property)
         .has(ns.sh.path, predicate)
 
-      dimension = new Dimension({ metadata, predicate, object })
+      dimension = new Dimension({ metadata, predicate, object, shapeId: this.propertyShapeId })
 
       this.dimensions.set(predicate, dimension)
     }
@@ -54,7 +55,7 @@ class Cube {
       .addOut(ns.sh.closed, true)
 
     for (const dimension of this.dimensions.values()) {
-      addAll(shapeDataset, dimension.toDataset({ shape: this.shape }))
+      addAll(shapeDataset, dimension.toDataset({ cube: this, shape: this.shape }))
     }
     const setGraph = quad => rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
 
