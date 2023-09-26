@@ -1,5 +1,12 @@
 # v1.0.0
 
+## 1.4.5
+
+### Patch Changes
+
+- 4e0fffc: `cube.js#toCubeShape`: add argument propertyShapeId which creates dimension Property Shape identifiers
+- 8302dc1: Remove direct usages of clownface
+
 ## 1.4.4
 
 ### Patch Changes
