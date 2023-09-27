@@ -33,12 +33,11 @@ const getObject = async ({
   const command = new GetObjectCommand(input)
   const data = await client.send(command)
 
-  const objectBody = data.Body
-  if (!objectBody) {
+  if (!data || !data.Body) {
     throw new Error('No body')
   }
 
-  const stream = objectBody.transformToWebStream()
+  const stream = data.Body.transformToWebStream()
   const writeStream = createWritableStream(destinationPath)
   await stream.pipeTo(writeStream)
 }
