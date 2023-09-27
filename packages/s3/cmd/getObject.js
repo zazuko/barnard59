@@ -2,6 +2,7 @@
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
 import { createWritableStream } from '../lib/streams.js'
+import { ensureFileDirectoryExists } from '../lib/paths.js'
 
 /**
  * Get an object from a S3 bucket.
@@ -22,6 +23,8 @@ const getObject = async ({
   secretAccessKey,
   ...s3Config
 }) => {
+  await ensureFileDirectoryExists(destinationPath)
+
   const client = newClient(generateConfig({ accessKeyId, secretAccessKey, ...s3Config }))
   const input = {
     Bucket: bucket,
@@ -37,7 +40,7 @@ const getObject = async ({
 
   const stream = objectBody.transformToWebStream()
   const writeStream = createWritableStream(destinationPath)
-  stream.pipeTo(writeStream)
+  await stream.pipeTo(writeStream)
 }
 
 export default getObject

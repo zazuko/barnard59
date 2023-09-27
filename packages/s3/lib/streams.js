@@ -3,13 +3,12 @@ import { createWriteStream } from 'fs'
 import { WritableStream } from 'stream/web'
 
 /**
- * Create a writable stream.
+ * Convert a WriteStream to a WritableStream.
  *
- * @param {string} path Path to write to.
+ * @param {import('fs').WriteStream} stream Stream to convert.
  * @returns {WritableStream} Writable stream.
  */
-export const createWritableStream = (path) => {
-  const stream = createWriteStream(path)
+export const toWritableStream = (stream) => {
   const writableStream = new WritableStream({
 
     /**
@@ -23,4 +22,15 @@ export const createWritableStream = (path) => {
     },
   })
   return writableStream
+}
+
+/**
+ * Create a writable stream.
+ *
+ * @param {string} path Path to write to.
+ * @returns {WritableStream} Writable stream.
+ */
+export const createWritableStream = (path) => {
+  const stream = createWriteStream(path)
+  return toWritableStream(stream)
 }
