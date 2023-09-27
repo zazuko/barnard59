@@ -1,0 +1,36 @@
+{
+  "name": "barnard59-s3",
+  "version": "0.0.0",
+  "description": "S3 support for Linked Data pipelines",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "true"
+  },
+  "keywords": [
+    "barnard59",
+    "s3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/s3"
+  },
+  "author": "Zazuko GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.420.0"
+  },
+  "files": [
+    "index.js",
+    "lib",
+    "cmd"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
