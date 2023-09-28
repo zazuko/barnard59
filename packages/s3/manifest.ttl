@@ -1,0 +1,18 @@
+@base <http://barnard59.zazuko.com/operations/s3/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<getObject> a p:Operation;
+  rdfs:label "Get S3 object";
+  rdfs:comment "Get an object from a S3 bucket.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-s3/cmd/getObject.js#default>
+  ].
+
+<putObject> a p:Operation;
+  rdfs:label "Put an object to S3";
+  rdfs:comment "Put an object to a S3 bucket.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-s3/cmd/putObject.js#default>
+  ].
