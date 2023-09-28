@@ -34,7 +34,7 @@ const getObject = async ({
   const data = await client.send(command)
 
   if (!data || !data.Body) {
-    throw new Error('No body')
+    throw new Error('There was an issue while fetching the requested S3 object.')
   }
 
   const stream = data.Body.transformToWebStream()
