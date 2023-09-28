@@ -34,7 +34,7 @@ export const generateConfig = ({ accessKeyId, secretAccessKey, ...s3Config }) =>
 
   // set a default region if none is provided
   if (!s3Config.region) {
-    config.region = 'us-east-1'
+    config.region = process.env.AWS_DEFAULT_REGION || 'us-east-1'
   }
 
   return config
