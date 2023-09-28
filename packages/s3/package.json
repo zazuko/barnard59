@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@aws-sdk/util-stream-node": "^3.374.0",
+    "@types/mocha": "^10.0.2",
     "aws-sdk-client-mock": "^3.0.0",
     "rimraf": "^5.0.5"
   }
