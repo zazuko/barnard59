@@ -2,13 +2,13 @@ name: CI
 on: push
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         node:
-          - '18'
-          - '16'
+          - "18"
+          - "20"
         package:
           - base
           - core
@@ -18,6 +18,7 @@ jobs:
           - graph-store
           - http
           - rdf
+          - s3
           - sparql
           - validation
     steps:
@@ -34,13 +35,13 @@ jobs:
           flags: barnard59-${{ matrix.package }}
 
   test-cli:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         node:
-          - '18'
-          - '16'
+          - "18"
+          - "20"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -55,7 +56,7 @@ jobs:
           flags: barnard59
 
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
