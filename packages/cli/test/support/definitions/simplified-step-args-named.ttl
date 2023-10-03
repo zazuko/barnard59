@@ -1,13 +1,13 @@
 @prefix code: <https://code.described.at/>.
 @prefix p: <https://pipeline.described.at/>.
-@prefix op: <http://barnard59.zazuko.com/operations/>.
+@prefix op: <https://barnard59.zazuko.com/operations/>.
 @base <http://example.org/pipeline/>.
 
 <> a p:Pipeline ;
   p:steps [
     p:stepList (
-      [ op:concat 
-        [code:name "fst"; code:value <readA>] , 
+      [ op:concat
+        [code:name "fst"; code:value <readA>] ,
         [code:name "snd"; code:value <readB>] ]
     )
   ] .

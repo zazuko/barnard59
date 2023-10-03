@@ -3,7 +3,7 @@
 @prefix ex: <http://example.org/>.
 @prefix p: <https://pipeline.described.at/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix op: <http://barnard59.zazuko.com/operations/> .
+@prefix op: <https://barnard59.zazuko.com/operations/> .
 
 <variables> p:variable [ a p:Variable;
     p:name "url" ;
