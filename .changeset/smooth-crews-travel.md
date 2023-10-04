@@ -12,4 +12,4 @@
 "barnard59-test-e2e": patch
 ---
 
-Change the operation URLs to be HTTPS (re zazuko/barnard59-website#4)
+Change the operation URLs to be HTTPS (re zazuko/barnard59-website#4). This will only be a breaking change to those using the [shorthand step syntax](https://data-centric.zazuko.com/docs/workflows/explanations/simplified-syntax).
