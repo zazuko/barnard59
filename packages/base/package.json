@@ -30,6 +30,7 @@
     "through2": "^4.0.2"
   },
   "devDependencies": {
+    "barnard59-core": "^3.0.2",
     "get-stream": "^6.0.1",
     "into-stream": "^7.0.0",
     "isstream": "^0.1.2",
