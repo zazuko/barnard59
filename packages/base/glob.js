@@ -6,6 +6,7 @@ import { Readable } from 'readable-stream'
 import tracer from './lib/tracer.js'
 
 function glob({ pattern, ...options }) {
+  const { logger } = this
   let filenames = null
 
   const span = tracer.startSpan('glob')
@@ -22,6 +23,7 @@ function glob({ pattern, ...options }) {
         await init()
 
         if (filenames.length === 0) {
+          logger.warn(`No files matched by glob '${pattern}'`)
           return stream.push(null)
         }
 
