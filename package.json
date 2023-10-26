@@ -13,14 +13,16 @@
     "packages/*",
     "test/*"
   ],
-  "dependencies": {
+  "devDependencies": {
     "@changesets/cli": "^2.26.1",
     "@tpluscode/eslint-config": "^0.4.3",
     "c8": "^7.6.0",
+    "chai": "^4.3.10",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "mocha": "^10.2.0",
-    "wsrun": "^5.2.4"
+    "wsrun": "^5.2.4",
+    "sinon-chai": "^3.7.0"
   },
   "lint-staged": {
     "*.js": [

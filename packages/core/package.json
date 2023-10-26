@@ -45,10 +45,9 @@
     "mocha": "^10.2.0",
     "nock": "^13.1.0",
     "rdf-utils-fs": "^2.1.0",
-    "sinon": "^15.0.4",
-    "sinon-chai": "^3.7.0"
+    "sinon": "^15.0.4"
   },
   "mocha": {
-    "require": "test/mocha-setup.cjs"
+    "require": "../../test/mocha-setup.cjs"
   }
 }

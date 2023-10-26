@@ -14,16 +14,19 @@ function glob({ pattern, ...options }) {
   const init = onetime(async () => {
     span.addEvent('init')
     filenames = await promisify(globFn)(pattern, options)
+    return filenames.length === 0
   })
 
   const stream = new Readable({
     objectMode: true,
     read: async () => {
       try {
-        await init()
+        const noneMatched = await init()
 
         if (filenames.length === 0) {
-          logger.warn(`No files matched by glob '${pattern}'`)
+          if (noneMatched) {
+            logger.warn(`No files matched by glob '${pattern}'`)
+          }
           return stream.push(null)
         }
 
