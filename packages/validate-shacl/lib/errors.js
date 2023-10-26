@@ -1,4 +1,4 @@
-function buildErrorMessage (report) {
+function buildErrorMessage(report) {
   return JSON.stringify(report.results.map(x => {
     const result = {}
     if (x.message && x.message.length > 0) {
@@ -19,7 +19,7 @@ function buildErrorMessage (report) {
 }
 
 export class ValidationError extends Error {
-  constructor (report, shapesGraph, dataGraph) {
+  constructor(report, shapesGraph, dataGraph) {
     const message = buildErrorMessage(report)
     super(message)
 

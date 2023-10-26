@@ -1,31 +1,23 @@
 import assert, { strictEqual } from 'assert'
-import fs from 'fs'
-import ParserN3 from '@rdfjs/parser-n3'
+import * as url from 'url'
 import assertThrows from 'assert-throws-async'
-import chai, { expect } from 'chai'
-import getStream from 'get-stream'
+import { expect } from 'chai'
+import getStream, { getStreamAsArray } from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
-import { describe, it } from 'mocha'
-import pkg from 'rdf-dataset-ext'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env-node'
+import toStream from 'rdf-dataset-ext/toStream.js'
 import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
 import { shacl } from '../validate.js'
-
-chai.use(sinonChai)
-const { toStream } = pkg
 
 const shapePath = 'support/simple.shape.ttl'
 new URL(shapePath, import.meta.url).toString()
 
-async function getRDFDataset (filePath) {
+async function getRDFDataset(filePath) {
   return rdf.dataset().import(getRDFStream(filePath))
 }
 
-function getRDFStream (filePath) {
-  const stream = fs.createReadStream(new URL(filePath, import.meta.url))
-  const parser = new ParserN3({ factory: rdf })
-  return parser.import(stream)
+function getRDFStream(filePath) {
+  return rdf.fromFile(url.fileURLToPath(new URL(filePath, import.meta.url)))
 }
 
 describe('validate-shacl', () => {
@@ -53,7 +45,7 @@ describe('validate-shacl', () => {
     it('sets maxErrors for validator', async () => {
       const stream = await shacl({
         shape: getRDFStream(shapePath),
-        maxErrors: 200
+        maxErrors: 200,
       })
 
       strictEqual(stream.validator.validationEngine.maxErrors, 200)
@@ -63,7 +55,7 @@ describe('validate-shacl', () => {
     it('unsets maxErrors when argument is zero', async () => {
       const stream = await shacl({
         shape: getRDFStream(shapePath),
-        maxErrors: 0
+        maxErrors: 0,
       })
 
       assert(typeof stream.validator.validationEngine.maxErrors === 'undefined')
@@ -78,7 +70,7 @@ describe('validate-shacl', () => {
       const validator = await shacl(getRDFStream(shapePath))
       const validatedInput = toStream(dataset).pipe(validator)
 
-      const passedTrough = await getStream.array(validatedInput)
+      const passedTrough = await getStreamAsArray(validatedInput)
       strictEqual(passedTrough.length, dataset.length)
     })
 
@@ -92,7 +84,7 @@ describe('validate-shacl', () => {
       const validatedInput = toStream(dataset).pipe(validator)
 
       await assertThrows(async () => {
-        await getStream.array(validatedInput)
+        await getStreamAsArray(validatedInput)
       }, Error, error => {
         strictEqual(error.report.dataset.size > 0, true)
         strictEqual(error.shapesGraph.size > 0, true)
@@ -111,16 +103,16 @@ describe('validate-shacl', () => {
       // Assumes partitioned data is sent through
       const validator = await shacl.call(context, {
         shape: getRDFStream(shapePath),
-        onViolation
+        onViolation,
       })
       const validatedInput = toStream(dataset).pipe(validator)
 
-      const passedTrough = await getStream.array(validatedInput)
+      const passedTrough = await getStreamAsArray(validatedInput)
       strictEqual(passedTrough.length, dataset.length)
       expect(onViolation).to.have.been.calledWithMatch({
         context,
         data: wrongData,
-        report: sinon.match.object
+        report: sinon.match.object,
       })
     })
   })

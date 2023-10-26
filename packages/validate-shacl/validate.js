@@ -1,21 +1,21 @@
 import { isStream, isReadableStream } from 'is-stream'
-import rdf from 'rdf-ext'
+import rdf from '@zazuko/env'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
 import { ValidationError } from './lib/errors.js'
 
 class ValidateChunk extends Transform {
-  constructor (context, shape, { maxErrors, onViolation } = {}) {
+  constructor(context, shape, { maxErrors, onViolation } = {}) {
     super({
       writableObjectMode: true,
-      readableObjectMode: true
+      readableObjectMode: true,
     })
     this.context = context
     this.onViolation = onViolation
-    this.validator = new SHACLValidator(shape, { maxErrors })
+    this.validator = new SHACLValidator(shape, { maxErrors, factory: rdf })
   }
 
-  _transform (data, encoding, callback) {
+  _transform(data, encoding, callback) {
     const report = this.validator.validate(data)
     let shouldContinue = report.conforms
 
@@ -23,7 +23,7 @@ class ValidateChunk extends Transform {
       shouldContinue = this.onViolation({
         context: this.context,
         report,
-        data
+        data,
       })
     }
 
@@ -34,7 +34,7 @@ class ValidateChunk extends Transform {
   }
 }
 
-export async function shacl (arg) {
+export async function shacl(arg) {
   let shape
   let options
   let maxErrors = 1
