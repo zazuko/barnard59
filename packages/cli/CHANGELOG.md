@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- 6be7cd8: Literals loaded as step arguments will be converted to matching JS type (closes #116)
+
+### Patch Changes
+
+- Updated dependencies [6be7cd8]
+- Updated dependencies [72648c5]
+  - barnard59-core@4.0.0
+
 ## 3.0.2
 
 ### Patch Changes

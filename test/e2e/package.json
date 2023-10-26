@@ -1,6 +1,6 @@
 {
   "name": "barnard59-test-e2e",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,14 +9,14 @@
   "dependencies": {
     "@rdfjs/formats-common": "^2.2.0",
     "@zazuko/env": "^1.0.1",
-    "barnard59-base": "^1.2.1",
-    "barnard59-core": "^3.0.0",
-    "barnard59-formats": "^1.4.0",
-    "barnard59-http": "^1.1.0",
+    "barnard59-base": "^2.0.0",
+    "barnard59-core": "^4.0.0",
+    "barnard59-formats": "^2.0.0",
+    "barnard59-http": "^2.0.0",
     "chai": "^4.3.7",
     "get-stream": "^6.0.0",
     "nock": "^13.3.1",
-    "barnard59-test-support": "^0.0.1",
+    "barnard59-test-support": "^0.0.2",
     "readable-stream": "^3",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-loader-code": "^2.0.0",
