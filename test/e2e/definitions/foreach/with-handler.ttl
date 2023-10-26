@@ -2,8 +2,8 @@
 @prefix code: <https://code.described.at/>.
 @prefix p: <https://pipeline.described.at/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix base: <http://barnard59.zazuko.com/operations/base/> .
-@prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix fs: <https://barnard59.zazuko.com/operations/core/fs/> .
 
 <> a p:Pipeline, p:Readable;
   p:steps [

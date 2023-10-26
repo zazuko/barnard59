@@ -2,10 +2,10 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix fs: <http://barnard59.zazuko.com/operations/core/fs/> .
-@prefix csvw: <http://barnard59.zazuko.com/operations/formats/csvw/> .
-@prefix ntriples: <http://barnard59.zazuko.com/operations/formats/ntriples/> .
-@prefix jsonld: <http://barnard59.zazuko.com/operations/formats/jsonld/> .
+@prefix fs: <https://barnard59.zazuko.com/operations/core/fs/> .
+@prefix csvw: <https://barnard59.zazuko.com/operations/formats/csvw/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix jsonld: <https://barnard59.zazuko.com/operations/formats/jsonld/> .
 
 <parseCsvw> a p:Pipeline, p:Readable;
   p:variables [
@@ -20,8 +20,8 @@
     ]
   ];
   p:steps [
-    p:stepList ( 
-      [ fs:createReadStream ("filename"^^p:VariableName) ] 
+    p:stepList (
+      [ fs:createReadStream ("filename"^^p:VariableName) ]
       [ csvw:parse (<parseMetadata>) ]
       [ ntriples:serialize () ]
     )
@@ -29,8 +29,8 @@
 
 <parseMetadata> a p:Pipeline, p:ReadableObjectMode;
   p:steps [
-    p:stepList ( 
-      [ fs:createReadStream ("metadata"^^p:VariableName) ] 
-      [ jsonld:parse () ] 
+    p:stepList (
+      [ fs:createReadStream ("metadata"^^p:VariableName) ]
+      [ jsonld:parse () ]
     )
   ].

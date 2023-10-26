@@ -1,5 +1,5 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-@base <http://barnard59.zazuko.com/pipeline/graph-store/> .
+@base <https://barnard59.zazuko.com/pipeline/graph-store/> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 
