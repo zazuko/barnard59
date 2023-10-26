@@ -40,7 +40,7 @@
     "chalk": "^4.1.0",
     "commander": "^11.0.0",
     "rdf-dataset-ext": "^1.0.1",
-    "rdf-loader-code": "^1.0.0",
+    "rdf-loader-code": "^2.0.0",
     "rdf-utils-fs": "^2.1.0"
   },
   "mocha": {
