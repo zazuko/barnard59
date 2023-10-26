@@ -5,21 +5,20 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "coverage": "codecov",
-    "test": "c8 --reporter=lcov --reporter=text mocha",
-    "stricter": "stricter-standard --fix"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/zazuko/barnard59-validate-shacl.git"
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/validate-shacl"
   },
   "keywords": [],
   "author": "Zazuko GmbH",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zazuko/barnard59-validate-shacl/issues"
+    "url": "https://github.com/zazuko/barnard59/issues"
   },
-  "homepage": "https://github.com/zazuko/barnard59-validate-shacl",
+  "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@rdfjs/fetch": "^3.0.0",
     "is-stream": "^3.0.0",
@@ -38,10 +37,6 @@
     "rdf-utils-fs": "^2.2.0",
     "readable-stream": "^3.6.0",
     "sinon": "^12.0.1",
-    "sinon-chai": "^3.7.0",
-    "stricter-standard": "^0.2.0"
-  },
-  "engines": {
-    "node": ">= 14.0.0"
+    "sinon-chai": "^3.7.0"
   }
 }
