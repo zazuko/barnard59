@@ -1,5 +1,13 @@
 # v1.0.0
 
+## 2.0.0
+
+### Major Changes
+
+- 6be7cd8: Literals loaded as step arguments will be converted to matching JS type (closes #116)
+- 72648c5: Change the operation URLs to be HTTPS (re zazuko/barnard59-website#4).
+  This will only be a breaking change to those using the [shorthand step syntax](https://data-centric.zazuko.com/docs/workflows/explanations/simplified-syntax).
+
 ## 1.4.5
 
 ### Patch Changes
