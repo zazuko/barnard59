@@ -1,0 +1,11 @@
+@base <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<validate> a p:Operation, p:Readable;
+          rdfs:label "validate rdf";
+          rdfs:comment "Validates a RDF graph against a set of conditions specified in a SHACL document";
+          code:implementedBy [ a code:EcmaScriptModule;
+                              code:link <node:barnard59-validate-shacl/validate.js#shacl>
+                             ].

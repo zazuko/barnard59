@@ -12,6 +12,7 @@ flag_management:
     - name: barnard59-http
     - name: barnard59-rdf
     - name: barnard59-sparql
+    - name: barnard59-validate-shacl
     - name: barnard59-validation
 ignore:
   - test
