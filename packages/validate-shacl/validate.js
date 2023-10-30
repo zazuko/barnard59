@@ -1,5 +1,4 @@
 import { isStream, isReadableStream } from 'is-stream'
-import rdf from '@zazuko/env'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Transform } from 'readable-stream'
 import { ValidationError } from './lib/errors.js'
@@ -12,7 +11,7 @@ class ValidateChunk extends Transform {
     })
     this.context = context
     this.onViolation = onViolation
-    this.validator = new SHACLValidator(shape, { maxErrors, factory: rdf })
+    this.validator = new SHACLValidator(shape, { maxErrors, factory: context.env })
   }
 
   _transform(data, encoding, callback) {
@@ -52,5 +51,5 @@ export async function shacl(arg) {
     throw new Error(`${shape} is not a readable stream`)
   }
 
-  return new ValidateChunk(this, await rdf.dataset().import(shape), { ...options, maxErrors })
+  return new ValidateChunk(this, await this.env.dataset().import(shape), { ...options, maxErrors })
 }

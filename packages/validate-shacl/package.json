@@ -22,13 +22,12 @@
   "dependencies": {
     "@rdfjs/fetch": "^3.0.0",
     "is-stream": "^3.0.0",
-    "@zazuko/env": "^1.9.0",
     "readable-stream": "3 - 4",
     "rdf-validate-shacl": "^0.5.1"
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",
-    "@zazuko/env-node": "^1.0.0",
+    "barnard59-env": "^0.0.0",
     "assert-throws-async": "^3.0.0",
     "chai": "^4.3.4",
     "get-stream": "^8.0.1",

@@ -4,20 +4,22 @@ import assertThrows from 'assert-throws-async'
 import { expect } from 'chai'
 import getStream, { getStreamAsArray } from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
-import rdf from '@zazuko/env-node'
 import toStream from 'rdf-dataset-ext/toStream.js'
 import sinon from 'sinon'
-import { shacl } from '../validate.js'
+import env from 'barnard59-env'
+import { shacl as unbound } from '../validate.js'
 
 const shapePath = 'support/simple.shape.ttl'
 new URL(shapePath, import.meta.url).toString()
 
+const shacl = unbound.bind({ env })
+
 async function getRDFDataset(filePath) {
-  return rdf.dataset().import(getRDFStream(filePath))
+  return env.dataset().import(getRDFStream(filePath))
 }
 
 function getRDFStream(filePath) {
-  return rdf.fromFile(url.fileURLToPath(new URL(filePath, import.meta.url)))
+  return env.fromFile(url.fileURLToPath(new URL(filePath, import.meta.url)))
 }
 
 describe('validate-shacl', () => {
