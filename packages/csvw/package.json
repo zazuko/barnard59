@@ -28,6 +28,7 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
+    "barnard59-env": "^0.0.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^7.0.1",
     "is-stream": "^3.0.0"

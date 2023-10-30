@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env-node'
+import rdf from 'barnard59-env'
 import ns from './namespaces.js'
 
 function createPipelineDefinition({

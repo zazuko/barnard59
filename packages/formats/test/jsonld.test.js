@@ -1,5 +1,5 @@
 import fs from 'fs'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { expect } from 'chai'
 import { parse } from '../jsonld.js'
 

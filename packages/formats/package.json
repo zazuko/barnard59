@@ -32,7 +32,7 @@
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
-    "@zazuko/env-node": "^1.0.0",
+    "barnard59-env": "^0.0.0",
     "chai": "^4.3.7"
   },
   "engines": {

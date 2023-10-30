@@ -1,5 +1,5 @@
 import fs from 'fs'
-import env from '@zazuko/env-node'
+import env from 'barnard59-env'
 import { expect } from 'chai'
 import { parse } from '../rdf-xml.js'
 
