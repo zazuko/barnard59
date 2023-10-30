@@ -2,4 +2,4 @@
 "barnard59-validate-shacl": minor
 ---
 
-Use `@zazuko/env`
+Remove dependency on `@zazuko/env` and use environment provided at runtime.

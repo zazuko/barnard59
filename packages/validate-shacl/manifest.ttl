@@ -1,4 +1,4 @@
-@base <http://barnard59.zazuko.com/operations/csvw/> .
+@base <https://barnard59.zazuko.com/operations/shacl/> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .

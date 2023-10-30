@@ -2,4 +2,4 @@
 "barnard59-validate-shacl": major
 ---
 
-Update manifest (use HTTPS URLs)
+Update manifest: current namespace and use HTTPS URL
