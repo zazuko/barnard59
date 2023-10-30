@@ -3,7 +3,6 @@
 "barnard59-validation": minor
 "barnard59-formats": minor
 "barnard59-sparql": minor
-"barnard59-base": minor
 "barnard59-csvw": minor
 "barnard59": minor
 "barnard59-test-support": patch
