@@ -1,5 +1,5 @@
 import path from 'path'
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import * as parser from './parser.js'
 import { removeFilePart } from './utils.js'

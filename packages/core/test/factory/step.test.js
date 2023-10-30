@@ -2,6 +2,7 @@ import { strictEqual, rejects } from 'assert'
 import { resolve } from 'path'
 import getStream from 'get-stream'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
+import env from 'barnard59-env'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
 import defaultLogger from '../../lib/defaultLogger.js'
 import createStep from '../../lib/factory/step.js'
@@ -9,6 +10,7 @@ import Step from '../../lib/Step.js'
 import ns from '../support/namespaces.js'
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
+const context = { env }
 
 describe('factory/step', () => {
   it('should be a method', () => {
@@ -20,8 +22,9 @@ describe('factory/step', () => {
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const step = await createStep(ptr, {
+      context,
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry(),
+      loaderRegistry: defaultLoaderRegistry(env),
       logger: defaultLogger(),
     })
 
@@ -34,8 +37,9 @@ describe('factory/step', () => {
 
     await rejects(async () => {
       await createStep(ptr, {
+        context,
         basePath: resolve('test'),
-        loaderRegistry: defaultLoaderRegistry(),
+        loaderRegistry: defaultLoaderRegistry(env),
         logger: defaultLogger(),
       })
     }, err => {
@@ -51,8 +55,9 @@ describe('factory/step', () => {
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const step = await createStep(ptr, {
+      context,
       basePath: resolve('test'),
-      loaderRegistry: defaultLoaderRegistry(),
+      loaderRegistry: defaultLoaderRegistry(env),
       logger: defaultLogger(),
     })
 

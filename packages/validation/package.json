@@ -34,14 +34,13 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@rdfjs/formats-common": "^2",
-    "@zazuko/env": "^1.1.1",
+    "@rdfjs/namespace": "^2.0.0",
+    "@zazuko/env-node": "^1.0.0",
     "anylogger": "^1.0.11",
     "anylogger-console": "^1.0.0",
     "chalk": "^4.1.0",
     "commander": "^11.0.0",
-    "rdf-dataset-ext": "^1.0.1",
-    "rdf-loader-code": "^2.0.0",
-    "rdf-utils-fs": "^2.1.0"
+    "rdf-loader-code": "^2.0.0"
   },
   "mocha": {
     "loader": "esmock"

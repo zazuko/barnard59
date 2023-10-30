@@ -2,6 +2,7 @@ import { promisify } from 'util'
 import { createWriteStream } from 'fs'
 import { finished, PassThrough } from 'readable-stream'
 import { SpanStatusCode } from '@opentelemetry/api'
+import env from 'barnard59-env'
 import runner from '../../runner.js'
 import bufferDebug from './../bufferDebug.js'
 import tracer from './../tracer.js'
@@ -28,7 +29,7 @@ export default async function (ptr, basePath, options = {}) {
       span.setAttribute('iri', ptr.value)
 
       const outputStream = createOutputStream(output)
-      const { finished: runFinished, pipeline } = await runner(ptr, {
+      const { finished: runFinished, pipeline } = await runner(ptr, env, {
         basePath,
         level,
         quiet,

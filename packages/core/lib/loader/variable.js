@@ -1,11 +1,9 @@
-import rdf from '@zazuko/env'
 import cloneTerm from '../cloneTerm.js'
-import ns from '../namespaces.js'
 import { VariableMap } from '../VariableMap.js'
 
 const unknownVariable = Symbol('unknown-variable')
 
-function loader(ptr, { variables = new VariableMap() } = {}) {
+function loader(rdf, ptr, { variables = new VariableMap() } = {}) {
   if (ptr.term.termType === 'Literal') {
     const value = variables.get(ptr.value)
 
@@ -18,7 +16,7 @@ function loader(ptr, { variables = new VariableMap() } = {}) {
     return value
   }
 
-  const name = ptr.out(ns.p.name).value
+  const name = ptr.out(rdf.ns.p.name).value
   let term
 
   // if the variables from the arguments contains it ...
@@ -27,7 +25,7 @@ function loader(ptr, { variables = new VariableMap() } = {}) {
     term = rdf.literal(variables.get(name))
   } else {
     // ... otherwise load the term from the dataset
-    term = cloneTerm(ptr.out(ns.p.value).term)
+    term = cloneTerm(rdf, ptr.out(rdf.ns.p.value).term)
   }
 
   // if there is a value, attached the name to it
@@ -38,9 +36,9 @@ function loader(ptr, { variables = new VariableMap() } = {}) {
   return term
 }
 
-loader.register = registry => {
-  registry.registerNodeLoader(ns.p.Variable, loader)
-  registry.registerLiteralLoader(ns.p.VariableName, loader)
+loader.register = (registry, rdf) => {
+  registry.registerNodeLoader(rdf.ns.p.Variable, loader.bind(null, rdf))
+  registry.registerLiteralLoader(rdf.ns.p.VariableName, loader.bind(null, rdf))
 }
 
 export default loader

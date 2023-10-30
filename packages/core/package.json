@@ -21,9 +21,6 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@opentelemetry/api": "^1.0.1",
-    "@rdfjs/namespace": "^2.0.0",
-    "@zazuko/env": "^1.0.1",
-    "clownface": "^2.0.0",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.1.1",
     "is-graph-pointer": "^2.1.0",
@@ -36,6 +33,8 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@rdfjs/namespace": "^2.0.0",
+    "barnard59-env": "^0.0.0",
     "barnard59-http": "^2.0.0",
     "barnard59-test-support": "^0.0.2",
     "chai": "^4.3.7",
@@ -44,7 +43,6 @@
     "lint-staged": "^13.2.2",
     "mocha": "^10.2.0",
     "nock": "^13.1.0",
-    "rdf-utils-fs": "^2.1.0",
     "sinon": "^15.0.4"
   },
   "mocha": {

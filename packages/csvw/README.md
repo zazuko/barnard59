@@ -1,4 +1,4 @@
-#  bardnard59-csvw
+#  barnard59-csvw
 
 Simplifies handling CSVW mapping documents in barnard59 pipelines
 

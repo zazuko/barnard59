@@ -1,8 +1,7 @@
 import { expect } from 'chai'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { discoverCommands } from '../../../lib/cli/dynamicCommands.js'
 import discoverManifests from '../../../lib/discoverManifests.js'
-import ns from '../../../lib/namespaces.js'
 
 describe('lib/cli/discoverCommands.js', () => {
   it('finds graph-store command', async () => {
@@ -24,9 +23,9 @@ describe('lib/cli/discoverCommands.js', () => {
     let command
     const manifest = rdf.clownface()
       .blankNode()
-      .addOut(rdf.ns.rdf.type, ns.b59.CliCommand)
-      .addOut(ns.b59.command, 'bar')
-      .addOut(ns.b59.source, 'barnard59/test/support/definitions/variable-with-value.ttl')
+      .addOut(rdf.ns.rdf.type, rdf.ns.b59.CliCommand)
+      .addOut(rdf.ns.b59.command, 'bar')
+      .addOut(rdf.ns.b59.source, 'barnard59/test/support/definitions/variable-with-value.ttl')
     const manifests = [{
       name: 'foo',
       version: '0.0.0',

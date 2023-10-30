@@ -2,11 +2,14 @@ import { rejects, strictEqual } from 'assert'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
 import { isReadableStream } from 'is-stream'
-import fetch from '../fetch.js'
+import env from 'barnard59-env'
+import fetchUnbound from '../fetch.js'
 
 const csvContent = 'id,text\n1,abc\n'
 const fileMetdataUrl = 'file:./test/support/test.metadata.json'
 const fileMetdataTtlUrl = 'file:./test/support/test.metadata.ttl'
+
+const fetch = fetchUnbound.bind({ env })
 
 describe('fetch', () => {
   it('should be a function', () => {

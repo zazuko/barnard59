@@ -1,7 +1,7 @@
 import * as url from 'url'
 import * as os from 'os'
 import { expect } from 'chai'
-import $rdf from '@zazuko/env'
+import $rdf from 'barnard59-env'
 import loader from '../../lib/loader/file.js'
 import ns from '../support/namespaces.js'
 

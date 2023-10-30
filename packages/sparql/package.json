@@ -18,13 +18,12 @@
   },
   "homepage": "https://github.com/zazuko/barnard59-sparql",
   "dependencies": {
-    "@rdfjs/namespace": "^2.0.0",
     "duplex-to": "^1.0.1",
     "sparql-http-client": "^2.4.0"
   },
   "devDependencies": {
     "@tpluscode/rdf-string": "^1.0.3",
-    "@zazuko/env": "^1.0.1",
+    "@zazuko/env": "^1.0.0",
     "get-stream": "^6.0.0",
     "isstream": "^0.1.2",
     "mocha": "^9.0.2",

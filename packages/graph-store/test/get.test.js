@@ -1,13 +1,13 @@
 import { strictEqual } from 'assert'
-import rdf from '@rdfjs/data-model'
-import namespace from '@rdfjs/namespace'
+import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import { array } from 'get-stream'
 import { isReadable, isWritable } from 'isstream'
-import get from '../get.js'
+import getUnbound from '../get.js'
 
-const ns = namespace('http://example.org/')
+const ns = rdf.namespace('http://example.org/')
+const get = getUnbound.bind({ env: rdf })
 
 describe('get', () => {
   it('should return a readable stream', async () => {
