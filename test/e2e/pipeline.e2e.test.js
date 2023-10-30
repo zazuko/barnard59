@@ -10,6 +10,7 @@ import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 import rdf from '@zazuko/env'
 import fromFile from 'rdf-utils-fs/fromFile.js'
+import env from 'barnard59-env'
 import { promisedEcmaScriptLoader, promisedUrlLoader } from './asyncLoaders.js'
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'definitions')
@@ -35,7 +36,7 @@ describe('Pipeline', () => {
 
   it('should load code using node: scheme', async () => {
     const ptr = await loadPipelineDefinition('world-clock/node')
-    const pipeline = await createPipeline(ptr)
+    const pipeline = await createPipeline(ptr, { env })
 
     const out = await getStream(pipeline.stream)
 
@@ -44,7 +45,7 @@ describe('Pipeline', () => {
 
   it('should load code using file: scheme', async () => {
     const ptr = await loadPipelineDefinition('world-clock/file')
-    const pipeline = await createPipeline(ptr, { basePath: process.cwd() })
+    const pipeline = await createPipeline(ptr, { env, basePath: process.cwd() })
 
     const out = await getStream(pipeline.stream)
 
@@ -53,12 +54,12 @@ describe('Pipeline', () => {
 
   it('should load code using async loaders', async () => {
     const ptr = await loadPipelineDefinition('world-clock/async')
-    const loaderRegistry = defaultLoaderRegistry()
+    const loaderRegistry = defaultLoaderRegistry(env)
 
     promisedEcmaScriptLoader.register(loaderRegistry)
     promisedUrlLoader.register(loaderRegistry)
 
-    const pipeline = await createPipeline(ptr, { loaderRegistry })
+    const pipeline = await createPipeline(ptr, { env, loaderRegistry })
 
     const out = await getStream(pipeline.stream)
 
@@ -68,9 +69,8 @@ describe('Pipeline', () => {
   it('should load file contents using loader', async () => {
     // given
     const ptr = await loadPipelineDefinition('file-loader')
-    const loaderRegistry = defaultLoaderRegistry()
     const pipeline = await createPipeline(ptr, {
-      loaderRegistry,
+      env,
       basePath: process.cwd(),
     })
 

@@ -32,15 +32,12 @@
     "@opentelemetry/semantic-conventions": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "@rdfjs/namespace": "^2.0.0",
-    "@zazuko/env": "^1.0.1",
     "barnard59-core": "4.0.0",
-    "clownface": "^2.0.0",
+    "barnard59-env": "0.0.0",
     "commander": "^11.0.0",
     "find-plugins": "^1.1.7",
     "is-graph-pointer": "^2.1.0",
     "lodash": "^4.17.21",
-    "rdf-dataset-ext": "^1.0.1",
-    "rdf-utils-fs": "^2.2.0",
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {

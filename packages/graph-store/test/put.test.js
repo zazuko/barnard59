@@ -1,7 +1,6 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { promisify } from 'util'
-import rdf from '@rdfjs/data-model'
-import namespace from '@rdfjs/namespace'
+import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
@@ -9,7 +8,7 @@ import { isReadable, isWritable } from 'isstream'
 import { finished } from 'readable-stream'
 import put from '../put.js'
 
-const ns = namespace('http://example.org/')
+const ns = rdf.namespace('http://example.org/')
 
 describe('put', () => {
   it('should return a writable stream', async () => {

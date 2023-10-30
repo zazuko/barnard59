@@ -1,6 +1,5 @@
 import fs from 'fs'
-import rdf from '@zazuko/env'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
+import env from 'barnard59-env'
 import { expect } from 'chai'
 import { parse } from '../rdf-xml.js'
 
@@ -9,8 +8,8 @@ describe('rdf/xml', () => {
     it('successfully loads the input file', async () => {
       const input = fs.createReadStream(new URL('./datasets/bioinformatics.rdf', import.meta.url))
 
-      const parser = parse()
-      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
+      const parser = parse.call({ env })
+      const dataset = await env.dataset().import(input.pipe(parser))
 
       expect(dataset).to.have.property('size').gt(0)
     })

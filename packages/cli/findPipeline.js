@@ -1,5 +1,4 @@
-import clownface from 'clownface'
-import ns from './lib/namespaces.js'
+import rdf from 'barnard59-env'
 
 export class MultipleRootsError extends Error {
   constructor(alternatives) {
@@ -10,13 +9,13 @@ export class MultipleRootsError extends Error {
 }
 
 function findPipeline(dataset, iri) {
-  let ptr = clownface({ dataset })
+  let ptr = rdf.clownface({ dataset })
 
   if (iri) {
     ptr = ptr.namedNode(iri)
   }
 
-  ptr = ptr.has(ns.rdf.type, ns.p.Pipeline)
+  ptr = ptr.has(rdf.ns.rdf.type, rdf.ns.p.Pipeline)
 
   if (ptr.terms.length === 0) {
     throw new Error('no pipeline found in the dataset')

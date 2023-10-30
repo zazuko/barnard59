@@ -1,5 +1,4 @@
-import clownface from 'clownface'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import ns from './namespaces.js'
 
 function createPipelineDefinition({
@@ -10,7 +9,7 @@ function createPipelineDefinition({
   writable,
   writableObjectMode,
 } = {}) {
-  const ptr = clownface({
+  const ptr = rdf.clownface({
     dataset: dataset || rdf.dataset(),
     term: term || rdf.blankNode(),
   })

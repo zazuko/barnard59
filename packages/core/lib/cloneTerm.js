@@ -1,6 +1,4 @@
-import rdf from '@zazuko/env'
-
-function cloneTerm(term) {
+function cloneTerm(rdf, term) {
   if (!term) {
     return null
   }

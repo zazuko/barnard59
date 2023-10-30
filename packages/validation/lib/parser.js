@@ -1,9 +1,7 @@
 import fs from 'fs'
 import readline from 'readline'
-import rdf from '@zazuko/env'
-import fromFile from 'rdf-utils-fs/fromFile.js'
+import rdf from '@zazuko/env-node'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
 import Issue from './issue.js'
 import * as utils from './utils.js'
 import validatePipelineProperty from './validatePipelineProperty.js'
@@ -15,12 +13,12 @@ const ns = {
 }
 
 export async function readGraph(file, checks) {
-  const quadStream = fromFile(file)
+  const quadStream = rdf.fromFile(file)
   const parserPromise = new Promise((resolve, reject) => {
     quadStream.on('error', reject)
     quadStream.on('end', resolve)
   })
-  const datasetPromise = fromStream(rdf.dataset(), quadStream)
+  const datasetPromise = rdf.dataset().import(quadStream)
 
   let issue, dataset
   try {

@@ -1,6 +1,5 @@
 import { SpanStatusCode } from '@opentelemetry/api'
 import { isStream } from '../isStream.js'
-import ns from '../namespaces.js'
 import PipelineError from '../PipelineError.js'
 import Step from '../Step.js'
 import tracer from '../tracer.js'
@@ -11,7 +10,7 @@ async function createStep(ptr, { basePath, context, loaderRegistry, logger, vari
   return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
-      const operation = await createOperation(ptr.out(ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })
+      const operation = await createOperation(ptr.out(context.env.ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })
       const stream = await operation.apply(context, args)
 
       if (!stream || !isStream(stream)) {

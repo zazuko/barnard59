@@ -11,6 +11,7 @@
     "@zazuko/env": "^1.0.1",
     "barnard59-base": "^2.0.0",
     "barnard59-core": "^4.0.0",
+    "barnard59-env": "^0.0.0",
     "barnard59-formats": "^2.0.0",
     "barnard59-http": "^2.0.0",
     "chai": "^4.3.7",

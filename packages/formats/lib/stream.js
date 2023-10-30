@@ -1,10 +1,7 @@
-import fromStream from 'rdf-dataset-ext/fromStream.js'
-import rdf from '@zazuko/env'
-
-export function toDataset(streamOrDataset) {
+export function toDataset(rdf, streamOrDataset) {
   if (!streamOrDataset.readable) {
     return Promise.resolve(streamOrDataset)
   }
 
-  return fromStream(rdf.dataset(), streamOrDataset)
+  return rdf.dataset().import(streamOrDataset)
 }

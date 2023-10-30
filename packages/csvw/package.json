@@ -21,7 +21,6 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@rdfjs/fetch": "^3.1.1",
-    "@zazuko/env": "^1.0.1",
     "duplex-to": "^1.0.1",
     "file-fetch": "^1.7.0",
     "node-fetch": "^3.0.0",
@@ -29,6 +28,7 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
+    "barnard59-env": "^0.0.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^7.0.1",
     "is-stream": "^3.0.0"

@@ -1,8 +1,7 @@
 import module from 'module'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { program } from 'commander'
 import { parse } from '../pipeline.js'
-import ns from '../namespaces.js'
 import runAction from './runAction.js'
 import { combine } from './options.js'
 
@@ -12,8 +11,8 @@ const require = module.createRequire(import.meta.url)
 export async function * discoverCommands(manifests) {
   for await (const { name, manifest, version } of manifests) {
     const commands = manifest
-      .has(rdf.ns.rdf.type, ns.b59.CliCommand)
-      .has(ns.b59.command)
+      .has(rdf.ns.rdf.type, rdf.ns.b59.CliCommand)
+      .has(rdf.ns.b59.command)
       .toArray()
 
     if (!commands.length) {
@@ -23,12 +22,12 @@ export async function * discoverCommands(manifests) {
     const command = program.command(`${name}`).version(version)
 
     for (const commandPtr of commands) {
-      const source = commandPtr.out(ns.b59.source).value
-      const pipeline = commandPtr.out(ns.b59.pipeline).value
+      const source = commandPtr.out(rdf.ns.b59.source).value
+      const pipeline = commandPtr.out(rdf.ns.b59.pipeline).value
       const { basePath, ptr } = await parse(require.resolve(source), pipeline)
 
       const pipelineSubCommand = command
-        .command(commandPtr.out(ns.b59.command).value)
+        .command(commandPtr.out(rdf.ns.b59.command).value)
       if (commandPtr.out(rdf.ns.rdfs.label).value) {
         pipelineSubCommand.description(commandPtr.out(rdf.ns.rdfs.label).value)
       }
@@ -59,17 +58,17 @@ export async function * discoverCommands(manifests) {
 
 function getAnnotatedVariables(ptr) {
   return ptr
-    .out(ns.p.variables)
-    .out(ns.p.variable)
+    .out(rdf.ns.p.variables)
+    .out(rdf.ns.p.variable)
     .toArray()
     .map(variable => {
-      const requiredLiteral = variable.out(ns.p.required).term
+      const requiredLiteral = variable.out(rdf.ns.p.required).term
       const required = requiredLiteral ? !requiredLiteral.equals(FALSE) : true
 
       return {
         required,
-        name: variable.out(ns.p.name).value,
-        defaultValue: variable.out(ns.p.value).value,
+        name: variable.out(rdf.ns.p.name).value,
+        defaultValue: variable.out(rdf.ns.p.value).value,
         description: variable.out(rdf.ns.rdfs.label).value,
       }
     })

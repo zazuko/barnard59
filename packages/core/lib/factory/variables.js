@@ -1,15 +1,11 @@
-import $rdf from '@zazuko/env'
-import ns from '../namespaces.js'
 import { VariableMap } from '../VariableMap.js'
-
-const FALSE = $rdf.literal('false', ns.xsd.boolean)
 
 async function createVariables(ptr, { basePath, context, loaderRegistry, logger }) {
   const variables = new VariableMap()
 
-  for (const variablePtr of ptr.out(ns.p.variable).toArray()) {
+  for (const variablePtr of ptr.out(context.env.ns.p.variable).toArray()) {
     let variable
-    if (variablePtr.out(ns.p.value).term) {
+    if (variablePtr.out(context.env.ns.p.value).term) {
       variable = await loaderRegistry.load(variablePtr, { basePath, context, logger, variables })
 
       if (!variable) {
@@ -17,8 +13,8 @@ async function createVariables(ptr, { basePath, context, loaderRegistry, logger 
       }
     }
 
-    const optional = variablePtr.out(ns.p.required).term?.equals(FALSE) || false
-    variables.set(variablePtr.out(ns.p.name).value, variable?.value, { optional })
+    const optional = variablePtr.out(context.env.ns.p.required).term?.equals(context.env.FALSE) || false
+    variables.set(variablePtr.out(context.env.ns.p.name).value, variable?.value, { optional })
   }
 
   return variables
