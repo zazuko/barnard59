@@ -20,6 +20,7 @@ jobs:
           - rdf
           - s3
           - sparql
+          - validate-shacl
           - validation
     steps:
       - uses: actions/checkout@v4
