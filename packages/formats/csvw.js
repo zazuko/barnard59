@@ -29,7 +29,7 @@ function parse(args) {
 
   return tracer.startActiveSpan('csvw:parse', async span => {
     try {
-      const dataset = await toDataset(metadata)
+      const dataset = await toDataset(this.env, metadata)
       span.addEvent('metadata')
       return sinkToDuplex(new CsvwParser({
         metadata: dataset,

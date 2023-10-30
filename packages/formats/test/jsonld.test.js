@@ -1,6 +1,5 @@
 import fs from 'fs'
 import rdf from '@zazuko/env'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
 import { expect } from 'chai'
 import { parse } from '../jsonld.js'
 
@@ -10,7 +9,7 @@ describe('jsonld', () => {
       const input = fs.createReadStream(new URL('./assets/remote.json', import.meta.url))
 
       const parser = parse()
-      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
+      const dataset = await rdf.dataset().import(input.pipe(parser))
 
       expect(dataset).to.have.property('size').gt(0)
     })
@@ -23,7 +22,7 @@ describe('jsonld', () => {
           'http://example.org/ns/csvw': './test/assets/csvw.context.json',
         },
       })
-      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
+      const dataset = await rdf.dataset().import(input.pipe(parser))
 
       expect(dataset).to.have.property('size').gt(0)
     })
@@ -36,7 +35,7 @@ describe('jsonld', () => {
           'http://example.org/ns/csvw': './test/assets/csvw.context.json',
         }),
       })
-      const dataset = await fromStream(rdf.dataset(), input.pipe(parser))
+      const dataset = await rdf.dataset().import(input.pipe(parser))
 
       expect(dataset).to.have.property('size').gt(0)
     })

@@ -1,9 +1,8 @@
 import rdfFetch from '@rdfjs/fetch'
-import rdf from '@zazuko/env'
 import checkResponse from './checkResponse.js'
 import commonFetch from './commonFetch.js'
 
-async function fetchMetadata(url) {
+async function fetchMetadata(rdf, url) {
   const res = await rdfFetch(url.toString(), {
     contentTypeLookup: extension => extension === '.json' ? 'application/ld+json' : undefined,
     factory: rdf,

@@ -1,6 +1,9 @@
 import { strictEqual } from 'assert'
-import metadata from '../lib/metadata.js'
+import env from 'barnard59-env'
+import metadataUnbound from '../lib/metadata.js'
 import createPipelineDefinition from './support/createPipelineDefinition.js'
+
+const metadata = metadataUnbound.bind(null, env)
 
 describe('metadata', () => {
   it('should be a function', () => {

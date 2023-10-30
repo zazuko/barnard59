@@ -7,15 +7,15 @@ import pipelineLoader from './loader/pipeline.js'
 import variableLoader from './loader/variable.js'
 import fileLoader from './loader/file.js'
 
-function factory() {
+function factory(rdf) {
   const registry = new LoaderRegistry()
 
   ecmaScriptLoader.register(registry)
   ecmaScriptLiteralLoader.register(registry)
-  ecmaScriptModuleLoader.register(registry)
-  pipelineLoader.register(registry)
-  variableLoader.register(registry)
-  fileLoader.register(registry)
+  ecmaScriptModuleLoader.register(registry, rdf)
+  pipelineLoader.register(registry, rdf)
+  variableLoader.register(registry, rdf)
+  fileLoader.register(registry, rdf)
 
   return registry
 }

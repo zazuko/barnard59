@@ -1,14 +1,13 @@
 import { Readable } from 'stream'
 import deepEqual from 'deep-equal'
 import formats from '@rdfjs/formats-common'
-import rdf from '@zazuko/env'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
+import rdf from '@zazuko/env-node'
 const parser = formats.parsers.get('text/turtle')
 
 export async function turtleToCF(str) {
   const stream = Readable.from([str])
   const quadStream = parser.import(stream)
-  return rdf.clownface({ dataset: await fromStream(rdf.dataset(), quadStream) })
+  return rdf.clownface({ dataset: await rdf.dataset().import(quadStream) })
 }
 
 export function checkArrayContainsField(array, field, value) {

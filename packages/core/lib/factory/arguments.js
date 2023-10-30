@@ -1,6 +1,5 @@
 import parseArguments from 'rdf-loader-code/arguments.js'
 import { unknownVariable } from '../loader/variable.js'
-import ns from '../namespaces.js'
 
 async function createArguments(ptr, { basePath, context, loaderRegistry, logger, variables }) {
   const args = await parseArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
@@ -9,7 +8,7 @@ async function createArguments(ptr, { basePath, context, loaderRegistry, logger,
   // This code maps the unknownVariable symbols to undefined for both kinds of arguments:
 
   // list
-  if (ptr.out(ns.code.arguments).isList()) {
+  if (ptr.out(context.env.ns.code.arguments).isList()) {
     return args.map(arg => arg === unknownVariable ? undefined : arg)
   }
 

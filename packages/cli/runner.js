@@ -2,7 +2,7 @@ import { createPipeline, defaultLogger, run } from 'barnard59-core'
 
 import tracer from './lib/tracer.js'
 
-function create(ptr, { basePath, outputStream, logger, variables = new Map(), level = 'error', quiet } = {}) {
+function create(ptr, env, { basePath, outputStream, logger, variables = new Map(), level = 'error', quiet } = {}) {
   return tracer.startActiveSpan('createPipeline', { 'pipeline.id': ptr.value }, async span => {
     try {
       if (!logger) {
@@ -10,6 +10,7 @@ function create(ptr, { basePath, outputStream, logger, variables = new Map(), le
       }
 
       const pipeline = createPipeline(ptr, {
+        env,
         basePath,
         logger,
         variables,

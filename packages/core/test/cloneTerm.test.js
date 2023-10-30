@@ -1,7 +1,9 @@
 import { notStrictEqual, strictEqual, throws } from 'assert'
-import rdf from '@zazuko/env'
-import cloneTerm from '../lib/cloneTerm.js'
+import rdf from '@zazuko/env-node'
+import cloneTermUnbound from '../lib/cloneTerm.js'
 import ns from './support/namespaces.js'
+
+const cloneTerm = cloneTermUnbound.bind(null, rdf)
 
 describe('cloneTerm', () => {
   it('should be a function', () => {

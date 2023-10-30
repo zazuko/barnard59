@@ -2,7 +2,6 @@ import { resolve } from 'path'
 import * as fs from 'fs'
 import { isLiteral } from 'is-graph-pointer'
 import untildify from 'untildify'
-import ns from '../namespaces.js'
 
 export default function loader(ptr, { basePath, variables }) {
   if (isLiteral(ptr)) {
@@ -13,6 +12,6 @@ export default function loader(ptr, { basePath, variables }) {
   }
 }
 
-loader.register = (registry) => {
-  registry.registerLiteralLoader(ns.p.FileContents, loader)
+loader.register = (registry, rdf) => {
+  registry.registerLiteralLoader(rdf.ns.p.FileContents, loader)
 }
