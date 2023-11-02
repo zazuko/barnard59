@@ -1,0 +1,37 @@
+{
+  "name": "barnard59-cube",
+  "version": "2.0.0",
+  "description": "RDF cubes for Linked Data pipelines",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/cube"
+  },
+  "keywords": [],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59",
+  "peerDependencies": {
+    "barnard59-base": "^2.0.0",
+    "barnard59-rdf": "^2.0.0",
+    "barnard59-http": "^2.0.0",
+    "barnard59-sparql": "^2.0.0",
+    "barnard59-formats": "^2.0.0",
+    "barnard59-validate-shacl": "^0.3.8"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "dependencies": {
+    "@zazuko/env-node": "^1.0.0",
+    "rdf-stream-to-dataset-stream": "^1.0.0"
+  }
+}

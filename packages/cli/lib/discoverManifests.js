@@ -9,6 +9,7 @@ const require = module.createRequire(import.meta.url)
 export default async function * () {
   const packages = findPlugins({
     includeDev: true,
+    includePeer: true,
     filter({ pkg }) {
       return packagePattern.test(pkg.name) && hasManifest(pkg.name)
     },

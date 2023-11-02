@@ -1,0 +1,216 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix http: <https://barnard59.zazuko.com/operations/http/> .
+@prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+_:endpoint a p:Variable ;
+  p:name "endpoint" ;
+  rdfs:label "SPARQL endpoint" ;
+  p:value "https://lindas.admin.ch/query"
+.
+
+_:cube a p:Variable ;
+  p:name "cube" ;
+  rdfs:label "cube URI" ;
+.
+
+_:constraint a p:Variable ;
+  p:name "constraint" ;
+  rdfs:label "cube constraint file" ;
+.
+
+_:profile a p:Variable ;
+  p:name "profile" ;
+  rdfs:label "cube constraint profile URL" ;
+  p:value "https://cube.link/latest/shape/standalone-constraint-constraint" ;
+.
+
+<fetch-cube-constraint> a p:Pipeline ;
+  p:variables [ p:variable _:endpoint, _:cube ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          _:queryConstraint
+          [ ntriples:serialize () ]
+          [ base:stdout () ]
+        ) 
+    ] 
+.
+
+<fetch-cube-observations> a p:Pipeline ;
+  p:variables [ p:variable _:endpoint, _:cube ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          _:queryObservations
+          _:toQuads
+          [ ntriples:serialize () ]
+          [ base:stdout () ]
+        ) 
+    ] 
+.
+
+<check-cube-constraint> a p:Pipeline ;
+  p:variables [ p:variable _:profile ] ;
+  p:steps
+    [
+      p:stepList ( 
+        _:stdin
+        [ n3:parse () ]
+        _:toDataset
+        _:validateWithProfile
+      )
+    ]
+.
+
+<check-cube-observations> a p:Pipeline ;
+  p:variables [ p:variable _:constraint ] ;
+  p:steps
+    [
+      p:stepList ( 
+        _:stdin
+        [ n3:parse () ]
+        _:toDatasetBySubject
+        _:batch
+        _:validateWithConstraint
+      )
+    ]
+.
+
+# relying on cbd is not ideal (vendor specific)
+_:queryConstraint sparql:construct
+    [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] , 
+    [
+      code:name "query";
+      code:value """
+      #pragma describe.strategy cbd
+
+      PREFIX cube: <https://cube.link/>
+
+      DESCRIBE ?s
+      WHERE {
+        <${cube}> cube:observationConstraint ?s .
+      }
+      """^^code:EcmaScriptTemplateLiteral 
+    ]
+.
+
+# use SELECT instead of CONSTRUCT to ensure result is ordered by subject
+_:queryObservations sparql:select
+    [
+      code:name "endpoint";
+      code:value "endpoint"^^p:VariableName
+    ] , 
+    [
+      code:name "query";
+      code:value """
+      PREFIX cube: <https://cube.link/>
+
+      SELECT ?s ?p ?o
+      WHERE {
+        <${cube}> cube:observationSet/cube:observation ?s .
+        ?s ?p ?o 
+      }
+      ORDER BY ?s
+      """^^code:EcmaScriptTemplateLiteral 
+    ]
+.
+
+_:toQuads a p:Step ;
+  code:implementedBy 
+    [ 
+      a code:EcmaScriptModule;
+      code:link <file:../lib/quads.js#toQuad>
+    ]
+.
+
+_:stdin a p:Step ;
+  code:implementedBy "() => process.stdin"^^code:EcmaScript  
+.
+
+_:toDataset a p:Step ;
+	code:implementedBy 
+    [
+      rdf:type code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
+    ] 
+.
+
+_:toDatasetBySubject a p:Step ;
+	code:implementedBy 
+    [
+      rdf:type code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/bySubject.js> ;
+    ] 
+. 
+
+_:batch a p:Step ;
+  code:implementedBy 
+    [ 
+      a code:EcmaScriptModule ;
+      code:link <file:../lib/batch.js#batch> ;
+    ] ;
+  code:arguments (50)
+.
+
+_:validateWithProfile shacl:validate
+  [ code:name "shape" ; code:value _:getProfile ] 
+  # beware of maxError = 1, see https://github.com/zazuko/rdf-validate-shacl/issues/88
+.
+
+_:validateWithConstraint shacl:validate
+  [ code:name "shape" ; code:value _:getConstraint ] 
+  # beware of maxError = 1, see https://github.com/zazuko/rdf-validate-shacl/issues/88
+.
+
+
+_:getProfile a p:Pipeline , p:ReadableObjectMode;
+  p:steps
+    [
+      p:stepList
+        (
+          [ http:get [ code:name "url" ; code:value "profile"^^p:VariableName ] ] 
+          [ n3:parse () ]
+        ) 
+    ] 
+  .
+
+_:getConstraint a p:Pipeline , p:ReadableObjectMode ;
+  p:variables [ p:variable _:constraint ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          _:readConstraint
+          _:toDataset
+          _:addTarget
+          [ base:flatten () ]
+        ) 
+    ] 
+.
+
+_:readConstraint a p:Step ;
+  code:implementedBy 
+    [ 
+      a code:EcmaScriptModule ;
+      code:link <node:rdf-utils-fs#fromFile> ;
+    ] ;
+  code:arguments ("constraint"^^p:VariableName)
+.
+
+_:addTarget base:map (
+  [
+    a code:EcmaScriptModule ;
+    code:link <file:../lib/target.js#addTarget>
+  ]
+) .
