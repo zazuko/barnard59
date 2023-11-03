@@ -51,7 +51,7 @@ Results are returned sorted by observation so that the potentially big output st
 
 ### check cube observations
 
-Pipeline `check-cube-observations` validates the input observations against the shapes provided with the _constraint_ variable.
+Pipeline `check-cube-observations` validates the input observations against the shapes provided with the `constraint` variable.
 
 The pipeline reads the observations from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube-observations` pipeline.
 
