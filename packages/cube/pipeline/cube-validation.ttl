@@ -68,7 +68,10 @@ _:profile a p:Variable ;
         _:stdin
         [ n3:parse () ]
         _:toDataset
-        _:validateWithProfile
+        [ shacl:report (_:getProfile) ]
+        [ base:flatten () ]
+        [ ntriples:serialize () ]
+        [ base:stdout () ]
       )
     ]
 .
@@ -82,7 +85,11 @@ _:profile a p:Variable ;
         [ n3:parse () ]
         _:toDatasetBySubject
         _:batch
-        _:validateWithConstraint
+        [ shacl:report (_:getConstraint) ]
+        [ base:limit (10)]
+        [ base:flatten () ]
+        [ ntriples:serialize () ]
+        [ base:stdout () ]
       )
     ]
 .
@@ -162,17 +169,6 @@ _:batch a p:Step ;
     ] ;
   code:arguments (50)
 .
-
-_:validateWithProfile shacl:validate
-  [ code:name "shape" ; code:value _:getProfile ] 
-  # beware of maxError = 1, see https://github.com/zazuko/rdf-validate-shacl/issues/88
-.
-
-_:validateWithConstraint shacl:validate
-  [ code:name "shape" ; code:value _:getConstraint ] 
-  # beware of maxError = 1, see https://github.com/zazuko/rdf-validate-shacl/issues/88
-.
-
 
 _:getProfile a p:Pipeline , p:ReadableObjectMode;
   p:steps
