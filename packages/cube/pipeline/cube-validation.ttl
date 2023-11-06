@@ -41,7 +41,7 @@ _:profile a p:Variable ;
         (
           _:queryConstraint
           [ ntriples:serialize () ]
-          [ base:stdout () ]
+          _:stdout
         ) 
     ] 
 .
@@ -55,7 +55,7 @@ _:profile a p:Variable ;
           _:queryObservations
           _:toQuads
           [ ntriples:serialize () ]
-          [ base:stdout () ]
+          _:stdout
         ) 
     ] 
 .
@@ -71,7 +71,7 @@ _:profile a p:Variable ;
         [ shacl:report (_:getProfile) ]
         [ base:flatten () ]
         [ ntriples:serialize () ]
-        [ base:stdout () ]
+        _:stdout
       )
     ]
 .
@@ -89,7 +89,7 @@ _:profile a p:Variable ;
         [ base:limit (10)]
         [ base:flatten () ]
         [ ntriples:serialize () ]
-        [ base:stdout () ]
+        _:stdout
       )
     ]
 .
@@ -143,6 +143,10 @@ _:toQuads a p:Step ;
 
 _:stdin a p:Step ;
   code:implementedBy "() => process.stdin"^^code:EcmaScript  
+.
+
+_:stdout a p:Step ;
+  code:implementedBy "() => process.stdout"^^code:EcmaScript  
 .
 
 _:toDataset a p:Step ;
