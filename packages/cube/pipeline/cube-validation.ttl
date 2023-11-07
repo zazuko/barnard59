@@ -33,6 +33,19 @@ _:profile a p:Variable ;
   p:value "https://cube.link/latest/shape/standalone-constraint-constraint" ;
 .
 
+_:batchSize a p:Variable ;
+  p:name "batchSize" ;
+  rdfs:label "batch size" ;
+  p:value 50 ;
+.
+
+_:maxViolations a p:Variable ;
+  p:name "maxViolations" ;
+  rdfs:label "max number of violations" ;
+  p:value 3 ;
+.
+
+
 <fetch-cube-constraint> a p:Pipeline ;
   p:variables [ p:variable _:endpoint, _:cube ] ;
   p:steps
@@ -77,7 +90,7 @@ _:profile a p:Variable ;
 .
 
 <check-cube-observations> a p:Pipeline ;
-  p:variables [ p:variable _:constraint ] ;
+  p:variables [ p:variable _:constraint , _:batchSize , _:maxViolations ] ;
   p:steps
     [
       p:stepList ( 
@@ -85,8 +98,10 @@ _:profile a p:Variable ;
         [ n3:parse () ]
         _:toDatasetBySubject
         _:batch
-        [ shacl:report (_:getConstraint) ]
-        [ base:limit (10)]
+        [ shacl:report 
+          [code:name "shape" ; code:value _:getConstraint ] ,
+          [code:name "maxErrors" ; code:value "maxViolations"^^p:VariableName ] 
+        ]
         [ base:flatten () ]
         [ ntriples:serialize () ]
         _:stdout
@@ -171,7 +186,7 @@ _:batch a p:Step ;
       a code:EcmaScriptModule ;
       code:link <file:../lib/batch.js#batch> ;
     ] ;
-  code:arguments (50)
+  code:arguments ("batchSize"^^p:VariableName)
 .
 
 _:getProfile a p:Pipeline , p:ReadableObjectMode;
