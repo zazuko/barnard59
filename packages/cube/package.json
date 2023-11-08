@@ -21,10 +21,10 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "peerDependencies": {
     "barnard59-base": "^2.0.0",
-    "barnard59-rdf": "^2.0.0",
-    "barnard59-http": "^2.0.0",
-    "barnard59-sparql": "^2.0.0",
     "barnard59-formats": "^2.0.0",
+    "barnard59-http": "^2.0.0",
+    "barnard59-rdf": "^2.0.0",
+    "barnard59-sparql": "^2.0.0",
     "barnard59-validate-shacl": "^0.3.8"
   },
   "engines": {
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@zazuko/env-node": "^1.0.0",
+    "external-merge-sort": "^0.1.2",
     "rdf-stream-to-dataset-stream": "^1.0.0"
   }
 }

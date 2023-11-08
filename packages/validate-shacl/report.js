@@ -5,14 +5,17 @@ import SHACLValidator from 'rdf-validate-shacl'
 async function * validate(iterable, validator, maxViolations) {
   let violations = 0
   for await (const chunk of iterable) {
+    if (maxViolations && violations >= maxViolations) {
+      continue // skip validation but continue to avoid finalization issues
+    }
     const report = validator.validate(chunk)
     if (!report.conforms) {
-      yield report.dataset
       violations = violations + report.results.filter(r => r.severity.value === 'http://www.w3.org/ns/shacl#Violation').length
-      if (maxViolations && violations > maxViolations) {
-        throw new Error(`limit of ${maxViolations} violations exceeded. ${violations} violations found`)
-      }
+      yield report.dataset
     }
+  }
+  if (violations && maxViolations) {
+    throw new Error(`At least ${violations} violations found`)
   }
   if (violations) {
     throw new Error(`${violations} violations found`)
