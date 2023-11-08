@@ -66,7 +66,6 @@ _:maxViolations a p:Variable ;
       p:stepList
         (
           _:queryObservations
-          _:toQuads
           [ ntriples:serialize () ]
           _:stdout
         ) 
@@ -96,7 +95,7 @@ _:maxViolations a p:Variable ;
       p:stepList ( 
         _:stdin
         [ n3:parse () ]
-        _:sortRDF
+        _:sortBySubject
         _:toDatasetBySubject
         _:batch
         [ shacl:report 
@@ -128,8 +127,7 @@ _:queryConstraint sparql:construct
     ]
 .
 
-# use SELECT instead of CONSTRUCT to ensure result is ordered by subject
-_:queryObservations sparql:select
+_:queryObservations sparql:construct
     [
       code:name "endpoint";
       code:value "endpoint"^^p:VariableName
@@ -139,20 +137,12 @@ _:queryObservations sparql:select
       code:value """
       PREFIX cube: <https://cube.link/>
 
-      SELECT ?s ?p ?o
+      CONSTRUCT { ?s ?p ?o }
       WHERE {
         <${cube}> cube:observationSet/cube:observation ?s .
         ?s ?p ?o 
       }
       """^^code:EcmaScriptTemplateLiteral 
-    ]
-.
-
-_:toQuads a p:Step ;
-  code:implementedBy 
-    [ 
-      a code:EcmaScriptModule;
-      code:link <file:../lib/quads.js#toQuad>
     ]
 .
 
@@ -231,7 +221,7 @@ _:addTarget base:map (
 ) .
 
 
-_:sortRDF a p:Step ;
+_:sortBySubject a p:Step ;
   code:implementedBy [ a code:EcmaScriptModule ;
     code:link <file:../lib/sort.js#sortRDF>
   ] ;
