@@ -17,22 +17,30 @@ npx barnard59 run ./pipeline/cube-validation.ttl \
     --variable endpoint=https://int.lindas.admin.ch/query 
 ```
 
+Taking advantage of [package-specific commands](https://data-centric.zazuko.com/docs/workflows/reference/cli/#package-specific-commands), we can express the same as:
+
+```bash
+npx barnard59 cube fetch-constraint \
+  --cube https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
+  --endpoint https://int.lindas.admin.ch/query
+```
+
+
 This pipeline is useful mainly for cubes published with [cube creator](https://github.com/zazuko/cube-creator) (if the cube definition is manually crafted, likely it's already available as a local file).
 
 
 ### check cube constraint
 
-Pipeline `check-cube-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint but [cube link](https://cube.link/) defines additional ones).
+Pipeline `check-cube-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
 
 The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube-constraint` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-cube-observations` pipeline).
 
 ```bash
 cat myConstraint.ttl \
-| npx barnard59 run ./pipeline/cube-validation.ttl \
-    --pipeline http://barnard59.zazuko.com/pipeline/cube-validation/check-cube-constraint \
-    --variable profile=https://cube.link/v0.0.5/shape/standalone-constraint-constraint
+| npx barnard59 cube check-constraint \
+    --profile https://cube.link/v0.1.0/shape/standalone-constraint-constraint
 ```
-TODO: explain how validation errors are reported
+SHACL reports for violations are written to `stdout`.
 
 
 ### fetch cube observations
@@ -40,14 +48,11 @@ TODO: explain how validation errors are reported
 Pipeline `fetch-cube-observations` queries a given SPARQL endpoint (default is https://lindas.admin.ch/query) to retrieve the observations of a given cube.
 
 ```bash
-npx barnard59 run ./pipeline/cube-validation.ttl \
-    --pipeline http://barnard59.zazuko.com/pipeline/cube-validation/fetch-cube-observations \
-    --variable cube=https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
-    --variable endpoint=https://int.lindas.admin.ch/query
+npx barnard59 cube fetch-observations \
+    --cube https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
+    --endpoint https://int.lindas.admin.ch/query
 ```
-Results are returned sorted by observation so that the potentially big output stream can be split (by the `check-cube-observations` pipeline) and each observation can be processed separately.
-
-
+Results are written to `stdout`.
 
 ### check cube observations
 
@@ -57,12 +62,14 @@ The pipeline reads the observations from `stdin`, allowing input from a local fi
 
 ```bash
 cat myObservations.ttl \
-| npx barnard59 run ./pipeline/cube-validation.ttl \
-    --pipeline http://barnard59.zazuko.com/pipeline/cube-validation/check-cube-observations \
-    --variable constraint=myConstraint.ttl
+| npx barnard59 cube check-observations \
+    --constraint myConstraint.ttl
 ```
+
 To enable validation, the pipeline adds to the constraint a `sh:targetClass` property with value `cube:Observation` (assuming that each observation has an explicit property `rdf:type` with value `cube:Observation`).
 
-To leverage streaming, the pipeline also assumes the triples for the same observation to be adjacent (`fetch-cube-observations` achieves this sorting by observation).
+To leverage streaming, input is split and validated in little batches of adjustable size (the default is 50 and likely it's appropriate in most cases). This allows the validation of very big cubes because observations are not loaded in memory all at once. To ensure triples for the same observation are adjacent (hence processed in the same batch), the input is sorted by subject (and in case the input is large the sorting step relies on temporary local files).
 
-TODO: explain how validation errors are reported
+SHACL reports for violations are written to `stdout`.
+
+To limit the output size, there is also a `maxViolations` option to stop validation when the given number of violations is reached.
