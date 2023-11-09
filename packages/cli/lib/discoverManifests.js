@@ -1,4 +1,5 @@
 import * as module from 'module'
+import path from 'path'
 import fs from 'fs'
 import findPlugins from 'find-plugins'
 import rdf from 'barnard59-env'
@@ -13,6 +14,15 @@ export default async function * () {
       return packagePattern.test(pkg.name) && hasManifest(pkg.name)
     },
   })
+
+  const dir = process.cwd()
+  if (hasManifest(dir)) {
+    yield {
+      name: path.basename(dir),
+      manifest: rdf.clownface({ dataset: await rdf.dataset().import(rdf.fromFile(`${dir}/manifest.ttl`)) }),
+      version: require(`${dir}/package.json`).version,
+    }
+  }
 
   for (const { pkg } of packages) {
     const { version } = require(`${pkg.name}/package.json`)
