@@ -35,10 +35,10 @@ const onError = async err => {
     if (err instanceof MultipleRootsError) {
       const alternatives = err.alternatives.map(x => `\n\t--pipeline ${x}`).join('')
       // eslint-disable-next-line no-console
-      console.log(`Multiple root pipelines found. Try one of these:${alternatives}`)
+      console.error(`Multiple root pipelines found. Try one of these:${alternatives}`)
     } else {
       // eslint-disable-next-line no-console
-      console.log(err)
+      console.error(err)
     }
   }
   await sdk.shutdown()
