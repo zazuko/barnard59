@@ -18,7 +18,7 @@ describe('barnard59', function () {
       const result = shell.exec(command, { silent: true, cwd })
 
       strictEqual(result.code, 1)
-      expect(result.stdout).to.equal('Multiple root pipelines found. Try one of these:\n\t--pipeline http://example.org/pipeline/p1\n\t--pipeline http://example.org/pipeline/p2\n')
+      expect(result.stderr).to.equal('Multiple root pipelines found. Try one of these:\n\t--pipeline http://example.org/pipeline/p1\n\t--pipeline http://example.org/pipeline/p2\n')
     })
     it('should exit with error code 0 if there are no error while processing the pipeline', () => {
       const pipelineFile = filenamePipelineDefinition('simple')
