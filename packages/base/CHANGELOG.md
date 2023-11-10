@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 2.0.1
+
+### Patch Changes
+
+- 67504df: Remove redundant dependency on `rdf-utils-fs`
+
 ## 2.0.0
 
 ### Major Changes
