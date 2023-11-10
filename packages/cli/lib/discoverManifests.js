@@ -1,5 +1,4 @@
 import * as module from 'module'
-import path from 'path'
 import fs from 'fs'
 import findPlugins from 'find-plugins'
 import rdf from 'barnard59-env'
