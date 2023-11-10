@@ -1,4 +1,4 @@
-import $rdf from '@zazuko/env'
+import $rdf from '@zazuko/env-node'
 
 const cube = $rdf.namespace('https://cube.link/')
 const ex = $rdf.namespace('http://example.org/')

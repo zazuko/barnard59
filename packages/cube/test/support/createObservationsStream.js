@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 import { Readable } from 'readable-stream'
 import * as ns from './namespaces.js'
 

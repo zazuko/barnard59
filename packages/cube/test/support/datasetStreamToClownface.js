@@ -1,5 +1,5 @@
 import getStream from 'get-stream'
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 import addAll from 'rdf-dataset-ext/addAll.js'
 
 async function datasetStreamToClownface(stream) {
