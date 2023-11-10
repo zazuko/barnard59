@@ -2,6 +2,7 @@ import * as module from 'module'
 import fs from 'fs'
 import findPlugins from 'find-plugins'
 import rdf from 'barnard59-env'
+import { packageDirectory } from 'pkg-dir'
 
 const packagePattern = /^barnard59-(.+)$/
 const require = module.createRequire(import.meta.url)
@@ -13,6 +14,16 @@ export default async function * () {
       return packagePattern.test(pkg.name) && hasManifest(pkg.name)
     },
   })
+
+  const dir = await packageDirectory()
+  if (hasManifest(dir)) {
+    const { name, version } = require(`${dir}/package.json`)
+    yield {
+      name,
+      manifest: rdf.clownface({ dataset: await rdf.dataset().import(rdf.fromFile(`${dir}/manifest.ttl`)) }),
+      version,
+    }
+  }
 
   for (const { pkg } of packages) {
     const { version } = require(`${pkg.name}/package.json`)

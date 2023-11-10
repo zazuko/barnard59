@@ -4,33 +4,22 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix base: <https://barnard59.zazuko.com/operations/base/> .
 @prefix fs: <https://barnard59.zazuko.com/operations/core/fs/> .
+@prefix test: <https://barnard59.zazuko.com/operations/test/> .
 
 <> a p:Pipeline, p:Readable;
   p:steps [
     p:stepList
     (
-      <iterateDirectory>
+      [ test:iterateDirectory ("definitions/foreach")]
       [ base:forEach ( <Print> "file" ) ]
     )
   ] .
-
-<iterateDirectory> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/iterateDirectory.js#default>
-  ];
-  code:arguments ("definitions/foreach").
 
 <Print> a p:Pipeline, p:ReadableObjectMode;
   p:steps [
     p:stepList
     (
       [ fs:createReadStream("file"^^p:VariableName) ]
-      <getLength>
+      [ test:getLength ("_ => this.variables.get('file')"^^code:EcmaScript) ]
     )
   ].
-
-<getLength> a p:Step;
-  code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/inlineTransform.js#default>
-  ];
-  code:arguments ("_ => this.variables.get('file')"^^code:EcmaScript).
