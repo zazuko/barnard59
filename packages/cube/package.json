@@ -34,5 +34,8 @@
     "@zazuko/env-node": "^1.0.0",
     "external-merge-sort": "^0.1.2",
     "rdf-stream-to-dataset-stream": "^1.0.0"
+  },
+  "devDependencies": {
+    "shelljs": "^0.8.5"
   }
 }

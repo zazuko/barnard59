@@ -1,0 +1,54 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix schema: <http://schema.org/> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix cube: <https://cube.link/> .
+
+<https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2/shape/> a sh:NodeShape, cube:Constraint ;
+	sh:closed true ;
+	sh:property [
+		rdf:type cube:MeasureDimension ;
+		schema:name "Valeur de correction"@fr, "Korrekturwert"@de, "Correction value"@en, "Valore di correzione"@it ;
+		sh:path <https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/correctionvalue> ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:decimal ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+		sh:minInclusive "-20"^^xsd:decimal ;
+		sh:maxInclusive "30"^^xsd:decimal ;
+		qudt:unit unit:KiloGM-PER-HA ;
+		qudt:scaleType qudt:RatioScale ;
+	], [
+		rdf:type cube:KeyDimension ;
+		schema:name "Intensità delle precipitazioni"@it, "Niederschlagsintensität"@de, "Intensity of precipitation"@en, "Intensité de précipitations"@fr ;
+		sh:path <https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/precipitation-intensity> ;
+		sh:in (
+			<https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2/Precipitationintensity/low>
+			<https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2/Precipitationintensity/high>
+			<https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2/Precipitationintensity/average>
+		) ;
+		sh:nodeKind sh:IRI ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+		qudt:scaleType qudt:NominalScale ;
+	], [
+		sh:path rdf:type ;
+		sh:in (
+			cube:Observation
+		) ;
+		sh:nodeKind sh:IRI ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	], [
+		sh:path cube:observedBy ;
+		sh:in (
+			<https://agriculture.ld.admin.ch/>
+      <https://register.ld.admin.ch/staatskalender/organization/10003634> 
+		) ;
+		sh:nodeKind sh:IRI ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] .
+
