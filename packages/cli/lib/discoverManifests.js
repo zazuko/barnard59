@@ -17,10 +17,11 @@ export default async function * () {
 
   const dir = process.cwd()
   if (hasManifest(dir)) {
+    const { name, version } = require(`${dir}/package.json`)
     yield {
-      name: path.basename(dir),
+      name,
       manifest: rdf.clownface({ dataset: await rdf.dataset().import(rdf.fromFile(`${dir}/manifest.ttl`)) }),
-      version: require(`${dir}/package.json`).version,
+      version,
     }
   }
 
