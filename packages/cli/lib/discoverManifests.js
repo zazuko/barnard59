@@ -2,6 +2,7 @@ import * as module from 'module'
 import fs from 'fs'
 import findPlugins from 'find-plugins'
 import rdf from 'barnard59-env'
+import { packageDirectory } from 'pkg-dir'
 
 const packagePattern = /^barnard59-(.+)$/
 const require = module.createRequire(import.meta.url)
@@ -14,7 +15,7 @@ export default async function * () {
     },
   })
 
-  const dir = process.cwd()
+  const dir = await packageDirectory()
   if (hasManifest(dir)) {
     const { name, version } = require(`${dir}/package.json`)
     yield {

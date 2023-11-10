@@ -38,6 +38,7 @@
     "find-plugins": "^1.1.7",
     "is-graph-pointer": "^2.1.0",
     "lodash": "^4.17.21",
+    "pkg-dir": "^8.0.0",
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
