@@ -1,6 +1,24 @@
 @base <https://barnard59.zazuko.com/> .
 @prefix b59: <https://barnard59.zazuko.com/vocab#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+
+# renamed from <https://barnard59.zazuko.com/operations/rdf/cube.js#buildCubeShape>
+<operations/cube/buildCubeShape> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "build Cube Shape";
+  rdfs:comment "Builds a Cube Shape based on Cube Observation datasets";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-cube/cube.js#buildCubeShape>
+  ].
+
+# renamed from <https://barnard59.zazuko.com/operations/rdf/cube.js#toObservation>
+<operations/cube/toObservation> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "to Cube Observation";
+  rdfs:comment "Converts a set of quads to a Cube Observation";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-cube/cube.js#toObservation>
+  ].
 
 
 <command/cube/fetch-constraint>

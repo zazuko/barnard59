@@ -1,5 +1,20 @@
 # barnard59-cube
 
+This package provides operations and commands for RDF cubes in Barnard59 Linked Data pipelines.
+The `manifest.ttl` file contains a full list of all operations included in this package. 
+
+## Operations
+
+### `cube/buildCubeShape`
+
+TBD
+
+### `cube/toObservation`
+
+TBD
+
+
+## Commands
 
 ## Cube validation
 

@@ -1,5 +1,5 @@
 import once from 'lodash/once.js'
-import $rdf from '@zazuko/env'
+import $rdf from '@zazuko/env-node'
 import { Transform } from 'readable-stream'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 import * as ns from '../../namespaces.js'

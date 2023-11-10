@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 import { fromRdf } from 'rdf-literal'
 import cbdCopy from '../../cbdCopy.js'
 import * as ns from '../../namespaces.js'

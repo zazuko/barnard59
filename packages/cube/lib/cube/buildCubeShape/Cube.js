@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 import addAll from 'rdf-dataset-ext/addAll.js'
 import cbdCopy from '../../cbdCopy.js'
 import * as ns from '../../namespaces.js'

@@ -1,7 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import toNT from '@rdfjs/to-ntriples'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 import toStream from 'rdf-dataset-ext/toStream.js'
 import { expect } from 'chai'
 import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'

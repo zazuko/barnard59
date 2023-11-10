@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from '@zazuko/env-node'
 
 function cbdCopy(source, target, { ignore = rdf.termSet() } = {}) {
   for (const quad of source.dataset.match(source.term)) {

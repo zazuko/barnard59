@@ -1,5 +1,5 @@
 import { URL } from 'url'
-import $rdf from '@zazuko/env'
+import $rdf from '@zazuko/env-node'
 import { Transform } from 'readable-stream'
 import dateToId from '../dateToId.js'
 import urlJoin from '../urlJoin.js'
