@@ -1,5 +1,4 @@
 import { Duplex } from 'stream'
-import rdf from '@zazuko/env-node'
 
 // Iterable<X> => Iterable<X[]>
 export async function * chunkObjectsBySize(size, iterable) {
@@ -27,6 +26,6 @@ export async function * chunkBySize({ env }, size, iterable) {
   }
 }
 
-export const batch = function (size) => {
+export const batch = function (size) {
   return Duplex.from(iterable => chunkBySize(this, Number(size), iterable))
 }
