@@ -16,7 +16,7 @@ _:cube a p:Variable ;
   rdfs:label "cube URI" ;
 .
 
-<fetch-cube-constraint> a p:Pipeline ;
+<fetch-constraint> a p:Pipeline ;
   p:variables [ p:variable _:endpoint, _:cube ] ;
   p:steps
     [

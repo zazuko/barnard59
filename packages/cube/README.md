@@ -18,11 +18,11 @@ TBD
 
 ## Cube validation
 
-`cube-validation.ttl` contains pipelines to retrieve and validate cube observations and their constraints.
+The following pipelines retrieve and validate cube observations and their constraints.
 
-### fetch cube constraint
+### fetch constraint
 
-Pipeline `fetch-cube-constraint` queries a given SPARQL endpoint to retrieve 
+Pipeline `fetch-constraint` queries a given SPARQL endpoint to retrieve 
 a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of the `cube:Constraint` part of a given cube.
 
 ```bash
@@ -35,11 +35,11 @@ npx barnard59 cube fetch-constraint \
 This pipeline is useful mainly for cubes published with [cube creator](https://github.com/zazuko/cube-creator) (if the cube definition is manually crafted, likely it's already available as a local file).
 
 
-### check cube constraint
+### check constraint
 
-Pipeline `check-cube-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
+Pipeline `check-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
 
-The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube-constraint` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-cube-observations` pipeline).
+The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-constraint` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-observations` pipeline).
 
 ```bash
 cat myConstraint.ttl \
@@ -49,9 +49,9 @@ cat myConstraint.ttl \
 SHACL reports for violations are written to `stdout`.
 
 
-### fetch cube observations
+### fetch observations
 
-Pipeline `fetch-cube-observations` queries a given SPARQL endpoint to retrieve the observations of a given cube.
+Pipeline `fetch-observations` queries a given SPARQL endpoint to retrieve the observations of a given cube.
 
 ```bash
 npx barnard59 cube fetch-observations \
@@ -60,11 +60,11 @@ npx barnard59 cube fetch-observations \
 ```
 Results are written to `stdout`.
 
-### check cube observations
+### check observations
 
-Pipeline `check-cube-observations` validates the input observations against the shapes provided with the `constraint` variable.
+Pipeline `check-observations` validates the input observations against the shapes provided with the `constraint` variable.
 
-The pipeline reads the observations from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube-observations` pipeline.
+The pipeline reads the observations from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-observations` pipeline.
 
 ```bash
 cat myObservations.ttl \
@@ -82,4 +82,4 @@ To limit the output size, there is also a `maxViolations` option to stop validat
 
 ### Known issues
 
-COmmand `check-constraint` may fail if there are `sh:in` constraints with too many values.
+Command `check-constraint` may fail if there are `sh:in` constraints with too many values.

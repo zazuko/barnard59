@@ -18,7 +18,7 @@ _:profile a p:Variable ;
 .
 
 
-<check-cube-constraint> a p:Pipeline ;
+<check-constraint> a p:Pipeline ;
   p:variables [ p:variable _:profile ] ;
   p:steps
     [

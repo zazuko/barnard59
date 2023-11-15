@@ -28,7 +28,7 @@ _:maxViolations a p:Variable ;
 .
 
 
-<check-cube-observations> a p:Pipeline ;
+<check-observations> a p:Pipeline ;
   p:variables [ p:variable _:constraint , _:batchSize , _:maxViolations ] ;
   p:steps
     [
