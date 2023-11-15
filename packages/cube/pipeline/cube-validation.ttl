@@ -204,11 +204,11 @@ _:getConstraint a p:Pipeline , p:ReadableObjectMode ;
 .
 
 _:readConstraint a p:Step ;
-  code:implementedBy 
-    [ 
-      a code:EcmaScriptModule ;
-      code:link <node:rdf-utils-fs#fromFile> ;
-    ] ;
+  code:implementedBy """
+  function (path) {
+    return this.env.fromFile(path)
+  }
+  """^^code:EcmaScript ;
   code:arguments ("constraint"^^p:VariableName)
 .
 
