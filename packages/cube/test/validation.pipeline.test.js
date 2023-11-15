@@ -9,10 +9,8 @@ describe('cube validation pipeline', function () {
   this.timeout(10000)
 
   it('should run check-cube-observations pipeline without error', () => {
-    const pipelineFile = (new URL('../pipeline/cube-validation.ttl', import.meta.url)).pathname
-    const pipelineURI = 'http://barnard59.zazuko.com/pipeline/cube-validation/check-cube-observations'
     const constraintFile = `${support}/constraint01.ttl`
-    const command = `cat ${support}/observations01.ttl | ${barnard59} run ${pipelineFile} --pipeline=${pipelineURI} --variable constraint=${constraintFile}`
+    const command = `cat ${support}/observations01.ttl | ${barnard59} cube check-observations --constraint ${constraintFile}`
 
     const result = shell.exec(command, { silent: true, cwd })
 
@@ -22,10 +20,8 @@ describe('cube validation pipeline', function () {
   })
 
   it('should run check-cube-observations pipeline with error', () => {
-    const pipelineFile = (new URL('../pipeline/cube-validation.ttl', import.meta.url)).pathname
-    const pipelineURI = 'http://barnard59.zazuko.com/pipeline/cube-validation/check-cube-observations'
     const constraintFile = `${support}/constraint01.ttl`
-    const command = `cat ${support}/observations02.ttl | ${barnard59} run ${pipelineFile} --pipeline=${pipelineURI} --variable constraint=${constraintFile}`
+    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile}`
 
     const result = shell.exec(command, { silent: true, cwd })
 

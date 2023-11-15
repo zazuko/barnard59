@@ -1,0 +1,53 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+_:endpoint a p:Variable ;
+  p:name "endpoint" ;
+  rdfs:label "SPARQL endpoint" ;
+.
+
+_:cube a p:Variable ;
+  p:name "cube" ;
+  rdfs:label "cube URI" ;
+.
+
+<fetch-cube-constraint> a p:Pipeline ;
+  p:variables [ p:variable _:endpoint, _:cube ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          _:queryConstraint
+          [ ntriples:serialize () ]
+          _:stdout
+        ) 
+    ] 
+.
+
+
+# relying on cbd is not ideal (vendor specific)
+_:queryConstraint sparql:construct
+    [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] , 
+    [
+      code:name "query";
+      code:value """
+      #pragma describe.strategy cbd
+
+      PREFIX cube: <https://cube.link/>
+
+      DESCRIBE ?s
+      WHERE {
+        <${cube}> cube:observationConstraint ?s .
+      }
+      """^^code:EcmaScriptTemplateLiteral 
+    ]
+.
+
+_:stdout a p:Step ;
+  code:implementedBy "() => process.stdout"^^code:EcmaScript  
+.

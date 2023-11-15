@@ -1,35 +1,18 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
-@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
-@prefix http: <https://barnard59.zazuko.com/operations/http/> .
 @prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
 @prefix base: <https://barnard59.zazuko.com/operations/base/> .
 @prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
 
-_:endpoint a p:Variable ;
-  p:name "endpoint" ;
-  rdfs:label "SPARQL endpoint" ;
-.
-
-_:cube a p:Variable ;
-  p:name "cube" ;
-  rdfs:label "cube URI" ;
-.
 
 _:constraint a p:Variable ;
   p:name "constraint" ;
   rdfs:label "cube constraint file" ;
-.
-
-_:profile a p:Variable ;
-  p:name "profile" ;
-  rdfs:label "cube constraint profile URL" ;
-  p:value "https://cube.link/latest/shape/standalone-constraint-constraint" ;
 .
 
 _:batchSize a p:Variable ;
@@ -44,48 +27,6 @@ _:maxViolations a p:Variable ;
   p:value 3 ;
 .
 
-
-<fetch-cube-constraint> a p:Pipeline ;
-  p:variables [ p:variable _:endpoint, _:cube ] ;
-  p:steps
-    [
-      p:stepList
-        (
-          _:queryConstraint
-          [ ntriples:serialize () ]
-          _:stdout
-        ) 
-    ] 
-.
-
-<fetch-cube-observations> a p:Pipeline ;
-  p:variables [ p:variable _:endpoint, _:cube ] ;
-  p:steps
-    [
-      p:stepList
-        (
-          _:queryObservations
-          [ ntriples:serialize () ]
-          _:stdout
-        ) 
-    ] 
-.
-
-<check-cube-constraint> a p:Pipeline ;
-  p:variables [ p:variable _:profile ] ;
-  p:steps
-    [
-      p:stepList ( 
-        _:stdin
-        [ n3:parse () ]
-        _:toDataset
-        [ shacl:report (_:getProfile) ]
-        [ base:flatten () ]
-        [ ntriples:serialize () ]
-        _:stdout
-      )
-    ]
-.
 
 <check-cube-observations> a p:Pipeline ;
   p:variables [ p:variable _:constraint , _:batchSize , _:maxViolations ] ;
@@ -108,42 +49,6 @@ _:maxViolations a p:Variable ;
     ]
 .
 
-# relying on cbd is not ideal (vendor specific)
-_:queryConstraint sparql:construct
-    [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] , 
-    [
-      code:name "query";
-      code:value """
-      #pragma describe.strategy cbd
-
-      PREFIX cube: <https://cube.link/>
-
-      DESCRIBE ?s
-      WHERE {
-        <${cube}> cube:observationConstraint ?s .
-      }
-      """^^code:EcmaScriptTemplateLiteral 
-    ]
-.
-
-_:queryObservations sparql:construct
-    [
-      code:name "endpoint";
-      code:value "endpoint"^^p:VariableName
-    ] , 
-    [
-      code:name "query";
-      code:value """
-      PREFIX cube: <https://cube.link/>
-
-      CONSTRUCT { ?s ?p ?o }
-      WHERE {
-        <${cube}> cube:observationSet/cube:observation ?s .
-        ?s ?p ?o 
-      }
-      """^^code:EcmaScriptTemplateLiteral 
-    ]
-.
 
 _:stdin a p:Step ;
   code:implementedBy "() => process.stdin"^^code:EcmaScript  
@@ -178,16 +83,6 @@ _:batch a p:Step ;
   code:arguments ("batchSize"^^p:VariableName)
 .
 
-_:getProfile a p:Pipeline , p:ReadableObjectMode;
-  p:steps
-    [
-      p:stepList
-        (
-          [ http:get [ code:name "url" ; code:value "profile"^^p:VariableName ] ] 
-          [ n3:parse () ]
-        ) 
-    ] 
-  .
 
 _:getConstraint a p:Pipeline , p:ReadableObjectMode ;
   p:variables [ p:variable _:constraint ] ;

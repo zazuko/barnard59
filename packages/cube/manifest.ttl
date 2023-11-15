@@ -25,30 +25,26 @@
   a b59:CliCommand ;
   b59:command "fetch-constraint" ;
   rdfs:label "Retrieves cube constraint from SPARQL endpoint" ;
-  b59:source "barnard59-cube/pipeline/cube-validation.ttl" ;
-  b59:pipeline <http://barnard59.zazuko.com/pipeline/cube-validation/fetch-cube-constraint> 
+  b59:source "barnard59-cube/pipeline/fetch-cube-constraint.ttl" ;
 .
 
 <command/cube/check-constraint>
   a b59:CliCommand ;
   b59:command "check-constraint" ;
   rdfs:label "Validate input constraint against profile shapes" ;
-  b59:source "barnard59-cube/pipeline/cube-validation.ttl" ;
-  b59:pipeline <http://barnard59.zazuko.com/pipeline/cube-validation/check-cube-constraint> 
+  b59:source "barnard59-cube/pipeline/check-cube-constraint.ttl" ;
 .
 
 <command/cube/fetch-observations>
   a b59:CliCommand ;
   b59:command "fetch-observations" ;
   rdfs:label "Retrieves cube observations from SPARQL endpoint" ;
-  b59:source "barnard59-cube/pipeline/cube-validation.ttl" ;
-  b59:pipeline <http://barnard59.zazuko.com/pipeline/cube-validation/fetch-cube-observations> 
+  b59:source "barnard59-cube/pipeline/fetch-cube-observations.ttl" ;
 .
 
 <command/cube/check-observations>
   a b59:CliCommand ;
   b59:command "check-observations" ;
   rdfs:label "Validate input observations against cube constraint" ;
-  b59:source "barnard59-cube/pipeline/cube-validation.ttl" ;
-  b59:pipeline <http://barnard59.zazuko.com/pipeline/cube-validation/check-cube-observations> 
+  b59:source "barnard59-cube/pipeline/check-cube-observations.ttl" ;
 .
