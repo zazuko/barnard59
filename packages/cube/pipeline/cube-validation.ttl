@@ -14,7 +14,6 @@
 _:endpoint a p:Variable ;
   p:name "endpoint" ;
   rdfs:label "SPARQL endpoint" ;
-  p:value "https://lindas.admin.ch/query"
 .
 
 _:cube a p:Variable ;

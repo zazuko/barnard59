@@ -22,17 +22,8 @@ TBD
 
 ### fetch cube constraint
 
-Pipeline `fetch-cube-constraint` queries a given SPARQL endpoint (default is https://lindas.admin.ch/query) to retrieve 
+Pipeline `fetch-cube-constraint` queries a given SPARQL endpoint to retrieve 
 a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of the `cube:Constraint` part of a given cube.
-
-```bash
-npx barnard59 run ./pipeline/cube-validation.ttl \
-    --pipeline http://barnard59.zazuko.com/pipeline/cube-validation/fetch-cube-constraint \
-    --variable cube=https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
-    --variable endpoint=https://int.lindas.admin.ch/query 
-```
-
-Taking advantage of [package-specific commands](https://data-centric.zazuko.com/docs/workflows/reference/cli/#package-specific-commands), we can express the same as:
 
 ```bash
 npx barnard59 cube fetch-constraint \
@@ -60,7 +51,7 @@ SHACL reports for violations are written to `stdout`.
 
 ### fetch cube observations
 
-Pipeline `fetch-cube-observations` queries a given SPARQL endpoint (default is https://lindas.admin.ch/query) to retrieve the observations of a given cube.
+Pipeline `fetch-cube-observations` queries a given SPARQL endpoint to retrieve the observations of a given cube.
 
 ```bash
 npx barnard59 cube fetch-observations \
@@ -88,3 +79,7 @@ To leverage streaming, input is split and validated in little batches of adjusta
 SHACL reports for violations are written to `stdout`.
 
 To limit the output size, there is also a `maxViolations` option to stop validation when the given number of violations is reached.
+
+### Known issues
+
+COmmand `check-constraint` may fail if there are `sh:in` constraints with too many values.
