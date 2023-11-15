@@ -1,15 +1,15 @@
 import { obj } from 'through2'
 
 function filter(func) {
-  return obj(function (chunk, encoding, callback) {
+  return obj((chunk, encoding, callback) => {
     Promise.resolve().then(() => {
-      return func(chunk, encoding)
+      return func.call(this, chunk, encoding)
     }).then(result => {
       if (result) {
-        this.push(chunk)
+        return callback(null, chunk)
       }
 
-      callback()
+      return callback()
     }).catch(callback)
   })
 }
