@@ -1,7 +1,7 @@
 {
   "name": "barnard59-cube",
   "version": "0.0.0",
-  "description": "RDF cubes for Linked Data pipelines",
+  "description": "Build and check RDF cubes in Linked Data pipelines",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -27,9 +27,6 @@
     "barnard59-sparql": "^2.0.0",
     "barnard59-validate-shacl": "^0.3.8"
   },
-  "engines": {
-    "node": ">= 14.0.0"
-  },
   "dependencies": {
     "@zazuko/env-node": "^1.0.0",
     "external-merge-sort": "^0.1.2",
@@ -37,7 +34,7 @@
     "rdf-dataset-ext": "^1.0.1",
     "rdf-literal": "^1.3.0",
     "rdf-stream-to-dataset-stream": "^1.0.0",
-    "readable-stream": "^3.6.0"
+    "readable-stream": "3 - 4"
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",

@@ -81,7 +81,7 @@ cat myObservations.ttl \
     --constraint myConstraint.ttl
 ```
 
-To enable validation, the pipeline adds to the constraint a `sh:targetClass` property with value `cube:Observation` (assuming that each observation has an explicit property `rdf:type` with value `cube:Observation`).
+To enable validation, the pipeline adds to the constraint a `sh:targetClass` property with value `cube:Observation`, requiring that each observation has an explicit `rdf:type`.
 
 To leverage streaming, input is split and validated in little batches of adjustable size (the default is 50 and likely it's appropriate in most cases). This allows the validation of very big cubes because observations are not loaded in memory all at once. To ensure triples for the same observation are adjacent (hence processed in the same batch), the input is sorted by subject (and in case the input is large the sorting step relies on temporary local files).
 

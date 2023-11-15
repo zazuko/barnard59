@@ -17,9 +17,9 @@ export async function * chunkObjectsBySize(size, iterable) {
 }
 
 // Iterable<Dataset> => Iterable<Dataset>
-export async function * chunkBySize(size, iterable) {
+export async function * chunkBySize({ env }, size, iterable) {
   for await (const array of chunkObjectsBySize(size, iterable)) {
-    const batch = rdf.dataset()
+    const batch = env.dataset()
     for (const dataset of array) {
       batch.addAll(dataset)
     }
@@ -27,4 +27,6 @@ export async function * chunkBySize(size, iterable) {
   }
 }
 
-export const batch = size => Duplex.from(iterable => chunkBySize(Number(size), iterable))
+export const batch = function (size) => {
+  return Duplex.from(iterable => chunkBySize(this, Number(size), iterable))
+}
