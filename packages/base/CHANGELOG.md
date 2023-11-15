@@ -1,5 +1,11 @@
 # v1.0.0
 
+## 2.1.0
+
+### Minor Changes
+
+- 5327ff0: Filter: bind filter callback function to pipeline context
+
 ## 2.0.1
 
 ### Patch Changes

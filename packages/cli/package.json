@@ -43,9 +43,9 @@
   },
   "devDependencies": {
     "approvals": "^6.2.2",
-    "barnard59-base": "^2.0.1",
+    "barnard59-base": "^2.1.0",
     "barnard59-formats": "^2.1.0",
-    "barnard59-graph-store": "^2.1.0",
+    "barnard59-graph-store": "^3.0.0",
     "barnard59-http": "^2.0.0",
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.3",
