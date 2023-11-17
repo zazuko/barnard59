@@ -1,43 +1,18 @@
-import rdf from '@zazuko/env-node'
-import { fromRdf } from 'rdf-literal'
 import cbdCopy from '../../cbdCopy.js'
-import * as ns from '../../namespaces.js'
-
-const datatypeParsers = rdf.termMap([
-  [ns.xsd.byte, fromRdf],
-  [ns.xsd.date, fromRdf],
-  [ns.xsd.dateTime, fromRdf],
-  [ns.xsd.decimal, fromRdf],
-  [ns.xsd.double, fromRdf],
-  [ns.xsd.float, fromRdf],
-  [ns.xsd.gDay, fromRdf],
-  [ns.xsd.gMonthDay, fromRdf],
-  [ns.xsd.gYear, fromRdf],
-  [ns.xsd.gYearMonth, fromRdf],
-  [ns.xsd.int, fromRdf],
-  [ns.xsd.integer, fromRdf],
-  [ns.xsd.long, fromRdf],
-  [ns.xsd.negativeInteger, fromRdf],
-  [ns.xsd.nonNegativeInteger, fromRdf],
-  [ns.xsd.nonPositiveInteger, fromRdf],
-  [ns.xsd.positiveInteger, fromRdf],
-  [ns.xsd.short, fromRdf],
-  [ns.xsd.unsignedByte, fromRdf],
-  [ns.xsd.unsignedInt, fromRdf],
-  [ns.xsd.unsignedLong, fromRdf],
-  [ns.xsd.unsignedShort, fromRdf],
-])
+import initDatatypeParsers from './datatypes.js'
 
 class Dimension {
-  constructor({ metadata, predicate, object, shapeId = () => rdf.blankNode() }) {
+  constructor({ rdf, metadata, predicate, object, shapeId = () => rdf.blankNode() }) {
+    this.rdf = rdf
     this.metadata = metadata
     this.predicate = predicate
     this.termType = object.termType
     this.datatype = rdf.termSet()
     this.shapeId = shapeId
 
-    if (object.datatype && datatypeParsers.has(object.datatype)) {
-      const datatypeParser = datatypeParsers.get(object.datatype)
+    this.datatypeParsers = initDatatypeParsers(rdf)
+    if (object.datatype && this.datatypeParsers.has(object.datatype)) {
+      const datatypeParser = this.datatypeParsers.get(object.datatype)
 
       const value = datatypeParser(object)
 
@@ -55,8 +30,8 @@ class Dimension {
       this.datatype.add(object.datatype)
     }
 
-    if (object.datatype && datatypeParsers.has(object.datatype)) {
-      const datatypeParser = datatypeParsers.get(object.datatype)
+    if (object.datatype && this.datatypeParsers.has(object.datatype)) {
+      const datatypeParser = this.datatypeParsers.get(object.datatype)
 
       const value = datatypeParser(object)
 
@@ -77,44 +52,44 @@ class Dimension {
   }
 
   toDataset({ cube, shape }) {
-    const dataset = rdf.dataset()
+    const dataset = this.rdf.dataset()
 
-    const graph = rdf.clownface({ dataset })
+    const graph = this.rdf.clownface({ dataset })
     const ptr = graph.node(this.shapeId(cube, this))
 
     ptr
-      .addIn(ns.sh.property, shape)
-      .addOut(ns.sh.path, this.predicate)
-      .addOut(ns.sh.nodeKind, this.termType === 'NamedNode' ? ns.sh.IRI : ns.sh.Literal)
-      .addOut(ns.sh.minCount, 1)
-      .addOut(ns.sh.maxCount, 1)
+      .addIn(this.rdf.ns.sh.property, shape)
+      .addOut(this.rdf.ns.sh.path, this.predicate)
+      .addOut(this.rdf.ns.sh.nodeKind, this.termType === 'NamedNode' ? this.rdf.ns.sh.IRI : this.rdf.ns.sh.Literal)
+      .addOut(this.rdf.ns.sh.minCount, 1)
+      .addOut(this.rdf.ns.sh.maxCount, 1)
 
     if (this.datatype.size === 1) {
-      ptr.addOut(ns.sh.datatype, [...this.datatype][0])
+      ptr.addOut(this.rdf.ns.sh.datatype, [...this.datatype][0])
     }
 
     if (this.datatype.size > 1) {
-      ptr.addList(ns.sh.or, [...this.datatype].map(datatype => {
+      ptr.addList(this.rdf.ns.sh.or, [...this.datatype].map(datatype => {
         return ptr
           .blankNode()
-          .addOut(ns.sh.datatype, datatype)
+          .addOut(this.rdf.ns.sh.datatype, datatype)
       }))
     }
 
     if (this.in) {
-      ptr.addList(ns.sh.in, [...this.in.values()])
+      ptr.addList(this.rdf.ns.sh.in, [...this.in.values()])
     }
 
     if (this.min) {
-      ptr.addOut(ns.sh.minInclusive, this.min)
+      ptr.addOut(this.rdf.ns.sh.minInclusive, this.min)
     }
 
     if (this.max) {
-      ptr.addOut(ns.sh.maxInclusive, this.max)
+      ptr.addOut(this.rdf.ns.sh.maxInclusive, this.max)
     }
 
     if (this.metadata.term) {
-      cbdCopy(this.metadata, ptr)
+      cbdCopy(this.rdf, this.metadata, ptr)
     }
 
     return dataset

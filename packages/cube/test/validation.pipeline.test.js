@@ -1,4 +1,5 @@
 import { strictEqual, ok } from 'assert'
+import { expect } from 'chai'
 import shell from 'shelljs'
 
 const barnard59 = (new URL('../../../packages/cli/bin/barnard59.js', import.meta.url)).pathname
@@ -26,7 +27,7 @@ describe('cube validation pipeline', function () {
     const result = shell.exec(command, { silent: true, cwd })
 
     strictEqual(result.code, 1)
-    ok(result.stderr.startsWith('Error: At least 1 violations found'))
+    expect(result.stderr).to.match(/^Error: At least 1 violations found/)
     ok(result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
   })
 })

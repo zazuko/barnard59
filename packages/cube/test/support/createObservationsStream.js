@@ -1,18 +1,18 @@
-import rdf from '@zazuko/env-node'
+import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import * as ns from './namespaces.js'
+import { ex } from './namespaces.js'
 
-function createObservationsStream({ observations = [{ [ns.ex.property.value]: rdf.literal('test') }] } = {}) {
+function createObservationsStream({ observations = [{ [ex.property.value]: rdf.literal('test') }] } = {}) {
   const datasets = []
 
   observations.forEach((observation, index) => {
     const observationPtr = rdf.clownface({
       dataset: rdf.dataset(),
-      term: ns.ex(`cube/observation/${index + 1}`),
+      term: ex(`cube/observation/${index + 1}`),
     })
 
-    observationPtr.addIn(ns.cube.observation, ns.ex('cube/observation/'))
-    observationPtr.addOut(ns.rdf.type, ns.cube.Observation)
+    observationPtr.addIn(rdf.ns.cube.observation, ex('cube/observation/'))
+    observationPtr.addOut(rdf.ns.rdf.type, rdf.ns.cube.Observation)
 
     for (const [property, value] of Object.entries(observation)) {
       observationPtr.addOut(rdf.namedNode(property), value)
