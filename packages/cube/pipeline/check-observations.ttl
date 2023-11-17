@@ -27,9 +27,14 @@ _:maxViolations a p:Variable ;
   p:value 3 ;
 .
 
+_:sortChunkSize a p:Variable ;
+  p:name "sortChunkSize" ;
+  rdfs:label "sort chunk size" ;
+  p:value 100000 ;
+.
 
 <check-observations> a p:Pipeline ;
-  p:variables [ p:variable _:constraint , _:batchSize , _:maxViolations ] ;
+  p:variables [ p:variable _:constraint , _:batchSize , _:maxViolations , _:sortChunkSize ] ;
   p:steps
     [
       p:stepList ( 
@@ -117,7 +122,7 @@ _:addTarget base:map (
 
 _:sortBySubject a p:Step ;
   code:implementedBy [ a code:EcmaScriptModule ;
-    code:link <file:../lib/sort.js#sortRDF>
+    code:link <file:../lib/sort.js#sortBySubject>
   ] ;
-  code:arguments ("x => x.subject.value"^^code:EcmaScript) 
+  code:arguments ("sortChunkSize"^^p:VariableName)
 .
