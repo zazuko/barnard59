@@ -1,13 +1,12 @@
 import { Readable, Duplex } from 'stream'
 import { sort, compareOn, createStore } from 'external-merge-sort'
-import rdf from '@zazuko/env-node'
 
-async function write(chunk, filename) {
-  await rdf.toFile(Readable.from(chunk), filename)
-  return rdf.fromFile(filename)
-}
+export function sortRDF(key) {
+  const write = async (chunk, filename) => {
+    await this.rdf.toFile(Readable.from(chunk), filename)
+    return this.rdf.fromFile(filename)
+  }
 
-export const sortRDF = key => {
   const comparer = compareOn(key)
   const store = createStore(write, '.nt')
 
