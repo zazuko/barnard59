@@ -1,11 +1,9 @@
-import rdf from '@zazuko/env-node'
-import addAll from 'rdf-dataset-ext/addAll.js'
 import cbdCopy from '../../cbdCopy.js'
-import * as ns from '../../namespaces.js'
 import Dimension from './Dimension.js'
 
 class Cube {
-  constructor({ metadata, observationSet, shape, term, propertyShapeId }) {
+  constructor({ rdf, metadata, observationSet, shape, term, propertyShapeId }) {
+    this.rdf = rdf
     this.metadata = metadata
     this.observationSet = observationSet
     this.shape = shape
@@ -19,11 +17,11 @@ class Cube {
 
     if (!dimension) {
       const metadata = this.metadata
-        .out(ns.cube.observationConstraint)
-        .out(ns.sh.property)
-        .has(ns.sh.path, predicate)
+        .out(this.rdf.ns.cube.observationConstraint)
+        .out(this.rdf.ns.sh.property)
+        .has(this.rdf.ns.sh.path, predicate)
 
-      dimension = new Dimension({ metadata, predicate, object, shapeId: this.propertyShapeId })
+      dimension = new Dimension({ rdf: this.rdf, metadata, predicate, object, shapeId: this.propertyShapeId })
 
       this.dimensions.set(predicate, dimension)
     }
@@ -36,30 +34,30 @@ class Cube {
   }
 
   toDataset({ shapeGraph } = { shapeGraph: undefined }) {
-    const dataset = rdf.dataset()
+    const dataset = this.rdf.dataset()
 
-    const cube = rdf.clownface({ dataset, term: this.term })
-      .addOut(ns.rdf.type, ns.cube.Cube)
-      .addOut(ns.cube.observationSet, this.observationSet)
-      .addOut(ns.cube.observationConstraint, this.shape)
+    const cube = this.rdf.clownface({ dataset, term: this.term })
+      .addOut(this.rdf.ns.rdf.type, this.rdf.ns.cube.Cube)
+      .addOut(this.rdf.ns.cube.observationSet, this.observationSet)
+      .addOut(this.rdf.ns.cube.observationConstraint, this.shape)
 
-    cbdCopy(this.metadata, cube, { ignore: rdf.termSet([ns.cube.observationConstraint]) })
+    cbdCopy(this.rdf, this.metadata, cube, { ignore: this.rdf.termSet([this.rdf.ns.cube.observationConstraint]) })
 
-    rdf.clownface({ dataset, term: this.observationSet })
-      .addOut(ns.rdf.type, ns.cube.ObservationSet)
+    this.rdf.clownface({ dataset, term: this.observationSet })
+      .addOut(this.rdf.ns.rdf.type, this.rdf.ns.cube.ObservationSet)
 
-    const shapeDataset = rdf.dataset()
+    const shapeDataset = this.rdf.dataset()
 
-    rdf.clownface({ dataset: shapeDataset, term: this.shape })
-      .addOut(ns.rdf.type, [ns.sh.NodeShape, ns.cube.Constraint])
-      .addOut(ns.sh.closed, true)
+    this.rdf.clownface({ dataset: shapeDataset, term: this.shape })
+      .addOut(this.rdf.ns.rdf.type, [this.rdf.ns.sh.NodeShape, this.rdf.ns.cube.Constraint])
+      .addOut(this.rdf.ns.sh.closed, true)
 
     for (const dimension of this.dimensions.values()) {
-      addAll(shapeDataset, dimension.toDataset({ cube: this, shape: this.shape }))
+      shapeDataset.addAll(dimension.toDataset({ cube: this, shape: this.shape }))
     }
-    const setGraph = quad => rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
+    const setGraph = quad => this.rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
 
-    return addAll(dataset, [...shapeDataset].map(setGraph))
+    return dataset.addAll([...shapeDataset].map(setGraph))
   }
 }
 
