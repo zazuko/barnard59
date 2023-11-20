@@ -33,55 +33,52 @@ _:sortChunkSize a p:Variable ;
   p:value 100000 ;
 .
 
-<check-observations> a p:Pipeline ;
+<check-observations> a p:Pipeline , p:Readable;
   p:variables [ p:variable _:constraint , _:batchSize , _:maxViolations , _:sortChunkSize ] ;
   p:steps
     [
-      p:stepList ( 
+      p:stepList
+      (
         _:stdin
         [ n3:parse () ]
         _:sortBySubject
         _:toDatasetBySubject
         _:batch
-        [ shacl:report 
+        [ shacl:report
           [code:name "shape" ; code:value _:getConstraint ] ,
-          [code:name "maxErrors" ; code:value "maxViolations"^^p:VariableName ] 
+          [code:name "maxErrors" ; code:value "maxViolations"^^p:VariableName ]
         ]
         [ base:flatten () ]
         [ ntriples:serialize () ]
-        _:stdout
+        _:failOnViolations
       )
     ]
 .
 
 
 _:stdin a p:Step ;
-  code:implementedBy "() => process.stdin"^^code:EcmaScript  
-.
-
-_:stdout a p:Step ;
-  code:implementedBy "() => process.stdout"^^code:EcmaScript  
+  code:implementedBy "() => process.stdin"^^code:EcmaScript
 .
 
 _:toDataset a p:Step ;
-	code:implementedBy 
+	code:implementedBy
     [
       rdf:type code:EcmaScript ;
       code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
-    ] 
+    ]
 .
 
 _:toDatasetBySubject a p:Step ;
-	code:implementedBy 
+	code:implementedBy
     [
       rdf:type code:EcmaScript ;
       code:link <node:rdf-stream-to-dataset-stream/bySubject.js> ;
-    ] 
-. 
+    ]
+.
 
 _:batch a p:Step ;
-  code:implementedBy 
-    [ 
+  code:implementedBy
+    [
       a code:EcmaScriptModule ;
       code:link <file:../lib/batch.js#batch> ;
     ] ;
@@ -99,8 +96,8 @@ _:getConstraint a p:Pipeline , p:ReadableObjectMode ;
           _:toDataset
           _:addTarget
           [ base:flatten () ]
-        ) 
-    ] 
+        )
+    ]
 .
 
 _:readConstraint a p:Step ;
@@ -125,4 +122,13 @@ _:sortBySubject a p:Step ;
     code:link <file:../lib/sort.js#sortBySubject>
   ] ;
   code:arguments ("sortChunkSize"^^p:VariableName)
+.
+
+_:failOnViolations
+  a p:Step ;
+  code:implementedBy
+    [
+      a code:EcmaScriptModule ;
+      code:link <file:../lib/validation.js#failOnViolations>
+    ] ;
 .

@@ -16,7 +16,7 @@
 		sh:datatype xsd:decimal ;
 		sh:minCount 1 ;
 		sh:maxCount 1 ;
-		sh:minInclusive "-20"^^xsd:decimal ;
+		sh:minExclusive "-20"^^xsd:decimal ;
 		sh:maxInclusive "30"^^xsd:decimal ;
 		qudt:unit unit:KiloGM-PER-HA ;
 		qudt:scaleType qudt:RatioScale ;
@@ -45,7 +45,7 @@
 		sh:path cube:observedBy ;
 		sh:in (
 			<https://agriculture.ld.admin.ch/>
-      <https://register.ld.admin.ch/staatskalender/organization/10003634> 
+      <https://register.ld.admin.ch/staatskalender/organization/10003634>
 		) ;
 		sh:nodeKind sh:IRI ;
 		sh:minCount 1 ;

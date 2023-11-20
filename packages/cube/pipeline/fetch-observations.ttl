@@ -24,9 +24,8 @@ _:cube a p:Variable ;
         (
           _:queryObservations
           [ ntriples:serialize () ]
-          _:stdout
-        ) 
-    ] 
+        )
+    ]
 .
 
 
@@ -34,7 +33,7 @@ _:queryObservations sparql:construct
     [
       code:name "endpoint";
       code:value "endpoint"^^p:VariableName
-    ] , 
+    ] ,
     [
       code:name "query";
       code:value """
@@ -43,12 +42,8 @@ _:queryObservations sparql:construct
       CONSTRUCT { ?s ?p ?o }
       WHERE {
         <${cube}> cube:observationSet/cube:observation ?s .
-        ?s ?p ?o 
+        ?s ?p ?o
       }
-      """^^code:EcmaScriptTemplateLiteral 
+      """^^code:EcmaScriptTemplateLiteral
     ]
-.
-
-_:stdout a p:Step ;
-  code:implementedBy "() => process.stdout"^^code:EcmaScript  
 .
