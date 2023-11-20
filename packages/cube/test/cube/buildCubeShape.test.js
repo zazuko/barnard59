@@ -517,6 +517,28 @@ describe('cube.buildCubeShape', () => {
     checkValues(undefinedType, undefinedValue)
   })
 
+  // this is not ideal, but it is the current behavior
+  it('ignores parsing error', async () => {
+    const two = rdf.literal('2', ns.xsd.integer)
+    const five = rdf.literal('5', ns.xsd.integer)
+    const input = createObservationsStream({
+      observations: [{
+        [ex.property.value]: two,
+      }, {
+        [ex.property.value]: rdf.literal('googol', ns.xsd.integer),
+      }, {
+        [ex.property.value]: five,
+      }],
+    })
+    const transform = buildCubeShape()
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    checkRange(result, two, five)
+  })
+
   it('should merge given metadata to cube metadata', async () => {
     const metadata = rdf.dataset([
       rdf.quad(ex.cube, ns.schema.name, rdf.literal('Test Cube')),
