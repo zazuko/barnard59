@@ -6,7 +6,7 @@ async function * validate(validator, maxViolations, iterable) {
   for await (const chunk of iterable) {
     const totalViolations = this.variables.get('violations')
     if (maxViolations && totalViolations > maxViolations) {
-      this.logger.warn('Reached max violations. Aborting')
+      this.logger.warn('Exceeded max violations. Aborting')
       break
     }
 
