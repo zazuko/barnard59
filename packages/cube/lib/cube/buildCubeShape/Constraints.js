@@ -126,41 +126,54 @@ export class ValuesConstraintBuilder {
 }
 
 export class DimensionConstraintsBuilder {
-  #defaultKey
-
   constructor({ rdf, datatypeParsers, inListThreshold }) {
     this.rdf = rdf
     this.datatypeParsers = datatypeParsers
     this.inListThreshold = inListThreshold
     this.builders = rdf.termMap()
-    this.#defaultKey = rdf.blankNode()
+  }
+
+  #addDatatype(object) {
+    if (this.builders.has(object.datatype)) {
+      this.builders.get(object.datatype).add(object)
+    } else if (this.datatypeParsers.has(object.datatype)) {
+      this.builders.set(object.datatype, new CompositeConstraintBuilder(
+        new DatatypeConstraintBuilder(this.rdf, object.datatype),
+        new RangeConstraintBuilder(this.rdf, object, this.datatypeParsers.get(object.datatype))))
+    } else {
+      this.builders.set(object.datatype, new CompositeConstraintBuilder(
+        new DatatypeConstraintBuilder(this.rdf, object.datatype),
+        new ValuesConstraintBuilder(this.rdf, object, this.inListThreshold)))
+    }
+  }
+
+  #addOther(object) {
+    if (this.valuesBuilder) {
+      this.valuesBuilder.add(object)
+    } else {
+      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, object, this.inListThreshold)
+    }
   }
 
   add(object) {
-    const key = object.datatype ?? this.#defaultKey
-    if (this.builders.has(key)) {
-      this.builders.get(key).add(object)
-      return
+    if (object.datatype) {
+      this.#addDatatype(object)
+    } else {
+      this.#addOther(object)
     }
-    if (key === this.#defaultKey) {
-      this.builders.set(key, new ValuesConstraintBuilder(this.rdf, object, this.inListThreshold))
-      return
-    }
-    if (this.datatypeParsers.has(key)) {
-      this.builders.set(key, new CompositeConstraintBuilder(
-        new DatatypeConstraintBuilder(this.rdf, object.datatype),
-        new RangeConstraintBuilder(this.rdf, object, this.datatypeParsers.get(key))))
-      return
-    }
-    this.builders.set(key, new CompositeConstraintBuilder(
-      new DatatypeConstraintBuilder(this.rdf, object.datatype),
-      new ValuesConstraintBuilder(this.rdf, object, this.inListThreshold)))
   }
 
   build(ptr) {
-    // TODO: check for error messages (too many values..)
+    if (this.valuesBuilder?.message) {
+      ptr.addOut(this.rdf.ns.sh.description, this.valuesBuilder.message)
+      return
+    }
 
     const builders = [...this.builders.values()]
+    if (this.valuesBuilder) {
+      builders.push(this.valuesBuilder)
+    }
+
     if (builders.length === 1) {
       builders[0].build(ptr)
     }

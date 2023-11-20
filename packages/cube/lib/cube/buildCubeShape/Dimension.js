@@ -3,14 +3,14 @@ import datatypeParsers from './datatypes.js'
 import { CompositeConstraintBuilder, NodeKindConstraintBuilder, DimensionConstraintsBuilder } from './Constraints.js'
 
 class Dimension {
-  constructor({ rdf, metadata, predicate, shapeId = () => rdf.blankNode() }) {
+  constructor({ rdf, metadata, predicate, shapeId = () => rdf.blankNode(), inListThreshold }) {
     this.rdf = rdf
     this.metadata = metadata
     this.predicate = predicate
     this.shapeId = shapeId
     this.constraints = new CompositeConstraintBuilder(
       new NodeKindConstraintBuilder(rdf),
-      new DimensionConstraintsBuilder({ rdf, datatypeParsers: datatypeParsers(rdf), inListThreshold: undefined }))
+      new DimensionConstraintsBuilder({ rdf, datatypeParsers: datatypeParsers(rdf), inListThreshold }))
   }
 
   update({ object }) {

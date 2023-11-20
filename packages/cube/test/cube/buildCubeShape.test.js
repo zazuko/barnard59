@@ -469,7 +469,25 @@ describe('cube.buildCubeShape', () => {
     strictEqual(datatypes.has(ns.cube.Undefined), true)
   })
 
-  // TODO: should limit number of values in IN
+  it('should limit number of values in sh:in', async () => {
+    const input = createObservationsStream({
+      observations: [{
+        [ex.property.value]: ex.valueA,
+      }, {
+        [ex.property.value]: ex.valueB,
+      }],
+    })
+    const transform = buildCubeShape({ inListThreshold: 1 })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const propertyShape = result.has(ns.sh.path, ex.property)
+    strictEqual(propertyShape.out(ns.sh.in).terms.length, 0)
+    const message = propertyShape.out(ns.sh.description).term.value
+    strictEqual(message, 'Too many values for in-list constraint.')
+  })
 
   it('should place other constraints inside sh:or if there are multiple datatypes', async () => {
     const two = rdf.literal('2', ns.xsd.integer)
