@@ -20,7 +20,7 @@ async function run(pipeline, { end = false, resume = false } = {}) {
         pipeline.logger.on('finish', () => resolve())
       })
 
-      if (pipeline.context?.error) {
+      if (pipeline.context.error) {
         throw pipeline.context.error
       }
       pipeline.logger.end()
