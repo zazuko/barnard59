@@ -11,18 +11,18 @@ describe('cube validation pipeline', function () {
 
   it('should run check-cube-observations pipeline without error', () => {
     const constraintFile = `${support}/constraint01.ttl`
-    const command = `cat ${support}/observations01.ttl | ${barnard59} cube check-observations --constraint ${constraintFile} --sortChunkSize 10`
+    const command = `cat ${support}/observations01.ttl | ${barnard59} cube check-observations --constraint ${constraintFile}`
 
     const result = shell.exec(command, { silent: true, cwd })
 
-    strictEqual(result.code, 0)
     strictEqual(result.stderr, '')
     strictEqual(result.stdout, '')
+    strictEqual(result.code, 0)
   })
 
   it('should run check-cube-observations pipeline with error', () => {
     const constraintFile = `${support}/constraint01.ttl`
-    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile} --maxViolations 1`
+    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile}`
 
     const result = shell.exec(command, { silent: true, cwd })
 
