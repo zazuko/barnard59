@@ -24,7 +24,7 @@ _:batchSize a p:Variable ;
 _:maxViolations a p:Variable ;
   p:name "maxViolations" ;
   rdfs:label "max number of violations" ;
-  p:value 3 ;
+  p:value 0 ;
 .
 
 _:sortChunkSize a p:Variable ;

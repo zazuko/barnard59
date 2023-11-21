@@ -19,8 +19,13 @@ async function * validate(validator, maxViolations, iterable) {
     }
   }
 
-  if (totalViolations > 0) {
-    this.error = new Error(`${totalViolations} violations found`)
+  if (totalViolations) {
+    const message = `${totalViolations} violations found`
+    if (totalViolations > maxViolations) {
+      this.error = new Error(message)
+    } else {
+      this.logger.warn(message)
+    }
   }
 }
 
@@ -32,7 +37,7 @@ export async function shacl(arg) {
     shape = arg
   } else if (arg) {
     ({ shape, ...options } = arg)
-    maxViolations = options.maxErrors < 1 ? undefined : Number(options.maxErrors)
+    maxViolations = options.maxErrors < 1 ? 0 : Number(options.maxErrors)
   }
 
   if (!shape) {
