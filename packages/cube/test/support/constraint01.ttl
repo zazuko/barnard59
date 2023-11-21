@@ -16,7 +16,7 @@
 		sh:datatype xsd:decimal ;
 		sh:minCount 1 ;
 		sh:maxCount 1 ;
-		sh:minExclusive "-20"^^xsd:decimal ;
+		sh:minInclusive "-20"^^xsd:decimal ;
 		sh:maxInclusive "30"^^xsd:decimal ;
 		qudt:unit unit:KiloGM-PER-HA ;
 		qudt:scaleType qudt:RatioScale ;
