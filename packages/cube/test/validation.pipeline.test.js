@@ -30,4 +30,15 @@ describe('cube validation pipeline', function () {
     expect(result.stderr).to.match(/1 violations found/)
     ok(result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
   })
+
+  it('should run check-cube-observations pipeline with options', () => {
+    const constraintFile = `${support}/constraint01.ttl`
+    const command = `cat ${support}/observations01.ttl | ${barnard59} cube check-observations --constraint ${constraintFile} --maxViolations 1 --batchSize 1 --sortChunkSize 1`
+
+    const result = shell.exec(command, { silent: true, cwd })
+
+    strictEqual(result.stderr, '')
+    strictEqual(result.stdout, '')
+    strictEqual(result.code, 0)
+  })
 })
