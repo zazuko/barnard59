@@ -1,5 +1,5 @@
 import { Duplex } from 'stream'
-import { isStream, isReadableStream } from 'is-stream'
+import { isReadableStream, isStream } from 'is-stream'
 import SHACLValidator from 'rdf-validate-shacl'
 
 async function * validate(validator, maxViolations, iterable) {
@@ -20,12 +20,7 @@ async function * validate(validator, maxViolations, iterable) {
   }
 
   if (totalViolations) {
-    const message = `${totalViolations} violations found`
-    if (totalViolations > maxViolations) {
-      this.error = new Error(message)
-    } else {
-      this.logger.warn(message)
-    }
+    this.failPipeline(new Error(`${totalViolations} violations found`))
   }
 }
 

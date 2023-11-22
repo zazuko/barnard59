@@ -22,7 +22,7 @@ describe('cube validation pipeline', function () {
 
   it('should run check-cube-observations pipeline with error', () => {
     const constraintFile = `${support}/constraint01.ttl`
-    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile}`
+    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile} --maxViolations 1`
 
     const result = shell.exec(command, { silent: true, cwd })
 
@@ -31,13 +31,13 @@ describe('cube validation pipeline', function () {
     ok(result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
   })
 
-  it('should run check-cube-observations pipeline without error when maxViolations is not exceeded', () => {
+  it('should run check-cube-observations when maxViolations is not exceeded', () => {
     const constraintFile = `${support}/constraint01.ttl`
-    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile} --maxViolations 2`
+    const command = `cat ${support}/observations02.ttl | ${barnard59} cube check-observations --constraint ${constraintFile}`
 
     const result = shell.exec(command, { silent: true, cwd })
 
-    strictEqual(result.code, 0)
+    strictEqual(result.code, 1)
     expect(result.stderr).to.match(/1 violations found/)
     ok(result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
   })
