@@ -20,7 +20,7 @@ async function * validate(validator, maxViolations, iterable) {
   }
 
   if (totalViolations) {
-    this.failPipeline(new Error(`${totalViolations} violations found`))
+    this.error(new Error(`${totalViolations} violations found`))
   }
 }
 

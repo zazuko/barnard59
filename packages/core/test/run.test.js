@@ -14,7 +14,6 @@ describe('run', () => {
         read: () => pipeline.stream.push(null),
       }),
       logger: defaultLogger(),
-      context: {},
     }
 
     const events = []
@@ -34,7 +33,6 @@ describe('run', () => {
         read: () => pipeline.stream.push(null),
       }),
       logger: defaultLogger(),
-      context: {},
     }
 
     const events = []
@@ -52,7 +50,6 @@ describe('run', () => {
         final: callback => callback(),
       }),
       logger: defaultLogger(),
-      context: {},
     }
 
     const events = []
