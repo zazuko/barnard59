@@ -12,6 +12,7 @@ jobs:
         package:
           - base
           - core
+          - cube
           - csvw
           - formats
           - ftp

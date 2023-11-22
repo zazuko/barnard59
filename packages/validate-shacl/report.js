@@ -1,36 +1,38 @@
 import { Duplex } from 'stream'
-import { isStream, isReadableStream } from 'is-stream'
+import { isReadableStream, isStream } from 'is-stream'
 import SHACLValidator from 'rdf-validate-shacl'
 
-async function * validate(iterable, validator, maxViolations) {
-  let violations = 0
+async function * validate(validator, maxViolations, iterable) {
+  let totalViolations = 0
+
   for await (const chunk of iterable) {
-    if (maxViolations && violations >= maxViolations) {
-      continue // skip validation but continue to avoid finalization issues
+    if (maxViolations && totalViolations > maxViolations) {
+      this.logger.warn('Exceeded max violations. Aborting')
+      break
     }
+
     const report = validator.validate(chunk)
     if (!report.conforms) {
-      violations = violations + report.results.filter(r => r.severity.value === 'http://www.w3.org/ns/shacl#Violation').length
+      const violations = report.results.filter(r => this.env.ns.sh.Violation.equals(r.severity)).length
+      totalViolations += violations
       yield report.dataset
     }
   }
-  if (violations && maxViolations) {
-    throw new Error(`At least ${violations} violations found`)
-  }
-  if (violations) {
-    throw new Error(`${violations} violations found`)
+
+  if (totalViolations) {
+    this.error(new Error(`${totalViolations} violations found`))
   }
 }
 
 export async function shacl(arg) {
   let shape
   let options
-  let maxErrors
+  let maxViolations
   if (isStream(arg)) {
     shape = arg
   } else if (arg) {
     ({ shape, ...options } = arg)
-    maxErrors = options.maxErrors < 1 ? undefined : Number(options.maxErrors)
+    maxViolations = options.maxErrors < 1 ? 0 : Number(options.maxErrors)
   }
 
   if (!shape) {
@@ -42,5 +44,6 @@ export async function shacl(arg) {
 
   const ds = await this.env.dataset().import(shape)
   const validator = new SHACLValidator(ds, { maxErrors: 0, factory: this.env })
-  return Duplex.from(iterable => validate(iterable, validator, maxErrors))
+
+  return Duplex.from(validate.bind(this, validator, maxViolations))
 }

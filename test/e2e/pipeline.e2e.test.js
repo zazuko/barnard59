@@ -81,4 +81,21 @@ describe('Pipeline', () => {
     const source = await fromStream(rdf.dataset(), fromFile('definitions/file-loader.ttl'))
     expect(toCanonical(out)).to.eq(toCanonical(source))
   })
+
+  it('should be set to fail from sub-pipeline', async () => {
+    // given
+    const ptr = await loadPipelineDefinition('sub-pipeline-error')
+    const pipeline = await createPipeline(ptr, {
+      env,
+      basePath: process.cwd(),
+    })
+
+    // when
+    const out = await getStream(pipeline.stream)
+
+    // then
+    expect(out).to.eq('foobar')
+    expect(pipeline.error).to.be.instanceof(Error)
+    expect(pipeline.error.message).to.eq('foo')
+  })
 })
