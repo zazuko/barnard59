@@ -1,11 +1,9 @@
 import { URL } from 'url'
-import $rdf from '@zazuko/env'
 import { Transform } from 'readable-stream'
 import dateToId from '../dateToId.js'
 import urlJoin from '../urlJoin.js'
-import { cube, rdf, xsd } from '../namespaces.js'
 
-function findRoot({ dataset }) {
+function findRoot($rdf, { dataset }) {
   const subjects = [...dataset].filter(quad => quad.subject.termType === 'NamedNode').reduce((subjects, quad) => {
     const count = subjects.get(quad.subject) || 0
 
@@ -20,7 +18,7 @@ function findRoot({ dataset }) {
 }
 
 function defaultObserver({ dataset, subject }) {
-  const observer = $rdf.clownface({ dataset }).out(cube.observedBy).term
+  const observer = this.rdf.clownface({ dataset }).out(this.rdf.ns.cube.observedBy).term
 
   if (observer) {
     return observer
@@ -30,38 +28,38 @@ function defaultObserver({ dataset, subject }) {
 
   iri.pathname = '/'
 
-  return $rdf.namedNode(iri.toString())
+  return this.rdf.namedNode(iri.toString())
 }
 
 function defaultObservations({ subject }) {
   const iri = urlJoin(subject.value, '..')
 
   if (iri.endsWith('/observation')) {
-    return $rdf.namedNode(`${iri}/`)
+    return this.rdf.namedNode(`${iri}/`)
   }
 
-  return $rdf.namedNode(`${iri}/observation/`)
+  return this.rdf.namedNode(`${iri}/observation/`)
 }
 
 function defaultObservation({ observations, subject }) {
   const url = new URL(subject.value)
   const id = url.pathname.split('/').slice(-1)[0]
 
-  return $rdf.namedNode(urlJoin(observations.value, id))
+  return this.rdf.namedNode(urlJoin(observations.value, id))
 }
 
 function dateByProperty(property) {
-  return ({ dataset }) => {
-    return $rdf.clownface({ dataset }).out(property).term
+  return function ({ dataset }) {
+    return this.rdf.clownface({ dataset }).out(property).term
   }
 }
 
 function dateNow() {
-  return $rdf.literal((new Date()).toISOString(), xsd.dateTime)
+  return this.rdf.literal((new Date()).toISOString(), this.rdf.ns.xsd.dateTime)
 }
 
 function dateByDatatype({ dataset }) {
-  const terms = $rdf.clownface({ dataset }).out().filter(ptr => xsd.dateTime.equals(ptr.term.datatype)).terms
+  const terms = this.rdf.clownface({ dataset }).out().filter(ptr => this.rdf.ns.xsd.dateTime.equals(ptr.term.datatype)).terms
 
   if (terms.length === 0) {
     throw new Error('now date value found')
@@ -77,14 +75,14 @@ function dateByDatatype({ dataset }) {
 function dateObservation({ dataset, observations, useDate }) {
   const date = useDate({ dataset })
 
-  return $rdf.namedNode(urlJoin(observations.value, dateToId(date.value)))
+  return this.rdf.namedNode(urlJoin(observations.value, dateToId(date.value)))
 }
 
 function indexObservation({ index, observations }) {
-  return $rdf.namedNode(urlJoin(observations.value, `./${index.toString()}`))
+  return this.rdf.namedNode(urlJoin(observations.value, `./${index.toString()}`))
 }
 
-function asTermObject(value) {
+function asTermObject($rdf, value) {
   if (typeof value === 'string') {
     value = $rdf.namedNode(value)
   }
@@ -95,24 +93,25 @@ function asTermObject(value) {
 }
 
 class ToObservation extends Transform {
-  constructor({ blacklist, dimensions, observation, observations, observer, useDate, useIndex } = {}) {
+  constructor({ rdf, blacklist, dimensions, observation, observations, observer, useDate, useIndex } = {}) {
     super({ objectMode: true })
 
+    this.rdf = rdf
     this.options = {
       index: 0,
-      blacklist: $rdf.termSet(),
-      dimensions: $rdf.termSet(),
+      blacklist: this.rdf.termSet(),
+      dimensions: this.rdf.termSet(),
     }
 
     if (blacklist) {
       for (const item of blacklist) {
-        this.options.blacklist.add(typeof item === 'string' ? $rdf.namedNode(item) : item.term)
+        this.options.blacklist.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
       }
     }
 
     if (dimensions) {
       for (const item of dimensions) {
-        this.options.dimensions.add(typeof item === 'string' ? $rdf.namedNode(item) : item.term)
+        this.options.dimensions.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
       }
     }
 
@@ -120,31 +119,31 @@ class ToObservation extends Transform {
       if (typeof observer === 'function') {
         this.options.observer = observer
       } else if (observer) {
-        this.options.observer = asTermObject(observer)
+        this.options.observer = asTermObject(rdf, observer)
       }
     } else {
-      this.options.observer = defaultObserver
+      this.options.observer = defaultObserver.bind({ rdf })
     }
 
     if (observations) {
       if (typeof observations === 'function') {
         this.options.observations = observations
       } else if (observations) {
-        this.options.observations = asTermObject(observations)
+        this.options.observations = asTermObject(rdf, observations)
       }
     } else {
-      this.options.observations = defaultObservations
+      this.options.observations = defaultObservations.bind({ rdf })
     }
 
     if (useDate) {
       if (useDate === true || useDate === 'true') {
-        this.options.useDate = dateByDatatype
+        this.options.useDate = dateByDatatype.bind({ rdf })
       } else if (useDate === 'now') {
-        this.options.useDate = dateNow
+        this.options.useDate = dateNow.bind({ rdf })
       } else if (typeof useDate === 'string') {
-        this.options.useDate = dateByProperty($rdf.namedNode(useDate))
+        this.options.useDate = dateByProperty(this.rdf.namedNode(useDate)).bind({ rdf })
       } else if (useDate.termType) {
-        this.options.useDate = dateByProperty(useDate)
+        this.options.useDate = dateByProperty(useDate).bind({ rdf })
       } else if (typeof useDate === 'function') {
         this.options.useDate = useDate
       }
@@ -154,11 +153,11 @@ class ToObservation extends Transform {
       this.options.observation = observation
     } else {
       if (this.options.useDate) {
-        this.options.observation = dateObservation
+        this.options.observation = dateObservation.bind({ rdf })
       } else if (useIndex) {
-        this.options.observation = indexObservation
+        this.options.observation = indexObservation.bind({ rdf })
       } else {
-        this.options.observation = defaultObservation
+        this.options.observation = defaultObservation.bind({ rdf })
       }
     }
   }
@@ -166,46 +165,46 @@ class ToObservation extends Transform {
   _transform(chunk, encoding, callback) {
     try {
       const context = {
-        dataset: $rdf.dataset([...chunk]),
+        dataset: this.rdf.dataset([...chunk]),
         ...this.options,
       }
 
-      context.subject = findRoot(context)
+      context.subject = findRoot(this.rdf, context)
       context.observer = this.options.observer(context)
       context.observations = this.options.observations(context)
       context.observation = this.options.observation(context)
 
-      const dataset = $rdf.dataset([...context.dataset]
-        .filter(quad => !quad.predicate.equals(rdf.type))
+      const dataset = this.rdf.dataset([...context.dataset]
+        .filter(quad => !quad.predicate.equals(this.rdf.ns.rdf.type))
         .filter(quad => !this.options.blacklist.has(quad.predicate))
         .map(quad => {
-          return $rdf.quad(
+          return this.rdf.quad(
             quad.subject.termType === 'NamedNode' ? context.observation : quad.subject,
             quad.predicate,
             quad.object,
           )
         }))
 
-      dataset.add($rdf.quad(context.observation, rdf.type, cube.Observation))
+      dataset.add(this.rdf.quad(context.observation, this.rdf.ns.rdf.type, this.rdf.ns.cube.Observation))
 
       if (context.date && context.dateProperty) {
-        dataset.add($rdf.quad(context.observation, context.dateProperty, context.date))
+        dataset.add(this.rdf.quad(context.observation, context.dateProperty, context.date))
       }
 
       if (context.observer) {
-        dataset.add($rdf.quad(context.observation, cube.observedBy, context.observer))
+        dataset.add(this.rdf.quad(context.observation, this.rdf.ns.cube.observedBy, context.observer))
       }
 
       if (this.options.dimensions) {
         for (const term of this.options.dimensions) {
           if (dataset.match(context.observation, term).size === 0) {
-            dataset.add($rdf.quad(context.observation, term, $rdf.literal('NaN', xsd.double)))
+            dataset.add(this.rdf.quad(context.observation, term, this.rdf.literal('NaN', this.rdf.ns.xsd.double)))
           }
         }
       }
 
       if (context.observations) {
-        dataset.add($rdf.quad(context.observations, cube.observation, context.observation))
+        dataset.add(this.rdf.quad(context.observations, this.rdf.ns.cube.observation, context.observation))
       }
 
       this.push([...dataset])
@@ -229,7 +228,7 @@ function toObservation({
   dateProperty,
   useIndex,
 } = {}) {
-  return new ToObservation({ blacklist, dimensions, observation, observations, observer, useDate, dateProperty, useIndex })
+  return new ToObservation({ rdf: this.env, blacklist, dimensions, observation, observations, observer, useDate, dateProperty, useIndex })
 }
 
 export default toObservation

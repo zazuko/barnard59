@@ -9,3 +9,10 @@
           code:implementedBy [ a code:EcmaScriptModule;
                               code:link <node:barnard59-validate-shacl/validate.js#shacl>
                              ].
+
+<report> a p:Operation, p:Readable;
+          rdfs:label "validate rdf";
+          rdfs:comment "Validates a RDF graph against a set of conditions specified in a SHACL document, returning the validation report";
+          code:implementedBy [ a code:EcmaScriptModule;
+                              code:link <node:barnard59-validate-shacl/report.js#shacl>
+                             ].

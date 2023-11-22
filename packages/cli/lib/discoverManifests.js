@@ -10,6 +10,7 @@ const require = module.createRequire(import.meta.url)
 export default async function * () {
   const packages = findPlugins({
     includeDev: true,
+    includePeer: true,
     filter({ pkg }) {
       return packagePattern.test(pkg.name) && hasManifest(pkg.name)
     },
@@ -19,7 +20,7 @@ export default async function * () {
   if (hasManifest(dir)) {
     const { name, version } = require(`${dir}/package.json`)
     yield {
-      name,
+      name: packagePattern.test(name) ? name.match(packagePattern)[1] : name,
       manifest: rdf.clownface({ dataset: await rdf.dataset().import(rdf.fromFile(`${dir}/manifest.ttl`)) }),
       version,
     }

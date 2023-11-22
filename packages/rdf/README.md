@@ -5,14 +5,6 @@ The `manifest.ttl` file contains a full list of all operations included in this 
 
 ## Operations
 
-### `cube/buildCubeShape`
-
-TBD
-
-### `cube/toObservation`
-
-TBD
-
 ### `fs/parse`
 
 Reads a file where the input chunk is its path and outputs quad stream of its contents. The appropriate parser is automatically selected by the [rdf-utils-fs](https://npm.im/rdf-utils-fs) package.

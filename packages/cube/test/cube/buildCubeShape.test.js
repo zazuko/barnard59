@@ -1,16 +1,18 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import toNT from '@rdfjs/to-ntriples'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import rdf from '@zazuko/env'
-import toStream from 'rdf-dataset-ext/toStream.js'
+import rdf from 'barnard59-env'
 import { expect } from 'chai'
-import buildCubeShape from '../../lib/cube/buildCubeShape/index.js'
+import buildCubeShapeUnbound from '../../lib/cube/buildCubeShape/index.js'
 import createObservationsStream from '../support/createObservationsStream.js'
 import datasetStreamToClownface from '../support/datasetStreamToClownface.js'
-import * as ns from '../support/namespaces.js'
+import { ex } from '../support/namespaces.js'
+
+const ns = rdf.ns
+const buildCubeShape = buildCubeShapeUnbound.bind({ env: rdf })
 
 function checkMinMax(result, min, max) {
-  const propertyShape = result.has(ns.sh.path, ns.ex.property)
+  const propertyShape = result.has(ns.sh.path, ex.property)
   const shapeMin = propertyShape.out(ns.sh.minInclusive)
   const shapeMax = propertyShape.out(ns.sh.maxInclusive)
 
@@ -51,7 +53,7 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const cube = result
-      .node(ns.ex('cube'))
+      .node(ex('cube'))
       .has(ns.rdf.type, ns.cube.Cube)
 
     strictEqual(cube.terms.length, 1)
@@ -79,7 +81,7 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const cube = result
-      .node(ns.ex('cube/observation/'))
+      .node(ex('cube/observation/'))
       .has(ns.rdf.type, ns.cube.ObservationSet)
 
     strictEqual(cube.terms.length, 1)
@@ -94,8 +96,8 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const observationSet = result
-      .node(ns.ex('cube'))
-      .has(ns.cube.observationSet, ns.ex('cube/observation/'))
+      .node(ex('cube'))
+      .has(ns.cube.observationSet, ex('cube/observation/'))
 
     strictEqual(observationSet.terms.length, 1)
   })
@@ -122,7 +124,7 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const shape = result
-      .node(ns.ex('cube/shape'))
+      .node(ex('cube/shape'))
       .has(ns.rdf.type, ns.sh.NodeShape)
 
     strictEqual(shape.terms.length, 1)
@@ -137,8 +139,8 @@ describe('cube.buildCubeShape', () => {
     const result = await datasetStreamToClownface(transform)
 
     const cube = result
-      .node(ns.ex('cube'))
-      .has(ns.cube.observationConstraint, ns.ex('cube/shape'))
+      .node(ex('cube'))
+      .has(ns.cube.observationConstraint, ex('cube/shape'))
 
     strictEqual(cube.terms.length, 1)
   })
@@ -146,8 +148,8 @@ describe('cube.buildCubeShape', () => {
   it('should generate a property shape for each dimension', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.propertyA.value]: rdf.literal('A'),
-        [ns.ex.propertyB.value]: rdf.literal('B'),
+        [ex.propertyA.value]: rdf.literal('A'),
+        [ex.propertyB.value]: rdf.literal('B'),
       }],
     })
     const transform = buildCubeShape()
@@ -156,20 +158,20 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShapes = result.node(ns.ex('cube/shape')).out(ns.sh.property)
+    const propertyShapes = result.node(ex('cube/shape')).out(ns.sh.property)
     const pathes = rdf.termSet(propertyShapes.out(ns.sh.path).terms)
 
     strictEqual(propertyShapes.terms.length, 3)
     strictEqual(pathes.has(ns.rdf.type), true)
-    strictEqual(pathes.has(ns.ex.propertyA), true)
-    strictEqual(pathes.has(ns.ex.propertyB), true)
+    strictEqual(pathes.has(ex.propertyA), true)
+    strictEqual(pathes.has(ex.propertyB), true)
   })
 
   it('should generate a NamedNode property shape for each dimension', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.propertyA.value]: rdf.literal('A'),
-        [ns.ex.propertyB.value]: rdf.literal('B'),
+        [ex.propertyA.value]: rdf.literal('A'),
+        [ex.propertyB.value]: rdf.literal('B'),
       }],
     })
     const transform = buildCubeShape({
@@ -182,7 +184,7 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShapes = result.node(ns.ex('cube/shape')).out(ns.sh.property)
+    const propertyShapes = result.node(ex('cube/shape')).out(ns.sh.property)
 
     expect(propertyShapes.terms).to.deep.contain.all.members([
       rdf.namedNode('http://example.org/cube/dim?id=http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
@@ -194,9 +196,9 @@ describe('cube.buildCubeShape', () => {
   it('should generate nodeKind for literal values', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('A'),
+        [ex.property.value]: rdf.literal('A'),
       }, {
-        [ns.ex.property.value]: rdf.literal('B'),
+        [ex.property.value]: rdf.literal('B'),
       }],
     })
     const transform = buildCubeShape()
@@ -205,7 +207,7 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShape = result.has(ns.sh.path, ns.ex.property)
+    const propertyShape = result.has(ns.sh.path, ex.property)
     const nodeKind = propertyShape.out(ns.sh.nodeKind)
 
     strictEqual(toNT(nodeKind.term), toNT(ns.sh.Literal))
@@ -214,9 +216,9 @@ describe('cube.buildCubeShape', () => {
   it('should generate nodeKind for named node values', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: ns.ex.valueA,
+        [ex.property.value]: ex.valueA,
       }, {
-        [ns.ex.property.value]: ns.ex.valueB,
+        [ex.property.value]: ex.valueB,
       }],
     })
     const transform = buildCubeShape()
@@ -225,7 +227,7 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShape = result.has(ns.sh.path, ns.ex.property)
+    const propertyShape = result.has(ns.sh.path, ex.property)
     const nodeKind = propertyShape.out(ns.sh.nodeKind)
 
     strictEqual(toNT(nodeKind.term), toNT(ns.sh.IRI))
@@ -234,9 +236,9 @@ describe('cube.buildCubeShape', () => {
   it('should generate a sh:in list for plain string values', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('A'),
+        [ex.property.value]: rdf.literal('A'),
       }, {
-        [ns.ex.property.value]: rdf.literal('B'),
+        [ex.property.value]: rdf.literal('B'),
       }],
     })
     const transform = buildCubeShape()
@@ -245,7 +247,7 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShape = result.has(ns.sh.path, ns.ex.property)
+    const propertyShape = result.has(ns.sh.path, ex.property)
     const values = [...propertyShape.out(ns.sh.in).list()].map(ptr => ptr.value).sort()
 
     deepStrictEqual(values, ['A', 'B'])
@@ -254,9 +256,9 @@ describe('cube.buildCubeShape', () => {
   it('should generate a sh:in list for named node values', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: ns.ex.valueA,
+        [ex.property.value]: ex.valueA,
       }, {
-        [ns.ex.property.value]: ns.ex.valueB,
+        [ex.property.value]: ex.valueB,
       }],
     })
     const transform = buildCubeShape()
@@ -265,11 +267,11 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShape = result.has(ns.sh.path, ns.ex.property)
+    const propertyShape = result.has(ns.sh.path, ex.property)
     const values = rdf.termSet([...propertyShape.out(ns.sh.in).list()].map(ptr => ptr.term))
 
-    strictEqual(values.has(ns.ex.valueA), true)
-    strictEqual(values.has(ns.ex.valueB), true)
+    strictEqual(values.has(ex.valueA), true)
+    strictEqual(values.has(ex.valueB), true)
   })
 
   it('should generate sh:minInclusive an sh:maxInclusive properties for date values', async () => {
@@ -277,11 +279,11 @@ describe('cube.buildCubeShape', () => {
     const max = rdf.literal('2000-01-03T00:00:00.000Z', ns.xsd.date)
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('2000-01-02T00:00:00.000Z', ns.xsd.date),
+        [ex.property.value]: rdf.literal('2000-01-02T00:00:00.000Z', ns.xsd.date),
       }, {
-        [ns.ex.property.value]: max,
+        [ex.property.value]: max,
       }, {
-        [ns.ex.property.value]: min,
+        [ex.property.value]: min,
       }],
     })
     const transform = buildCubeShape()
@@ -298,11 +300,11 @@ describe('cube.buildCubeShape', () => {
     const max = rdf.literal('3.3', ns.xsd.double)
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('2.2', ns.xsd.double),
+        [ex.property.value]: rdf.literal('2.2', ns.xsd.double),
       }, {
-        [ns.ex.property.value]: max,
+        [ex.property.value]: max,
       }, {
-        [ns.ex.property.value]: min,
+        [ex.property.value]: min,
       }],
     })
     const transform = buildCubeShape()
@@ -319,11 +321,11 @@ describe('cube.buildCubeShape', () => {
     const max = rdf.literal('3.3', ns.xsd.float)
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('2.2', ns.xsd.float),
+        [ex.property.value]: rdf.literal('2.2', ns.xsd.float),
       }, {
-        [ns.ex.property.value]: max,
+        [ex.property.value]: max,
       }, {
-        [ns.ex.property.value]: min,
+        [ex.property.value]: min,
       }],
     })
     const transform = buildCubeShape()
@@ -340,11 +342,11 @@ describe('cube.buildCubeShape', () => {
     const max = rdf.literal('3', ns.xsd.int)
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('2', ns.xsd.int),
+        [ex.property.value]: rdf.literal('2', ns.xsd.int),
       }, {
-        [ns.ex.property.value]: max,
+        [ex.property.value]: max,
       }, {
-        [ns.ex.property.value]: min,
+        [ex.property.value]: min,
       }],
     })
     const transform = buildCubeShape()
@@ -361,11 +363,11 @@ describe('cube.buildCubeShape', () => {
     const max = rdf.literal('1300', ns.xsd.gYear)
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('0100', ns.xsd.gYear),
+        [ex.property.value]: rdf.literal('0100', ns.xsd.gYear),
       }, {
-        [ns.ex.property.value]: max,
+        [ex.property.value]: max,
       }, {
-        [ns.ex.property.value]: min,
+        [ex.property.value]: min,
       }],
     })
     const transform = buildCubeShape()
@@ -382,11 +384,11 @@ describe('cube.buildCubeShape', () => {
     const max = rdf.literal('3', ns.xsd.integer)
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('2', ns.xsd.integer),
+        [ex.property.value]: rdf.literal('2', ns.xsd.integer),
       }, {
-        [ns.ex.property.value]: max,
+        [ex.property.value]: max,
       }, {
-        [ns.ex.property.value]: min,
+        [ex.property.value]: min,
       }],
     })
     const transform = buildCubeShape()
@@ -401,9 +403,9 @@ describe('cube.buildCubeShape', () => {
   it('should generate sh:or for multiple datatypes', async () => {
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('a', ns.xsd.integer),
+        [ex.property.value]: rdf.literal('a', ns.xsd.integer),
       }, {
-        [ns.ex.property.value]: rdf.literal('', ns.cube.Undefined),
+        [ex.property.value]: rdf.literal('', ns.cube.Undefined),
       }],
     })
     const transform = buildCubeShape()
@@ -412,7 +414,7 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyShape = result.has(ns.sh.path, ns.ex.property)
+    const propertyShape = result.has(ns.sh.path, ex.property)
     const datatypes = rdf.termSet([...propertyShape.out(ns.sh.or).list()].map(or => or.out(ns.sh.datatype).term))
 
     strictEqual(datatypes.has(ns.xsd.integer), true)
@@ -420,13 +422,13 @@ describe('cube.buildCubeShape', () => {
   })
 
   it('should merge given metadata to cube metadata', async () => {
-    const metadata = toStream(rdf.dataset([
-      rdf.quad(ns.ex.cube, ns.schema.name, rdf.literal('Test Cube')),
-      rdf.quad(ns.ex.other, ns.schema.name, rdf.literal('Test Other')),
-    ]))
+    const metadata = rdf.dataset([
+      rdf.quad(ex.cube, ns.schema.name, rdf.literal('Test Cube')),
+      rdf.quad(ex.other, ns.schema.name, rdf.literal('Test Other')),
+    ]).toStream()
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('test'),
+        [ex.property.value]: rdf.literal('test'),
       }],
     })
     const transform = buildCubeShape({ metadata })
@@ -441,12 +443,12 @@ describe('cube.buildCubeShape', () => {
   })
 
   it('should ignore cube:observationConstraint property in cube metadata', async () => {
-    const metadata = toStream(rdf.dataset([
-      rdf.quad(ns.ex.cube, ns.cube.observationConstraint, ns.ex.shape),
-    ]))
+    const metadata = rdf.dataset([
+      rdf.quad(ex.cube, ns.cube.observationConstraint, ex.shape),
+    ]).toStream()
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('test'),
+        [ex.property.value]: rdf.literal('test'),
       }],
     })
     const transform = buildCubeShape({ metadata })
@@ -458,85 +460,85 @@ describe('cube.buildCubeShape', () => {
     const constraints = result.out(ns.cube.observationConstraint).terms
 
     strictEqual(constraints.length, 1)
-    strictEqual(constraints[0].equals(ns.ex.shape), false)
+    strictEqual(constraints[0].equals(ex.shape), false)
   })
 
   it('should merge given metadata with blank nodes to cube metadata', async () => {
     const dataset = rdf.dataset()
 
-    rdf.clownface({ dataset, term: ns.ex.cube })
-      .addOut(ns.ex.propertyA, null, ptr => {
+    rdf.clownface({ dataset, term: ex.cube })
+      .addOut(ex.propertyA, null, ptr => {
         ptr
-          .addOut(ns.ex.propertyB, 'Text B')
-          .addOut(ns.ex.propertyC, null, ptr => {
-            ptr.addOut(ns.ex.propertyD, 'Text D')
+          .addOut(ex.propertyB, 'Text B')
+          .addOut(ex.propertyC, null, ptr => {
+            ptr.addOut(ex.propertyD, 'Text D')
           })
-          .addOut(ns.ex.propertyF, ns.ex.node, ptr => {
-            ptr.addOut(ns.ex.propertyE, 'Text E')
+          .addOut(ex.propertyF, ex.node, ptr => {
+            ptr.addOut(ex.propertyE, 'Text E')
           })
       })
-      .addOut(ns.cube.observationConstraint, ns.ex.test)
+      .addOut(ns.cube.observationConstraint, ex.test)
 
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property.value]: rdf.literal('test'),
+        [ex.property.value]: rdf.literal('test'),
       }],
     })
-    const transform = buildCubeShape({ metadata: toStream(dataset) })
+    const transform = buildCubeShape({ metadata: dataset.toStream() })
 
     input.pipe(transform)
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyA = result.out(ns.ex.propertyA)
-    const propertyB = propertyA.out(ns.ex.propertyB)
-    const propertyC = propertyA.out(ns.ex.propertyC)
-    const propertyD = propertyC.out(ns.ex.propertyD)
-    const propertyF = propertyA.out(ns.ex.propertyF)
-    const propertyG = propertyF.out(ns.ex.propertyG)
+    const propertyA = result.out(ex.propertyA)
+    const propertyB = propertyA.out(ex.propertyB)
+    const propertyC = propertyA.out(ex.propertyC)
+    const propertyD = propertyC.out(ex.propertyD)
+    const propertyF = propertyA.out(ex.propertyF)
+    const propertyG = propertyF.out(ex.propertyG)
 
     strictEqual(propertyA.term.termType, 'BlankNode')
     strictEqual(rdf.literal('Text B').equals(propertyB.term), true)
     strictEqual(propertyC.term.termType, 'BlankNode')
     strictEqual(rdf.literal('Text D').equals(propertyD.term), true)
-    strictEqual(ns.ex.node.equals(propertyF.term), true)
+    strictEqual(ex.node.equals(propertyF.term), true)
     strictEqual(propertyG.term, undefined)
   })
 
   it('should merge given metadata to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
-    rdf.clownface({ dataset, term: ns.ex.cube })
+    rdf.clownface({ dataset, term: ex.cube })
       .addOut(ns.cube.observationConstraint, shape => {
         shape.addOut(ns.sh.property, property => {
           property
-            .addOut(ns.sh.path, ns.ex.property1)
+            .addOut(ns.sh.path, ex.property1)
             .addOut(ns.schema.name, 'Test Property')
         })
       })
 
-    rdf.clownface({ dataset, term: ns.ex.otherCube })
+    rdf.clownface({ dataset, term: ex.otherCube })
       .addOut(ns.cube.observationConstraint, shape => {
         shape.addOut(ns.sh.property, property => {
           property
-            .addOut(ns.sh.path, ns.ex.property1)
+            .addOut(ns.sh.path, ex.property1)
             .addOut(ns.schema.name, 'Other Property')
         })
       })
 
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property1.value]: rdf.literal('A'),
-        [ns.ex.property2.value]: rdf.literal('B'),
+        [ex.property1.value]: rdf.literal('A'),
+        [ex.property2.value]: rdf.literal('B'),
       }],
     })
-    const transform = buildCubeShape({ metadata: toStream(dataset) })
+    const transform = buildCubeShape({ metadata: dataset.toStream() })
 
     input.pipe(transform)
 
     const result = await datasetStreamToClownface(transform)
 
-    const property1Name = result.has(ns.sh.path, ns.ex.property1)
+    const property1Name = result.has(ns.sh.path, ex.property1)
       .out(ns.schema.name).term
 
     strictEqual(rdf.literal('Test Property').equals(property1Name), true)
@@ -545,44 +547,44 @@ describe('cube.buildCubeShape', () => {
   it('should merge given metadata with blank nodes to dimension metadata', async () => {
     const dataset = rdf.dataset()
 
-    rdf.clownface({ dataset, term: ns.ex.cube })
+    rdf.clownface({ dataset, term: ex.cube })
       .addOut(ns.cube.observationConstraint, shape => {
         shape.addOut(ns.sh.property, property => {
           property
-            .addOut(ns.sh.path, ns.ex.property1)
-            .addOut(ns.ex.propertyA, null, ptr => {
+            .addOut(ns.sh.path, ex.property1)
+            .addOut(ex.propertyA, null, ptr => {
               ptr
-                .addOut(ns.ex.propertyB, 'Text B')
-                .addOut(ns.ex.propertyC, null, ptr => ptr.addOut(ns.ex.propertyD, 'Text D'))
-                .addOut(ns.ex.propertyF, ns.ex.node, ptr => ptr.addOut(ns.ex.propertyE, 'Text E'))
+                .addOut(ex.propertyB, 'Text B')
+                .addOut(ex.propertyC, null, ptr => ptr.addOut(ex.propertyD, 'Text D'))
+                .addOut(ex.propertyF, ex.node, ptr => ptr.addOut(ex.propertyE, 'Text E'))
             })
         })
       })
 
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property1.value]: rdf.literal('A'),
-        [ns.ex.property2.value]: rdf.literal('B'),
+        [ex.property1.value]: rdf.literal('A'),
+        [ex.property2.value]: rdf.literal('B'),
       }],
     })
-    const transform = buildCubeShape({ metadata: toStream(dataset) })
+    const transform = buildCubeShape({ metadata: dataset.toStream() })
 
     input.pipe(transform)
 
     const result = await datasetStreamToClownface(transform)
 
-    const propertyA = result.has(ns.sh.path, ns.ex.property1).out(ns.ex.propertyA)
-    const propertyB = propertyA.out(ns.ex.propertyB)
-    const propertyC = propertyA.out(ns.ex.propertyC)
-    const propertyD = propertyC.out(ns.ex.propertyD)
-    const propertyF = propertyA.out(ns.ex.propertyF)
-    const propertyG = propertyF.out(ns.ex.propertyG)
+    const propertyA = result.has(ns.sh.path, ex.property1).out(ex.propertyA)
+    const propertyB = propertyA.out(ex.propertyB)
+    const propertyC = propertyA.out(ex.propertyC)
+    const propertyD = propertyC.out(ex.propertyD)
+    const propertyF = propertyA.out(ex.propertyF)
+    const propertyG = propertyF.out(ex.propertyG)
 
     strictEqual(propertyA.term.termType, 'BlankNode')
     strictEqual(rdf.literal('Text B').equals(propertyB.term), true)
     strictEqual(propertyC.term.termType, 'BlankNode')
     strictEqual(rdf.literal('Text D').equals(propertyD.term), true)
-    strictEqual(ns.ex.node.equals(propertyF.term), true)
+    strictEqual(ex.node.equals(propertyF.term), true)
     strictEqual(propertyG.term, undefined)
   })
 
@@ -591,12 +593,12 @@ describe('cube.buildCubeShape', () => {
 
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property1.value]: rdf.literal('A'),
-        [ns.ex.property2.value]: rdf.literal('B'),
+        [ex.property1.value]: rdf.literal('A'),
+        [ex.property2.value]: rdf.literal('B'),
       }],
     })
     const targetShapeGraph = rdf.namedNode('http://shapes.org')
-    const transform = buildCubeShape({ metadata: toStream(dataset), graph: targetShapeGraph })
+    const transform = buildCubeShape({ metadata: dataset.toStream(), graph: targetShapeGraph })
 
     input.pipe(transform)
 
@@ -614,12 +616,12 @@ describe('cube.buildCubeShape', () => {
 
     const input = createObservationsStream({
       observations: [{
-        [ns.ex.property1.value]: rdf.literal('A'),
-        [ns.ex.property2.value]: rdf.literal('B'),
+        [ex.property1.value]: rdf.literal('A'),
+        [ex.property2.value]: rdf.literal('B'),
       }],
     })
     const targetShapeGraph = 'http://shapes.org'
-    const transform = buildCubeShape({ metadata: toStream(dataset), graph: targetShapeGraph })
+    const transform = buildCubeShape({ metadata: dataset.toStream(), graph: targetShapeGraph })
 
     input.pipe(transform)
 

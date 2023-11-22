@@ -34,7 +34,7 @@ export const desugar = async (dataset, { logger, knownOperations } = {}) => {
       const [quad] = step.dataset.match(step.term)
       const knownStep = knownOperations.get(quad?.predicate)
       if (!knownStep) {
-        logger?.warn(`Operation <${quad?.predicate.value}> not found in known manifests. Have you added the right \`branard59-*\` package as dependency?`)
+        logger?.warn(`Operation <${quad?.predicate.value}> not found in known manifests. Have you added the right \`barnard59-*\` package as dependency?`)
         continue
       }
 

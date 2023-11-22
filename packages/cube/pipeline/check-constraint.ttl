@@ -1,0 +1,58 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix http: <https://barnard59.zazuko.com/operations/http/> .
+@prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+
+_:profile a p:Variable ;
+  p:name "profile" ;
+  rdfs:label "cube constraint profile URL" ;
+  p:value "https://cube.link/latest/shape/standalone-constraint-constraint" ;
+.
+
+
+<check-constraint> a p:Pipeline , p:Readable ;
+  p:variables [ p:variable _:profile ] ;
+  p:steps
+    [
+      p:stepList (
+        _:stdin
+        [ n3:parse () ]
+        _:toDataset
+        [ shacl:report (_:getProfile) ]
+        [ base:flatten () ]
+        [ ntriples:serialize () ]
+      )
+    ]
+.
+
+_:stdin a p:Step ;
+  code:implementedBy "() => process.stdin"^^code:EcmaScript
+.
+
+_:toDataset a p:Step ;
+	code:implementedBy
+    [
+      rdf:type code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
+    ]
+.
+
+
+_:getProfile a p:Pipeline , p:ReadableObjectMode;
+  p:steps
+    [
+      p:stepList
+        (
+          [ http:get [ code:name "url" ; code:value "profile"^^p:VariableName ] ]
+          [ n3:parse () ]
+        )
+    ]
+  .
