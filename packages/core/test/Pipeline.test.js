@@ -37,7 +37,7 @@ describe('Pipeline', () => {
 
     await finished(pipeline.stream)
 
-    strictEqual(pipeline.context.content.toString(), 'test')
+    strictEqual(pipeline.context.variables.get('input').toString(), 'test')
   })
 
   it('should support nested pipelines', async () => {
