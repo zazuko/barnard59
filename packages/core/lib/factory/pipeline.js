@@ -6,8 +6,8 @@ import { VariableMap } from '../VariableMap.js'
 import createStep from './step.js'
 import createVariables from './variables.js'
 
-async function createPipelineContext(ptr, { basePath, context, logger, variables }) {
-  return { ...context, basePath, logger, variables }
+async function createPipelineContext(ptr, { basePath, context, logger, variables, error }) {
+  return { error, ...context, basePath, logger, variables }
 }
 
 async function createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables }) {
@@ -35,8 +35,15 @@ function createPipeline(ptr, {
   ptr = context.env.clownface({ dataset: ptr.dataset, term: ptr.term })
 
   const onInit = async pipeline => {
+    function error(err) {
+      logger.error(err)
+      if (!pipeline.error) {
+        pipeline.error = err
+      }
+    }
+
     variables = await createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables })
-    context = await createPipelineContext(ptr, { basePath, context, logger, variables })
+    context = await createPipelineContext(ptr, { basePath, context, logger, variables, error })
 
     logVariables(ptr, context, variables)
 

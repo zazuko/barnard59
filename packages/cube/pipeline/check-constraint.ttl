@@ -18,36 +18,31 @@ _:profile a p:Variable ;
 .
 
 
-<check-constraint> a p:Pipeline ;
+<check-constraint> a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:profile ] ;
   p:steps
     [
-      p:stepList ( 
+      p:stepList (
         _:stdin
         [ n3:parse () ]
         _:toDataset
         [ shacl:report (_:getProfile) ]
         [ base:flatten () ]
         [ ntriples:serialize () ]
-        _:stdout
       )
     ]
 .
 
 _:stdin a p:Step ;
-  code:implementedBy "() => process.stdin"^^code:EcmaScript  
-.
-
-_:stdout a p:Step ;
-  code:implementedBy "() => process.stdout"^^code:EcmaScript  
+  code:implementedBy "() => process.stdin"^^code:EcmaScript
 .
 
 _:toDataset a p:Step ;
-	code:implementedBy 
+	code:implementedBy
     [
       rdf:type code:EcmaScript ;
       code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
-    ] 
+    ]
 .
 
 
@@ -56,8 +51,8 @@ _:getProfile a p:Pipeline , p:ReadableObjectMode;
     [
       p:stepList
         (
-          [ http:get [ code:name "url" ; code:value "profile"^^p:VariableName ] ] 
+          [ http:get [ code:name "url" ; code:value "profile"^^p:VariableName ] ]
           [ n3:parse () ]
-        ) 
-    ] 
+        )
+    ]
   .

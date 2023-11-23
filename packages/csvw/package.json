@@ -1,6 +1,6 @@
 {
   "name": "barnard59-csvw",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Simplifies handling CSVW mapping documents in barnard59 pipelines",
   "type": "module",
   "main": "index.js",
@@ -28,7 +28,7 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
-    "barnard59-env": "^0.0.0",
+    "barnard59-env": "^1.0.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^7.0.1",
     "is-stream": "^3.0.0"

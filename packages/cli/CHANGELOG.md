@@ -1,5 +1,34 @@
 # Changelog
 
+## 4.1.0
+
+### Minor Changes
+
+- ce0bdf4: Removed dependency on any RDF/JS Environment. The CLI provides it at runtime to ensure that steps
+  use the same factories. Step implementors are encouraged to use the environment provided by the
+  barnard59 runtime insead of importing directly.
+
+  ```diff
+  -import rdf from 'rdf-ext'
+
+  export function myStep() {
+  - const dataset = rdf.dataset()
+  + const dataset = this.env.dataset()
+
+    return rdf.dataset().toStream()
+  }
+  ```
+
+- 5c526f2: Include current project in manifest discovery
+
+### Patch Changes
+
+- 0e5cb97: Write CLI errors to `stderr`
+- Updated dependencies [ce0bdf4]
+- Updated dependencies [ce0bdf4]
+  - barnard59-core@5.0.0
+  - barnard59-env@1.0.0
+
 ## 4.0.0
 
 ### Major Changes

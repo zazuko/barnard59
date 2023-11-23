@@ -16,7 +16,7 @@ _:cube a p:Variable ;
   rdfs:label "cube URI" ;
 .
 
-<fetch-constraint> a p:Pipeline ;
+<fetch-constraint> a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:endpoint, _:cube ] ;
   p:steps
     [
@@ -24,15 +24,14 @@ _:cube a p:Variable ;
         (
           _:queryConstraint
           [ ntriples:serialize () ]
-          _:stdout
-        ) 
-    ] 
+        )
+    ]
 .
 
 
 # relying on cbd is not ideal (vendor specific)
 _:queryConstraint sparql:construct
-    [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] , 
+    [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] ,
     [
       code:name "query";
       code:value """
@@ -44,10 +43,6 @@ _:queryConstraint sparql:construct
       WHERE {
         <${cube}> cube:observationConstraint ?s .
       }
-      """^^code:EcmaScriptTemplateLiteral 
+      """^^code:EcmaScriptTemplateLiteral
     ]
-.
-
-_:stdout a p:Step ;
-  code:implementedBy "() => process.stdout"^^code:EcmaScript  
 .

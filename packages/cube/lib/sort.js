@@ -11,5 +11,8 @@ export function sortBySubject(sortChunkSize) {
   const store = createStore(write, '.nt')
   const maxSize = Number(sortChunkSize)
 
-  return Duplex.from(iterable => sort(iterable, { comparer, store, maxSize }))
+  const stream = Duplex.from(iterable => sort(iterable, { comparer, store, maxSize }))
+  stream.on('finish', store.dispose)
+  stream.on('error', store.dispose)
+  return stream
 }

@@ -45,7 +45,7 @@
 		sh:path cube:observedBy ;
 		sh:in (
 			<https://agriculture.ld.admin.ch/>
-      <https://register.ld.admin.ch/staatskalender/organization/10003634> 
+      <https://register.ld.admin.ch/staatskalender/organization/10003634>
 		) ;
 		sh:nodeKind sh:IRI ;
 		sh:minCount 1 ;

@@ -1,5 +1,24 @@
 # `v0.2.0`
 
+## 0.4.0
+
+### Minor Changes
+
+- ce0bdf4: Removed dependency on any RDF/JS Environment. The CLI provides it at runtime to ensure that steps
+  use the same factories. Step implementors are encouraged to use the environment provided by the
+  barnard59 runtime insead of importing directly.
+
+  ```diff
+  -import rdf from 'rdf-ext'
+
+  export function myStep() {
+  - const dataset = rdf.dataset()
+  + const dataset = this.env.dataset()
+
+    return rdf.dataset().toStream()
+  }
+  ```
+
 ## 0.3.0
 
 ### Minor Changes
