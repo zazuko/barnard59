@@ -1,4 +1,4 @@
-# v1.0.0
+# barnard59-graph-store
 
 ## 3.0.0
 
