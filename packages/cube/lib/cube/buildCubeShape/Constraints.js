@@ -59,28 +59,48 @@ export class DatatypeConstraintBuilder {
   constructor(rdf, datatype) {
     this.sh = rdf.ns.sh
     this.datatype = datatype
+    this.enabled = true
   }
 
-  add() {}
+  add(object) {
+    if (!this.datatype.equals(object.datatype)) {
+      this.enabled = false
+    }
+  }
 
   build(ptr) {
-    ptr.addOut(this.sh.datatype, this.datatype)
+    if (this.enabled) {
+      ptr.addOut(this.sh.datatype, this.datatype)
+    }
   }
 }
 
 export class RangeConstraintBuilder {
+  // can be false in case of parsing issues
+  #isInRange = value => (this.min <= value && value <= this.max)
+
+  // consider removing the parser argument and always use fromRdf from 'rdf-literal'
+  // because we rely on its behavior in case of parsing issues
   constructor(rdf, object, parser) {
     this.sh = rdf.ns.sh
     this.parser = parser
     this.minObject = object
     this.maxObject = object
-    const value = parser(object) // error handling?
+    const value = parser(object)
     this.min = value
     this.max = value
+    this.enabled = this.#isInRange(value)
   }
 
   add(object) {
-    const value = this.parser(object) // error handling?
+    if (!this.enabled) return
+
+    if (!object.datatype) {
+      this.enabled = false
+      return
+    }
+
+    const value = this.parser(object)
     if (value < this.min) {
       this.min = value
       this.minObject = object
@@ -89,9 +109,14 @@ export class RangeConstraintBuilder {
       this.max = value
       this.maxObject = object
     }
+    if (!this.#isInRange(value)) {
+      this.enabled = false
+    }
   }
 
   build(ptr) {
+    if (!this.enabled) return
+
     ptr.addOut(this.sh.minInclusive, this.minObject)
     ptr.addOut(this.sh.maxInclusive, this.maxObject)
   }
@@ -102,24 +127,21 @@ export class ValuesConstraintBuilder {
     this.sh = rdf.ns.sh
     this.threshold = threshold
     this.values = rdf.termSet([object])
-  }
-
-  #strategy = object => {
-    if (this.values.size === this.threshold) {
-      this.message = 'Too many values for in-list constraint.' // TODO: better message
-      this.values.clear()
-      this.#strategy = _ => {}
-    } else {
-      this.values.add(object)
-    }
+    this.enabled = true
   }
 
   add(object) {
-    this.#strategy(object)
+    if (!this.enabled) return
+    this.values.add(object)
+    if (this.values.size > this.threshold) {
+      this.enabled = false
+      this.message = 'Too many values for in-list constraint.' // TODO: better message
+      this.values.clear()
+    }
   }
 
   build(ptr) {
-    if (this.values.size > 0) {
+    if (this.enabled) {
       ptr.addList(this.sh.in, this.values)
     }
   }

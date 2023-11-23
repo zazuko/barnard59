@@ -517,8 +517,7 @@ describe('cube.buildCubeShape', () => {
     checkValues(undefinedType, undefinedValue)
   })
 
-  // this is not ideal, but it is the current behavior
-  it('ignores parsing error', async () => {
+  it('should create no range constraints on parsing error', async () => {
     const two = rdf.literal('2', ns.xsd.integer)
     const five = rdf.literal('5', ns.xsd.integer)
     const input = createObservationsStream({
@@ -536,7 +535,8 @@ describe('cube.buildCubeShape', () => {
 
     const result = await datasetStreamToClownface(transform)
 
-    checkRange(result, two, five)
+    strictEqual(result.out(ns.sh.minInclusive).terms.length, 0)
+    strictEqual(result.out(ns.sh.maxInclusive).terms.length, 0)
   })
 
   it('should merge given metadata to cube metadata', async () => {

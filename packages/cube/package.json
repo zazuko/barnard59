@@ -38,8 +38,9 @@
     "@rdfjs/to-ntriples": "^2.0.0",
     "barnard59-env": "^0.0.0",
     "chai": "^4.3.7",
-    "is-stream": "^3.0.0",
     "get-stream": "^6.0.1",
+    "is-stream": "^3.0.0",
+    "rdf-validate-shacl": "^0.5.1",
     "shelljs": "^0.8.5"
   }
 }
