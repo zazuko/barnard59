@@ -1,6 +1,6 @@
 {
   "name": "barnard59-cube",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Build and check RDF cubes in Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -23,8 +23,8 @@
     "barnard59-base": "^2.0.0",
     "barnard59-formats": "^2.0.0",
     "barnard59-http": "^2.0.0",
-    "barnard59-rdf": "^2.0.0",
-    "barnard59-sparql": "^2.0.0",
+    "barnard59-rdf": "^3.0.0",
+    "barnard59-sparql": "^2.1.1",
     "barnard59-shacl": "^1.0.0"
   },
   "dependencies": {
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",
-    "barnard59-env": "^1.0.0",
+    "barnard59-env": "^1.1.0",
     "chai": "^4.3.7",
     "is-stream": "^3.0.0",
     "get-stream": "^6.0.1",
