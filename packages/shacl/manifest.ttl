@@ -1,4 +1,5 @@
 @base <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix b59: <https://barnard59.zazuko.com/vocab#> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -16,3 +17,10 @@
           code:implementedBy [ a code:EcmaScriptModule;
                               code:link <node:barnard59-shacl/report.js#shacl>
                              ].
+
+<command/validate>
+  a b59:CliCommand ;
+  b59:command "validate" ;
+  rdfs:label "Validates the RDF in standard input against a SHACL document" ;
+  b59:source "barnard59-shacl/pipeline/validate.ttl" ;
+.
