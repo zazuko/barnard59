@@ -20,13 +20,13 @@ TBD
 
 The following pipelines retrieve and validate cube observations and their constraints.
 
-### fetch constraint
+### fetch cube
 
-Pipeline `fetch-constraint` queries a given SPARQL endpoint to retrieve 
-a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of the `cube:Constraint` part of a given cube.
+Pipeline `fetch-cube` queries a given SPARQL endpoint to retrieve 
+a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of a given cube and its constraint (excluding the observations).
 
 ```bash
-npx barnard59 cube fetch-constraint \
+npx barnard59 cube fetch-cube \
   --cube https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
   --endpoint https://int.lindas.admin.ch/query
 ```
@@ -39,7 +39,7 @@ This pipeline is useful mainly for cubes published with [cube creator](https://g
 
 Pipeline `check-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
 
-The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-constraint` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-observations` pipeline).
+The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-observations` pipeline).
 
 ```bash
 cat myConstraint.ttl \
