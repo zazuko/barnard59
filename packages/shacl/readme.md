@@ -1,12 +1,14 @@
-#  barnard59-validate-shacl
+#  barnard59-shacl
 
 A barnard59 step that validates RDF using the [Shapes Constraint Language](https://www.w3.org/TR/shacl) (SHACL).
 
 ## Install
 
 ```
-npm install barnard59-validate-shacl --save
+npm install barnard59-shacl --save
 ```
+
+‼️ This package was previously published as `barnard59-validate-shacl`. Please update your dependencies accordingly. ‼️
 
 ## Exported steps
 
@@ -24,7 +26,7 @@ prefix code: <https://code.described.at/>
   code:implementedBy
     [
       a code:EcmaScriptModule ;
-      code:link <node:barnard59-validate-shacl/validate.js#shacl>
+      code:link <node:barnard59-shacl/validate.js#shacl>
     ] ;
   code:arguments ( <#CubeShapes> ) ;
 .
@@ -42,7 +44,7 @@ prefix code: <https://code.described.at/>
   code:implementedBy
     [
       a code:EcmaScriptModule ;
-      code:link <node:barnard59-validate-shacl/validate.js#shacl>
+      code:link <node:barnard59-shacl/validate.js#shacl>
     ] ;
   code:arguments
     [ code:name "shape" ; code:value <#CubeShapes> ] ,

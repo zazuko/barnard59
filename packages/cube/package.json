@@ -25,7 +25,7 @@
     "barnard59-http": "^2.0.0",
     "barnard59-rdf": "^2.0.0",
     "barnard59-sparql": "^2.0.0",
-    "barnard59-validate-shacl": "^1.0.0"
+    "barnard59-shacl": "^1.0.0"
   },
   "dependencies": {
     "external-merge-sort": "^0.1.3",

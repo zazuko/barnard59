@@ -1,5 +1,5 @@
 {
-  "name": "barnard59-validate-shacl",
+  "name": "barnard59-shacl",
   "version": "1.0.0",
   "description": "A barnard59 step that validates RDF using the Shapes Constraint Language (SHACL).",
   "type": "module",
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/zazuko/barnard59.git",
-    "directory": "packages/validate-shacl"
+    "directory": "packages/shacl"
   },
   "keywords": [],
   "author": "Zazuko GmbH",
