@@ -98,7 +98,14 @@
   rdfs:label "stdout";
   rdfs:comment "Writes the incoming data to stdout and also forwards the data to the stream output.";
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-base/stdout.js#default>
+    code:link <node:barnard59-base/process.js#stdout>
+  ].
+
+<stdin> a p:Operation, p:Writable, p:Readable;
+  rdfs:label "stdin";
+  rdfs:comment "Reads from standard input";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/process.js#stdin>
   ].
 
 <toString> a p:Operation, p:WritableObjectMode, p:Readable;
