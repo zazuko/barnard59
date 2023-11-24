@@ -21,15 +21,20 @@ The argument is a RDF stream containing the SHACL shapes.
 ```turtle
 prefix : <https://pipeline.described.at/>
 prefix code: <https://code.described.at/>
+prefix shacl: <https://barnard59.zazuko.com/operations/shacl/>
+prefix fs: <https://barnard59.zazuko.com/operations/core/fs/>
 
-<#shaclValidate> a :Step ;
-  code:implementedBy
+[
+  a :Pipeline ;
+  :steps
     [
-      a code:EcmaScriptModule ;
-      code:link <node:barnard59-shacl/validate.js#shacl>
+      :stepList 
+        (
+          [ fs:createReadStream ( "path/to/data" ) ]
+          [ shacl:validate ( <#CubeShapes> ) ]
+        )
     ] ;
-  code:arguments ( <#CubeShapes> ) ;
-.
+] .
 ```
 
 > Note that this operation does not take care of partitioning the data, using this operation requires to prepare the data accordingly.
@@ -39,14 +44,9 @@ To pass additional options, initialize the step with named arguments instead. Al
 ```turtle
 prefix : <https://pipeline.described.at/>
 prefix code: <https://code.described.at/>
+prefix shacl: <https://barnard59.zazuko.com/operations/shacl/>
 
-<#shaclValidate> a :Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <node:barnard59-shacl/validate.js#shacl>
-    ] ;
-  code:arguments
+[ shacl:validate
     [ code:name "shape" ; code:value <#CubeShapes> ] ,
     # validation will stop when the given number is reached (default 1)
     # set to 0 to report all errors    
@@ -57,8 +57,8 @@ prefix code: <https://code.described.at/>
     [ 
       code:name "onViolation" ; 
       code:value [ a code:EcmaScriptModule ; code:link <file:...> ] ;
-    ] ;
-.
+    ] 
+].
 ```
 
 #### `onViolation`
@@ -78,4 +78,41 @@ export function continueOnWarnings({ context, data, report }) {
 
     return !hasViolations
 }
+```
+
+
+### `report`
+
+Similar to `validate`, but instead of returning the data graph, it streams SHACL validation report(s).
+
+```turtle
+prefix : <https://pipeline.described.at/>
+prefix code: <https://code.described.at/>
+prefix shacl: <https://barnard59.zazuko.com/operations/shacl/>
+prefix fs: <https://barnard59.zazuko.com/operations/core/fs/>
+
+[
+  a :Pipeline, :Readable ;
+  :steps
+    [
+      :stepList 
+        (
+          [ fs:createReadStream ( "path/to/data" ) ]
+          # TODO: parse input and group into dataset chunks for validation
+          [ shacl:report ( <#CubeShapes> ) ]
+        )
+    ] ;
+] .
+```
+
+
+
+By default, the pipeline will stop when 500 validation errors are encountered across all processed datasets. This can be changed by passing a `maxErrors` argument. Specifically, to fail on first violation, set it to `0`. 
+
+```turtle
+[
+  shacl:report
+    [ code:name "shape" ; code:value <#CubeShapes> ] ,
+    [ code:name "maxErrors" ; code:value 0 ]
+] .
 ```
