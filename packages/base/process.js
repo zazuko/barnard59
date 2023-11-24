@@ -8,8 +8,10 @@ class StdOut extends Transform {
   }
 }
 
-function factory() {
+export function stdout() {
   return new StdOut()
 }
 
-export default factory
+export function stdin() {
+  return process.stdin
+}
