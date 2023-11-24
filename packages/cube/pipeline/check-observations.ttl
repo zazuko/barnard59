@@ -2,6 +2,8 @@
 @prefix p: <https://pipeline.described.at/> .
 @prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
 @prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
+@prefix splitDataset: <https://barnard59.zazuko.com/operations/rdf/splitDataset/> .
 @prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -42,7 +44,7 @@ _:sortChunkSize a p:Variable ;
         [ base:stdin () ]
         [ n3:parse () ]
         _:sortBySubject
-        _:toDatasetBySubject
+        [ splitDataset:bySubject () ]
         _:batch
         [ shacl:report
           [code:name "shape" ; code:value _:getConstraint ] ,
@@ -51,22 +53,6 @@ _:sortChunkSize a p:Variable ;
         [ base:flatten () ]
         [ ntriples:serialize () ]
       )
-    ]
-.
-
-_:toDataset a p:Step ;
-	code:implementedBy
-    [
-      rdf:type code:EcmaScript ;
-      code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
-    ]
-.
-
-_:toDatasetBySubject a p:Step ;
-	code:implementedBy
-    [
-      rdf:type code:EcmaScript ;
-      code:link <node:rdf-stream-to-dataset-stream/bySubject.js> ;
     ]
 .
 
@@ -87,7 +73,7 @@ _:getConstraint a p:Pipeline , p:ReadableObjectMode ;
       p:stepList
         (
           _:readConstraint
-          _:toDataset
+          [ getDataset: () ]
           _:addTarget
           [ base:flatten () ]
         )
