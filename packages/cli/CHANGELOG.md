@@ -1,5 +1,15 @@
 # barnard59
 
+## 4.1.1
+
+### Patch Changes
+
+- bb3b99b: include peer dependencies in manifest discovery
+- Updated dependencies [1dbb51f]
+- Updated dependencies [e0bab1a]
+  - barnard59-core@5.1.0
+  - barnard59-env@1.1.0
+
 ## 4.1.0
 
 ### Minor Changes

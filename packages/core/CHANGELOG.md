@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 5.1.0
+
+### Minor Changes
+
+- 1dbb51f: Add support for "late errors" where step authors can call `context.error()` to avoid immediately breaking the pipeline
+
 ## 5.0.0
 
 ### Major Changes
