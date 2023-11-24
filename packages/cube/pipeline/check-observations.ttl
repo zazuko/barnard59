@@ -39,7 +39,7 @@ _:sortChunkSize a p:Variable ;
     [
       p:stepList
       (
-        _:stdin
+        [ base:stdin () ]
         [ n3:parse () ]
         _:sortBySubject
         _:toDatasetBySubject
@@ -52,11 +52,6 @@ _:sortChunkSize a p:Variable ;
         [ ntriples:serialize () ]
       )
     ]
-.
-
-
-_:stdin a p:Step ;
-  code:implementedBy "() => process.stdin"^^code:EcmaScript
 .
 
 _:toDataset a p:Step ;

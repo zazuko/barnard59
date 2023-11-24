@@ -23,7 +23,7 @@ _:profile a p:Variable ;
   p:steps
     [
       p:stepList (
-        _:stdin
+        [ base:stdin () ]
         [ n3:parse () ]
         _:toDataset
         [ shacl:report (_:getProfile) ]
@@ -31,10 +31,6 @@ _:profile a p:Variable ;
         [ ntriples:serialize () ]
       )
     ]
-.
-
-_:stdin a p:Step ;
-  code:implementedBy "() => process.stdin"^^code:EcmaScript
 .
 
 _:toDataset a p:Step ;
