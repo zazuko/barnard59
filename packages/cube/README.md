@@ -35,15 +35,15 @@ npx barnard59 cube fetch-cube \
 This pipeline is useful mainly for cubes published with [cube creator](https://github.com/zazuko/cube-creator) (if the cube definition is manually crafted, likely it's already available as a local file).
 
 
-### check constraint
+### check cube
 
-Pipeline `check-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
+Pipeline `check-cube` validates the input cube and constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
 
-The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-observations` pipeline).
+The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-cube` pipeline (in most cases it's useful to have the cube in a local file because it's needed also for the `check-observations` pipeline).
 
 ```bash
 cat myConstraint.ttl \
-| npx barnard59 cube check-constraint \
+| npx barnard59 cube check-cube \
     --profile https://cube.link/v0.1.0/shape/standalone-constraint-constraint
 ```
 SHACL reports for violations are written to `stdout`.
@@ -82,4 +82,4 @@ To limit the output size, there is also a `maxViolations` option to stop validat
 
 ### Known issues
 
-Command `check-constraint` may fail if there are `sh:in` constraints with too many values.
+Command `check-cube` may fail if there are `sh:in` constraints with too many values.
