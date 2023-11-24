@@ -1,10 +1,11 @@
-# v0.1.0
+# barnard59-shacl
 
 ## 1.0.0
 
 ### Major Changes
 
 - 430ce8a: Update manifest: current namespace and use HTTPS URL
+- Renamed from `barnard59-validate-shacl` to `barnard59-shacl`
 
 ### Minor Changes
 

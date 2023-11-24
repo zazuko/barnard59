@@ -25,7 +25,7 @@
     "barnard59-http": "^2.0.0",
     "barnard59-rdf": "^2.0.0",
     "barnard59-sparql": "^2.0.0",
-    "barnard59-validate-shacl": "^0.3.8"
+    "barnard59-shacl": "^1.0.0"
   },
   "dependencies": {
     "external-merge-sort": "^0.1.3",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",
-    "barnard59-env": "^0.0.0",
+    "barnard59-env": "^1.0.0",
     "chai": "^4.3.7",
     "is-stream": "^3.0.0",
     "get-stream": "^6.0.1",

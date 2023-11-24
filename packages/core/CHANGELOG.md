@@ -1,4 +1,4 @@
-# Changelog
+# barnard59-core
 
 ## 5.0.0
 
