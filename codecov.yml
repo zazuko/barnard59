@@ -18,3 +18,4 @@ flag_management:
 ignore:
   - test
   - "packages/*/test/**/*"
+  - "packages/*/test/*"
