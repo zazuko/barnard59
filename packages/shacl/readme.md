@@ -116,3 +116,22 @@ By default, the pipeline will stop when 500 validation errors are encountered ac
     [ code:name "maxErrors" ; code:value 0 ]
 ] .
 ```
+
+
+## Commands
+
+Peer dependencies must be explicitly installed
+
+```
+npm i barnard59-base barnard59-formats barnard59-rdf
+```
+
+### validate
+
+Reads standard input and validates the data against the given SHACL shapes.
+
+```bash
+cat data.ttl | barnard59 shacl validate --shapes https://example.com/shapes.ttl
+```
+
+Shapes can also be path relative to the working directory.

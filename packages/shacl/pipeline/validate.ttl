@@ -1,0 +1,61 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
+@prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix code: <https://code.described.at/> .
+
+@base <http://barnard59.zazuko.com/pipeline/shacl/> .
+
+_:shapes a p:Variable ;
+  p:name "shapes" ;
+  rdfs:label "URL or path of the shapes graph" ;
+.
+
+<validate>
+  a p:Pipeline, p:Readable ;
+  p:variables [ p:variable _:shapes ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ base:stdin () ]
+          <_validate>
+        )
+    ] ;
+.
+
+<_validate>
+  a p:Pipeline, p:Writable, p:Readable ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ n3:parse () ]
+          [ getDataset: () ]
+          [ shacl:report ( _:getShapes ) ]
+          [ base:flatten () ]
+          [ ntriples:serialize () ]
+        )
+    ] ;
+.
+
+_:getShapes a p:Pipeline, p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            a p:Step ;
+            code:implementedBy
+              [
+                a code:EcmaScriptModule ;
+                code:link <file:../lib/getShapes.js#default> ;
+              ] ;
+            code:arguments ( "shapes"^^p:VariableName ) ;
+          ]
+        )
+    ]
+.
