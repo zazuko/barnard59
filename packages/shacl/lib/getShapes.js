@@ -1,13 +1,10 @@
-import { resolve } from 'path'
-
 export default async function getShapes(pathOrUri) {
   let url
 
   try {
     url = new URL(pathOrUri)
   } catch {
-    const path = resolve(this.basePath, pathOrUri)
-    return this.env.fromFile(path)
+    return this.env.fromFile(pathOrUri)
   }
 
   const response = await this.env.fetch(url)
