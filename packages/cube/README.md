@@ -18,7 +18,7 @@ TBD
 
 ## Cube validation
 
-The following pipelines retrieve and validate cube observations and their metadata.
+The following pipelines retrieve and validate cube observations and metadata.
 
 ### fetch metadata
 
@@ -42,7 +42,7 @@ Pipeline `check-metadata` validates the input metadata against the shapes provid
 The pipeline reads the metadata from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-metadata` pipeline (in most cases it's useful to have the metadata in a local file because it's needed also for the `check-observations` pipeline).
 
 ```bash
-cat metadata.ttl \
+cat cube.ttl \
 | npx barnard59 cube check-metadata \
     --profile https://cube.link/v0.1.0/shape/standalone-constraint-constraint
 ```

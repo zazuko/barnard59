@@ -24,14 +24,14 @@
 <command/cube/fetch-metadata>
   a b59:CliCommand ;
   b59:command "fetch-metadata" ;
-  rdfs:label "Retrieves cube and constraint from SPARQL endpoint" ;
+  rdfs:label "Retrieves cube and its constraint shape from SPARQL endpoint" ;
   b59:source "barnard59-cube/pipeline/fetch-metadata.ttl" ;
 .
 
 <command/cube/check-metadata>
   a b59:CliCommand ;
   b59:command "check-metadata" ;
-  rdfs:label "Validate input cube and constraint against profile shapes" ;
+  rdfs:label "Validate input cube and its constraint against profile shapes" ;
   b59:source "barnard59-cube/pipeline/check-metadata.ttl" ;
 .
 
