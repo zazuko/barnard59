@@ -34,6 +34,7 @@
     "@rdfjs/to-ntriples": "^2.0.0",
     "@tpluscode/rdf-string": "^1.1.0",
     "assert-throws-async": "^3.0.0",
+    "barnard59-core": "^5.1.0",
     "barnard59-env": "^1.0.0",
     "barnard59-test-support": "*",
     "chai": "^4.3.4",
@@ -41,7 +42,8 @@
     "express-as-promise": "^1.2.0",
     "get-stream": "^8.0.1",
     "rdf-dataset-ext": "^1.1.0",
-    "sinon": "^15"
+    "sinon": "^15",
+    "string-to-stream": "^3.0.1"
   },
   "mocha": {
     "require": "../../test/mocha-setup.cjs"
