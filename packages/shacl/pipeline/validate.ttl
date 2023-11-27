@@ -22,6 +22,17 @@ _:shapes a p:Variable ;
       p:stepList
         (
           [ base:stdin () ]
+          <_validate>
+        )
+    ] ;
+.
+
+<_validate>
+  a p:Pipeline, p:Writable, p:Readable ;
+  p:steps
+    [
+      p:stepList
+        (
           [ n3:parse () ]
           [ getDataset: () ]
           [ shacl:report ( _:getShapes ) ]

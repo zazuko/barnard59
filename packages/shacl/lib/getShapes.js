@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 
-export default function getShapes(pathOrUri) {
+export default async function getShapes(pathOrUri) {
   let url
 
   try {
@@ -10,6 +10,17 @@ export default function getShapes(pathOrUri) {
     return this.env.fromFile(path)
   }
 
-  const response = this.env.fetch(url)
-  return this.env.formats.import(response.headers['content-type'], response.body)
+  const response = await this.env.fetch(url)
+  let contentType = response.headers['content-type']
+  if (!contentType) {
+    this.logger.warn(`No content-type header found for ${url}. Trying n-triples`)
+    contentType = 'application/n-triples'
+  }
+
+  const parserStream = this.env.formats.parsers.import(contentType, response.body)
+  if (!parserStream) {
+    throw new Error(`No parser found for ${contentType}`)
+  }
+
+  return parserStream
 }
