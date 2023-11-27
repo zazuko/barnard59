@@ -1,5 +1,18 @@
 # barnard59-shacl
 
+## 1.1.0
+
+### Minor Changes
+
+- d5249ee: Added a pipeline command which validates quads from standard input
+
+### Patch Changes
+
+- Updated dependencies [e0b6f85]
+- Updated dependencies [0431adf]
+  - barnard59-base@2.2.0
+  - barnard59-rdf@3.1.0
+
 ## 1.0.0
 
 ### Major Changes

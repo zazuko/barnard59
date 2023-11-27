@@ -1,5 +1,17 @@
 # barnard59-cube
 
+## 1.0.1
+
+### Patch Changes
+
+- 1b09c57: Renamed fetch-constraint and check-constraint to fetch-metadata and check-metadata
+- Updated dependencies [e0b6f85]
+- Updated dependencies [d5249ee]
+- Updated dependencies [0431adf]
+  - barnard59-base@2.2.0
+  - barnard59-shacl@1.1.0
+  - barnard59-rdf@3.1.0
+
 ## 1.0.0
 
 ### Major Changes
