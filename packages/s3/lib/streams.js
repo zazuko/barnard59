@@ -1,5 +1,6 @@
 // @ts-check
 import { createWriteStream } from 'fs'
+import { Readable } from 'node:stream'
 import { WritableStream } from 'stream/web'
 
 /**
@@ -16,8 +17,7 @@ export const toWritableStream = (stream) => {
      *
      * @param {any} chunk
     */
-    // eslint-disable-next-line space-before-function-paren
-    write (chunk) {
+    write: (chunk) => {
       stream.write(chunk)
     },
   })
@@ -25,7 +25,7 @@ export const toWritableStream = (stream) => {
 }
 
 /**
- * Create a writable stream.
+ * Create a writable stream from a path.
  *
  * @param {string} path Path to write to.
  * @returns {WritableStream} Writable stream.
@@ -33,4 +33,64 @@ export const toWritableStream = (stream) => {
 export const createWritableStream = (path) => {
   const stream = createWriteStream(path)
   return toWritableStream(stream)
+}
+
+/**
+ * Convert a ReadableStream to a Readable.
+ *
+ * @param {any} webStream The WebStream to convert.
+ * @returns {Readable} The Node.js stream.
+ */
+export const toReadable = (webStream) => {
+  const nodeStream = new Readable({
+    // The read method is called when the stream wants to pull more data in
+    read: () => { },
+  })
+
+  // Handle each chunk of data
+  const reader = webStream.getReader()
+  const pump = () => {
+    reader.read().then(({ done, value }) => {
+      if (done) {
+        // When no more data, close the stream
+        nodeStream.push(null)
+      } else {
+        // Push the data into the Node.js stream
+        nodeStream.push(Buffer.from(value))
+        pump()
+      }
+    }).catch(err => {
+      // Handle any errors
+      nodeStream.emit('error', err)
+    })
+  }
+
+  // Start pumping data
+  pump()
+
+  return nodeStream
+}
+
+/**
+ * Get a string out of a Readable.
+ *
+ * @param {Readable} stream Stream to read from.
+ * @returns {Promise<string>} String.
+ */
+export const toString = async (stream) => {
+  const data = []
+
+  return new Promise((resolve, reject) => {
+    stream.on('data', (chunk) => {
+      data.push(chunk)
+    })
+
+    stream.on('end', () => {
+      resolve(data.join(''))
+    })
+
+    stream.on('error', (error) => {
+      reject(error)
+    })
+  })
 }
