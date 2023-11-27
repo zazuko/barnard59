@@ -1,5 +1,17 @@
 # barnard59-rdf
 
+## 3.1.0
+
+### Minor Changes
+
+- 0431adf: Export `rdf-stream-to-dataset-stream` functions as pipeline operations.
+
+  - `<https://barnard59.zazuko.com/operations/rdf/getDataset>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/byGraph>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/byPredicate>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/bySubject>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/byType>`
+
 ## 3.0.0
 
 ### Major Changes
