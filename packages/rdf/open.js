@@ -1,4 +1,4 @@
-export default async function getShapes(pathOrUri) {
+export default async function (pathOrUri) {
   let url
 
   try {
@@ -8,7 +8,7 @@ export default async function getShapes(pathOrUri) {
   }
 
   const response = await this.env.fetch(url)
-  let contentType = response.headers['content-type']
+  let contentType = response.headers.get('content-type')
   if (!contentType) {
     this.logger.warn(`No content-type header found for ${url}. Trying n-triples`)
     contentType = 'application/n-triples'
