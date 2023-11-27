@@ -1,0 +1,81 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+_:endpoint a p:Variable ;
+  p:name "endpoint" ;
+  rdfs:label "SPARQL endpoint" ;
+.
+
+_:cube a p:Variable ;
+  p:name "cube" ;
+  rdfs:label "cube URI" ;
+.
+
+<fetch-metadata> a p:Pipeline , p:Readable ;
+  p:variables [ p:variable _:endpoint, _:cube ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ base:concat\/object (_:queryCube _:queryConstraint) ]
+          [ ntriples:serialize () ]
+        )
+    ]
+.
+
+
+# relying on cbd is not ideal (vendor specific)
+
+_:queryCube a p:Pipeline , p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            sparql:construct
+              [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] ,
+              [
+                code:name "query";
+                code:value """
+                #pragma describe.strategy cbd
+
+                DESCRIBE <${cube}>
+                """^^code:EcmaScriptTemplateLiteral
+              ]
+          ]
+        )
+    ]
+  .
+
+_:queryConstraint a p:Pipeline, p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            sparql:construct
+              [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] ,
+              [
+                code:name "query";
+                code:value """
+                #pragma describe.strategy cbd
+
+                PREFIX cube: <https://cube.link/>
+
+                DESCRIBE ?s
+                WHERE {
+                  <${cube}> cube:observationConstraint ?s .
+                }
+                """^^code:EcmaScriptTemplateLiteral
+              ]
+          ]
+        )
+    ]
+  .
+  

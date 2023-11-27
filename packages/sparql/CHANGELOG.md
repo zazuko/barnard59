@@ -1,5 +1,11 @@
 # barnard59-sparql
 
+## 2.1.1
+
+### Patch Changes
+
+- bb3b99b: fix code link in manifest
+
 ## 2.1.0
 
 ### Minor Changes

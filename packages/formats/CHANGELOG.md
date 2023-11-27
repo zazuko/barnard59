@@ -1,4 +1,4 @@
-# v1.0.0
+# barnard59-formats
 
 ## 2.1.0
 

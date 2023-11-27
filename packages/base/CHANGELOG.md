@@ -1,4 +1,10 @@
-# v1.0.0
+# barnard59-base
+
+## 2.2.0
+
+### Minor Changes
+
+- e0b6f85: Added an operation to read standard input
 
 ## 2.1.0
 

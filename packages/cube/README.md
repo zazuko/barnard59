@@ -3,6 +3,12 @@
 This package provides operations and commands for RDF cubes in Barnard59 Linked Data pipelines.
 The `manifest.ttl` file contains a full list of all operations included in this package. 
 
+## Installation
+
+```
+npm i barnard59-cube
+```
+
 ## Operations
 
 ### `cube/buildCubeShape`
@@ -16,17 +22,23 @@ TBD
 
 ## Commands
 
+Peer dependencies must be explicitly installed
+
+```
+npm i barnard59-base barnard59-formats barnard59-http barnard59-rdf barnard59-sparql barnard59-shacl
+```
+
 ## Cube validation
 
-The following pipelines retrieve and validate cube observations and their constraints.
+The following pipelines retrieve and validate cube observations and metadata.
 
-### fetch constraint
+### fetch metadata
 
-Pipeline `fetch-constraint` queries a given SPARQL endpoint to retrieve 
-a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of the `cube:Constraint` part of a given cube.
+Pipeline `fetch-metadata` queries a given SPARQL endpoint to retrieve 
+a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of a given cube and its constraint (excluding the observations).
 
 ```bash
-npx barnard59 cube fetch-constraint \
+npx barnard59 cube fetch-metadata \
   --cube https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
   --endpoint https://int.lindas.admin.ch/query
 ```
@@ -35,15 +47,15 @@ npx barnard59 cube fetch-constraint \
 This pipeline is useful mainly for cubes published with [cube creator](https://github.com/zazuko/cube-creator) (if the cube definition is manually crafted, likely it's already available as a local file).
 
 
-### check constraint
+### check metadata
 
-Pipeline `check-constraint` validates the input constraint against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
+Pipeline `check-metadata` validates the input metadata against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
 
-The pipeline reads the constraint from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-constraint` pipeline (in most cases it's useful to have the constraint in a local file because it's needed also for the `check-observations` pipeline).
+The pipeline reads the metadata from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-metadata` pipeline (in most cases it's useful to have the metadata in a local file because it's needed also for the `check-observations` pipeline).
 
 ```bash
-cat myConstraint.ttl \
-| npx barnard59 cube check-constraint \
+cat cube.ttl \
+| npx barnard59 cube check-metadata \
     --profile https://cube.link/v0.1.0/shape/standalone-constraint-constraint
 ```
 SHACL reports for violations are written to `stdout`.
@@ -67,9 +79,9 @@ Pipeline `check-observations` validates the input observations against the shape
 The pipeline reads the observations from `stdin`, allowing input from a local file (as in the following example) as well as from the output of the `fetch-observations` pipeline.
 
 ```bash
-cat myObservations.ttl \
+cat observations.ttl \
 | npx barnard59 cube check-observations \
-    --constraint myConstraint.ttl
+    --constraint metadata.ttl
 ```
 
 To enable validation, the pipeline adds to the constraint a `sh:targetClass` property with value `cube:Observation`, requiring that each observation has an explicit `rdf:type`.
@@ -82,4 +94,4 @@ To limit the output size, there is also a `maxViolations` option to stop validat
 
 ### Known issues
 
-Command `check-constraint` may fail if there are `sh:in` constraints with too many values.
+Command `check-metadata` may fail if there are `sh:in` constraints with too many values.

@@ -1,4 +1,37 @@
-# v1.0.0
+# barnard59-rdf
+
+## 3.1.0
+
+### Minor Changes
+
+- 0431adf: Export `rdf-stream-to-dataset-stream` functions as pipeline operations.
+
+  - `<https://barnard59.zazuko.com/operations/rdf/getDataset>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/byGraph>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/byPredicate>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/bySubject>`
+  - `<https://barnard59.zazuko.com/operations/rdf/splitDataset/byType>`
+
+## 3.0.0
+
+### Major Changes
+
+- 68c034a: Move cube operations from package `barnard59-rdf` to the new package `barnard59-cube`.
+
+  ```diff
+  <#toObservation> a p:Step;
+    code:implementedBy [ a code:EcmaScriptModule;
+      - code:link <node:barnard59-rdf/cube.js#toObservation>
+      + code:link <node:barnard59-cube/cube.js#toObservation>
+    ].
+
+  <#buildCubeShape> a p:Step;
+    code:implementedBy [ a code:EcmaScriptModule;
+      - code:link <node:barnard59-rdf/cube.js#buildCubeShape>
+      + code:link <node:barnard59-code/cube.js#buildCubeShape>
+    ].
+
+  ```
 
 ## 2.0.0
 

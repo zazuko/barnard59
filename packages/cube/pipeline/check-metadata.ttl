@@ -5,6 +5,7 @@
 @prefix base: <https://barnard59.zazuko.com/operations/base/> .
 @prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -18,33 +19,20 @@ _:profile a p:Variable ;
 .
 
 
-<check-constraint> a p:Pipeline , p:Readable ;
+<check-metadata> a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:profile ] ;
   p:steps
     [
       p:stepList (
-        _:stdin
+        [ base:stdin () ]
         [ n3:parse () ]
-        _:toDataset
+        [ getDataset: () ]
         [ shacl:report (_:getProfile) ]
         [ base:flatten () ]
         [ ntriples:serialize () ]
       )
     ]
 .
-
-_:stdin a p:Step ;
-  code:implementedBy "() => process.stdin"^^code:EcmaScript
-.
-
-_:toDataset a p:Step ;
-	code:implementedBy
-    [
-      rdf:type code:EcmaScript ;
-      code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
-    ]
-.
-
 
 _:getProfile a p:Pipeline , p:ReadableObjectMode;
   p:steps

@@ -1,6 +1,6 @@
 {
   "name": "barnard59-graph-store",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -24,11 +24,9 @@
     "lodash": "^4.17.21",
     "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
-    "sparql-http-client": "^2.4.0"
-  },
-  "peerDependencies": {
+    "sparql-http-client": "^2.4.0",
     "barnard59-base": "^2.1.0",
-    "barnard59-rdf": "^2.0.0"
+    "barnard59-rdf": "^3.0.0"
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",

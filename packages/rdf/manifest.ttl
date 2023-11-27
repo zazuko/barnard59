@@ -41,3 +41,58 @@
       code:link <node:barnard59-rdf/fs.js#parse>
     ] ;
 .
+
+<getDataset>
+  a p:Operation, p:WritableObjectMode, p:ReadableObjectMode ;
+  rdfs:label "Combine RDF stream to dataset" ;
+  rdfs:comment "The entire RDF stream is combined into a single dataset" ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/toDatasetStream.js> ;
+    ]
+.
+
+<splitDataset/byGraph>
+  a p:Operation, p:WritableObjectMode, p:ReadableObjectMode ;
+  rdfs:label "Splits RDF stream on graph" ;
+  rdfs:comment "Combines streamed quads into datasets. A new dataset is pushed when graph changes" ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/byGraph.js> ;
+    ]
+.
+
+<splitDataset/byPredicate>
+  a p:Operation, p:WritableObjectMode, p:ReadableObjectMode ;
+  rdfs:label "Splits RDF stream on predicate" ;
+  rdfs:comment "Combines streamed quads into datasets. A new dataset is pushed when predicate changes" ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/byPredicate.js> ;
+    ]
+.
+
+<splitDataset/bySubject>
+  a p:Operation, p:WritableObjectMode, p:ReadableObjectMode ;
+  rdfs:label "Splits RDF stream on subject" ;
+  rdfs:comment "Combines streamed quads into datasets. A new dataset is pushed when subject changes" ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/byPredicate.js> ;
+    ]
+.
+
+<splitDataset/byType>
+  a p:Operation, p:WritableObjectMode, p:ReadableObjectMode ;
+  rdfs:label "Splits RDF stream by RDF type" ;
+  rdfs:comment "Combines streamed quads into datasets. A new dataset is pushed when an rdf:type triple is encountered" ;
+  code:implementedBy
+    [
+      a code:EcmaScript ;
+      code:link <node:rdf-stream-to-dataset-stream/byPredicate.js> ;
+    ]
+.

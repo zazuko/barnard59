@@ -1,4 +1,11 @@
-# v1.0.0
+# barnard59-graph-store
+
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [68c034a]
+  - barnard59-rdf@3.0.0
 
 ## 3.0.0
 

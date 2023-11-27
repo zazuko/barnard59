@@ -22,7 +22,7 @@ function getRDFStream(filePath) {
   return env.fromFile(url.fileURLToPath(new URL(filePath, import.meta.url)))
 }
 
-describe('validate-shacl', () => {
+describe('shacl', () => {
   describe('validate', () => {
     it('should be a factory', () => {
       strictEqual(typeof shacl, 'function')
