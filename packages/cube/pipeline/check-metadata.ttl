@@ -19,7 +19,7 @@ _:profile a p:Variable ;
 .
 
 
-<check-cube> a p:Pipeline , p:Readable ;
+<check-metadata> a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:profile ] ;
   p:steps
     [
