@@ -39,7 +39,7 @@ describe('pipeline/validate', function () {
     expect(output).to.be.empty
   })
 
-  it('validates against remove shapes', () => {
+  it('validates against remote shapes', () => {
     return withServer(async server => {
       server.app.use(express.static(url.fileURLToPath(new URL('../support', import.meta.url))))
       const baseUrl = await server.listen()
