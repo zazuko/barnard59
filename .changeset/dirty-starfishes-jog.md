@@ -2,4 +2,4 @@
 "barnard59-base": minor
 ---
 
-Addded an operation to read standard input
+Added an operation to read standard input
