@@ -1,5 +1,5 @@
 // @ts-check
-import { createWriteStream } from 'fs'
+import { createWriteStream } from 'node:fs'
 import { Readable } from 'node:stream'
 import { WritableStream } from 'stream/web'
 

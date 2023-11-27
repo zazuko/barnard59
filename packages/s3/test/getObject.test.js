@@ -1,7 +1,7 @@
 // @ts-check
-import { Readable } from 'stream'
-import { readFile } from 'fs/promises'
-import { strictEqual } from 'assert'
+import { Readable } from 'node:stream'
+import { readFile } from 'node:fs/promises'
+import { strictEqual } from 'node:assert'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import { mockClient } from 'aws-sdk-client-mock'

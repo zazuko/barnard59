@@ -1,5 +1,6 @@
 // @ts-check
-import { createReadStream } from 'fs'
+import { createReadStream } from 'node:fs'
+import { PassThrough } from 'node:stream'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
 
@@ -13,6 +14,7 @@ import { generateConfig, newClient } from '../lib/client.js'
  *  accessKeyId?: string;
  *  secretAccessKey?: string;
  * }} params Parameters.
+ * @returns {Promise<PassThrough>} Promise.
  */
 const putObject = async ({
   bucket,
@@ -32,6 +34,8 @@ const putObject = async ({
   }
   const command = new PutObjectCommand(input)
   await client.send(command)
+
+  return new PassThrough()
 }
 
 export default putObject
