@@ -1,6 +1,6 @@
 // @ts-check
 import { Readable } from 'node:stream'
-import { strictEqual } from 'node:assert'
+import { rejects, strictEqual } from 'node:assert'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import { mockClient } from 'aws-sdk-client-mock'
@@ -40,5 +40,16 @@ describe('getStreamObject', async () => {
 
     const fileContent = await toString(objectStream)
     strictEqual(fileContent, data)
+  })
+
+  it('should throw in case of empty body', async () => {
+    s3Mock.on(GetObjectCommand).resolves({ Body: null })
+
+    await rejects(async () => {
+      await getStreamObject({
+        bucket: 'test-bucket',
+        key: 'get-a-file.txt',
+      })
+    })
   })
 })
