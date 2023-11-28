@@ -1,4 +1,4 @@
-export default async function (pathOrUri) {
+export default async function (pathOrUri, mediaTypeOverride) {
   let url
 
   try {
@@ -8,10 +8,14 @@ export default async function (pathOrUri) {
   }
 
   const response = await this.env.fetch(url)
-  let contentType = response.headers.get('content-type')
-  if (!contentType) {
-    this.logger.warn(`No content-type header found for ${url}. Trying n-triples`)
-    contentType = 'application/n-triples'
+  let contentType
+  if (mediaTypeOverride) {
+    contentType = mediaTypeOverride
+  } else {
+    contentType = response.headers.get('content-type')
+    if (!contentType) {
+      throw new Error(`No content-type header found for ${url}`)
+    }
   }
 
   const parserStream = this.env.formats.parsers.import(contentType, response.body)
