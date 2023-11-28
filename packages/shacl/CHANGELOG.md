@@ -1,5 +1,13 @@
 # barnard59-shacl
 
+## 1.1.1
+
+### Patch Changes
+
+- c80f82b: Resolve shapes against working directory
+- Updated dependencies [b833a62]
+  - barnard59-rdf@3.2.0
+
 ## 1.1.0
 
 ### Minor Changes
