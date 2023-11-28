@@ -1,5 +1,14 @@
 # barnard59-shacl
 
+## 1.1.2
+
+### Patch Changes
+
+- ebe9128: prevent potential memory leaks by creating a fresh validator for each chunk
+- Updated dependencies [c759278]
+- Updated dependencies [ebe9128]
+  - barnard59-rdf@3.2.1
+
 ## 1.1.1
 
 ### Patch Changes
