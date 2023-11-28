@@ -82,7 +82,7 @@
   code:implementedBy
     [
       a code:EcmaScript ;
-      code:link <node:rdf-stream-to-dataset-stream/byPredicate.js> ;
+      code:link <node:rdf-stream-to-dataset-stream/bySubject.js> ;
     ]
 .
 
@@ -93,6 +93,6 @@
   code:implementedBy
     [
       a code:EcmaScript ;
-      code:link <node:rdf-stream-to-dataset-stream/byPredicate.js> ;
+      code:link <node:rdf-stream-to-dataset-stream/byType.js> ;
     ]
 .
