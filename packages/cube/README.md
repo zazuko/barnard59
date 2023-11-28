@@ -60,6 +60,9 @@ cat cube.ttl \
 ```
 SHACL reports for violations are written to `stdout`.
 
+In cases when a remote address give to `--profile` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--profileFormat` option to select the correct RDF parser. Its value must be a media type of, such as `text/turtle`.
+
+```bash
 
 ### fetch observations
 
