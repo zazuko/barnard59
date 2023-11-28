@@ -6,6 +6,7 @@
 @prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
 @prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
 @prefix code: <https://code.described.at/> .
+@prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
 
 @base <http://barnard59.zazuko.com/pipeline/shacl/> .
 
@@ -47,15 +48,7 @@ _:getShapes a p:Pipeline, p:ReadableObjectMode ;
     [
       p:stepList
         (
-          [
-            a p:Step ;
-            code:implementedBy
-              [
-                a code:EcmaScriptModule ;
-                code:link <file:../lib/getShapes.js#default> ;
-              ] ;
-            code:arguments ( "shapes"^^p:VariableName ) ;
-          ]
+          [ rdf:open ( "shapes"^^p:VariableName ) ]
         )
     ]
 .
