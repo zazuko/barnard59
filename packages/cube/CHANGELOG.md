@@ -1,5 +1,19 @@
 # barnard59-cube
 
+## 1.1.0
+
+### Minor Changes
+
+- b833a62: Support SHACL profile for validating cube to be loaded from local path
+
+### Patch Changes
+
+- e5a3457: The loaded profile can now be in any RDF serialzation
+- Updated dependencies [c80f82b]
+- Updated dependencies [b833a62]
+  - barnard59-shacl@1.1.1
+  - barnard59-rdf@3.2.0
+
 ## 1.0.1
 
 ### Patch Changes
