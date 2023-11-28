@@ -103,7 +103,7 @@
   rdfs:comment "Web resource requires content-type header. Will try n-triples as fallback. Local paths will be relative to the current working directory" ;
   code:implementedBy
     [
-      a code:EcmaScript ;
+      a code:EcmaScriptModule ;
       code:link <node:barnard59-rdf/open.js#default>
     ]
 .
