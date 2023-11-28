@@ -2,4 +2,4 @@
 "barnard59-shacl": patch
 ---
 
-reduce memory pressure
+prevent potential memory leaks by creating a fresh validator for each chunk
