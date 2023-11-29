@@ -11,6 +11,7 @@ class Dimension {
     this.constraints = new CompositeConstraintBuilder(
       new NodeKindConstraintBuilder(rdf),
       new DimensionConstraintsBuilder({ rdf, datatypeParsers: datatypeParsers(rdf), inListThreshold }))
+    this.messages = []
   }
 
   update({ object }) {
@@ -30,6 +31,11 @@ class Dimension {
       .addOut(this.rdf.ns.sh.maxCount, 1)
 
     this.constraints.build(ptr)
+
+    ptr.out(this.rdf.ns.sh.description)
+      .forEach(description => {
+        this.messages.push(`${this.predicate.value}: ${description.term.value}`)
+      })
 
     if (this.metadata.term) {
       cbdCopy(this.rdf, this.metadata, ptr)

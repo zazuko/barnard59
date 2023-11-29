@@ -13,6 +13,10 @@ class Cube {
     this.inListThreshold = inListThreshold
   }
 
+  get messages() {
+    return [...this.dimensions.values()].flatMap(({ messages }) => messages)
+  }
+
   dimension({ predicate, object }) {
     let dimension = this.dimensions.get(predicate)
 
