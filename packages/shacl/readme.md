@@ -16,7 +16,7 @@ npm install barnard59-shacl --save
 
 Validates a chunk of RDF against a set of conditions specified in a SHACL graph.
 
-The argument is a RDF stream containing the SHACL shapes.
+The argument is an RDF stream containing the SHACL shapes.
 
 ```turtle
 prefix : <https://pipeline.described.at/>
@@ -135,3 +135,5 @@ cat data.ttl | barnard59 shacl validate --shapes https://example.com/shapes.ttl
 ```
 
 Shapes can also be path relative to the working directory.
+
+In cases when a remote address give to `--shapes` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--shapesFormat` option to select the correct RDF parser. Its value must be a media type, such as `text/turtle`.

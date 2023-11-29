@@ -1,5 +1,24 @@
 # barnard59-rdf
 
+## 3.2.1
+
+### Patch Changes
+
+- c759278: Wrong code type in manifest of `<open>` operation
+- ebe9128: fix manifest entry for splitDataset (bySubject and byType)
+
+## 3.2.0
+
+### Minor Changes
+
+- b833a62: Added a universal RDF open step which fetches from the web or local path
+
+  ```turtle
+  @prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
+
+  [ rdf:open ( "path/to/shapes" ) ] .
+  ```
+
 ## 3.1.0
 
 ### Minor Changes

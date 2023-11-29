@@ -1,12 +1,10 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
-@prefix http: <https://barnard59.zazuko.com/operations/http/> .
 @prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
 @prefix base: <https://barnard59.zazuko.com/operations/base/> .
 @prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
-@prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
@@ -18,15 +16,20 @@ _:profile a p:Variable ;
   p:value "https://cube.link/latest/shape/standalone-constraint-constraint" ;
 .
 
+_:profileFormat a p:Variable ;
+  p:name "profileFormat" ;
+  rdfs:label "Override the profile format" ;
+  p:required false ;
+.
 
 <check-metadata> a p:Pipeline , p:Readable ;
-  p:variables [ p:variable _:profile ] ;
+  p:variables [ p:variable _:profile, _:profileFormat ] ;
   p:steps
     [
       p:stepList (
         [ base:stdin () ]
         [ n3:parse () ]
-        [ getDataset: () ]
+        [ rdf:getDataset () ]
         [ shacl:report (_:getProfile) ]
         [ base:flatten () ]
         [ ntriples:serialize () ]
@@ -39,8 +42,7 @@ _:getProfile a p:Pipeline , p:ReadableObjectMode;
     [
       p:stepList
         (
-          [ http:get [ code:name "url" ; code:value "profile"^^p:VariableName ] ]
-          [ n3:parse () ]
+          [ rdf:open ( "profile"^^p:VariableName "profileFormat"^^p:VariableName ) ]
         )
     ]
   .
