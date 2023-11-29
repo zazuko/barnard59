@@ -17,7 +17,9 @@ export function combine({ variable: commandVars, ...options }) {
 
   if (variableAll) {
     for (const [key, value] of Object.entries(process.env)) {
-      variables.set(key, value)
+      if (!variables.has(key)) {
+        variables.set(key, value)
+      }
     }
   }
 
