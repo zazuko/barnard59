@@ -1,5 +1,11 @@
 # barnard59-rdf
 
+## 3.2.2
+
+### Patch Changes
+
+- 5c14dc9: Add the option to override the media type of remote resources when using `rdf:open` operation
+
 ## 3.2.1
 
 ### Patch Changes
