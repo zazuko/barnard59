@@ -17,7 +17,7 @@
     code:link <node:barnard59-s3/cmd/putObject.js#default>
   ].
 
-<getStreamObject> a p:Operation;
+<getStreamObject> a p:Operation, p:Readable;
   rdfs:label "Get S3 object as stream";
   rdfs:comment "Get an object from a S3 bucket as a Readable stream.";
   code:implementedBy [ a code:EcmaScriptModule;
