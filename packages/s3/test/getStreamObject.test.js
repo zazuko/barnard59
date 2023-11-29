@@ -4,8 +4,8 @@ import { rejects, strictEqual } from 'node:assert'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import { mockClient } from 'aws-sdk-client-mock'
+import getStream from 'get-stream'
 import { getStreamObject } from '../index.js'
-import { toString } from '../lib/streams.js'
 import { removeResultsDirectory } from './utils.js'
 
 describe('getStreamObject', async () => {
@@ -38,7 +38,7 @@ describe('getStreamObject', async () => {
       key: 'get-a-file.txt',
     })
 
-    const fileContent = await toString(objectStream)
+    const fileContent = await getStream(objectStream)
     strictEqual(fileContent, data)
   })
 

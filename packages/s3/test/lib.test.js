@@ -1,9 +1,8 @@
 // @ts-check
 import { strictEqual, deepEqual } from 'node:assert'
-import { Readable } from 'node:stream'
 import { S3Client } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
-import { toReadable, toString } from '../lib/streams.js'
+import { toReadable } from '../lib/streams.js'
 
 describe('lib', async () => {
   describe('client', async () => {
@@ -75,27 +74,6 @@ describe('lib', async () => {
       })
 
       nodeStream.pipe(process.stdout)
-    })
-
-    it('should reject on stream error', async () => {
-      // Create a mock Readable stream
-      const mockStream = new Readable({
-        read: () => { },
-      })
-
-      // Manually emit an error after a brief delay
-      process.nextTick(() => {
-        mockStream.emit('error', new Error('Test error'))
-      })
-
-      try {
-        // Pass the mock stream to your function
-        await toString(mockStream)
-        throw new Error('Error was not thrown as expected')
-      } catch (error) {
-        // Assert the error
-        strictEqual(error.message, 'Test error')
-      }
     })
   })
 })

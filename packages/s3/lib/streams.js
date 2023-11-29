@@ -70,27 +70,3 @@ export const toReadable = (webStream) => {
 
   return nodeStream
 }
-
-/**
- * Get a string out of a Readable.
- *
- * @param {Readable} stream Stream to read from.
- * @returns {Promise<string>} String.
- */
-export const toString = async (stream) => {
-  const data = []
-
-  return new Promise((resolve, reject) => {
-    stream.on('data', (chunk) => {
-      data.push(chunk)
-    })
-
-    stream.on('end', () => {
-      resolve(data.join(''))
-    })
-
-    stream.on('error', (error) => {
-      reject(error)
-    })
-  })
-}
