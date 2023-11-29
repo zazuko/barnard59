@@ -136,4 +136,4 @@ cat data.ttl | barnard59 shacl validate --shapes https://example.com/shapes.ttl
 
 Shapes can also be path relative to the working directory.
 
-In cases when a remote address give to `--shapes` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--shapesFormat` option to select the correct RDF parser. Its value must be a media type of, such as `text/turtle`.
+In cases when a remote address give to `--shapes` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--shapesFormat` option to select the correct RDF parser. Its value must be a media type, such as `text/turtle`.
