@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "barnard59": "bin/barnard59.js"
+    "barnard59": "bin/barnard59.js",
+    "b59": "bin/barnard59.js"
   },
   "scripts": {
     "test": "mocha"
