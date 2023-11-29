@@ -115,24 +115,25 @@ describe('barnard59', function () {
     })
 
     describe('variable-all', () => {
-      it('should import all environment variables', () => {
-        const pipelineFile = filenamePipelineDefinition('simple')
-        const command = `abc=123 def=456 ${barnard59} run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile} --variable-all`
+      [
+        ['abc=123 def=456', '--variable-all', '', 'should import all environment variables'],
+        ['abc=123 def=456', '', '--variable-all', 'should import all environment variables'],
+        ['abc=123 def=123', '--variable-all --variable def=456', '', 'should override single variable'],
+        ['abc=123 def=123', '--variable-all', '--variable def=456', 'should override single variable'],
+        ['abc=123 def=123', '--variable def=456', '--variable-all', 'should override single variable'],
+        ['abc=123 def=123', '', '--variable-all --variable def=456', 'should override single variable'],
+      ].forEach(([env, optionsBefore, optionsAfter, title]) => {
+        context(`${optionsBefore} run ${optionsAfter}`, () => {
+          it(title, () => {
+            const pipelineFile = filenamePipelineDefinition('simple')
+            const command = `${env} ${barnard59} ${optionsBefore} run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile} ${optionsAfter}`
 
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
+            const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
 
-        expect(result).to.match(/info:.+abc: 123/)
-        expect(result).to.match(/verbose:.+def: 456/)
-      })
-
-      it('should import all environment variables before command', () => {
-        const pipelineFile = filenamePipelineDefinition('simple')
-        const command = `abc=123 def=456 ${barnard59} --variable-all run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile}`
-
-        const result = stripAnsi(shell.exec(command, { silent: true }).stderr)
-
-        expect(result).to.match(/info:.+abc: 123/)
-        expect(result).to.match(/verbose:.+def: 456/)
+            expect(result).to.match(/info:.+abc: 123/)
+            expect(result).to.match(/verbose:.+def: 456/)
+          })
+        })
       })
     })
   })
