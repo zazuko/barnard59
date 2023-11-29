@@ -1,5 +1,13 @@
 # barnard59-shacl
 
+## 1.1.3
+
+### Patch Changes
+
+- 5c14dc9: Add parameter to override the format of the shapes graph
+- Updated dependencies [5c14dc9]
+  - barnard59-rdf@3.2.2
+
 ## 1.1.2
 
 ### Patch Changes

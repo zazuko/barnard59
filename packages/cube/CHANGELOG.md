@@ -1,5 +1,15 @@
 # barnard59-cube
 
+## 1.1.1
+
+### Patch Changes
+
+- 5c14dc9: Add parameter to override the format of the shapes graph
+- Updated dependencies [5c14dc9]
+- Updated dependencies [5c14dc9]
+  - barnard59-rdf@3.2.2
+  - barnard59-shacl@1.1.3
+
 ## 1.1.0
 
 ### Minor Changes
