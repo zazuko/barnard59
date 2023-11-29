@@ -16,9 +16,14 @@ _:profile a p:Variable ;
   p:value "https://cube.link/latest/shape/standalone-constraint-constraint" ;
 .
 
+_:profileFormat a p:Variable ;
+  p:name "profileFormat" ;
+  rdfs:label "Override the profile format" ;
+  p:required false ;
+.
 
 <check-metadata> a p:Pipeline , p:Readable ;
-  p:variables [ p:variable _:profile ] ;
+  p:variables [ p:variable _:profile, _:profileFormat ] ;
   p:steps
     [
       p:stepList (
@@ -37,7 +42,7 @@ _:getProfile a p:Pipeline , p:ReadableObjectMode;
     [
       p:stepList
         (
-          [ rdf:open ( "profile"^^p:VariableName ) ]
+          [ rdf:open ( "profile"^^p:VariableName "profileFormat"^^p:VariableName ) ]
         )
     ]
   .
