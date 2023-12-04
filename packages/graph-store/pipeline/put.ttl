@@ -49,7 +49,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                 code:value "source"^^p:VariableName
               ]
           ]
-          [ op:rdf\/parse () ]
+          [ op:rdf\/fs.js\#parse () ]
           [ op:rdf\/setGraph ( "graph"^^p:VariableName ) ]
           [
             op:graph-store\/put
