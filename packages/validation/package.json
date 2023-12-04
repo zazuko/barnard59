@@ -33,9 +33,8 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
-    "@rdfjs/formats-common": "^2",
     "@rdfjs/namespace": "^2.0.0",
-    "@zazuko/env-node": "^1.0.0",
+    "barnard59-env": "^1.1.0",
     "anylogger": "^1.0.11",
     "anylogger-console": "^1.0.0",
     "chalk": "^4.1.0",

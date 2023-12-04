@@ -1,6 +1,6 @@
 import fs from 'fs'
 import readline from 'readline'
-import rdf from '@zazuko/env-node'
+import rdf from 'barnard59-env'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import Issue from './issue.js'
 import * as utils from './utils.js'

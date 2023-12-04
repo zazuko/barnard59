@@ -1,9 +1,8 @@
-import defaultFormats from '@rdfjs/formats-common'
 import mime from 'mime-types'
 
-function getParserByExtension(fileUrl) {
+function getParserByExtension(env, fileUrl) {
   const mimeType = mime.lookup(fileUrl.toString())
-  return defaultFormats.parsers.get(mimeType)
+  return env.formats.parsers.get(mimeType)
 }
 
 export {

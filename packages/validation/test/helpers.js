@@ -1,8 +1,8 @@
 import { Readable } from 'stream'
 import deepEqual from 'deep-equal'
-import formats from '@rdfjs/formats-common'
-import rdf from '@zazuko/env-node'
-const parser = formats.parsers.get('text/turtle')
+import rdf from 'barnard59-env'
+
+const parser = rdf.formats.parsers.get('text/turtle')
 
 export async function turtleToCF(str) {
   const stream = Readable.from([str])

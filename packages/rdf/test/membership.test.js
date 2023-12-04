@@ -1,7 +1,7 @@
 import { equal, strictEqual, throws } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
 import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import append from '../lib/append.js'

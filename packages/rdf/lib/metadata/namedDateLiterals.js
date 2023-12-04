@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { xsd } from '../namespaces.js'
 
 const namedDateLiterals = new Map()

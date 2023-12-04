@@ -5,10 +5,8 @@ import createPipeline from 'barnard59-core/lib/factory/pipeline.js'
 import defaultLoaderRegistry from 'barnard59-core/lib/defaultLoaderRegistry.js'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { expect } from 'chai'
-import formats from '@rdfjs/formats-common'
 import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
-import rdf from '@zazuko/env'
 import fromFile from 'rdf-utils-fs/fromFile.js'
 import env from 'barnard59-env'
 import { promisedEcmaScriptLoader, promisedUrlLoader } from './asyncLoaders.js'
@@ -75,10 +73,10 @@ describe('Pipeline', () => {
     })
 
     // when
-    const out = await fromStream(rdf.dataset(), formats.parsers.import('text/turtle', pipeline.stream))
+    const out = await fromStream(env.dataset(), env.formats.parsers.import('text/turtle', pipeline.stream))
 
     // then
-    const source = await fromStream(rdf.dataset(), fromFile('definitions/file-loader.ttl'))
+    const source = await fromStream(env.dataset(), fromFile('definitions/file-loader.ttl'))
     expect(toCanonical(out)).to.eq(toCanonical(source))
   })
 

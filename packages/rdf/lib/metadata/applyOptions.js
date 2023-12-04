@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 import * as ns from '../namespaces.js'
 import { xsd } from '../namespaces.js'

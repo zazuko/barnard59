@@ -1,12 +1,13 @@
 import { Transform } from 'readable-stream'
-import fromFile from 'rdf-utils-fs/fromFile.js'
 
 export function parse() {
+  const { env } = this
+
   return new Transform({
     objectMode: true,
     transform: async function (path, encoding, callback) {
       try {
-        const fileStream = fromFile(path)
+        const fileStream = env.fromFile(path)
 
         let failed = false
         fileStream.on('data', quad => this.push(quad))
