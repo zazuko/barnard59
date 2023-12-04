@@ -1,5 +1,17 @@
 # barnard59-graph-store
 
+## 5.0.0
+
+### Major Changes
+
+- ade9d1f: Disable stream splitting by default, add optional argument to `put` pipeline
+- b82b47b: Align operation URIs with the other packages
+
+  ```diff
+  -prefix graph-store: <https://barnard59.zazuko.com/operation/graph-store/>
+  +prefix graph-store: <https://barnard59.zazuko.com/operations/graph-store/>
+  ```
+
 ## 4.0.0
 
 ### Patch Changes
