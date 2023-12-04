@@ -1,5 +1,15 @@
 # barnard59
 
+## 4.2.0
+
+### Minor Changes
+
+- b7ef314: Added a CLI alias `b59` to reduce the typing necessary
+
+### Patch Changes
+
+- 2eda6da: `--variable` option should have precedence over environments variables imported with `--variable-all` (closes #74)
+
 ## 4.1.1
 
 ### Patch Changes
