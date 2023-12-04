@@ -29,19 +29,19 @@ async function fetchHTTPWithMeta(input) {
   }
 }
 
-function guessParserForFile(filePath) {
-  const parser = getParserByExtension(filePath)
+function guessParserForFile(env, filePath) {
+  const parser = getParserByExtension(env, filePath)
   if (!parser) {
     throw new Error(`No parser could be guessed for ${filePath}`)
   }
   return parser
 }
 
-async function fetchFileWithMeta(input) {
+async function fetchFileWithMeta(env, input) {
   const filePathURL = new URL(input, import.meta.url)
   const res = await fileFetch(filePathURL.toString())
   const stream = res.body
-  const quadStream = await guessParserForFile(input).import(stream)
+  const quadStream = await guessParserForFile(env, input).import(stream)
   return {
     quadStream,
     metadata: {
@@ -67,7 +67,7 @@ async function localFetch(
     throw new Error(`needs input filename or URL, got [${typeof input}]`)
   }
   const fetch = protoFetch({
-    file: fetchFileWithMeta,
+    file: fetchFileWithMeta.bind(null, this.env),
     http: fetchHTTPWithMeta,
     https: fetchHTTPWithMeta,
   })

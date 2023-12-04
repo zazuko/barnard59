@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert'
 import { expect } from 'chai'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
 import { applyOptions } from '../../lib/metadata/applyOptions.js'
 import * as ns from '../../lib/namespaces.js'

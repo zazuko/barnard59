@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 
 class PatternMatcher {
   constructor({ subject, predicate, object, graph } = {}) {

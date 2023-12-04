@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import TripleToQuadTransform from 'rdf-transform-triple-to-quad'
 
 function setGraph(graph) {

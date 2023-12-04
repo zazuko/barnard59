@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { Transform } from 'readable-stream'
 import PatternMatcher from './lib/PatternMatcher.js'
 

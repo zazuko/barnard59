@@ -1,11 +1,8 @@
 import { strictEqual } from 'assert'
+import env from 'barnard59-env'
 import { getParserByExtension } from '../../lib/localFetch/lookupParser.js'
 
 describe('metadata.lfetch.lookupParser', () => {
-  it('should be a function', () => {
-    strictEqual(typeof getParserByExtension, 'function')
-  })
-
   it('should return a parser for well-known RDF extensions', async () => {
     const rdfExtensions = [
       'jsonld',
@@ -18,7 +15,7 @@ describe('metadata.lfetch.lookupParser', () => {
     ]
 
     rdfExtensions.forEach(extension => {
-      const parser = getParserByExtension(`/file.${extension}`)
+      const parser = getParserByExtension(env, `/file.${extension}`)
       strictEqual(parser !== null, true, `Should get a parser for extension ${extension}`)
     })
   })
@@ -30,7 +27,7 @@ describe('metadata.lfetch.lookupParser', () => {
     ]
 
     nonRdfExtensions.forEach(extension => {
-      const parser = getParserByExtension(`/file.${extension}`)
+      const parser = getParserByExtension(env, `/file.${extension}`)
       strictEqual(parser === undefined, true, `Should not get a parser for extension ${extension}`)
     })
   })

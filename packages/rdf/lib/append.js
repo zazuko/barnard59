@@ -17,7 +17,7 @@ class MetadataAppend extends Transform {
 
   async _flush(callback) {
     try {
-      const { quadStream, metadata } = await localFetch(this.input, this.basePath)
+      const { quadStream, metadata } = await localFetch.call(this.context, this.input, this.basePath)
       for (const quad of await applyOptions(quadStream, metadata, this.options)) {
         this.push(quad)
       }

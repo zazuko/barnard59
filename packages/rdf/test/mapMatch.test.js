@@ -1,7 +1,7 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isDuplexStream } from 'is-stream'
-import rdf from '@zazuko/env'
+import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
 import mapMatch from '../mapMatch.js'
 import * as ns from './support/namespaces.js'
