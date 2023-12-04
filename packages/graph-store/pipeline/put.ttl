@@ -2,6 +2,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 @base <https://barnard59.zazuko.com/pipeline/graph-store/> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
+@prefix op: <https://barnard59.zazuko.com/operations/> .
 
 <put> a p:Pipeline ;
   p:variables
@@ -34,58 +35,32 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     ] ;
   p:steps
     [
-      p:stepList ( _:loadFiles _:parse _:setGraph _:upload )
-    ] ;
-.
-
-_:loadFiles a p:Step ;
-  code:implementedBy
-    [
-      code:link <node:barnard59-base/glob.js#default> ;
-      a code:EcmaScriptModule
-    ] ;
-  code:arguments
-    [
-      code:name "pattern" ;
-      code:value "source"^^p:VariableName ;
-    ] ;
-.
-
-_:parse
-  a p:Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <node:barnard59-rdf/fs.js#parse>
-    ] ;
-.
-
-_:setGraph a p:Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <node:barnard59-rdf/setGraph.js#default>
-    ] ;
-  code:arguments ( "graph"^^p:VariableName ) ;
-.
-
-_:upload a p:Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <file:../put.js#default> ;
-    ] ;
-  code:arguments
-    [
-      code:name "endpoint" ;
-      code:value "endpoint"^^p:VariableName ;
-    ],
-    [
-      code:name "user" ;
-      code:value "user"^^p:VariableName ;
-    ],
-    [
-      code:name "password" ;
-      code:value "password"^^p:VariableName ;
+      p:stepList
+        (
+          [
+            op:base\/glob
+              [
+                code:name "pattern" ;
+                code:value "source"^^p:VariableName
+              ]
+          ]
+          [ op:rdf\/parse () ]
+          [ op:rdf\/setGraph ( "graph"^^p:VariableName ) ]
+          [
+            op:graph-store\/put
+              [
+                code:name "endpoint" ;
+                code:value "endpoint"^^p:VariableName ;
+              ],
+              [
+                code:name "user" ;
+                code:value "user"^^p:VariableName ;
+              ],
+              [
+                code:name "password" ;
+                code:value "password"^^p:VariableName ;
+              ]
+          ]
+        )
     ] ;
 .
