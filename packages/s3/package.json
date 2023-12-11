@@ -40,5 +40,8 @@
     "@types/mocha": "^10.0.2",
     "aws-sdk-client-mock": "^3.0.0",
     "rimraf": "^5.0.5"
+  },
+  "mocha": {
+    "loader": "ts-node/esm"
   }
 }

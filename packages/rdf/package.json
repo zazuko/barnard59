@@ -50,6 +50,7 @@
     "node": ">= 14.0.0"
   },
   "mocha": {
-    "require": "../../test/mocha-setup.cjs"
+    "require": "../../test/mocha-setup.cjs",
+    "loader": "ts-node/esm"
   }
 }

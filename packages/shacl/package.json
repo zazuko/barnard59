@@ -44,6 +44,7 @@
     "string-to-stream": "^3.0.1"
   },
   "mocha": {
-    "require": "../../test/mocha-setup.cjs"
+    "require": "../../test/mocha-setup.cjs",
+    "loader": "ts-node/esm"
   }
 }
