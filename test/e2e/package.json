@@ -18,7 +18,7 @@
     "barnard59-test-support": "^0.0.3",
     "readable-stream": "^3",
     "rdf-dataset-ext": "^1.0.1",
-    "rdf-loader-code": "^2.0.0",
+    "rdf-loader-code": "^2.1.1",
     "rdf-utils-fs": "^2.3.0",
     "string-to-stream": "^3.0.1"
   }

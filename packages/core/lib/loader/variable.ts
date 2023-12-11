@@ -1,9 +1,13 @@
+import type { Term } from '@rdfjs/types'
+import type { Environment } from 'barnard59-env'
+import type { GraphPointer } from 'clownface'
+import LoaderRegistry from 'rdf-loaders-registry'
 import cloneTerm from '../cloneTerm.js'
 import { VariableMap } from '../VariableMap.js'
 
 const unknownVariable = Symbol('unknown-variable')
 
-function loader(rdf, ptr, { variables = new VariableMap() } = {}) {
+function loader(rdf: Environment, ptr: GraphPointer, { variables = new VariableMap() } = {}) {
   if (ptr.term.termType === 'Literal') {
     const value = variables.get(ptr.value)
 
@@ -16,8 +20,8 @@ function loader(rdf, ptr, { variables = new VariableMap() } = {}) {
     return value
   }
 
-  const name = ptr.out(rdf.ns.p.name).value
-  let term
+  const name = ptr.out(rdf.ns.p.name).value as string
+  let term: null | (Term & { name?: string })
 
   // if the variables from the arguments contains it ...
   if (variables.has(name)) {
@@ -36,7 +40,7 @@ function loader(rdf, ptr, { variables = new VariableMap() } = {}) {
   return term
 }
 
-loader.register = (registry, rdf) => {
+loader.register = (registry: LoaderRegistry, rdf: Environment) => {
   registry.registerNodeLoader(rdf.ns.p.Variable, loader.bind(null, rdf))
   registry.registerLiteralLoader(rdf.ns.p.VariableName, loader.bind(null, rdf))
 }

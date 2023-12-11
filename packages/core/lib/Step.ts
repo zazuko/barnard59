@@ -1,8 +1,22 @@
-import once from 'lodash/once.js'
-import StreamObject from './StreamObject.js'
+import once from 'onetime'
+import { Stream } from 'readable-stream'
+import StreamObject, { Options as BaseOptions } from './StreamObject.js'
 import tracer from './tracer.js'
+import type { Operation } from './factory/operation.js'
 
-class Step extends StreamObject {
+export interface StepOptions extends BaseOptions {
+  args: unknown[]
+  operation: Operation
+  stream: Stream
+}
+
+// eslint-disable-next-line no-use-before-define
+class Step extends StreamObject<Stream & { step: Step }> {
+  private args: unknown[]
+  private operation: Operation
+  // eslint-disable-next-line no-use-before-define
+  private readonly _stream: Stream & { step: Step }
+
   constructor({
     args,
     basePath,
@@ -14,14 +28,15 @@ class Step extends StreamObject {
     ptr,
     stream,
     variables,
-  }) {
-    super({ basePath, children, context, loaderRegistry, logger, ptr, stream, variables })
+  }: StepOptions) {
+    super({ basePath, children, context, loaderRegistry, logger, ptr, variables })
 
     this.args = args
     this.operation = operation
+    this._stream = stream as unknown as Stream & { step: Step }
 
-    if (typeof stream.step === 'undefined') {
-      stream.step = this
+    if (typeof this._stream.step === 'undefined') {
+      this._stream.step = this
     }
 
     // Create a span for this step
@@ -41,6 +56,10 @@ class Step extends StreamObject {
     }
 
     this.logger.trace({ iri: this.ptr.value, message: 'created new Step' })
+  }
+
+  get stream() {
+    return this._stream
   }
 }
 

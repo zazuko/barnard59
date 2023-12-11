@@ -1,15 +1,40 @@
 import * as otel from '@opentelemetry/api'
-import once from 'lodash/once.js'
-import streams from 'readable-stream'
-import createStream from './factory/stream.js'
+import once from 'onetime'
+import streams, { Stream } from 'readable-stream'
+import createStream, { assertWritable } from './factory/stream.js'
 import { isReadable } from './isStream.js'
 import nextLoop from './nextLoop.js'
-import StreamObject from './StreamObject.js'
+import StreamObject, { Options as BaseOptions } from './StreamObject.js'
 import tracer from './tracer.js'
 
 const { finished } = streams
 
-class Pipeline extends StreamObject {
+export interface PipelineOptions extends BaseOptions {
+  // eslint-disable-next-line no-use-before-define
+  onInit?: (pipeline: Pipeline) => Promise<void>
+  readable?: boolean
+  readableObjectMode?: boolean
+  writable?: boolean
+  writableObjectMode?: boolean
+}
+
+// eslint-disable-next-line no-use-before-define
+class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
+  public readonly readable: boolean | undefined
+  public readonly readableObjectMode: boolean | undefined
+  public readonly writable: boolean | undefined
+  public readonly writableObjectMode: boolean | undefined
+  private readonly onInit: ((pipeline: typeof this) => Promise<void>) | (() => void)
+  private _chunks: number
+  private readonly ctx: otel.Context
+  private readonly init: () => void
+  public readonly read: (size: number) => Promise<void>
+  public readonly write: (chunk: unknown, encoding: string, callback: (error?: (Error | null)) => void) => Promise<boolean>
+  public readonly final: (callback: (error?: (Error | null)) => void) => Promise<void>
+  public error: Error | undefined
+  // eslint-disable-next-line no-use-before-define
+  private readonly _stream: Stream & { pipeline: Pipeline }
+
   constructor({
     basePath,
     children,
@@ -23,7 +48,7 @@ class Pipeline extends StreamObject {
     variables,
     writable,
     writableObjectMode,
-  }) {
+  }: PipelineOptions) {
     super({ basePath, children, context, loaderRegistry, logger, ptr, variables })
 
     this.logger.trace({ iri: this.ptr.value, message: 'create new Pipeline' })
@@ -44,8 +69,8 @@ class Pipeline extends StreamObject {
     this.write = otel.context.bind(this.ctx, this._write.bind(this))
     this.final = otel.context.bind(this.ctx, this._final.bind(this))
 
-    this.stream = createStream(this)
-    this.stream.pipeline = this
+    this._stream = createStream(this) as unknown as Stream & { pipeline: Pipeline }
+    this._stream.pipeline = this
 
     this.onInit = onInit || (() => { })
     this.init = once(otel.context.bind(this.ctx, this._init.bind(this)))
@@ -53,6 +78,10 @@ class Pipeline extends StreamObject {
     this._chunks = 0
 
     this.logger.trace({ iri: this.ptr.value, message: 'created new Pipeline' })
+  }
+
+  get stream() {
+    return this._stream
   }
 
   get firstChild() {
@@ -63,7 +92,7 @@ class Pipeline extends StreamObject {
     return this.children[this.children.length - 1]
   }
 
-  addChild(step) {
+  addChild(step: StreamObject) {
     step.stream.on('error', err => this.destroy(err))
     this.children.push(step)
   }
@@ -80,7 +109,9 @@ class Pipeline extends StreamObject {
 
       // connect all steps
       for (let index = 0; index < this.children.length - 1; index++) {
-        this.children[index].stream.pipe(this.children[index + 1].stream)
+        const child = this.children[index + 1]
+        assertWritable(child)
+        this.children[index].stream.pipe(child.stream)
       }
 
       finished(this.lastChild.stream, err => {
@@ -90,7 +121,8 @@ class Pipeline extends StreamObject {
           this.logger.error(err)
         }
       })
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       this.destroy(err)
 
       this.logger.error(err, { iri: this.ptr.value })
@@ -99,7 +131,7 @@ class Pipeline extends StreamObject {
     this.logger.trace({ iri: this.ptr.value, message: 'initialized Pipeline' })
   }
 
-  destroy(err) {
+  destroy(err: Error) {
     this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
     this._span.end()
     this.stream.destroy(err)
@@ -115,7 +147,7 @@ class Pipeline extends StreamObject {
 
   // stream interface
 
-  async _read(size) {
+  async _read(size: number) {
     try {
       await this.init()
 
@@ -144,21 +176,26 @@ class Pipeline extends StreamObject {
           this._span.setAttribute('stream.chunks', this._chunks)
         }
       }
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       this._span.recordException(err)
       this.lastChild.stream.destroy(err)
     }
   }
 
-  async _write(chunk, encoding, callback) {
+  async _write(chunk: unknown, encoding: string, callback: (error?: Error | null) => void) {
     await this.init()
+
+    assertWritable(this.firstChild)
 
     this._span.addEvent('write')
     return this.firstChild.stream.write(chunk, encoding, callback)
   }
 
-  async _final(callback) {
+  async _final(callback: (error?: Error | null) => void) {
     await this.init()
+
+    assertWritable(this.firstChild)
 
     finished(this.lastChild.stream, callback)
 

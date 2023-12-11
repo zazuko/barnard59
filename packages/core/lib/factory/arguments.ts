@@ -1,8 +1,14 @@
+import { Context } from 'vm'
 import parseArguments from 'rdf-loader-code/arguments.js'
+import type { GraphPointer } from 'clownface'
+import { Logger } from 'winston'
+import { LoaderRegistry } from 'rdf-loaders-registry'
 import { unknownVariable } from '../loader/variable.js'
+import { VariableMap } from '../../index.js'
 
-async function createArguments(ptr, { basePath, context, loaderRegistry, logger, variables }) {
-  const args = await parseArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
+async function createArguments(ptr: GraphPointer, { basePath, context, loaderRegistry, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const args: any[] = await parseArguments(ptr, { basePath, context, loaderRegistry, variables })
 
   // The variable loader returns the symbol unknownVariable for all unknown variables.
   // This code maps the unknownVariable symbols to undefined for both kinds of arguments:

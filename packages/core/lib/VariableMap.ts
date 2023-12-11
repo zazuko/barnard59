@@ -1,11 +1,14 @@
-export class VariableMap extends Map {
-  constructor(...args) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export class VariableMap extends Map<string, any> {
+  private optionalVariables: Set<string>
+
+  constructor(...args: ReadonlyArray<readonly [string, unknown][]>) {
     super(...args)
 
     this.optionalVariables = new Set()
   }
 
-  get(key, { allowMissing } = {}) {
+  get(key: string, { allowMissing = false } = {}) {
     if (!this.has(key) && !this.optionalVariables.has(key) && !allowMissing) {
       throw new Error(`Undefined variable '${key}'`)
     }
@@ -13,7 +16,7 @@ export class VariableMap extends Map {
     return super.get(key)
   }
 
-  set(key, value, { optional = false } = {}) {
+  set(key: string, value: unknown, { optional = false } = {}) {
     if (typeof value !== 'undefined') {
       super.set(key, value)
     }
@@ -21,9 +24,11 @@ export class VariableMap extends Map {
     if (optional) {
       this.optionalVariables.add(key)
     }
+
+    return this
   }
 
-  static merge(left, right) {
+  static merge(left: Iterable<[string, unknown]>, right: Iterable<[string, unknown]>) {
     const merged = new VariableMap([...left, ...right])
 
     if (left instanceof VariableMap) {
