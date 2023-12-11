@@ -1,8 +1,5 @@
 {
-  "extends": [ "@tpluscode" ],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
+  "extends": [ "@tpluscode/eslint-config/js" ],
   "env": {
     "mocha": true
   },
@@ -10,6 +7,12 @@
     "files": "**/test/**",
     "rules": {
       "no-console": "off"
+    }
+  }, {
+    "files": "**/*.ts",
+    "extends": "@tpluscode",
+    "parserOptions": {
+      "project": "./tsconfig.json"
     }
   }]
 }
