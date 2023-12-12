@@ -27,7 +27,7 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
   private readonly onInit: ((pipeline: typeof this) => Promise<void>) | (() => void)
   private _chunks: number
   private readonly ctx: otel.Context
-  private readonly init: () => void
+  private readonly init: () => Promise<void>
   public readonly read: (size: number) => Promise<void>
   public readonly write: (chunk: unknown, encoding: string, callback: (error?: (Error | null)) => void) => Promise<boolean>
   public readonly final: (callback: (error?: (Error | null)) => void) => Promise<void>
