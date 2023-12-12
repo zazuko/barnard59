@@ -53,7 +53,7 @@
   <#buildCubeShape> a p:Step;
     code:implementedBy [ a code:EcmaScriptModule;
       - code:link <node:barnard59-rdf/cube.js#buildCubeShape>
-      + code:link <node:barnard59-code/cube.js#buildCubeShape>
+      + code:link <node:barnard59-cube/cube.js#buildCubeShape>
     ].
 
   ```
