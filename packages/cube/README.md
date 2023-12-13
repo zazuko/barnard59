@@ -62,7 +62,6 @@ SHACL reports for violations are written to `stdout`.
 
 In cases when a remote address give to `--profile` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--profileFormat` option to select the correct RDF parser. Its value must be a media type, such as `text/turtle`.
 
-```bash
 
 ### fetch observations
 
@@ -90,6 +89,35 @@ cat observations.ttl \
 To enable validation, the pipeline adds to the constraint a `sh:targetClass` property with value `cube:Observation`, requiring that each observation has an explicit `rdf:type`.
 
 To leverage streaming, input is split and validated in little batches of adjustable size (the default is 50 and likely it's appropriate in most cases). This allows the validation of very big cubes because observations are not loaded in memory all at once. To ensure triples for the same observation are adjacent (hence processed in the same batch), the input is sorted by subject (and in case the input is large the sorting step relies on temporary local files).
+
+
+Not all constraints are amenable to batching:
+```turtle
+# metadata.ttl
+@prefix cube: <https://cube.link/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix schema: <http://schema.org/> .
+
+<myconstraint> a sh:NodeShape, cube:Constraint ;
+  sh:property [
+    sh:path schema:address ;
+    sh:class schema:PostalAddress ;
+  ] .
+
+```
+
+```turtle
+# observations.ttl
+@prefix schema: <http://schema.org/> .
+
+<observation1> schema:address <address1> .
+<observation2> schema:address <address2> .
+# ... many more observations
+
+<address1> a schema:PostalAddress .
+```
+In this example, to check the address type we need all data at once. Setting `--batchSize 0` will produce a single batch with all the data.
+
 
 SHACL reports for violations are written to `stdout`.
 
