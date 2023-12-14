@@ -1,4 +1,4 @@
-import winston from 'winston'
+import * as winston from 'winston'
 
 const { createLogger, format, transports } = winston
 const { Console, File } = transports
@@ -12,7 +12,18 @@ const levels = {
   trace: 5,
 }
 
-function factory({ console = true, errorFilename = null, filename = null, level = 'error', quiet } = {}) {
+declare module 'winston' {
+  export interface Logger {
+    error: winston.LeveledLogMethod
+    warn: winston.LeveledLogMethod
+    info: winston.LeveledLogMethod
+    verbose: winston.LeveledLogMethod
+    debug: winston.LeveledLogMethod
+    trace: winston.LeveledLogMethod
+  }
+}
+
+function factory({ console = true, errorFilename = null, filename = null, level = 'error', quiet = false } = {}) {
   const transports = []
 
   if (console) {

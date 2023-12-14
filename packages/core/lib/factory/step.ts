@@ -1,12 +1,16 @@
 import { SpanStatusCode } from '@opentelemetry/api'
+import type { GraphPointer } from 'clownface'
+import { Logger } from 'winston'
+import { LoaderRegistry } from 'rdf-loaders-registry'
 import { isStream } from '../isStream.js'
 import PipelineError from '../PipelineError.js'
 import Step from '../Step.js'
 import tracer from '../tracer.js'
+import { Context, VariableMap } from '../../index.js'
 import createArguments from './arguments.js'
 import createOperation from './operation.js'
 
-async function createStep(ptr, { basePath, context, loaderRegistry, logger, variables }) {
+async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
   return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
@@ -18,7 +22,8 @@ async function createStep(ptr, { basePath, context, loaderRegistry, logger, vari
       }
 
       return new Step({ args, basePath, context, loaderRegistry, logger, operation, ptr, stream, variables })
-    } catch (cause) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (cause: any) {
       span.recordException(cause)
       span.setStatus({ code: SpanStatusCode.ERROR, message: cause.message })
       throw new PipelineError(`could not load step ${ptr.value}`, cause)

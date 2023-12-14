@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prepack": "tsc"
   },
   "repository": {
     "type": "git",
@@ -25,15 +26,16 @@
     "duplexify": "^4.1.1",
     "is-graph-pointer": "^2.1.0",
     "is-stream": "^3.0.0",
-    "lodash": "^4.17.21",
-    "rdf-loader-code": "^2.0.0",
-    "rdf-loaders-registry": "^0.3.0",
+    "onetime": "^6.0.0",
+    "rdf-loader-code": "^2.1.1",
+    "rdf-loaders-registry": "^1.0.1",
     "readable-stream": "^3.6.0",
     "untildify": "^5.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "@rdfjs/namespace": "^2.0.0",
+    "@types/readable-stream": "^4.0.9",
     "barnard59-env": "^1.1.0",
     "barnard59-http": "^2.0.0",
     "barnard59-test-support": "^0.0.3",
@@ -46,6 +48,7 @@
     "sinon": "^15.0.4"
   },
   "mocha": {
-    "require": "../../test/mocha-setup.cjs"
+    "require": "../../test/mocha-setup.cjs",
+    "loader": "ts-node/esm"
   }
 }

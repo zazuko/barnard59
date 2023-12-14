@@ -29,6 +29,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm install
+      - name: Compile TypeScript packages
+        run: npx wsrun -mc prepack --sourceMap
       - run: npx c8 --all --src packages/${{ matrix.package }} -x "packages/!(${{ matrix.package }})" --reporter lcovonly --reporter text wsrun --no-prefix -p barnard59-${{ matrix.package }} -c test
       - name: Codecov
         uses: codecov/codecov-action@v3
@@ -50,6 +52,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm install
+      - name: Compile TypeScript packages
+        run: npx wsrun -mc prepack --sourceMap
       - run: npx c8 --all --src packages/cli -x "packages/!(cli)" --reporter lcovonly --reporter text wsrun --no-prefix -p barnard59 -c test
       - name: Codecov
         uses: codecov/codecov-action@v3

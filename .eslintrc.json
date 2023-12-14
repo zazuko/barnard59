@@ -3,10 +3,19 @@
   "env": {
     "mocha": true
   },
+  "rules": {
+    "import/no-unresolved": "warn"
+  },
   "overrides": [{
     "files": "**/test/**",
     "rules": {
       "no-console": "off"
+    }
+  }, {
+    "files": "**/*.ts",
+    "extends": "@tpluscode",
+    "parserOptions": {
+      "project": "./tsconfig.json"
     }
   }]
 }

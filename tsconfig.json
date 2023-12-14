@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "ES2022",
+    "target": "ES2022",
+    "moduleResolution": "Node",
+    "declaration": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "files": [
+    "packages/core/index.ts",
+    "packages/core/lib/utils.ts",
+    "packages/env/index.ts"
+  ]
+}

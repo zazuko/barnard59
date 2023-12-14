@@ -32,5 +32,8 @@
     "rimraf": "^5.0.1",
     "sftp-fs": "^0.0.7",
     "ssh2": "^1.14.0"
+  },
+  "mocha": {
+    "loader": "ts-node/esm"
   }
 }
