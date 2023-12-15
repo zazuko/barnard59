@@ -48,3 +48,10 @@
   rdfs:label "Validate input observations against cube constraint" ;
   b59:source "barnard59-cube/pipeline/check-observations.ttl" ;
 .
+
+<command/cube/check-class>
+  a b59:CliCommand ;
+  b59:command "check-class" ;
+  rdfs:label "Validate input observations against a class constraint" ;
+  b59:source "barnard59-cube/pipeline/check-class.ttl" ;
+.
