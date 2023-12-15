@@ -107,3 +107,13 @@
       code:link <node:barnard59-rdf/open.js#default>
     ]
 .
+
+<transformCodeImports>
+  a p:Operation, p:ReadableObjectMode, p:WritableObjectMode ;
+  rdfs:label "Transforms code:imports triples by fetching remote graphs and mergin them with the passing stream" ;
+  code:implementedBy
+    [
+      a code:EcmaScriptModule ;
+      code:link <node:barnard59-rdf/imports.js#default>
+    ]
+.

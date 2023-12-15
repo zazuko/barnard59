@@ -4,7 +4,7 @@ export default async function (pathOrUri, mediaTypeOverride) {
   try {
     url = new URL(pathOrUri)
   } catch {
-    return this.env.fromFile(pathOrUri)
+    return this.env.fromFile(pathOrUri, { implicitBaseIRI: true })
   }
 
   const response = await this.env.fetch(url)

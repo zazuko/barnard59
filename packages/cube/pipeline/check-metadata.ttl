@@ -43,6 +43,7 @@ _:getProfile a p:Pipeline , p:ReadableObjectMode;
       p:stepList
         (
           [ rdf:open ( "profile"^^p:VariableName "profileFormat"^^p:VariableName ) ]
+          [ rdf:transformCodeImports () ]
         )
     ]
   .
