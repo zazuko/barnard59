@@ -5,6 +5,25 @@ import SHACLValidator from 'rdf-validate-shacl'
 async function * validate(ds, maxViolations, iterable) {
   let totalViolations = 0
 
+  const removeClassConstraints = ds => {
+    const properties = this.env.clownface({ dataset: ds, term: this.env.ns.cube.Constraint })
+      .in(this.env.ns.rdf.type)
+      .out(this.env.ns.sh.property)
+    const classConstraints = properties.has(this.env.ns.sh.class)
+    if (classConstraints.terms.length > 0) {
+      const cmds = classConstraints.map(c => {
+        const path = c.out(this.env.ns.sh.path).term.value
+        const classTerm = c.out(this.env.ns.sh.class).term.value
+        return `\n\tbarnard59 cube check-class --path ${path} --class ${classTerm}`
+      })
+      this.logger.warn(`Class constraints are not supported. Use the check-class command instead: ${cmds.join('')}`)
+    }
+
+    properties.deleteOut(this.env.ns.sh.class)
+  }
+  // consider removing class constraints only if batch size is > 0
+  removeClassConstraints(ds)
+
   for await (const chunk of iterable) {
     if (maxViolations && totalViolations > maxViolations) {
       this.logger.warn('Exceeded max violations. Aborting')

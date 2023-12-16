@@ -1,0 +1,70 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
+@prefix splitDataset: <https://barnard59.zazuko.com/operations/rdf/splitDataset/> .
+@prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+_:path a p:Variable ;
+  p:name "path" ;
+  rdfs:label "property whose range is class".
+
+_:class a p:Variable ;
+  p:name "class" ;
+  rdfs:label "range class of path".
+
+_:maxViolations a p:Variable ;
+  p:name "maxViolations" ;
+  rdfs:label "max number of violations" ;
+  p:value 500 ;
+.
+
+_:sortChunkSize a p:Variable ;
+  p:name "sortChunkSize" ;
+  rdfs:label "sort chunk size" ;
+  p:value 100000 ;
+.
+
+<check-class> a p:Pipeline , p:Readable;
+  p:variables [ p:variable _:path, _:class, _:maxViolations, _:sortChunkSize ] ;
+  p:steps
+    [
+      p:stepList
+      (
+        [ base:stdin () ]
+        [ n3:parse () ]
+        _:choose
+        _:sortByGraph
+        _:check
+        [ base:limit ("maxViolations"^^p:VariableName)]
+        [ ntriples:serialize () ]
+      )
+    ]
+.
+
+_:choose base:map (
+  [
+    a code:EcmaScriptModule ;
+    code:link <file:../lib/classConstraint.js#choose>
+  ] 
+) .
+
+_:sortByGraph a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <file:../lib/classConstraint.js#sortByGraph>
+  ] ;
+  code:arguments ("sortChunkSize"^^p:VariableName)
+.
+
+_:check a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <file:../lib/classConstraint.js#check>
+  ] 
+.
+
