@@ -1,4 +1,5 @@
 import * as winston from 'winston'
+import anylogger from 'anylogger'
 
 const { createLogger, format, transports } = winston
 const { Console, File } = transports
@@ -47,7 +48,7 @@ function factory({ console = true, errorFilename = null, filename = null, level 
   winston.addColors({
     trace: 'blue',
   })
-  return createLogger({
+  const logger = createLogger({
     levels,
     level,
     format: format.combine(
@@ -59,6 +60,22 @@ function factory({ console = true, errorFilename = null, filename = null, level 
     transports,
     silent: quiet,
   })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  anylogger.ext = function (facade: any) {
+    facade.enabledFor = function () {
+      return true
+    }
+    for (const method in anylogger.levels) {
+      facade[method] = function (...args: unknown[]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return ((<any>logger)[method] || logger.debug)(...args)
+      }
+    }
+    return facade
+  }
+
+  return logger
 }
 
 export default factory

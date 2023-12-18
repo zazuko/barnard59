@@ -23,16 +23,10 @@ describe('open', function () {
 
   it('should load from remote URL', async () => {
     // given
+    const quadStream = sinon.stub().returns('foo')
     const env = {
-      formats: {
-        parsers: {
-          import: sinon.stub().returns('foo'),
-        },
-      },
-      fetch: async () => new Response('', {
-        headers: {
-          'Content-Type': 'text/turtle',
-        },
+      fetch: async () => ({
+        quadStream,
       }),
     }
 
@@ -49,7 +43,7 @@ describe('open', function () {
 
       // then
       expect(quad).to.eq('foo')
-      expect(env.formats.parsers.import).to.have.been.calledWith('text/turtle', sinon.match.any)
+      expect(quadStream).to.have.been.called
     })
   })
 
