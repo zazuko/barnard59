@@ -2,6 +2,19 @@ import { Readable, Duplex } from 'stream'
 import { sort, compareOn, createStore } from 'external-merge-sort'
 import through2 from 'through2'
 
+// generic enough to be moved to a separate utils package
+const compositeComparer = (...comparers) => {
+  return (x, y) => {
+    for (const comparer of comparers) {
+      const result = comparer(x, y)
+      if (result !== 0) {
+        return result
+      }
+    }
+    return 0
+  }
+}
+
 export function choose(quad) {
   const predicate = this.env.namedNode(this.variables.get('path'))
   const classNode = this.env.namedNode(this.variables.get('class'))
@@ -19,17 +32,9 @@ export function sortByGraph(sortChunkSize) {
     return this.env.fromFile(filename)
   }
 
-  const typeFirstComparer = compareOn(quad => this.env.ns.rdf.type.equals(quad.predicate) ? 0 : 1)
-
-  const comparer = (x, y) => {
-    if (x.graph.value < y.graph.value) {
-      return -1
-    }
-    if (x.graph.value > y.graph.value) {
-      return 1
-    }
-    return typeFirstComparer(x, y)
-  }
+  const comparer = compositeComparer(
+    compareOn(quad => quad.graph.value),
+    compareOn(quad => this.env.ns.rdf.type.equals(quad.predicate) ? 0 : 1))
 
   const store = createStore(write, '.nt')
   const maxSize = Number(sortChunkSize)
