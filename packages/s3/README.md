@@ -42,7 +42,7 @@ And all options from [S3ClientConfigType](https://docs.aws.amazon.com/AWSJavaScr
 
 ## Working with streams
 
-### `getStreamObject`
+### `getObjectStream` (`getObject/stream` operation)
 
 Get an object from a S3 bucket as a `Readable` stream.
 
@@ -64,3 +64,5 @@ This returns a `Readable` stream that contains the content of the requested obje
 ### Upload data to S3
 
 To put a stream into a S3 bucket, you will need to first write the stream to a file and then use `putObject` to upload the file to S3.
+
+Direct stream to S3 upload is not supported.

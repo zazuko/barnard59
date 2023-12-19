@@ -5,10 +5,10 @@ import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import { mockClient } from 'aws-sdk-client-mock'
 import getStream from 'get-stream'
-import { getStreamObject } from '../index.js'
+import { getObjectStream } from '../index.js'
 import { removeResultsDirectory } from './utils.js'
 
-describe('getStreamObject', async () => {
+describe('getObjectStream', async () => {
   let s3Mock
 
   before(async () => {
@@ -33,7 +33,7 @@ describe('getStreamObject', async () => {
 
     s3Mock.on(GetObjectCommand).resolves({ Body: sdkStream })
 
-    const objectStream = await getStreamObject({
+    const objectStream = await getObjectStream({
       bucket: 'test-bucket',
       key: 'get-a-file.txt',
     })
@@ -46,7 +46,7 @@ describe('getStreamObject', async () => {
     s3Mock.on(GetObjectCommand).resolves({ Body: null })
 
     await rejects(async () => {
-      await getStreamObject({
+      await getObjectStream({
         bucket: 'test-bucket',
         key: 'get-a-file.txt',
       })
