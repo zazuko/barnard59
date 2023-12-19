@@ -1,28 +1,6 @@
 // @ts-check
 import { createWriteStream } from 'node:fs'
-import { Readable } from 'node:stream'
-import { WritableStream } from 'stream/web'
-
-/**
- * Convert a WriteStream to a WritableStream.
- *
- * @param {import('fs').WriteStream} stream Stream to convert.
- * @returns {WritableStream} Writable stream.
- */
-export const toWritableStream = (stream) => {
-  const writableStream = new WritableStream({
-
-    /**
-     * Write data to the stream.
-     *
-     * @param {any} chunk
-    */
-    write: (chunk) => {
-      stream.write(chunk)
-    },
-  })
-  return writableStream
-}
+import { Readable, Writable } from 'node:stream'
 
 /**
  * Create a writable stream from a path.
@@ -32,7 +10,7 @@ export const toWritableStream = (stream) => {
  */
 export const createWritableStream = (path) => {
   const stream = createWriteStream(path)
-  return toWritableStream(stream)
+  return Writable.toWeb(stream)
 }
 
 /**
