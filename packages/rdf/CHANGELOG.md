@@ -1,5 +1,24 @@
 # barnard59-rdf
 
+## 3.3.0
+
+### Minor Changes
+
+- f883060: `rdf:open` will parse local resource taking the file's path as `file:` base URI
+- f883060: Added operation `rdf:transformCodeImports`. See [rdf-transform-code-imports package](https://github.com/zazuko/rdf-transform-graph-imports) for details.
+
+### Patch Changes
+
+- 898c80f: Use `barnard59-env` instead of `@zazuko/env(-node)`.
+
+  Remove direct dependency on `@rdfjs/formats-common`
+
+- 898c80f: Remove dependency on `rdf-utils-fs` and use it via `barnard59-env`
+- 1bfec3c: `rdf:open` would not apply resource URL as base when parsing
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+  - barnard59-env@1.2.0
+
 ## 3.2.2
 
 ### Patch Changes

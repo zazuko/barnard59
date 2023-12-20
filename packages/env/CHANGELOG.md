@@ -1,5 +1,12 @@
 # barnard59-env
 
+## 1.2.0
+
+### Minor Changes
+
+- 5a70d2b: Added type namespace builders of Zazuko vocabularies
+- 5a70d2b: Bundle type declarations (source migrated to TypeScript)
+
 ## 1.1.0
 
 ### Minor Changes

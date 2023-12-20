@@ -1,6 +1,6 @@
 {
   "name": "barnard59-rdf",
-  "version": "3.2.2",
+  "version": "3.3.0",
   "description": "RDF support for Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -24,7 +24,7 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "@rdfjs/fetch": "^3.0.0",
-    "barnard59-env": "^1.1.0",
+    "barnard59-env": "^1.2.0",
     "file-fetch": "^1.7.0",
     "is-stream": "^3.0.0",
     "lodash": "^4.17.21",

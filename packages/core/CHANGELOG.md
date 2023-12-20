@@ -1,5 +1,18 @@
 # barnard59-core
 
+## 5.2.0
+
+### Minor Changes
+
+- 5a70d2b: Bundle type declarations (source migrated to TypeScript)
+
+### Patch Changes
+
+- 5a70d2b: Updated `rdf-loaders-registry`
+- 5a70d2b: Updated `rdf-loader-code`
+- 5a70d2b: Replace `lodash/once` with `onetime`
+- 1bfec3c: Hook default logger to `anylogger` to simplify 3rd party lib logging
+
 ## 5.1.0
 
 ### Minor Changes

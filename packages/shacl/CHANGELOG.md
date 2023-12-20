@@ -1,5 +1,20 @@
 # barnard59-shacl
 
+## 1.2.0
+
+### Minor Changes
+
+- f883060: When fetching shapes, `code:imports` declarations are resolved and merged with the graph
+
+### Patch Changes
+
+- Updated dependencies [f883060]
+- Updated dependencies [898c80f]
+- Updated dependencies [f883060]
+- Updated dependencies [898c80f]
+- Updated dependencies [1bfec3c]
+  - barnard59-rdf@3.3.0
+
 ## 1.1.3
 
 ### Patch Changes
