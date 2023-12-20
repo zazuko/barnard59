@@ -1,6 +1,8 @@
 import cbdCopy from '../../cbdCopy.js'
 import datatypeParsers from './datatypes.js'
-import { CompositeConstraintBuilder, NodeKindConstraintBuilder, DimensionConstraintsBuilder } from './Constraints.js'
+import { CompositeConstraintBuilder } from './constraintBuilder/CompositeConstraintBuilder.js'
+import { DimensionConstraintsBuilder } from './constraintBuilder/DimensionConstraintsBuilder.js'
+import { NodeKindConstraintBuilder } from './constraintBuilder/NodeKindConstraintBuilder.js'
 
 class Dimension {
   constructor({ rdf, metadata, predicate, shapeId = () => rdf.blankNode(), inListMaxSize }) {

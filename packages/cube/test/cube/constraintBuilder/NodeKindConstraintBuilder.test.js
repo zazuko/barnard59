@@ -1,5 +1,5 @@
 import rdf from 'barnard59-env'
-import { NodeKindConstraintBuilder } from '../../../lib/cube/buildCubeShape/Constraints.js'
+import { NodeKindConstraintBuilder } from '../../../lib/cube/buildCubeShape/constraintBuilder/NodeKindConstraintBuilder.js'
 import { buildShape, conforms, notConforms } from './support.js'
 
 const { xsd } = rdf.ns

@@ -1,6 +1,6 @@
 import rdf from 'barnard59-env'
 import { fromRdf } from 'rdf-literal'
-import { RangeConstraintBuilder } from '../../../lib/cube/buildCubeShape/Constraints.js'
+import { RangeConstraintBuilder } from '../../../lib/cube/buildCubeShape/constraintBuilder/RangeConstraintBuilder.js'
 import { buildShape, conforms, notConforms } from './support.js'
 
 const { xsd } = rdf.ns

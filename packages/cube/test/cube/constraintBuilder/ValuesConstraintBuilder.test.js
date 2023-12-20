@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert'
 import rdf from 'barnard59-env'
-import { ValuesConstraintBuilder } from '../../../lib/cube/buildCubeShape/Constraints.js'
+import { ValuesConstraintBuilder } from '../../../lib/cube/buildCubeShape/constraintBuilder/ValuesConstraintBuilder.js'
 import { buildShape, conforms, notConforms } from './support.js'
 
 const { xsd } = rdf.ns
