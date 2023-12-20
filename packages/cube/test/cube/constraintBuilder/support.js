@@ -20,7 +20,7 @@ export const notConforms = (validator, values) => {
   strictEqual(report.conforms, false)
 }
 
-export const createValidator = (builder, values) => {
+export const buildShape = (builder, values) => {
   const shape = rdf.clownface()
   const ptr = shape.blankNode()
   shape.namedNode('http://example.org/shape')
@@ -30,7 +30,6 @@ export const createValidator = (builder, values) => {
 
   values.forEach(x => builder.add(x))
   builder.build(ptr)
-  // console.log(shape.dataset.toCanonical())
 
   const validator = new SHACLValidator(shape.dataset, { factory: rdf })
   conforms(validator, values)

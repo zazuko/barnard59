@@ -1,7 +1,7 @@
 import rdf from 'barnard59-env'
 import { fromRdf } from 'rdf-literal'
 import { DimensionConstraintsBuilder } from '../../../lib/cube/buildCubeShape/Constraints.js'
-import { createValidator, conforms, notConforms } from './support.js'
+import { buildShape, conforms, notConforms } from './support.js'
 
 const { xsd } = rdf.ns
 
@@ -22,7 +22,7 @@ describe('DimensionConstraintsBuilder', () => {
 
   it('should create a shape constrained to some named nodes', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
-    const validator = createValidator(builder, [namedNode1, namedNode2])
+    const validator = buildShape(builder, [namedNode1, namedNode2])
     conforms(validator, [namedNode1, namedNode2])
     notConforms(validator, [namedNode3])
     notConforms(validator, [string1])
@@ -30,12 +30,12 @@ describe('DimensionConstraintsBuilder', () => {
   })
   it('should create a shape unconstrained', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
-    const validator = createValidator(builder, [namedNode1, namedNode2])
+    const validator = buildShape(builder, [namedNode1, namedNode2])
     conforms(validator, [namedNode1, namedNode2, namedNode3, string1, one])
   })
   it('should create a shape constrained to some strings', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
-    const validator = createValidator(builder, [string1, string2])
+    const validator = buildShape(builder, [string1, string2])
     conforms(validator, [string1, string2])
     notConforms(validator, [string3])
     notConforms(validator, [one])
@@ -43,21 +43,21 @@ describe('DimensionConstraintsBuilder', () => {
   })
   it('should create a shape constrained to all strings', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
-    const validator = createValidator(builder, [string1, string2])
+    const validator = buildShape(builder, [string1, string2])
     conforms(validator, [string1, string2, string3])
     notConforms(validator, [one])
     notConforms(validator, [namedNode1])
   })
   it('should create a shape constrained to numbers in range', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
-    const validator = createValidator(builder, [one, three])
+    const validator = buildShape(builder, [one, three])
     conforms(validator, [two])
     notConforms(validator, [string1])
     notConforms(validator, [namedNode1])
   })
   it('should create a shape constrained to (sh:or) alternatives', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
-    const validator = createValidator(builder, [namedNode1, namedNode2, string1, string2, one, three])
+    const validator = buildShape(builder, [namedNode1, namedNode2, string1, string2, one, three])
     conforms(validator, [two])
     notConforms(validator, [string3])
     notConforms(validator, [namedNode3])

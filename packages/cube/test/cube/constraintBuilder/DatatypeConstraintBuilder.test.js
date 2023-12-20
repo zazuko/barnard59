@@ -1,6 +1,6 @@
 import rdf from 'barnard59-env'
 import { DatatypeConstraintBuilder } from '../../../lib/cube/buildCubeShape/Constraints.js'
-import { createValidator, conforms, notConforms } from './support.js'
+import { buildShape, conforms, notConforms } from './support.js'
 
 const { xsd } = rdf.ns
 
@@ -13,14 +13,14 @@ describe('DatatypeConstraintBuilder', () => {
 
   it('should create a constrained shape', () => {
     const builder = new DatatypeConstraintBuilder(rdf, xsd.string)
-    const validator = createValidator(builder, [string1, string2])
+    const validator = buildShape(builder, [string1, string2])
     conforms(validator, [string3])
     notConforms(validator, [integer])
     notConforms(validator, [namedNode])
   })
   it('should create an unconstrained shape', () => {
     const builder = new DatatypeConstraintBuilder(rdf, xsd.string)
-    const validator = createValidator(builder, [string1, string2, namedNode])
+    const validator = buildShape(builder, [string1, string2, namedNode])
     conforms(validator, [string1, string2, string3, integer, namedNode])
   })
 })

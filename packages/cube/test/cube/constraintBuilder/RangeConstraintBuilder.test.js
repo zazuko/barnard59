@@ -1,7 +1,7 @@
 import rdf from 'barnard59-env'
 import { fromRdf } from 'rdf-literal'
 import { RangeConstraintBuilder } from '../../../lib/cube/buildCubeShape/Constraints.js'
-import { createValidator, conforms, notConforms } from './support.js'
+import { buildShape, conforms, notConforms } from './support.js'
 
 const { xsd } = rdf.ns
 
@@ -13,28 +13,28 @@ describe('RangeConstraintBuilder', () => {
 
   it('should create a constrained shape', () => {
     const builder = new RangeConstraintBuilder(rdf, four, fromRdf)
-    const validator = createValidator(builder, [two, three, seven])
+    const validator = buildShape(builder, [two, three, seven])
     conforms(validator, [five, six])
     notConforms(validator, [one, eight])
   })
   it('should create an unconstrained shape due to wrong datatype', () => {
     const builder = new RangeConstraintBuilder(rdf, four, fromRdf)
-    const validator = createValidator(builder, [one, string, seven])
+    const validator = buildShape(builder, [one, string, seven])
     conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
   })
   it('should create an unconstrained shape due to missing datatype', () => {
     const builder = new RangeConstraintBuilder(rdf, four, fromRdf)
-    const validator = createValidator(builder, [one, namedNode, seven])
+    const validator = buildShape(builder, [one, namedNode, seven])
     conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
   })
   it('should create an unconstrained shape due to unexpected value', () => {
     const builder = new RangeConstraintBuilder(rdf, four, fromRdf)
-    const validator = createValidator(builder, [one, wrong, seven])
+    const validator = buildShape(builder, [one, wrong, seven])
     conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
   })
   it('should create an unconstrained shape due to parsing issue of initial value', () => {
     const builder = new RangeConstraintBuilder(rdf, wrong, fromRdf)
-    const validator = createValidator(builder, [])
+    const validator = buildShape(builder, [])
     conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
   })
 })
