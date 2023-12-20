@@ -10,17 +10,17 @@ const property = rdf.namedNode('http://example.org/property')
 const createDataset = values =>
   rdf.clownface().namedNode(subject).addOut(property, values).dataset
 
-export const conforms = (validator, values) => {
+export const conforms = (validator, ...values) => {
   const report = validator.validate(createDataset(values))
   strictEqual(report.conforms, true)
 }
 
-export const notConforms = (validator, values) => {
+export const notConforms = (validator, ...values) => {
   const report = validator.validate(createDataset(values))
   strictEqual(report.conforms, false)
 }
 
-export const buildShape = (builder, values) => {
+export const buildShape = (builder, ...values) => {
   const shape = rdf.clownface()
   const ptr = shape.blankNode()
   shape.namedNode('http://example.org/shape')
@@ -32,6 +32,6 @@ export const buildShape = (builder, values) => {
   builder.build(ptr)
 
   const validator = new SHACLValidator(shape.dataset, { factory: rdf })
-  conforms(validator, values)
+  conforms(validator, ...values)
   return validator
 }

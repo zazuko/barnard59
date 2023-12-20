@@ -13,31 +13,31 @@ describe('RangeConstraintBuilder', () => {
 
   context('built from integers between 2 and 7', () => {
     const builder = new RangeConstraintBuilder(rdf, fromRdf)
-    const validator = buildShape(builder, [four, two, three, seven])
+    const validator = buildShape(builder, four, two, three, seven)
     const assertConforms = conforms.bind(null, validator)
     const assertNotConforms = notConforms.bind(null, validator)
 
-    it('integers in range conform', () => assertConforms([five, six]))
-    it('integers outside range do not conform', () => assertNotConforms([one, eight]))
+    it('integers in range conform', () => assertConforms(five, six))
+    it('integers outside range do not conform', () => assertNotConforms(one, eight))
   })
   it('should create an unconstrained shape due to wrong datatype', () => {
     const builder = new RangeConstraintBuilder(rdf, fromRdf)
-    const validator = buildShape(builder, [one, string, seven])
-    conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
+    const validator = buildShape(builder, one, string, seven)
+    conforms(validator, one, two, three, four, five, six, seven, eight, wrong, string, namedNode)
   })
   it('should create an unconstrained shape due to missing datatype', () => {
     const builder = new RangeConstraintBuilder(rdf, fromRdf)
-    const validator = buildShape(builder, [one, namedNode, seven])
-    conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
+    const validator = buildShape(builder, one, namedNode, seven)
+    conforms(validator, one, two, three, four, five, six, seven, eight, wrong, string, namedNode)
   })
   it('should create an unconstrained shape due to unexpected value', () => {
     const builder = new RangeConstraintBuilder(rdf, fromRdf)
-    const validator = buildShape(builder, [one, wrong, seven])
-    conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
+    const validator = buildShape(builder, one, wrong, seven)
+    conforms(validator, one, two, three, four, five, six, seven, eight, wrong, string, namedNode)
   })
   it('should create an unconstrained shape due to parsing issue of initial value', () => {
     const builder = new RangeConstraintBuilder(rdf, fromRdf)
-    const validator = buildShape(builder, [wrong])
-    conforms(validator, [one, two, three, four, five, six, seven, eight, wrong, string, namedNode])
+    const validator = buildShape(builder, wrong)
+    conforms(validator, one, two, three, four, five, six, seven, eight, wrong, string, namedNode)
   })
 })

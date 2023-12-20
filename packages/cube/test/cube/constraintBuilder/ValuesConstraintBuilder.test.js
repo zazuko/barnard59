@@ -14,19 +14,19 @@ describe('ValuesConstraintBuilder', () => {
 
   context('built without threshold', () => {
     const builder = new ValuesConstraintBuilder(rdf)
-    const validator = buildShape(builder, [string, integer, namedNode, blankNode])
+    const validator = buildShape(builder, string, integer, namedNode, blankNode)
     const assertConforms = conforms.bind(null, validator)
     const assertNotConforms = notConforms.bind(null, validator)
-    it('values used to build the shape conform', () => assertConforms([string, integer, namedNode, blankNode]))
-    it('other values do not conform', () => assertNotConforms([other]))
+    it('values used to build the shape conform', () => assertConforms(string, integer, namedNode, blankNode))
+    it('other values do not conform', () => assertNotConforms(other))
   })
   context('built with too many values', () => {
     const threshold = 2
     const builder = new ValuesConstraintBuilder(rdf, threshold)
-    const validator = buildShape(builder, [string, integer, namedNode, blankNode])
+    const validator = buildShape(builder, string, integer, namedNode, blankNode)
     const assertConforms = conforms.bind(null, validator)
 
-    it('everything conforms', () => assertConforms([string, integer, namedNode, blankNode, other]))
+    it('everything conforms', () => assertConforms(string, integer, namedNode, blankNode, other))
     it('reports too many values', () => strictEqual(builder.message, 'Too many values for in-list constraint.'))
   })
 })
