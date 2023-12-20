@@ -8,19 +8,17 @@ export default async function (pathOrUri, mediaTypeOverride) {
   }
 
   const response = await this.env.fetch(url)
-  let contentType
+  let parserStream
   if (mediaTypeOverride) {
-    contentType = mediaTypeOverride
-  } else {
-    contentType = response.headers.get('content-type')
-    if (!contentType) {
-      throw new Error(`No content-type header found for ${url}`)
-    }
-  }
+    parserStream = this.env.formats.parsers.import(mediaTypeOverride, response.body, {
+      baseIRI: response.url,
+    })
 
-  const parserStream = this.env.formats.parsers.import(contentType, response.body)
-  if (!parserStream) {
-    throw new Error(`No parser found for ${contentType}`)
+    if (!parserStream) {
+      throw new Error(`No parser found for ${mediaTypeOverride}`)
+    }
+  } else {
+    parserStream = await response.quadStream()
   }
 
   return parserStream
