@@ -19,47 +19,69 @@ describe('DimensionConstraintsBuilder', () => {
   const one = rdf.literal('1', xsd.integer)
   const two = rdf.literal('2', xsd.integer)
   const three = rdf.literal('3', xsd.integer)
+  const four = rdf.literal('4', xsd.integer)
 
-  it('should create a shape constrained to some named nodes', () => {
+  context('built from two named nodes', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
     const validator = buildShape(builder, [namedNode1, namedNode2])
-    conforms(validator, [namedNode1, namedNode2])
-    notConforms(validator, [namedNode3])
-    notConforms(validator, [string1])
-    notConforms(validator, [one])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('the two named nodes conform', () => assertConforms([namedNode1, namedNode2]))
+    it('another named node does not conform', () => assertNotConforms([namedNode3]))
+    it('a string literal does not conform', () => assertNotConforms([string1]))
+    it('an integer literal does not conform', () => assertNotConforms([one]))
   })
-  it('should create a shape unconstrained', () => {
+  context('built from too many distinct named nodes', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
     const validator = buildShape(builder, [namedNode1, namedNode2])
-    conforms(validator, [namedNode1, namedNode2, namedNode3, string1, one])
+    const assertConforms = conforms.bind(null, validator)
+    it('everything conforms', () => assertConforms([namedNode1, namedNode2, namedNode3, string1, one]))
   })
-  it('should create a shape constrained to some strings', () => {
+  context('built from two strings', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
     const validator = buildShape(builder, [string1, string2])
-    conforms(validator, [string1, string2])
-    notConforms(validator, [string3])
-    notConforms(validator, [one])
-    notConforms(validator, [namedNode1])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('the two strings conform', () => assertConforms([string1, string2]))
+    it('another string does not conform', () => assertNotConforms([string3]))
+    it('a named node does not conform', () => assertNotConforms([namedNode1]))
+    it('an integer literal does not conform', () => assertNotConforms([one]))
   })
-  it('should create a shape constrained to all strings', () => {
+  context('built from too many distinct strings', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
     const validator = buildShape(builder, [string1, string2])
-    conforms(validator, [string1, string2, string3])
-    notConforms(validator, [one])
-    notConforms(validator, [namedNode1])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+    it('every string conforms', () => assertConforms([string1, string2, string3]))
+    it('an integer literal does not conform', () => assertNotConforms([one]))
+    it('a named node does not conform', () => assertNotConforms([namedNode1]))
   })
-  it('should create a shape constrained to numbers in range', () => {
+  context('built from two integers', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
     const validator = buildShape(builder, [one, three])
-    conforms(validator, [two])
-    notConforms(validator, [string1])
-    notConforms(validator, [namedNode1])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('the two integers conform', () => assertConforms([one, three]))
+    it('an integer in between conforms', () => assertConforms([two]))
+    it('an integer outside the range does not conform', () => assertNotConforms([four]))
+    it('a string literal does not conform', () => assertNotConforms([string1]))
+    it('a named node does not conform', () => assertNotConforms([namedNode1]))
   })
-  it('should create a shape constrained to (sh:or) alternatives', () => {
+  context('built two named nodes, two strings and two integers', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
     const validator = buildShape(builder, [namedNode1, namedNode2, string1, string2, one, three])
-    conforms(validator, [two])
-    notConforms(validator, [string3])
-    notConforms(validator, [namedNode3])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('the two named nodes conform', () => assertConforms([namedNode1, namedNode2]))
+    it('another named node does not conform', () => assertNotConforms([namedNode3]))
+    it('the two strings conform', () => assertConforms([string1, string2]))
+    it('another string does not conform', () => assertNotConforms([string3]))
+    it('the two integers conform', () => assertConforms([one, three]))
+    it('an integer in between conforms', () => assertConforms([two]))
+    it('an integer outside the range does not conform', () => assertNotConforms([four]))
   })
 })

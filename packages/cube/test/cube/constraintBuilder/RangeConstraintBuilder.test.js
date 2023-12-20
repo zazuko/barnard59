@@ -11,11 +11,14 @@ describe('RangeConstraintBuilder', () => {
   const string = rdf.literal('foo', xsd.string)
   const namedNode = rdf.namedNode('http://example.org/namedNode')
 
-  it('should create a constrained shape', () => {
+  context('built from integers between 2 and 7', () => {
     const builder = new RangeConstraintBuilder(rdf, four, fromRdf)
     const validator = buildShape(builder, [two, three, seven])
-    conforms(validator, [five, six])
-    notConforms(validator, [one, eight])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('integers in range conform', () => assertConforms([five, six]))
+    it('integers outside range do not conform', () => assertNotConforms([one, eight]))
   })
   it('should create an unconstrained shape due to wrong datatype', () => {
     const builder = new RangeConstraintBuilder(rdf, four, fromRdf)

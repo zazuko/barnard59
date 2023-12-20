@@ -11,16 +11,21 @@ describe('DatatypeConstraintBuilder', () => {
   const integer = rdf.literal('2', xsd.integer)
   const namedNode = rdf.namedNode('http://example.org/namedNode')
 
-  it('should create a constrained shape', () => {
+  context('built from all strings', () => {
     const builder = new DatatypeConstraintBuilder(rdf, xsd.string)
     const validator = buildShape(builder, [string1, string2])
-    conforms(validator, [string3])
-    notConforms(validator, [integer])
-    notConforms(validator, [namedNode])
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('string conforms', () => assertConforms([string3]))
+    it('integer does not conform', () => assertNotConforms([integer]))
+    it('named node does not conform', () => assertNotConforms([namedNode]))
   })
-  it('should create an unconstrained shape', () => {
+  context('built from not only strings', () => {
     const builder = new DatatypeConstraintBuilder(rdf, xsd.string)
     const validator = buildShape(builder, [string1, string2, namedNode])
-    conforms(validator, [string1, string2, string3, integer, namedNode])
+    const assertConforms = conforms.bind(null, validator)
+
+    it('everything conforms', () => assertConforms([string1, string2, string3, integer, namedNode]))
   })
 })
