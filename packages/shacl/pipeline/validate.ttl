@@ -55,6 +55,7 @@ _:getShapes a p:Pipeline, p:ReadableObjectMode ;
       p:stepList
         (
           [ rdf:open ( "shapes"^^p:VariableName "shapesMediaType"^^p:VariableName ) ]
+          [ rdf:transformCodeImports () ]
         )
     ]
 .
