@@ -1,8 +1,8 @@
 export class ValuesConstraintBuilder {
-  constructor(rdf, object, threshold) {
+  constructor(rdf, threshold) {
     this.sh = rdf.ns.sh
     this.threshold = threshold
-    this.values = rdf.termSet([object])
+    this.values = rdf.termSet()
     this.enabled = true
   }
 
@@ -17,7 +17,7 @@ export class ValuesConstraintBuilder {
   }
 
   build(ptr) {
-    if (this.enabled) {
+    if (this.enabled && this.values.size > 0) {
       ptr.addList(this.sh.in, this.values)
     }
   }

@@ -13,7 +13,7 @@ describe('ValuesConstraintBuilder', () => {
   const other = rdf.namedNode('http://example.org/other')
 
   context('built without threshold', () => {
-    const builder = new ValuesConstraintBuilder(rdf, string)
+    const builder = new ValuesConstraintBuilder(rdf)
     const validator = buildShape(builder, [string, integer, namedNode, blankNode])
     const assertConforms = conforms.bind(null, validator)
     const assertNotConforms = notConforms.bind(null, validator)
@@ -22,7 +22,7 @@ describe('ValuesConstraintBuilder', () => {
   })
   context('built with too many values', () => {
     const threshold = 2
-    const builder = new ValuesConstraintBuilder(rdf, string, threshold)
+    const builder = new ValuesConstraintBuilder(rdf, threshold)
     const validator = buildShape(builder, [string, integer, namedNode, blankNode])
     const assertConforms = conforms.bind(null, validator)
 

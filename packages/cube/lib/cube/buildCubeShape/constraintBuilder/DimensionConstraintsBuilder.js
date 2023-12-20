@@ -11,17 +11,25 @@ export class DimensionConstraintsBuilder {
     this.builders = rdf.termMap()
   }
 
+  #createBuilder(datatype) {
+    if (this.datatypeParsers.has(datatype)) {
+      return new CompositeConstraintBuilder(
+        new DatatypeConstraintBuilder(this.rdf, datatype),
+        new RangeConstraintBuilder(this.rdf, this.datatypeParsers.get(datatype)))
+    } else {
+      return new CompositeConstraintBuilder(
+        new DatatypeConstraintBuilder(this.rdf, datatype),
+        new ValuesConstraintBuilder(this.rdf, this.inListMaxSize))
+    }
+  }
+
   #addDatatype(object) {
     if (this.builders.has(object.datatype)) {
       this.builders.get(object.datatype).add(object)
-    } else if (this.datatypeParsers.has(object.datatype)) {
-      this.builders.set(object.datatype, new CompositeConstraintBuilder(
-        new DatatypeConstraintBuilder(this.rdf, object.datatype),
-        new RangeConstraintBuilder(this.rdf, object, this.datatypeParsers.get(object.datatype))))
     } else {
-      this.builders.set(object.datatype, new CompositeConstraintBuilder(
-        new DatatypeConstraintBuilder(this.rdf, object.datatype),
-        new ValuesConstraintBuilder(this.rdf, object, this.inListMaxSize)))
+      const builder = this.#createBuilder(object.datatype)
+      builder.add(object)
+      this.builders.set(object.datatype, builder)
     }
   }
 
@@ -29,7 +37,8 @@ export class DimensionConstraintsBuilder {
     if (this.valuesBuilder) {
       this.valuesBuilder.add(object)
     } else {
-      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, object, this.inListMaxSize)
+      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, this.inListMaxSize)
+      this.valuesBuilder.add(object)
     }
   }
 

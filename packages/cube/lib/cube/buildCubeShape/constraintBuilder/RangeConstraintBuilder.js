@@ -1,18 +1,30 @@
 export class RangeConstraintBuilder {
-  // can be false in case of parsing issues
-  #isInRange = value => (this.min <= value && value <= this.max)
-
   // consider removing the parser argument and always use fromRdf from 'rdf-literal'
   // because we rely on its behavior in case of parsing issues
-  constructor(rdf, object, parser) {
+  constructor(rdf, parser) {
     this.sh = rdf.ns.sh
     this.parser = parser
-    this.minObject = object
-    this.maxObject = object
-    const value = parser(object)
-    this.min = value
-    this.max = value
-    this.enabled = this.#isInRange(value)
+    this.enabled = true
+  }
+
+  #initRange(object, value) {
+    return {
+      min: value,
+      max: value,
+      minObject: object,
+      maxObject: object,
+    }
+  }
+
+  #updateRange(object, value, range) {
+    if (value < range.min) {
+      range.min = value
+      range.minObject = object
+    }
+    if (value > range.max) {
+      range.max = value
+      range.maxObject = object
+    }
   }
 
   add(object) {
@@ -24,23 +36,21 @@ export class RangeConstraintBuilder {
     }
 
     const value = this.parser(object)
-    if (value < this.min) {
-      this.min = value
-      this.minObject = object
+
+    if (this.range) {
+      this.#updateRange(object, value, this.range)
+    } else {
+      this.range = this.#initRange(object, value)
     }
-    if (value > this.max) {
-      this.max = value
-      this.maxObject = object
-    }
-    if (!this.#isInRange(value)) {
-      this.enabled = false
-    }
+
+    // can be false in case of parsing issues
+    this.enabled = (this.range.min <= value && value <= this.range.max)
   }
 
   build(ptr) {
-    if (!this.enabled) return
-
-    ptr.addOut(this.sh.minInclusive, this.minObject)
-    ptr.addOut(this.sh.maxInclusive, this.maxObject)
+    if (this.enabled && this.range) {
+      ptr.addOut(this.sh.minInclusive, this.range.minObject)
+      ptr.addOut(this.sh.maxInclusive, this.range.maxObject)
+    }
   }
 }
