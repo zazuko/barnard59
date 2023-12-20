@@ -4,10 +4,10 @@ import { RangeConstraintBuilder } from './RangeConstraintBuilder.js'
 import { ValuesConstraintBuilder } from './ValuesConstraintBuilder.js'
 
 export class DimensionConstraintsBuilder {
-  constructor({ rdf, datatypeParsers, inListThreshold }) {
+  constructor({ rdf, datatypeParsers, inListMaxSize }) {
     this.rdf = rdf
     this.datatypeParsers = datatypeParsers
-    this.inListThreshold = inListThreshold
+    this.inListMaxSize = inListMaxSize
     this.builders = rdf.termMap()
   }
 
@@ -21,7 +21,7 @@ export class DimensionConstraintsBuilder {
     } else {
       this.builders.set(object.datatype, new CompositeConstraintBuilder(
         new DatatypeConstraintBuilder(this.rdf, object.datatype),
-        new ValuesConstraintBuilder(this.rdf, object, this.inListThreshold)))
+        new ValuesConstraintBuilder(this.rdf, object, this.inListMaxSize)))
     }
   }
 
@@ -29,7 +29,7 @@ export class DimensionConstraintsBuilder {
     if (this.valuesBuilder) {
       this.valuesBuilder.add(object)
     } else {
-      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, object, this.inListThreshold)
+      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, object, this.inListMaxSize)
     }
   }
 

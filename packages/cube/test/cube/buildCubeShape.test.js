@@ -477,7 +477,7 @@ describe('cube.buildCubeShape', () => {
         [ex.property.value]: ex.valueB,
       }],
     })
-    const transform = buildCubeShape({ inListThreshold: 1 })
+    const transform = buildCubeShape({ inListMaxSize: 1 })
 
     input.pipe(transform)
 

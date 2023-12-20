@@ -24,7 +24,7 @@ function defaultShape({ term }) {
 }
 
 class CubeShapeBuilder extends Transform {
-  constructor({ rdf, excludeValuesOf, metadata, graph, propertyShapeId, inListThreshold } = {}) {
+  constructor({ rdf, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
     super({ objectMode: true })
 
     this.rdf = rdf
@@ -36,7 +36,7 @@ class CubeShapeBuilder extends Transform {
       shape: defaultShape.bind({ rdf }),
       graph,
       propertyShapeId,
-      inListThreshold,
+      inListMaxSize,
     }
 
     this.init = once(() => this._init())
@@ -77,7 +77,7 @@ class CubeShapeBuilder extends Transform {
         observationSet: context.observationSet,
         shape: context.shape,
         propertyShapeId: this.options.propertyShapeId,
-        inListThreshold: this.options.inListThreshold,
+        inListMaxSize: this.options.inListMaxSize,
       })
 
       this.options.cubes.set(context.term, context.cube)
@@ -106,8 +106,8 @@ class CubeShapeBuilder extends Transform {
   }
 }
 
-function buildCubeShape({ excludeValuesOf, metadata, graph, propertyShapeId, inListThreshold } = {}) {
-  return new CubeShapeBuilder({ rdf: this.env, excludeValuesOf, metadata, graph, propertyShapeId, inListThreshold })
+function buildCubeShape({ excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
+  return new CubeShapeBuilder({ rdf: this.env, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize })
 }
 
 export default buildCubeShape

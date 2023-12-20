@@ -29,7 +29,7 @@ describe('DimensionConstraintsBuilder', () => {
     notConforms(validator, [one])
   })
   it('should create a shape unconstrained', () => {
-    const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListThreshold: 1 })
+    const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
     const validator = createValidator(builder, [namedNode1, namedNode2])
     conforms(validator, [namedNode1, namedNode2, namedNode3, string1, one])
   })
@@ -42,7 +42,7 @@ describe('DimensionConstraintsBuilder', () => {
     notConforms(validator, [namedNode1])
   })
   it('should create a shape constrained to all strings', () => {
-    const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListThreshold: 1 })
+    const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
     const validator = createValidator(builder, [string1, string2])
     conforms(validator, [string1, string2, string3])
     notConforms(validator, [one])
