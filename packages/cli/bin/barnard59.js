@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import { CollectorTraceExporter, CollectorMetricExporter } from '@opentelemetry/exporter-collector'
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
