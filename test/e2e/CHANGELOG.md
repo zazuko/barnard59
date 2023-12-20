@@ -1,5 +1,23 @@
 # barnard59-test-e2e
 
+## 0.0.5
+
+### Patch Changes
+
+- 898c80f: Use `barnard59-env` instead of `@zazuko/env(-node)`.
+
+  Remove direct dependency on `@rdfjs/formats-common`
+
+- 5a70d2b: Updated `rdf-loader-code`
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+- Updated dependencies [1bfec3c]
+- Updated dependencies [5a70d2b]
+  - barnard59-env@1.2.0
+  - barnard59-core@5.2.0
+
 ## 0.0.4
 
 ### Patch Changes

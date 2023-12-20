@@ -1,5 +1,23 @@
 # barnard59
 
+## 4.3.0
+
+### Minor Changes
+
+- e7b1cc1: Adds the ability to run b59 extension commands from global installation (NPM-only)
+
+### Patch Changes
+
+- 6019be1: Packages which provide CLI command are now be discoverable from `node_modules` without the need to install explicitly in project
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+- Updated dependencies [5a70d2b]
+- Updated dependencies [1bfec3c]
+- Updated dependencies [5a70d2b]
+  - barnard59-env@1.2.0
+  - barnard59-core@5.2.0
+
 ## 4.2.0
 
 ### Minor Changes
