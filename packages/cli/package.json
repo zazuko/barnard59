@@ -37,6 +37,8 @@
     "barnard59-env": "1.1.0",
     "commander": "^11.0.0",
     "pkgscan": "^1.0.24",
+    "find-up": "^7.0.0",
+    "is-installed-globally": "^1.0.0",
     "is-graph-pointer": "^2.1.0",
     "lodash": "^4.17.21",
     "pkg-dir": "^8.0.0",
