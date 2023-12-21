@@ -45,7 +45,8 @@ _:sortChunkSize a p:Variable ;
         [ n3:parse () ]
         _:sortBySubject
         [ splitDataset:bySubject () ]
-        _:batch
+        [ base:batch ("batchSize"^^p:VariableName) ]
+        [ base:flatten () ]
         [ shacl:report
           [code:name "shape" ; code:value _:getConstraint ] ,
           [code:name "maxErrors" ; code:value "maxViolations"^^p:VariableName ]
@@ -55,16 +56,6 @@ _:sortChunkSize a p:Variable ;
       )
     ]
 .
-
-_:batch a p:Step ;
-  code:implementedBy
-    [
-      a code:EcmaScriptModule ;
-      code:link <file:../lib/batch.js#batch> ;
-    ] ;
-  code:arguments ("batchSize"^^p:VariableName)
-.
-
 
 _:getConstraint a p:Pipeline , p:ReadableObjectMode ;
   p:variables [ p:variable _:constraint ] ;
