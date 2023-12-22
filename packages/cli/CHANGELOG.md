@@ -1,5 +1,11 @@
 # barnard59
 
+## 4.3.1
+
+### Patch Changes
+
+- 89fa4fb: Fix: running from global installation did not work
+
 ## 4.3.0
 
 ### Minor Changes
