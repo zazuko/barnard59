@@ -1,5 +1,11 @@
 # barnard59
 
+## 4.3.2
+
+### Patch Changes
+
+- ae574b8: Steps using simplified syntax would not be found when running a globally installed pipeline command
+
 ## 4.3.1
 
 ### Patch Changes
