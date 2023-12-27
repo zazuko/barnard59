@@ -1,8 +1,8 @@
 // @ts-check
 import { strictEqual, deepEqual } from 'node:assert'
+import { Readable } from 'node:stream'
 import { S3Client } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
-import { toReadable } from '../lib/streams.js'
 
 describe('lib', async () => {
   describe('client', async () => {
@@ -47,33 +47,6 @@ describe('lib', async () => {
         },
         region: 'eu-central-1',
       })
-    })
-  })
-
-  describe('streams', () => {
-    it('should handle errors in the webStream', (done) => {
-      // Mock the reader and webStream
-      const mockReader = {
-        read: () => Promise.reject(new Error('Test error')),
-      }
-      const mockWebStream = {
-        getReader: () => mockReader,
-      }
-
-      // Convert to Node.js readable stream
-      const nodeStream = toReadable(mockWebStream)
-
-      // Listen for the error event
-      nodeStream.on('error', (err) => {
-        try {
-          strictEqual(err.message, 'Test error')
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
-
-      nodeStream.pipe(process.stdout)
     })
   })
 })

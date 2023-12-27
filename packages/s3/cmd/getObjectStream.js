@@ -1,7 +1,7 @@
 // @ts-check
+import { Readable } from 'node:stream'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
-import { toReadable } from '../lib/streams.js'
 
 /**
  * Get an object from a S3 bucket as a Stream.
@@ -34,7 +34,8 @@ const getStreamObject = async ({
   }
 
   const stream = data.Body.transformToWebStream()
-  return toReadable(stream)
+  // @ts-ignore
+  return Readable.fromWeb(stream)
 }
 
 export default getStreamObject
