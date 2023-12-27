@@ -1,0 +1,35 @@
+name: Fig integration
+
+on:
+  push:
+    branches:
+      - cli-command-help
+
+jobs:
+  push-autocomplete-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install Dependencies
+        run: npm ci
+      - run: npm run generate-autocomplete-spec
+        working-directory: packages/cli
+
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.GH_APP_ID }}
+          private_key: ${{ secrets.GH_PRIVATE_KEY }}
+
+      - name: Create Autocomplete PR
+        uses: withfig/push-to-fig-autocomplete-action@v1
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          autocomplete-spec-name: barnard59
+          spec-path: packages/cli/fig-spec.js
+          integration: commander

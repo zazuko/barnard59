@@ -5,3 +5,4 @@ node_modules
 *.js.map
 .env
 *.received.txt
+fig-spec.js

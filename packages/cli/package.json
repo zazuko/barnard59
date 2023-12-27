@@ -9,7 +9,8 @@
     "b59": "bin/barnard59.sh"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "generate-autocomplete-spec": "node --loader ts-node/esm --no-warnings ./bin/generate-autocomplete-spec.js > fig-spec.js"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
+    "@fig/complete-commander": "^3.0.0",
     "approvals": "^6.2.2",
     "barnard59-base": "^2.1.0",
     "barnard59-formats": "^2.1.0",

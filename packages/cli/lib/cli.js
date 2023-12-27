@@ -9,6 +9,7 @@ import { parse } from './pipeline.js'
 import { combine } from './cli/options.js'
 
 program
+  .name('barnard59')
   .addOption(commonOptions.variable)
   .addOption(commonOptions.variableAll)
   .addOption(commonOptions.verbose)
@@ -43,21 +44,26 @@ export default async function () {
     .addOption(commonOptions.verbose)
     .addOption(commonOptions.quiet)
 
-  program.exitOverride()
+  return {
+    program,
+    async run() {
+      program.exitOverride()
 
-  try {
-    await program.parseAsync(process.argv)
-  } catch (error) {
-    const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
-    if (groups && groups.command) {
-      /* eslint-disable no-console */
-      if (isInstalledGlobally) {
-        console.error(`Try running 'npm install (-g) barnard59-${groups.command}'`)
+      try {
+        await program.parseAsync(process.argv)
+      } catch (error) {
+        const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
+        if (groups && groups.command) {
+          /* eslint-disable no-console */
+          if (isInstalledGlobally) {
+            console.error(`Try running 'npm install (-g) barnard59-${groups.command}'`)
+          }
+
+          console.error(`Try running 'npm install barnard59-${groups.command}'`)
+        }
+
+        process.exit(1)
       }
-
-      console.error(`Try running 'npm install barnard59-${groups.command}'`)
-    }
-
-    process.exit(1)
+    },
   }
 }

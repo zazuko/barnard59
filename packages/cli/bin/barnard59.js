@@ -95,7 +95,8 @@ const onError = async err => {
 
   // Dynamically import the rest once the SDK started to ensure
   // monkey-patching was done properly
-  const { default: run } = await import('../lib/cli.js')
+  const { default: cli } = await import('../lib/cli.js')
+  const { run } = await cli()
   await run()
   await sdk.shutdown()
 })().catch(onError)
