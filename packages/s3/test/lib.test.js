@@ -1,6 +1,5 @@
 // @ts-check
 import { strictEqual, deepEqual } from 'node:assert'
-import { Readable } from 'node:stream'
 import { S3Client } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
 
