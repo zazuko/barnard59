@@ -69,7 +69,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  global installation:
+  global-installation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
