@@ -1,4 +1,5 @@
 import { program } from 'commander'
+import isInstalledGlobally from 'is-installed-globally'
 import runAction from './cli/runAction.js'
 import * as monitoringOptions from './cli/monitoringOptions.js'
 import * as commonOptions from './cli/commonOptions.js'
@@ -42,5 +43,21 @@ export default async function () {
     .addOption(commonOptions.verbose)
     .addOption(commonOptions.quiet)
 
-  await program.parseAsync(process.argv)
+  program.exitOverride()
+
+  try {
+    await program.parseAsync(process.argv)
+  } catch (error) {
+    const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
+    if (groups && groups.command) {
+      /* eslint-disable no-console */
+      if (isInstalledGlobally) {
+        console.error(`Try running 'npm install (-g) barnard59-${groups.command}'`)
+      }
+
+      console.error(`Try running 'npm install barnard59-${groups.command}'`)
+    }
+
+    process.exit(1)
+  }
 }
