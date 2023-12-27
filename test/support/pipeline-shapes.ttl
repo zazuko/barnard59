@@ -1,0 +1,52 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX p: <https://pipeline.described.at/>
+PREFIX code: <https://code.described.at/>
+prefix op: <https://barnard59.zazuko.com/operations/>
+
+<Pipeline>
+  a sh:NodeShape ;
+  sh:targetClass p:Pipeline ;
+  sh:property
+    [
+      sh:path ( p:steps p:stepList [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+      sh:or
+        (
+          [
+            sh:node <Step> ;
+          ]
+          [
+            sh:node <ShorthandStep> ;
+          ]
+        ) ;
+    ] ;
+.
+
+<Step>
+  sh:property
+    [
+      sh:class p:Step ;
+      sh:property
+        [
+          sh:path code:implementedBy ;
+          sh:minCount 1 ;
+          sh:maxCount 1 ;
+        ],
+        [
+          sh:path code:arguments ;
+          sh:maxCount 1 ;
+        ] ;
+    ] ;
+.
+
+<ShorthandStep>
+  sh:property
+    [
+      sh:property
+        [
+          sh:path [ sh:alternativePath ( op:formats\/n3\/parse op:formats\/ntriples\/serialize ) ] ;
+          sh:minCount 1 ;
+          sh:maxCount 1 ;
+        ] ;
+    ] ;
+.

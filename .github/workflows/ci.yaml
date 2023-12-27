@@ -68,3 +68,16 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm ci
       - run: npm run lint
+
+  global installation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - name: pack all
+        run: npm pack -ws
+      - run: npm install -g barnard59-*.tgz
+      - run: which barnard59
+      - run: barnard59 --help
+      - run: barnard59 shacl validate --shapes test/support/pipeline-shapes.ttl < test/e2e/definitions/file-loader.ttl
