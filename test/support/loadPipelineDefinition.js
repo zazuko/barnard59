@@ -17,7 +17,7 @@ export function pipelineDefinitionLoader(baseUrl, path = 'support/definitions') 
     const stream = fromFile(filename)
     let dataset = await fromStream(rdf.dataset(), stream)
     if (desugar) {
-      dataset = await desugarDefinition(dataset, { logger })
+      dataset = await desugarDefinition(dataset, { logger, pipelinePath: filename })
     }
 
     return rdf.clownface({ dataset, term })

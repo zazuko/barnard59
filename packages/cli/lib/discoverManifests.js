@@ -1,5 +1,4 @@
 import * as module from 'module'
-import fs from 'fs'
 import { exec } from 'child_process'
 import { dirname } from 'path'
 import { getInstalledPackage } from 'pkgscan'
@@ -9,10 +8,12 @@ import { packageDirectory } from 'pkg-dir'
 import { findUp } from 'find-up'
 
 const packagePattern = /^barnard59-(.+)$/
-const require = module.createRequire(import.meta.url)
 
-export default async function * () {
-  const packages = (await getInstalledPackages()).filter(hasManifest)
+export default async function * ({ basePath = import.meta.url, all = false } = {}) {
+  const require = module.createRequire(basePath)
+  const hasManifest = canRequireManifest.bind(null, require)
+
+  const packages = (await getInstalledPackages(all)).filter(hasManifest)
 
   const dir = await packageDirectory()
   if (hasManifest(dir)) {
@@ -35,14 +36,18 @@ export default async function * () {
   }
 }
 
-async function getInstalledPackages() {
+async function getInstalledPackages(all) {
   if (isInstalledGlobally) {
+    let npmList = 'npm list -g'
+    if (all) {
+      npmList += ' --all'
+    }
     return new Promise((resolve, reject) => {
-      exec('npm list -g --depth=0 --json', (err, stdout) => {
+      exec(npmList, (err, stdout) => {
         if (err) {
           reject(err)
         } else {
-          resolve(Object.keys(JSON.parse(stdout).dependencies).filter(pkg => packagePattern.test(pkg)))
+          resolve([...new Set(stdout.match(/(?<pkg>barnard59-[^@]+)/g))])
         }
       })
     })
@@ -52,9 +57,9 @@ async function getInstalledPackages() {
   return getInstalledPackage('barnard59-*', dirname(packagePath)).map(pkg => pkg.name)
 }
 
-function hasManifest(pkg) {
+function canRequireManifest(require, pkg) {
   try {
-    fs.accessSync(require.resolve(`${pkg}/manifest.ttl`))
+    require.resolve(`${pkg}/manifest.ttl`)
     return true
   } catch {
     return false

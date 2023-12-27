@@ -1,12 +1,17 @@
-import { dirname, resolve } from 'path'
+import module from 'node:module'
+import { dirname, resolve } from 'node:path'
+import * as url from 'url'
 import rdf from 'barnard59-env'
 import { isGraphPointer } from 'is-graph-pointer'
+import { packageDirectory } from 'pkg-dir'
+import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
+import isInstalledGlobally from 'is-installed-globally'
 import findPipeline from '../findPipeline.js'
 import discoverManifests from './discoverManifests.js'
 
-const discoverOperations = async () => {
+const discoverOperations = async (pipelinePath) => {
   const ops = rdf.termMap()
-  for await (const { manifest } of discoverManifests()) {
+  for await (const { manifest } of discoverManifests({ basePath: pipelinePath, all: true })) {
     manifest
       .has(rdf.ns.rdf.type, rdf.ns.p.Operation)
       .forEach(operation => {
@@ -20,14 +25,19 @@ const discoverOperations = async () => {
   return ops
 }
 
-export const desugar = async (dataset, { logger, knownOperations } = {}) => {
-  knownOperations = knownOperations ?? await discoverOperations()
+export const desugar = async (dataset, { logger, knownOperations, pipelinePath } = {}) => {
+  knownOperations = knownOperations ?? await discoverOperations(pipelinePath)
+  const dir = await packageDirectory({
+    cwd: pipelinePath,
+  })
+  const require = module.createRequire(dir + '/')
+
   const ptr = rdf.clownface({ dataset })
   let n = 0
   ptr.has(rdf.ns.p.stepList).out(rdf.ns.p.stepList).forEach(listPointer => {
     for (const step of listPointer.list()) {
       if (isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Step)) ||
-          isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Pipeline))) {
+        isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Pipeline))) {
         continue
       }
       // we expect a known operation
@@ -38,7 +48,17 @@ export const desugar = async (dataset, { logger, knownOperations } = {}) => {
         continue
       }
 
-      const { type, link } = knownStep
+      let { type, link } = knownStep
+      const { pathname, filename, hash, protocol } = iriResolve(link.value, pipelinePath)
+
+      if (protocol === 'node:' && isInstalledGlobally) {
+        // must resolve node: links to absolute paths to overcome node resolution issues in global context
+        const resolved = require.resolve(pathname)
+        if (filename !== resolved) {
+          link = rdf.namedNode(url.pathToFileURL(resolved).toString() + hash)
+        }
+      }
+
       const args = step.out(quad.predicate)
       step.deleteOut(quad.predicate)
       // keep args only if non-empty
@@ -62,7 +82,7 @@ async function fileToDataset(filename) {
 
 export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
-  const ptr = findPipeline(await desugar(dataset, { logger }), iri)
+  const ptr = findPipeline(await desugar(dataset, { logger, pipelinePath: filename }), iri)
 
   return {
     basePath: resolve(dirname(filename)),
