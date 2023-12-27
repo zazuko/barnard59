@@ -62,7 +62,11 @@ export default async function () {
           console.error(`Try running 'npm install barnard59-${groups.command}'`)
         }
 
-        process.exit(1)
+        if ('exitCode' in error) {
+          process.exit(error.exitCode)
+        } else {
+          process.exit(1)
+        }
       }
     },
   }
