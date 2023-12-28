@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "generate-autocomplete-spec": "node --loader ts-node/esm --no-warnings ./bin/generate-autocomplete-spec.js > fig-spec.js"
+    "generate-autocomplete-spec": "node --loader ts-node/esm --no-warnings ./bin/generate-autocomplete-spec.js > fig-spec.ts"
   },
   "repository": {
     "type": "git",

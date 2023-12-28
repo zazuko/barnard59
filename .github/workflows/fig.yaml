@@ -31,5 +31,5 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
           autocomplete-spec-name: barnard59
-          spec-path: packages/cli/fig-spec.js
+          spec-path: packages/cli/fig-spec.ts
           integration: commander
