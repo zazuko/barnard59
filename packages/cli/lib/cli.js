@@ -1,5 +1,6 @@
 import { program } from 'commander'
 import isInstalledGlobally from 'is-installed-globally'
+import { MultipleRootsError } from '../findPipeline.js'
 import runAction from './cli/runAction.js'
 import * as monitoringOptions from './cli/monitoringOptions.js'
 import * as commonOptions from './cli/commonOptions.js'
@@ -52,20 +53,24 @@ export default async function () {
       try {
         await program.parseAsync(process.argv)
       } catch (error) {
-        const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
-        if (groups && groups.command) {
-          /* eslint-disable no-console */
-          if (isInstalledGlobally) {
-            console.error(`Try running 'npm install (-g) barnard59-${groups.command}'`)
+        if (error instanceof program.CommanderError) {
+          const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
+          if (groups && groups.command) {
+            /* eslint-disable no-console */
+            if (isInstalledGlobally) {
+              console.error(`Try running 'npm install (-g) barnard59-${groups.command}'`)
+            }
+
+            console.error(`Try running 'npm install barnard59-${groups.command}'`)
           }
-
-          console.error(`Try running 'npm install barnard59-${groups.command}'`)
-        }
-
-        if ('exitCode' in error) {
           process.exit(error.exitCode)
-        } else {
+        } else if (error instanceof MultipleRootsError) {
+          const alternatives = error.alternatives.map(x => `\n\t--pipeline ${x}`).join('')
+          // eslint-disable-next-line no-console
+          console.error(`Multiple root pipelines found. Try one of these:${alternatives}`)
           process.exit(1)
+        } else {
+          throw error
         }
       }
     },
