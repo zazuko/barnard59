@@ -1,14 +1,14 @@
 // @ts-check
 import { Readable } from 'node:stream'
-import { readFile } from 'node:fs/promises'
 import { rejects, strictEqual } from 'node:assert'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import { mockClient } from 'aws-sdk-client-mock'
-import { getObject } from '../index.js'
-import { removeResultsDirectory, testResultsDirectory } from './utils.js'
+import getStream from 'get-stream'
+import { getObjectStream } from '../index.js'
+import { removeResultsDirectory } from './utils.js'
 
-describe('getObject', async () => {
+describe('getObjectStream', async () => {
   let s3Mock
 
   before(async () => {
@@ -21,9 +21,8 @@ describe('getObject', async () => {
     await removeResultsDirectory()
   })
 
-  it('should be able to get a file', async () => {
+  it('should be able to get a stream from a file', async () => {
     const data = 'Hello world'
-    const filePath = `${testResultsDirectory}/getObject/get-a-file.txt`
 
     // Create Stream from string
     const stream = new Readable()
@@ -34,26 +33,22 @@ describe('getObject', async () => {
 
     s3Mock.on(GetObjectCommand).resolves({ Body: sdkStream })
 
-    await getObject({
+    const objectStream = await getObjectStream({
       bucket: 'test-bucket',
       key: 'get-a-file.txt',
-      destinationPath: filePath,
     })
 
-    const fileContent = await readFile(filePath, 'utf8')
+    const fileContent = await getStream(objectStream)
     strictEqual(fileContent, data)
   })
 
-  it('should throw for empty body', async () => {
-    const filePath = `${testResultsDirectory}/getObject/get-empty-body.txt`
-
+  it('should throw in case of empty body', async () => {
     s3Mock.on(GetObjectCommand).resolves({ Body: null })
 
     await rejects(async () => {
-      await getObject({
+      await getObjectStream({
         bucket: 'test-bucket',
         key: 'get-a-file.txt',
-        destinationPath: filePath,
       })
     })
   })

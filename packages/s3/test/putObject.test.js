@@ -1,8 +1,8 @@
 // @ts-check
-import { Readable } from 'stream'
-import { createWriteStream } from 'fs'
-import { readFile, writeFile } from 'fs/promises'
-import { strictEqual } from 'assert'
+import { Readable } from 'node:stream'
+import { createWriteStream } from 'node:fs'
+import { readFile, writeFile } from 'node:fs/promises'
+import { strictEqual } from 'node:assert'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { mockClient } from 'aws-sdk-client-mock'
 import { putObject } from '../index.js'

@@ -1,5 +1,5 @@
 // @ts-check
-import { dirname } from 'path'
+import { dirname } from 'node:path'
 import { mkdirp } from 'mkdirp'
 
 /**
