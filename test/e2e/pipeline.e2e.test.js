@@ -96,4 +96,19 @@ describe('Pipeline', () => {
     expect(pipeline.error).to.be.instanceof(Error)
     expect(pipeline.error.message).to.eq('foo')
   })
+
+  it('works with async generator steps', async () => {
+    // given
+    const ptr = await loadPipelineDefinition('limit-offset')
+    const pipeline = await createPipeline(ptr, {
+      env,
+      basePath: process.cwd(),
+    })
+
+    // when
+    const out = await getStream.array(pipeline.stream)
+
+    // then
+    expect(out).to.deep.eq([{ age: 23 }])
+  })
 })
