@@ -6,7 +6,7 @@ import { isGraphPointer } from 'is-graph-pointer'
 import { Stream } from 'readable-stream'
 import { VariableMap } from '../../index.js'
 
-export type Operation = (this: Context, ...args: unknown[]) => Promise<Stream> | Stream
+export type Operation = (this: Context, ...args: unknown[]) => Promise<Stream | (() => AsyncGenerator)> | Stream | (() => AsyncGenerator)
 
 async function createOperation(ptr: MultiPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
   if (!isGraphPointer(ptr)) {
