@@ -9,7 +9,7 @@ import tracer from './lib/tracer.js'
 /**
  * @this {import('barnard59-core').Context}
  * @param {{ pattern: string } & import('glob').IOptions} options
- * @return {import('readable-stream').Readable}
+ * @return {Readable}
  */
 function glob({ pattern, ...options }) {
   const { logger } = this
@@ -24,7 +24,7 @@ function glob({ pattern, ...options }) {
     return filenames.length === 0
   })
 
-  /** @type {import('readable-stream').Readable} */
+  /** @type {Readable} */
   const stream = new Readable({
     objectMode: true,
     read: async () => {

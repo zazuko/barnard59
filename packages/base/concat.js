@@ -49,6 +49,7 @@ class ConcatStream extends Readable {
 
 /**
  * @param {(import('stream').Duplex)[]} streams
+ * @return {Readable}
  */
 function factory(...streams) {
   return new ConcatStream(streams)
@@ -56,6 +57,7 @@ function factory(...streams) {
 
 /**
  * @param {(import('stream').Duplex)[]} streams
+ * @return {Readable}
  */
 const object = (...streams) => {
   return new ConcatStream(streams, { objectMode: true })

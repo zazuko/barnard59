@@ -38,14 +38,14 @@ class JsonStringify extends Transform {
 }
 
 /**
- * @return {import('stream').Transform}
+ * @return {Transform}
  */
 function parse() {
   return new JsonParse()
 }
 
 /**
- * @return {import('stream').Transform}
+ * @return {Transform}
  */
 function stringify() {
   return new JsonStringify()

@@ -17,7 +17,7 @@ class Nul extends Writable {
 }
 
 /**
- * @return {import('readable-stream').Writable}
+ * @return {Writable}
  */
 function factory() {
   return new Nul()

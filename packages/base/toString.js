@@ -20,7 +20,7 @@ class ToString extends Transform {
 }
 
 /**
- * @return {import('readable-stream').Transform}
+ * @return {Transform}
  */
 function factory() {
   return new ToString()

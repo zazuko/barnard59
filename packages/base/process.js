@@ -5,7 +5,7 @@ class StdOut extends Transform {
   /**
    * @param {Uint8Array | string} chunk
    * @param {BufferEncoding} encoding
-   * @param {import('stream').TransformCallback} callback
+   * @param {(error?: Error | null, data?: any) => void} callback
    */
   _transform(chunk, encoding, callback) {
     process.stdout.write(chunk, encoding)
@@ -15,7 +15,7 @@ class StdOut extends Transform {
 }
 
 /**
- * @return {import('readable-stream').Transform}
+ * @return {Transform}
  */
 export function stdout() {
   return new StdOut()
