@@ -1,6 +1,13 @@
+// @ts-check
 import { obj } from 'through2'
 
+/**
+ * Limit the amount of chunks in a pipe.
+ * @param {number} offset
+ * @returns {import('stream').Transform}
+ */
 function offset(offset) {
+  /** @type {any} */
   const t = obj(function (chunk, encoding, callback) {
     t.count++
 

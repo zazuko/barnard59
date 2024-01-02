@@ -1,13 +1,20 @@
-import { promisify } from 'util'
+// @ts-check
+import { promisify } from 'node:util'
 import { SpanStatusCode } from '@opentelemetry/api'
 import globFn from 'glob'
 import onetime from 'onetime'
 import { Readable } from 'readable-stream'
 import tracer from './lib/tracer.js'
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {{ pattern: string } & import('glob').IOptions} options
+ * @return {import('readable-stream').Readable}
+ */
 function glob({ pattern, ...options }) {
   const { logger } = this
-  let filenames = null
+  /** @type {string[]} */
+  let filenames = []
 
   const span = tracer.startSpan('glob')
 
@@ -17,6 +24,7 @@ function glob({ pattern, ...options }) {
     return filenames.length === 0
   })
 
+  /** @type {import('readable-stream').Readable} */
   const stream = new Readable({
     objectMode: true,
     read: async () => {
@@ -34,8 +42,9 @@ function glob({ pattern, ...options }) {
           return
         }
 
+        // @ts-ignore
         stream._read()
-      } catch (err) {
+      } catch (/** @type {any} */ err) {
         span.recordException(err)
         span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
         stream.destroy(err)

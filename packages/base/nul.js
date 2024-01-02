@@ -1,3 +1,4 @@
+// @ts-check
 import { Writable } from 'readable-stream'
 
 class Nul extends Writable {
@@ -5,11 +6,19 @@ class Nul extends Writable {
     super({ objectMode: true })
   }
 
+  /**
+   * @param {any} chunk
+   * @param {string} encoding
+   * @param {() => void} callback
+   */
   _write(chunk, encoding, callback) {
     callback()
   }
 }
 
+/**
+ * @return {import('readable-stream').Writable}
+ */
 function factory() {
   return new Nul()
 }

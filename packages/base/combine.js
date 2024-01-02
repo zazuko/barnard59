@@ -1,5 +1,12 @@
+// @ts-check
 import duplexify from 'duplexify'
 
+/**
+ * Limit the amount of chunks in a pipe.
+ * @returns {import('stream').Duplex} A transform stream.
+ * @param {(import('stream').Duplex)[]} streams
+ * @param {*} options
+ */
 function combine(streams, options) {
   if (streams.length === 0) {
     throw new Error('no streams to combine')

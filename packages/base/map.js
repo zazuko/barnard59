@@ -1,16 +1,33 @@
+// @ts-check
 import transform from 'parallel-transform'
+
+/**
+ * @typedef {(this: import('barnard59-core').Context, chunk: From) => Promise<To> | To} MapCallback
+ * @template From, To
+ */
+
+/**
+ * @typedef {{
+ *   map: MapCallback<From, To>
+ *   concurrency?: number
+ *   ordered?: boolean
+ *   objectMode?: boolean
+ * }|MapCallback<From, To>} MapOptions
+ * @template From, To
+ */
 
 /**
  * Processes chunks with a transform function
  *
- * @param {Object|Function} options Transform function or complex options
- * @params {Function} options.map Transform function
- * @param {Number} [options.concurrency=1] The max number of concurrent chunks being transformed
- * @param {Boolean} [options.ordered=true] Option to keep order of asynchronously transformed chunks
- * @param {Boolean} [options.objectMode=true] Option to transform chunks in object mode
- * @return {ReadableStream}
+ * @this {import('barnard59-core').Context}
+ * @param {MapOptions<From, To>} options Transform function or complex options
+ * @return {import('stream').Transform}
+ * @template From, To
  */
 export default function map(options) {
+  /**
+   * @type {MapCallback<*, *>}
+   */
   let func
   let concurrency = 1
   let ordered = true

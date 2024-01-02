@@ -1,3 +1,4 @@
+// @ts-check
 import { Transform } from 'readable-stream'
 
 class JsonParse extends Transform {
@@ -8,6 +9,11 @@ class JsonParse extends Transform {
     })
   }
 
+  /**
+   * @param {*} chunk
+   * @param {string} encoding
+   * @param {(error?: Error | null, data?: any) => void} callback
+   */
   _transform(chunk, encoding, callback) {
     callback(null, JSON.parse(chunk.toString()))
   }
@@ -21,15 +27,26 @@ class JsonStringify extends Transform {
     })
   }
 
+  /**
+   * @param {*} chunk
+   * @param {string} encoding
+   * @param {(error?: Error | null, data?: any) => void} callback
+   */
   _transform(chunk, encoding, callback) {
     callback(null, JSON.stringify(chunk))
   }
 }
 
+/**
+ * @return {import('stream').Transform}
+ */
 function parse() {
   return new JsonParse()
 }
 
+/**
+ * @return {import('stream').Transform}
+ */
 function stringify() {
   return new JsonStringify()
 }
