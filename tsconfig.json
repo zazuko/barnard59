@@ -11,6 +11,5 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true
-  },
-  "files": []
+  }
 }
