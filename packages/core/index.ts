@@ -6,8 +6,8 @@ import defaultLogger from './lib/defaultLogger.js'
 import createPipeline from './lib/factory/pipeline.js'
 import run from './lib/run.js'
 import Pipeline, { PipelineOptions } from './lib/Pipeline.js'
-import Step from './lib/Step.js'
 
+export type { default as Step } from './lib/Step.js'
 export type { default as Pipeline, PipelineOptions } from './lib/Pipeline.js'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -29,7 +29,6 @@ export interface Context {
   basePath: string
   createPipeline(ptr: GraphPointer, arg?: Partial<PipelineOptions>): Pipeline
   error(err: Error): void
-  step: Step
 }
 
 export {

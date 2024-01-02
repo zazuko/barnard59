@@ -7,7 +7,7 @@ import ReadableToReadable from 'readable-to-readable'
 const { finished, Duplex } = stream
 
 /**
- * @typedef {Pick<import('barnard59-core').Context, 'createPipeline' | 'step' | 'variables'> & {
+ * @typedef {Pick<import('barnard59-core').Context, 'createPipeline' | 'variables'> & {
  *   pipeline: PipelineStream
  *   variable: string
  * }} ForEachOptions
@@ -25,7 +25,7 @@ class ForEach extends Duplex {
   /**
    * @param {ForEachOptions} context
    */
-  constructor({ createPipeline, pipeline, step, variable, variables }) {
+  constructor({ createPipeline, pipeline, variable, variables }) {
     super({ objectMode: true })
 
     // Bind the read and write function to the current context so the trace ID
@@ -33,7 +33,6 @@ class ForEach extends Duplex {
     this._read = context.bind(context.active(), this._read)
     this._write = context.bind(context.active(), this._write)
     this.createPipeline = createPipeline
-    this.step = step
 
     // we only need the ptr of the pipeline to create new copies...
     this.ptr = pipeline.pipeline.ptr
@@ -55,6 +54,7 @@ class ForEach extends Duplex {
   }
 
   set subPipeline(subPipeline) {
+    // @ts-ignore
     this.step.children[0] = subPipeline
   }
 
@@ -121,7 +121,6 @@ function factory(pipeline, variable) {
   return new ForEach({
     pipeline,
     createPipeline: this.createPipeline,
-    step: this.step,
     variable,
     variables: this.variables,
   })
