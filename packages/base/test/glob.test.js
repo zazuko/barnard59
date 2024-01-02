@@ -1,6 +1,6 @@
 import { deepStrictEqual, strictEqual } from 'assert'
 import { array } from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import sinon from 'sinon'
 import { expect } from 'chai'
 import glob from '../glob.js'
