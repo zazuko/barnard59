@@ -1,4 +1,3 @@
-// @ts-check
 import { Transform } from 'readable-stream'
 
 class StdOut extends Transform {

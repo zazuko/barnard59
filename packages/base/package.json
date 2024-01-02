@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "mocha",
-    "preprepack": "rimraf *.d.ts",
-    "prepack": "tsc"
+    "prebuild": "rimraf *.d.ts",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",

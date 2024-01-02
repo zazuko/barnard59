@@ -7,11 +7,10 @@
     "strict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true
   },
-  "files": [
-    "packages/core/index.ts",
-    "packages/core/lib/utils.ts",
-    "packages/env/index.ts"
-  ]
+  "files": []
 }

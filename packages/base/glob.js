@@ -1,4 +1,3 @@
-// @ts-check
 import { promisify } from 'node:util'
 import { SpanStatusCode } from '@opentelemetry/api'
 import globFn from 'glob'

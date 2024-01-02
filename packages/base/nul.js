@@ -1,4 +1,3 @@
-// @ts-check
 import { Writable } from 'readable-stream'
 
 class Nul extends Writable {

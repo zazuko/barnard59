@@ -1,4 +1,3 @@
-// @ts-check
 import transform from 'parallel-transform'
 
 /**

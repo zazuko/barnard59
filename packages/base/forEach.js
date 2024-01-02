@@ -1,4 +1,3 @@
-// @ts-check
 import { promisify } from 'node:util'
 import { context } from '@opentelemetry/api'
 import stream from 'readable-stream'

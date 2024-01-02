@@ -1,4 +1,3 @@
-// @ts-check
 import { obj } from 'through2'
 
 /**

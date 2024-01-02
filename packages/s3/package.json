@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "coverage": "c8 --reporter=lcov --reporter=text npm run test"
+    "coverage": "c8 --reporter=lcov --reporter=text npm run test",
+    "build": "tsc"
   },
   "keywords": [
     "barnard59",

@@ -1,4 +1,3 @@
-// @ts-check
 import duplexify from 'duplexify'
 
 /**

@@ -1,4 +1,3 @@
-// @ts-check
 import { finished, Readable } from 'readable-stream'
 
 class ConcatStream extends Readable {
