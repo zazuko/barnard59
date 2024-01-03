@@ -9,6 +9,14 @@ import isInstalledGlobally from 'is-installed-globally'
 import findPipeline from '../findPipeline.js'
 import discoverManifests from './discoverManifests.js'
 
+/**
+ * @typedef {Map<import('rdf-js').Term, { type: import('rdf-js').NamedNode, link: import('rdf-js').NamedNode }>} OperationMap
+ */
+
+/**
+ * @param {string} pipelinePath
+ * @returns {Promise<OperationMap>}
+ */
 const discoverOperations = async (pipelinePath) => {
   const ops = rdf.termMap()
   for await (const { manifest } of discoverManifests({ basePath: pipelinePath, all: true })) {
@@ -25,8 +33,16 @@ const discoverOperations = async (pipelinePath) => {
   return ops
 }
 
-export const desugar = async (dataset, { logger, knownOperations, pipelinePath } = {}) => {
-  knownOperations = knownOperations ?? await discoverOperations(pipelinePath)
+/**
+ * @param {import('rdf-js').DatasetCore} dataset
+ * @param {object} options
+ * @param {import('winston').Logger} [options.logger]
+ * @param {OperationMap} [options.knownOperations]
+ * @param {string} options.pipelinePath
+ * @returns {Promise<import('rdf-js').DatasetCore>}
+ */
+export const desugar = async (dataset, { logger, knownOperations, pipelinePath }) => {
+  const operations = knownOperations ?? await discoverOperations(pipelinePath)
   const dir = await packageDirectory({
     cwd: pipelinePath,
   })
@@ -35,14 +51,14 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
   const ptr = rdf.clownface({ dataset })
   let n = 0
   ptr.has(rdf.ns.p.stepList).out(rdf.ns.p.stepList).forEach(listPointer => {
-    for (const step of listPointer.list()) {
+    for (const step of (listPointer.list() || [])) {
       if (isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Step)) ||
         isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Pipeline))) {
         continue
       }
       // we expect a known operation
       const [quad] = step.dataset.match(step.term)
-      const knownStep = knownOperations.get(quad?.predicate)
+      const knownStep = operations.get(quad?.predicate)
       if (!knownStep) {
         logger?.warn(`Operation <${quad?.predicate.value}> not found in known manifests. Have you added the right \`barnard59-*\` package as dependency?`)
         continue
@@ -76,10 +92,21 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
   return ptr.dataset
 }
 
+/**
+ * @param {string} filename
+ * @return {Promise<import('rdf-js').DatasetCore>}
+ */
 async function fileToDataset(filename) {
   return rdf.dataset().import(rdf.fromFile(filename))
 }
 
+/**
+ * @param {string} filename
+ * @param {string} iri
+ * @param {object} [options]
+ * @param {import('winston').Logger} [options.logger]
+ * @return {Promise<{ basePath: string, ptr: import('clownface').AnyPointer }>}
+ */
 export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
   const ptr = findPipeline(await desugar(dataset, { logger, pipelinePath: filename }), iri)

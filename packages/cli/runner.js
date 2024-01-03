@@ -2,8 +2,19 @@ import { createPipeline, defaultLogger, run } from 'barnard59-core'
 
 import tracer from './lib/tracer.js'
 
-function create(ptr, env, { basePath, outputStream, logger, variables = new Map(), level = 'error', quiet } = {}) {
-  return tracer.startActiveSpan('createPipeline', { 'pipeline.id': ptr.value }, async span => {
+/**
+ * @param {import('clownface').GraphPointer} ptr
+ * @param {import('barnard59-env').Environment} env
+ * @param {object} options
+ * @param {string} options.basePath
+ * @param {import('stream').Writable} options.outputStream
+ * @param {import('winston').Logger} [options.logger]
+ * @param {Map<string, unknown>} [options.variables]
+ * @param {"error" | "info" | "debug"} [options.level]
+ * @param {boolean} [options.quiet]
+ */
+function create(ptr, env, { basePath, outputStream, logger, variables = new Map(), level = 'error', quiet }) {
+  return tracer.startActiveSpan('createPipeline', { attributes: { 'pipeline.id': ptr.value } }, async span => {
     try {
       if (!logger) {
         logger = defaultLogger({ level, quiet })
