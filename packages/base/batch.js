@@ -1,4 +1,4 @@
-import { Transform } from 'stream'
+import { Transform } from 'readable-stream'
 
 function batch(size = 0) {
   let array = []
