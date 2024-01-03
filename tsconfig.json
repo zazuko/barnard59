@@ -8,10 +8,5 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "allowSyntheticDefaultImports": true
-  },
-  "files": [
-    "packages/core/index.ts",
-    "packages/core/lib/utils.ts",
-    "packages/env/index.ts"
-  ]
+  }
 }

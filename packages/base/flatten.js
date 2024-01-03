@@ -1,7 +1,20 @@
 import { obj } from 'through2'
 
+/**
+ * @callback ForEachCallback
+ * @param {unknown} item
+ * @return {void}
+ */
+
+/**
+ * @typedef {Iterable<unknown> | { forEach(cb: ForEachCallback): void }} IterableLike
+ */
+
+/**
+ * @return {import('stream').Transform} Transform
+ */
 function flatten() {
-  return obj(function (chunk, encoding, callback) {
+  return obj(function (/** IterableLike */ chunk, encoding, callback) {
     if (typeof chunk[Symbol.iterator] === 'function') {
       for (const item of chunk) {
         this.push(item)
@@ -11,7 +24,7 @@ function flatten() {
     }
 
     if (typeof chunk.forEach === 'function') {
-      chunk.forEach(item => this.push(item))
+      chunk.forEach((/** @type {unknown} */ item) => this.push(item))
 
       return callback()
     }

@@ -32,6 +32,6 @@
     "is-stream": "^3.0.0"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "loader": "tsm"
   }
 }

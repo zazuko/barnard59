@@ -4,7 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "prepack": "tsc"
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@zazuko/env-node": "^1.0.3",
