@@ -12,7 +12,7 @@ import { Context, VariableMap } from '../../index.js'
 import createArguments from './arguments.js'
 import createOperation from './operation.js'
 
-async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
+async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Context; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
   return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })

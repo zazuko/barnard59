@@ -1,4 +1,11 @@
+/**
+ * Limit the amount of chunks in a pipe.
+ * @param {number} offset
+ */
 export default function (offset) {
+  /**
+   * @param {AsyncIterable<*>} stream
+   */
   return async function * (stream) {
     let count = 0
 
