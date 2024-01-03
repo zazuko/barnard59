@@ -7,9 +7,6 @@
     "strict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "checkJs": true,
-    "noEmit": true
+    "allowSyntheticDefaultImports": true
   }
 }
