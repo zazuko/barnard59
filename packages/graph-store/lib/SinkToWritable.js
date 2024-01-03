@@ -1,9 +1,12 @@
-import { promisify } from 'util'
-import once from 'lodash/once.js'
+import { promisify } from 'node:util'
+import once from 'onetime'
 import defer from 'promise-the-world/defer.js'
 import { finished, Readable, Writable } from 'readable-stream'
 
 class SinkToWritable extends Writable {
+  /**
+   * @param {(readable: Readable) => Promise<void>} factory
+   */
   constructor(factory) {
     super({
       objectMode: true,
@@ -26,7 +29,7 @@ class SinkToWritable extends Writable {
         try {
           await isFinished
           await returned.promise
-        } catch (err) {
+        } catch (/** @type {any} */ err) {
           return callback(err)
         }
 
@@ -37,7 +40,7 @@ class SinkToWritable extends Writable {
     const init = once(async () => {
       try {
         await factory(readable)
-      } catch (err) {
+      } catch (/** @type {any} */ err) {
         return returned.reject(err)
       }
 
