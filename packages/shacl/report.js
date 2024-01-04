@@ -1,7 +1,13 @@
-import { Duplex } from 'stream'
+import { Duplex } from 'node:stream'
 import { isReadableStream, isStream } from 'is-stream'
 import SHACLValidator from 'rdf-validate-shacl'
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {import('rdf-js').DatasetCore} ds
+ * @param {number | undefined} maxViolations
+ * @param {AsyncIterable<any>} iterable
+ */
 async function * validate(ds, maxViolations, iterable) {
   let totalViolations = 0
 
@@ -26,9 +32,15 @@ async function * validate(ds, maxViolations, iterable) {
   }
 }
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {import('stream').Stream | { shape: import('stream').Stream, maxErrors?: number }} arg
+ * @return {Promise<Duplex>}
+ */
 export async function shacl(arg) {
   let shape
   let options
+  /** @type {number | undefined} */
   let maxViolations
   if (isStream(arg)) {
     shape = arg
