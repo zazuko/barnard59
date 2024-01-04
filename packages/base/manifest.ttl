@@ -114,3 +114,10 @@
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-base/toString.js#default>
   ].
+
+<streamValues> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "Stream values";
+  rdfs:comment "Creates a readable stream from the given array.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/Readable.js#from>
+  ].

@@ -12,10 +12,16 @@ class ToReadable extends Readable {
   }
 }
 
+/**
+ * @deprecated Use `base:streamValues` instead.
+ */
 function stringToReadable(str) {
   return new ToReadable(str)
 }
 
+/**
+ * @deprecated Use `base:streamValues` instead.
+ */
 function objectToReadable(obj) {
   return new ToReadable(obj, { objectMode: true })
 }

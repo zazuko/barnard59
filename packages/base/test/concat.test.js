@@ -1,6 +1,6 @@
 import { deepStrictEqual, strictEqual, rejects } from 'assert'
 import getStream, { array } from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import { Readable } from 'readable-stream'
 import concat, { object } from '../concat.js'
 

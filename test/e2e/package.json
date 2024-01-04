@@ -21,5 +21,8 @@
     "rdf-loader-code": "^2.1.1",
     "rdf-utils-fs": "^2.3.0",
     "string-to-stream": "^3.0.1"
+  },
+  "mocha": {
+    "loader": "ts-node/esm"
   }
 }
