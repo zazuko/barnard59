@@ -21,12 +21,19 @@ function createOutputStream(output = '-') {
   return createWriteStream(output)
 }
 
+/**
+ * @param {import('clownface').AnyPointer} ptr
+ * @param {string} basePath
+ * @param {Partial<import('../cli.js').CliOptions>} [options]
+ */
 export default async function (ptr, basePath, options = {}) {
   await tracer.startActiveSpan('barnard59 run', async span => {
     try {
       const { output, variables, enableBufferMonitor, logger, level, quiet } = options
 
-      span.setAttribute('iri', ptr.value)
+      if (ptr.value) {
+        span.setAttribute('iri', ptr.value)
+      }
 
       const outputStream = createOutputStream(output)
       const { finished: runFinished, pipeline } = await runner(ptr, env, {
@@ -45,7 +52,7 @@ export default async function (ptr, basePath, options = {}) {
       await runFinished
       // TODO: this has some issues
       await promisify(finished)(outputStream)
-    } catch (err) {
+    } catch (/** @type any */ err) {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       throw err

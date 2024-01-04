@@ -1,4 +1,5 @@
-import type { GraphPointer } from 'clownface'
+import type { DatasetCore, Term } from 'rdf-js'
+import type { GraphPointer, MultiPointer } from 'clownface'
 import { Logger } from 'winston'
 import { LoaderRegistry } from 'rdf-loaders-registry'
 import type { Environment } from 'barnard59-env'
@@ -12,7 +13,6 @@ import createStep from './step.js'
 import createVariables from './variables.js'
 
 function createPipelineContext(
-  ptr: GraphPointer,
   { basePath, context, logger, variables, error }: {
     basePath: string
     context: Pick<Context, 'env'>
@@ -50,7 +50,7 @@ type CreatePipeline = {
   context?: Context
 }
 
-function createPipeline(ptr: GraphPointer, init: CreatePipeline) {
+function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: CreatePipeline) {
   let context: Context = init.context || { env: init.env! } as Context
 
   let {
@@ -60,11 +60,11 @@ function createPipeline(ptr: GraphPointer, init: CreatePipeline) {
     variables = new VariableMapImpl(),
   } = init
 
-  if (!ptr.term || !ptr.dataset) {
+  if (!maybePtr.term || !maybePtr.dataset) {
     throw new Error('the given graph pointer is invalid')
   }
 
-  ptr = context.env.clownface({ dataset: ptr.dataset, term: ptr.term })
+  const ptr = context.env.clownface({ dataset: maybePtr.dataset, term: maybePtr.term })
 
   const onInit = async (pipeline: Pipeline) => {
     function error(err: Error) {
@@ -75,7 +75,7 @@ function createPipeline(ptr: GraphPointer, init: CreatePipeline) {
     }
 
     variables = await createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables })
-    context = await createPipelineContext(ptr, { basePath, context, logger, variables, error })
+    context = await createPipelineContext({ basePath, context, logger, variables, error })
 
     logVariables(ptr, context, variables)
 
@@ -99,7 +99,7 @@ function createPipeline(ptr: GraphPointer, init: CreatePipeline) {
   return new Pipeline({ basePath, loaderRegistry, logger, onInit, ptr, ...metadata(context.env, ptr) })
 }
 
-function logVariables(ptr: GraphPointer, { env, logger }: Pick<Context, 'env' | 'logger'>, variables: VariableMap) {
+function logVariables(ptr: MultiPointer, { env, logger }: Pick<Context, 'env' | 'logger'>, variables: VariableMap) {
   if (variables.size) {
     for (const [key, value] of variables) {
       let level : 'verbose' | 'info' = 'verbose'

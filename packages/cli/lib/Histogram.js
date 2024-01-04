@@ -3,18 +3,30 @@ import { promisify } from 'util'
 import padStart from 'lodash/padStart.js'
 import range from 'lodash/range.js'
 
+/**
+ * @typedef {Object} HistogramData
+ */
+
 class Histogram {
   constructor({ max = 100, width = 40 } = {}) {
+    /** @type {number} */
     this.max = max
+    /** @type {number} */
     this.width = width
   }
 
+  /**
+   * @param {number} value
+   */
   bar(value) {
     const pos = Math.round(value / this.max * this.width)
 
     return range(this.width).map(i => pos > i ? '=' : ' ').join('')
   }
 
+  /**
+   * @param {HistogramData} data
+   */
   generate(data) {
     const maxTextLength = Object.keys(data).reduce((max, text) => Math.max(max, text.length), 0)
 
@@ -26,6 +38,9 @@ class Histogram {
     }).join('\n')
   }
 
+  /**
+   * @param {HistogramData} data
+   */
   async draw(data) {
     if (this.height) {
       readline.moveCursor(process.stderr, 0, -this.height)

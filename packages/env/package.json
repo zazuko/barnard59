@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@zazuko/env-node": "^1.0.3",
-    "@zazuko/vocabulary-extras-builders": "^1.1.0"
+    "@zazuko/vocabulary-extras-builders": "^1.1.3"
   },
   "repository": {
     "type": "git",

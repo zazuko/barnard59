@@ -23,6 +23,9 @@ const sdk = new NodeSDK({
   }),
 })
 
+/**
+ * @param {any} [err]
+ */
 const onError = async err => {
   // Remove signal handler to quit immediately when receiving multiple
   // SIGINT/SIGTEM
@@ -82,7 +85,7 @@ const onError = async err => {
       interval: otelMetricsInterval,
     })
   }
-
+  // @ts-ignore
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel[otelDebug])
 
   // Automatic resource detection is disabled because the default AWS and

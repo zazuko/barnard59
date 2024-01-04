@@ -9,6 +9,12 @@ import { findUp } from 'find-up'
 
 const packagePattern = /^barnard59-(.+)$/
 
+/**
+ * @param {object} [options]
+ * @param {string} [options.basePath]
+ * @param {boolean} [options.all]
+ * @returns {AsyncGenerator<{ name: string, manifest: import('clownface').AnyPointer, version: string }, void, unknown>}
+ */
 export default async function * ({ basePath = import.meta.url, all = false } = {}) {
   const require = module.createRequire(basePath)
   const hasManifest = canRequireManifest.bind(null, require)
@@ -28,14 +34,21 @@ export default async function * ({ basePath = import.meta.url, all = false } = {
   for (const pkg of packages) {
     const { version } = require(`${pkg}/package.json`)
     const dataset = await rdf.dataset().import(rdf.fromFile(require.resolve(`${pkg}/manifest.ttl`)))
-    yield {
-      name: pkg.match(packagePattern)[1],
-      manifest: rdf.clownface({ dataset }),
-      version,
+    const matched = pkg.match(packagePattern)
+    if (matched) {
+      yield {
+        name: matched[1],
+        manifest: rdf.clownface({ dataset }),
+        version,
+      }
     }
   }
 }
 
+/**
+ * @param {boolean} [all]
+ * @return {Promise<string[]>}
+ */
 async function getInstalledPackages(all) {
   if (isInstalledGlobally) {
     let npmList = 'npm list -g'
@@ -54,9 +67,17 @@ async function getInstalledPackages(all) {
   }
 
   const packagePath = await findUp(['package-lock.json', 'yarn.lock'])
-  return getInstalledPackage('barnard59-*', dirname(packagePath)).map(pkg => pkg.name)
+  if (!packagePath) {
+    return []
+  }
+  return (getInstalledPackage('barnard59-*', dirname(packagePath)) || []).map(pkg => pkg.name)
 }
 
+/**
+ * @param {NodeRequire} require
+ * @param {string} [pkg]
+ * @returns {boolean}
+ */
 function canRequireManifest(require, pkg) {
   try {
     require.resolve(`${pkg}/manifest.ttl`)

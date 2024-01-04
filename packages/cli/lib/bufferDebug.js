@@ -1,8 +1,18 @@
+// @ts-nocheck
 import stream from 'readable-stream'
 import Histogram from './Histogram.js'
 
 const { finished } = stream
 
+/**
+ * @param {{
+ *   index: number,
+ *   mode: string,
+ *   state: import('readable-stream').ReadableState | import('readable-stream').WritableState,
+ *   step: import('barnard59-core').Step
+ * }} args
+ * @return {{value: (number|number), key: string}}
+ */
 function bufferStatePair({ index, mode, state, step }) {
   const key = `[${index}] (${mode}) ${step.ptr.value} (${state.length}/${state.highWaterMark})`
   const value = state.length > 0 ? Math.round(state.length / state.highWaterMark * 100.0) : 0
@@ -10,6 +20,10 @@ function bufferStatePair({ index, mode, state, step }) {
   return { key, value }
 }
 
+/**
+ * @param {import('barnard59-core').Pipeline} pipeline
+ * @returns {Record<string, number> | undefined}
+ */
 function bufferInfo(pipeline) {
   const steps = pipeline.children
 
@@ -17,7 +31,7 @@ function bufferInfo(pipeline) {
     return
   }
 
-  return steps.reduce((data, step, index) => {
+  return steps.reduce((/** @type {Record<string, number>} */ data, step, index) => {
     if (step.stream._writableState) {
       const { key, value } = bufferStatePair({
         index,
@@ -44,6 +58,10 @@ function bufferInfo(pipeline) {
   }, {})
 }
 
+/**
+ * @param {import('barnard59-core').Pipeline} pipeline
+ * @param {{ interval?: number }} [options]
+ */
 function bufferDebug(pipeline, { interval = 10 } = {}) {
   let done = false
 

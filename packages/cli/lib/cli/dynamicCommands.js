@@ -1,6 +1,7 @@
-import module from 'module'
+import module from 'node:module'
 import rdf from 'barnard59-env'
 import { program } from 'commander'
+import { isLiteral } from 'is-graph-pointer'
 import { parse } from '../pipeline.js'
 import runAction from './runAction.js'
 import { combine } from './options.js'
@@ -8,11 +9,22 @@ import { combine } from './options.js'
 const FALSE = rdf.literal('false', rdf.ns.xsd.boolean)
 const require = module.createRequire(import.meta.url)
 
+/**
+ * @typedef {{
+ *   name: string | undefined,
+ *   manifest: import('clownface').AnyPointer,
+ *   version: string,
+ * }} Manifest
+ */
+
+/**
+ * @param {AsyncIterable<Manifest>} manifests
+ * @return {AsyncGenerator<import('commander').Command, void, *>}
+ */
 export async function * discoverCommands(manifests) {
-  for await (const { name, manifest, version } of manifests) {
+  for await (const { name, manifest, version = '0.0.0' } of manifests) {
     const commands = manifest
       .has(rdf.ns.rdf.type, rdf.ns.b59.CliCommand)
-      .has(rdf.ns.b59.command)
       .toArray()
 
     if (!commands.length) {
@@ -22,14 +34,22 @@ export async function * discoverCommands(manifests) {
     const command = program.command(`${name}`).version(version)
 
     for (const commandPtr of commands) {
-      const source = commandPtr.out(rdf.ns.b59.source).value
-      const pipeline = commandPtr.out(rdf.ns.b59.pipeline).value
-      const { basePath, ptr } = await parse(require.resolve(source), pipeline)
+      const source = commandPtr.out(rdf.ns.b59.source)
+      const pipeline = commandPtr.out(rdf.ns.b59.pipeline)
+      const commandName = commandPtr.out(rdf.ns.b59.command).value
+      const description = commandPtr.out(rdf.ns.rdfs.label).value
 
-      const pipelineSubCommand = command
-        .command(commandPtr.out(rdf.ns.b59.command).value)
-      if (commandPtr.out(rdf.ns.rdfs.label).value) {
-        pipelineSubCommand.description(commandPtr.out(rdf.ns.rdfs.label).value)
+      if (!isLiteral(source) || !commandName) {
+        // eslint-disable-next-line no-console
+        console.error(`WARN: Skipping command <${commandPtr.value}> because it is not valid`)
+        continue
+      }
+
+      const { basePath, ptr } = await parse(require.resolve(source.value), pipeline.value)
+
+      const pipelineSubCommand = command.command(commandName)
+      if (description) {
+        pipelineSubCommand.description(description)
       }
 
       const variables = getAnnotatedVariables(ptr)
@@ -56,6 +76,10 @@ export async function * discoverCommands(manifests) {
   }
 }
 
+/**
+ * @param {import('clownface').GraphPointer} ptr
+ * @returns {Array<{ name: string | undefined, description: string | undefined, required: boolean, defaultValue: string | undefined }>}
+ */
 function getAnnotatedVariables(ptr) {
   return ptr
     .out(rdf.ns.p.variables)

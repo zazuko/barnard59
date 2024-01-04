@@ -13,6 +13,8 @@ const levels = {
   trace: 5,
 }
 
+export type LogLevels = keyof typeof levels
+
 declare module 'winston' {
   export interface Logger {
     error: winston.LeveledLogMethod
