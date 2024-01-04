@@ -5,7 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prebuild": "rimraf *.d.ts **/*.d.ts",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,7 @@
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",
     "@tpluscode/rdf-string": "^1.1.0",
+    "@types/rdf-validate-shacl": "^0.4.6",
     "assert-throws-async": "^3.0.0",
     "barnard59-core": "^5.2.0",
     "barnard59-env": "^1.2.0",
