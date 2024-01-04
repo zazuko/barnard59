@@ -7,6 +7,22 @@ import discoverManifests from './discoverManifests.js'
 import { parse } from './pipeline.js'
 import { combine } from './cli/options.js'
 
+/**
+ * @typedef {{
+ *   output?: string
+ *   logger?: import('winston').Logger,
+ *   variables: Map<string, string>,
+ *   variableAll: boolean,
+ *   verbose: number,
+ *   quiet: boolean,
+ *   enableBufferMonitor: boolean,
+ *   otelDebug: keyof typeof import('@opentelemetry/api').DiagLogLevel,
+ *   level: import('barnard59-core/lib/defaultLogger.js').LogLevels,
+ *   otelTracesExporter: 'otlp' | 'none',
+ *   otelMetricsExporter: 'otlp' | 'none',
+ * }} CliOptions
+ */
+
 program
   .addOption(commonOptions.variable)
   .addOption(commonOptions.variableAll)

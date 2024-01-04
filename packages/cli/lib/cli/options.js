@@ -1,6 +1,10 @@
 import { program } from 'commander'
 import { defaultLogger } from 'barnard59-core'
 
+/**
+ * @param {import('../cli.js').CliOptions & { variable: Map<string, string >}} options
+ * @returns {import('../cli.js').CliOptions}
+ */
 export function combine({ variable: commandVars, ...options }) {
   const { variable: programVars, ...programOpts } = program.opts()
   const combinedOptions = {
@@ -27,6 +31,7 @@ export function combine({ variable: commandVars, ...options }) {
     logger: defaultLogger({ level, quiet }),
     ...combinedOptions,
     variables,
+    // @ts-ignore
     level,
   }
 }

@@ -3,14 +3,14 @@ import { createPipeline, defaultLogger, run } from 'barnard59-core'
 import tracer from './lib/tracer.js'
 
 /**
- * @param {import('clownface').GraphPointer} ptr
+ * @param {{ term?: import('@rdfjs/types').Term, dataset?: import('@rdfjs/types').DatasetCore, value?: string }} ptr
  * @param {import('barnard59-env').Environment} env
  * @param {object} options
  * @param {string} options.basePath
  * @param {import('stream').Writable} options.outputStream
  * @param {import('winston').Logger} [options.logger]
  * @param {Map<string, unknown>} [options.variables]
- * @param {"error" | "info" | "debug"} [options.level]
+ * @param {import('barnard59-core/lib/defaultLogger.js').LogLevels} [options.level]
  * @param {boolean} [options.quiet]
  */
 function create(ptr, env, { basePath, outputStream, logger, variables = new Map(), level = 'error', quiet }) {
