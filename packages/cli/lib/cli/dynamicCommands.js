@@ -1,7 +1,7 @@
 import module from 'node:module'
 import rdf from 'barnard59-env'
 import { program } from 'commander'
-import { isNamedNode } from 'is-graph-pointer'
+import { isLiteral } from 'is-graph-pointer'
 import { parse } from '../pipeline.js'
 import runAction from './runAction.js'
 import { combine } from './options.js'
@@ -39,13 +39,13 @@ export async function * discoverCommands(manifests) {
       const commandName = commandPtr.out(rdf.ns.b59.command).value
       const description = commandPtr.out(rdf.ns.rdfs.label).value
 
-      if (!isNamedNode(source) || !commandName || !isNamedNode(pipeline)) {
+      if (!isLiteral(source) || !commandName) {
         // eslint-disable-next-line no-console
         console.error(`WARN: Skipping command <${commandPtr.value}> because it is not valid`)
         continue
       }
 
-      const { basePath, ptr } = await parse(require.resolve(source.value), pipeline.term)
+      const { basePath, ptr } = await parse(require.resolve(source.value), pipeline.value)
 
       const pipelineSubCommand = command.command(commandName)
       if (description) {
