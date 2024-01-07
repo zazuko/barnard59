@@ -36,7 +36,7 @@
     "@types/duplex-to": "^1.0.3",
     "@types/promise-the-world": "^1.0.6",
     "@types/readable-stream": "^4.0.10",
-    "@types/sparql-http-client": "^2.2.13",
+    "@types/sparql-http-client": "^2.2.14",
     "@zazuko/env": "^1.9.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
