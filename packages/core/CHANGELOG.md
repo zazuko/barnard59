@@ -1,5 +1,17 @@
 # barnard59-core
 
+## 5.3.0
+
+### Minor Changes
+
+- ba328de: Support steps being implemented as async generators
+
+### Patch Changes
+
+- 70b50da: Fix: wrong `Context` type used for `Operation`
+- a172b45: Relax pointer arguments
+- 86131dc: `Pipeline#init` made public
+
 ## 5.2.0
 
 ### Minor Changes

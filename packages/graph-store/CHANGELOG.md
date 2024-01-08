@@ -1,5 +1,18 @@
 # barnard59-graph-store
 
+## 5.1.0
+
+### Minor Changes
+
+- 4d7b620: Bundle TypeScript declarations
+
+### Patch Changes
+
+- Updated dependencies [0c0245d]
+- Updated dependencies [464b09e]
+- Updated dependencies [ba328de]
+  - barnard59-base@2.3.0
+
 ## 5.0.0
 
 ### Major Changes
