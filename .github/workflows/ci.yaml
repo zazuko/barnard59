@@ -79,6 +79,19 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
+  smoke-test-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+      - run: npx barnard59 run test/e2e/definitions/file-loader.ttl
+      - run: npx barnard59 run test/e2e/definitions/foreach/with-handler.ttl
+      - run: npx barnard59 run test/e2e/definitions/foreach/with-variable.ttl --variable pattern="test/e2e/definitions/foreach/*"
+      - run: npx barnard59 run test/e2e/definitions/foreach/csv-duplicate.ttl --variable filename=test/e2e/data/test.csv
+      - run: npx barnard59 run test/e2e/definitions/world-clock/async.ttl
+      - run: npx barnard59 run test/e2e/definitions/world-clock/file.ttl
+      - run: npx barnard59 run test/e2e/definitions/world-clock/node.ttl
+
   global-installation:
     runs-on: ubuntu-latest
     steps:

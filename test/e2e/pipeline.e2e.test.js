@@ -1,4 +1,4 @@
-import { deepStrictEqual } from 'assert'
+import { deepStrictEqual } from 'node:assert'
 import getStream from 'get-stream'
 import nock from 'nock'
 import createPipeline from 'barnard59-core/lib/factory/pipeline.js'
@@ -33,8 +33,8 @@ describe('Pipeline', () => {
   })
 
   it('should load code using node: scheme', async () => {
-    const ptr = await loadPipelineDefinition('world-clock/node')
-    const pipeline = await createPipeline(ptr, { env })
+    const { ptr, basePath } = await loadPipelineDefinition('world-clock/node')
+    const pipeline = await createPipeline(ptr, { env, basePath })
 
     const out = await getStream(pipeline.stream)
 
@@ -42,8 +42,8 @@ describe('Pipeline', () => {
   })
 
   it('should load code using file: scheme', async () => {
-    const ptr = await loadPipelineDefinition('world-clock/file')
-    const pipeline = await createPipeline(ptr, { env, basePath: process.cwd() })
+    const { ptr, basePath } = await loadPipelineDefinition('world-clock/file')
+    const pipeline = await createPipeline(ptr, { env, basePath })
 
     const out = await getStream(pipeline.stream)
 
@@ -51,13 +51,13 @@ describe('Pipeline', () => {
   })
 
   it('should load code using async loaders', async () => {
-    const ptr = await loadPipelineDefinition('world-clock/async')
+    const { ptr, basePath } = await loadPipelineDefinition('world-clock/async')
     const loaderRegistry = defaultLoaderRegistry(env)
 
     promisedEcmaScriptLoader.register(loaderRegistry)
     promisedUrlLoader.register(loaderRegistry)
 
-    const pipeline = await createPipeline(ptr, { env, loaderRegistry })
+    const pipeline = await createPipeline(ptr, { env, loaderRegistry, basePath })
 
     const out = await getStream(pipeline.stream)
 
@@ -66,10 +66,10 @@ describe('Pipeline', () => {
 
   it('should load file contents using loader', async () => {
     // given
-    const ptr = await loadPipelineDefinition('file-loader')
+    const { ptr, basePath } = await loadPipelineDefinition('file-loader')
     const pipeline = await createPipeline(ptr, {
       env,
-      basePath: process.cwd(),
+      basePath,
     })
 
     // when
@@ -82,10 +82,10 @@ describe('Pipeline', () => {
 
   it('should be set to fail from sub-pipeline', async () => {
     // given
-    const ptr = await loadPipelineDefinition('sub-pipeline-error')
+    const { ptr, basePath } = await loadPipelineDefinition('sub-pipeline-error')
     const pipeline = await createPipeline(ptr, {
       env,
-      basePath: process.cwd(),
+      basePath,
     })
 
     // when
@@ -99,10 +99,10 @@ describe('Pipeline', () => {
 
   it('works with async generator steps', async () => {
     // given
-    const ptr = await loadPipelineDefinition('limit-offset')
+    const { ptr, basePath } = await loadPipelineDefinition('limit-offset')
     const pipeline = await createPipeline(ptr, {
       env,
-      basePath: process.cwd(),
+      basePath,
     })
 
     // when
