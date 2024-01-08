@@ -84,6 +84,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
+      - run: npm ci
       - run: npx barnard59 run test/e2e/definitions/file-loader.ttl
       - run: npx barnard59 run test/e2e/definitions/foreach/with-handler.ttl
       - run: npx barnard59 run test/e2e/definitions/foreach/with-variable.ttl --variable pattern="test/e2e/definitions/foreach/*"
