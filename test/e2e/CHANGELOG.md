@@ -1,5 +1,25 @@
 # barnard59-test-e2e
 
+## 0.1.0
+
+### Minor Changes
+
+- 32fa9c7: Make the e2e tests reflect real CLI usage more closely by setting `basePath` to be the actual pipeline path
+
+### Patch Changes
+
+- Updated dependencies [86131dc]
+- Updated dependencies [ba328de]
+- Updated dependencies [0c0245d]
+- Updated dependencies [70b50da]
+- Updated dependencies [464b09e]
+- Updated dependencies [ba328de]
+- Updated dependencies [a172b45]
+- Updated dependencies [86131dc]
+  - barnard59-env@1.2.1
+  - barnard59-core@5.3.0
+  - barnard59-base@2.3.0
+
 ## 0.0.5
 
 ### Patch Changes
