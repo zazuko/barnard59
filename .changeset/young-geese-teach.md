@@ -1,5 +1,6 @@
 ---
-"barnard59-base": patch
+"barnard59-base": minor
+"barnard59-cube": patch
 ---
 
 added batch operation
