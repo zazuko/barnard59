@@ -5,7 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prebuild": "rimraf *.d.ts lib/*.d.ts",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -21,7 +24,7 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "duplex-to": "^1.0.0",
-    "lodash": "^4.17.21",
+    "onetime": "^6.0.0",
     "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
     "sparql-http-client": "^2.4.0",
@@ -30,6 +33,10 @@
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^2.0.0",
+    "@types/duplex-to": "^1.0.3",
+    "@types/promise-the-world": "^1.0.6",
+    "@types/readable-stream": "^4.0.10",
+    "@types/sparql-http-client": "^2.2.14",
     "@zazuko/env": "^1.9.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
