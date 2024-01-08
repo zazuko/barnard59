@@ -17,9 +17,9 @@ const knownOperations = rdf.termMap([
 ])
 
 const check = async name => {
-  const pipeline = await loadPipelineDefinition(name, { desugar: false })
+  const { ptr } = await loadPipelineDefinition(name, { desugar: false })
 
-  const result = await desugar(pipeline.dataset, { knownOperations })
+  const result = await desugar(ptr.dataset, { knownOperations })
 
   approvals.verify(dirname, name, result.toCanonical())
 }

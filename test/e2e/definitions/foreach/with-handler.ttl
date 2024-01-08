@@ -10,7 +10,7 @@
   p:steps [
     p:stepList
     (
-      [ test:iterateDirectory ("definitions/foreach")]
+      [ test:iterateDirectory (".")]
       [ base:forEach ( <Print> "file" ) ]
     )
   ] .

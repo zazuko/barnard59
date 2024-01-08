@@ -109,7 +109,7 @@ async function fileToDataset(filename) {
  */
 export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
-  const ptr = findPipeline(await desugar(dataset, { logger, pipelinePath: filename }), iri)
+  const ptr = findPipeline(await desugar(dataset, { logger, pipelinePath: resolve(filename) }), iri)
 
   return {
     basePath: resolve(dirname(filename)),

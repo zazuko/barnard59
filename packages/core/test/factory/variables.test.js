@@ -12,7 +12,7 @@ const context = { env }
 
 describe('factory/variables', () => {
   it('should return a VariableMap', async () => {
-    const definition = await loadPipelineDefinition('plain')
+    const { ptr: definition } = await loadPipelineDefinition('plain')
     const ptr = definition.node(ns.ex('')).out(ns.p.variables)
 
     const variables = await createVariables(ptr, {
@@ -25,7 +25,7 @@ describe('factory/variables', () => {
   })
 
   it('should load "required" annotation', async () => {
-    const definition = await loadPipelineDefinition('variables')
+    const { ptr: definition } = await loadPipelineDefinition('variables')
     const ptr = definition.node(ns.ex.inline).out(ns.p.variables)
 
     const variables = await createVariables(ptr, {
@@ -38,7 +38,7 @@ describe('factory/variables', () => {
   })
 
   it('should load the given inline variables', async () => {
-    const definition = await loadPipelineDefinition('variables')
+    const { ptr: definition } = await loadPipelineDefinition('variables')
     const ptr = definition.node(ns.ex.inline).out(ns.p.variables)
 
     const variables = await createVariables(ptr, {
@@ -51,7 +51,7 @@ describe('factory/variables', () => {
   })
 
   it('should load the given variables sets', async () => {
-    const definition = await loadPipelineDefinition('variables')
+    const { ptr: definition } = await loadPipelineDefinition('variables')
     const ptr = definition.node(ns.ex.multiset).out(ns.p.variables)
 
     const variables = await createVariables(ptr, {

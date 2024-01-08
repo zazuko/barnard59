@@ -15,7 +15,7 @@ describe('factory/arguments', () => {
   })
 
   it('should build key-value pair arguments', async () => {
-    const definition = await loadPipelineDefinition('arguments')
+    const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.keyValues).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const args = await createArguments(ptr, {
@@ -27,7 +27,7 @@ describe('factory/arguments', () => {
   })
 
   it('should build key-value pair arguments with undefined variable', async () => {
-    const definition = await loadPipelineDefinition('arguments')
+    const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.keyValueMissingVar).out(ns.p.steps).out(ns.p.stepList).list()][0]
     const variables = new VariableMap()
     variables.set('a', undefined, { optional: true })
@@ -42,7 +42,7 @@ describe('factory/arguments', () => {
   })
 
   it('should build list arguments', async () => {
-    const definition = await loadPipelineDefinition('arguments')
+    const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.list).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const args = await createArguments(ptr, {
@@ -54,7 +54,7 @@ describe('factory/arguments', () => {
   })
 
   it('should build list arguments with undefined variable', async () => {
-    const definition = await loadPipelineDefinition('arguments')
+    const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.listMissingVar).out(ns.p.steps).out(ns.p.stepList).list()][0]
     const variables = new VariableMap()
     variables.set('a', undefined, { optional: true })
@@ -69,7 +69,7 @@ describe('factory/arguments', () => {
   })
 
   it('should forward variables to the loader', async () => {
-    const definition = await loadPipelineDefinition('arguments')
+    const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.variable).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const args = await createArguments(ptr, {

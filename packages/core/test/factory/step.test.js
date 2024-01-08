@@ -18,7 +18,7 @@ describe('factory/step', () => {
   })
 
   it('should load the given step', async () => {
-    const definition = await loadPipelineDefinition('plain')
+    const { ptr: definition } = await loadPipelineDefinition('plain')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const step = await createStep(ptr, {
@@ -32,7 +32,7 @@ describe('factory/step', () => {
   })
 
   it('should forward errors thrown by the loader', async () => {
-    const definition = await loadPipelineDefinition('step-operation-missing-error')
+    const { ptr: definition } = await loadPipelineDefinition('step-operation-missing-error')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     await rejects(async () => {
@@ -51,7 +51,7 @@ describe('factory/step', () => {
   })
 
   it('should attach step to the context', async () => {
-    const definition = await loadPipelineDefinition('step-ptr')
+    const { ptr: definition } = await loadPipelineDefinition('step-ptr')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const step = await createStep(ptr, {

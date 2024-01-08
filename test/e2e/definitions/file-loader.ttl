@@ -23,6 +23,6 @@ _:openSelf
     """^^code:EcmaScript ;
   code:arguments
     (
-      "definitions/file-loader.ttl"^^p:FileContents
+      "file-loader.ttl"^^p:FileContents
     )
 .

@@ -8,7 +8,7 @@ const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url)
 
 describe('run', () => {
   it('should emit an error if an error in the pipeline occurs', async () => {
-    const ptr = await loadPipelineDefinition('error')
+    const { ptr } = await loadPipelineDefinition('error')
     const run = await runner(ptr, env, {
       outputStream: process.stdout,
       basePath: resolve('test'),

@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import * as url from 'url'
+import { resolve, dirname } from 'node:path'
+import * as url from 'node:url'
 import rdf from '@zazuko/env'
 import fromFile from 'rdf-utils-fs/fromFile.js'
 import namespace from '@rdfjs/namespace'
@@ -20,6 +20,9 @@ export function pipelineDefinitionLoader(baseUrl, path = 'support/definitions') 
       dataset = await desugarDefinition(dataset, { logger, pipelinePath: filename })
     }
 
-    return rdf.clownface({ dataset, term })
+    return {
+      ptr: rdf.clownface({ dataset, term }),
+      basePath: dirname(filename),
+    }
   }
 }
