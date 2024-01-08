@@ -20,7 +20,7 @@ describe('Pipeline', () => {
   })
 
   it('should process the given pipeline definition', async () => {
-    const ptr = await loadPipelineDefinition('read')
+    const { ptr } = await loadPipelineDefinition('read')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -30,7 +30,7 @@ describe('Pipeline', () => {
   })
 
   it('should support writable pipelines', async () => {
-    const ptr = await loadPipelineDefinition('write')
+    const { ptr } = await loadPipelineDefinition('write')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -42,7 +42,7 @@ describe('Pipeline', () => {
   })
 
   it('should support nested pipelines', async () => {
-    const ptr = await loadPipelineDefinition('nested')
+    const { ptr } = await loadPipelineDefinition('nested')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -52,7 +52,7 @@ describe('Pipeline', () => {
   })
 
   it('should emit error when nested pipeline step errors immediately', async () => {
-    const ptr = await loadPipelineDefinition('nestedErrorBeforeInit')
+    const { ptr } = await loadPipelineDefinition('nestedErrorBeforeInit')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -62,7 +62,7 @@ describe('Pipeline', () => {
   })
 
   it('should support nested writable pipelines', async () => {
-    const ptr = await loadPipelineDefinition('nested-write')
+    const { ptr } = await loadPipelineDefinition('nested-write')
     const result = []
 
     const pipeline = createPipeline(ptr, {
@@ -77,7 +77,7 @@ describe('Pipeline', () => {
   })
 
   it('should assign the pipeline stream to the .stream property', async () => {
-    const ptr = await loadPipelineDefinition('nested')
+    const { ptr } = await loadPipelineDefinition('nested')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -85,7 +85,7 @@ describe('Pipeline', () => {
   })
 
   it('should assign the pipeline to the .pipeline property of the stream', async () => {
-    const ptr = await loadPipelineDefinition('nested')
+    const { ptr } = await loadPipelineDefinition('nested')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -93,7 +93,7 @@ describe('Pipeline', () => {
   })
 
   it('should have a basePath string property', async () => {
-    const ptr = await loadPipelineDefinition('read')
+    const { ptr } = await loadPipelineDefinition('read')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -101,7 +101,7 @@ describe('Pipeline', () => {
   })
 
   it('should have a context object property', async () => {
-    const ptr = await loadPipelineDefinition('read')
+    const { ptr } = await loadPipelineDefinition('read')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -109,7 +109,7 @@ describe('Pipeline', () => {
   })
 
   it('should emit an error if the Pipeline contains no steps', async () => {
-    const ptr = await loadPipelineDefinition('empty')
+    const { ptr } = await loadPipelineDefinition('empty')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -119,7 +119,7 @@ describe('Pipeline', () => {
   })
 
   it('should have a ptr clownface property', async () => {
-    const ptr = await loadPipelineDefinition('read')
+    const { ptr } = await loadPipelineDefinition('read')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -129,7 +129,7 @@ describe('Pipeline', () => {
   })
 
   it('should have a ptr variables Map property', async () => {
-    const ptr = await loadPipelineDefinition('read')
+    const { ptr } = await loadPipelineDefinition('read')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -137,7 +137,7 @@ describe('Pipeline', () => {
   })
 
   it('should emit an error if an operation returns an invalid stream', async () => {
-    const ptr = await loadPipelineDefinition('step-invalid')
+    const { ptr } = await loadPipelineDefinition('step-invalid')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -147,7 +147,7 @@ describe('Pipeline', () => {
   })
 
   it('should emit an error if an operation rejects with error', async () => {
-    const ptr = await loadPipelineDefinition('step-operation-error')
+    const { ptr } = await loadPipelineDefinition('step-operation-error')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -157,7 +157,7 @@ describe('Pipeline', () => {
   })
 
   it('should emit step stream errors', async () => {
-    const ptr = await loadPipelineDefinition('step-stream-error')
+    const { ptr } = await loadPipelineDefinition('step-stream-error')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -167,7 +167,7 @@ describe('Pipeline', () => {
   })
 
   it('should catch and emit step stream errors', async () => {
-    const ptr = await loadPipelineDefinition('step-stream-throw')
+    const { ptr } = await loadPipelineDefinition('step-stream-throw')
 
     const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -178,7 +178,7 @@ describe('Pipeline', () => {
 
   describe('plain Pipeline', () => {
     it('should emit an end event', async () => {
-      const ptr = await loadPipelineDefinition('plain')
+      const { ptr } = await loadPipelineDefinition('plain')
 
       const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -192,7 +192,7 @@ describe('Pipeline', () => {
 
   describe('readable Pipeline', () => {
     it('should emit an end event', async () => {
-      const ptr = await loadPipelineDefinition('read')
+      const { ptr } = await loadPipelineDefinition('read')
 
       const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -204,7 +204,7 @@ describe('Pipeline', () => {
     })
 
     it('should emit an error if the last step doesn\'t have a readable interface', async () => {
-      const ptr = await loadPipelineDefinition('read-step-not-read')
+      const { ptr } = await loadPipelineDefinition('read-step-not-read')
 
       const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 
@@ -216,7 +216,7 @@ describe('Pipeline', () => {
 
   describe('writeable Pipeline', () => {
     it('should emit an finish event', async () => {
-      const ptr = await loadPipelineDefinition('write')
+      const { ptr } = await loadPipelineDefinition('write')
 
       const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
 

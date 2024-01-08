@@ -16,7 +16,7 @@ describe('factory/operation', () => {
   })
 
   it('should load the given operation', async () => {
-    const definition = await loadPipelineDefinition('plain')
+    const { ptr: definition } = await loadPipelineDefinition('plain')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0].out(ns.code.implementedBy)
 
     const operation = await createOperation(ptr, {
