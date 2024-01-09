@@ -1,6 +1,6 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
-@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/raw/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -23,7 +23,7 @@ _:cube a p:Variable ;
       p:stepList
         (
           _:queryObservations
-          [ ntriples:serialize () ]
+          # [ ntriples:serialize () ]
         )
     ]
 .

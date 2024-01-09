@@ -4,10 +4,17 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <construct> a p:Operation, p:ReadableObjectMode;
-  rdfs:label "SPARQL Select";
+  rdfs:label "SPARQL Construct";
   rdfs:comment "Runs the given CONSTRUCT query against the given endpoint parses the result.";
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-sparql/construct.js#default>
+  ].
+
+<raw/construct> a p:Operation, p:Readable;
+  rdfs:label "SPARQL Construct with raw response";
+  rdfs:comment "Runs the given CONSTRUCT query against the given endpoint returning the raw response.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-sparql/constructRaw.js#default>
   ].
 
 <select> a p:Operation, p:ReadableObjectMode;
