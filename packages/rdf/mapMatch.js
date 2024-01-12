@@ -18,7 +18,7 @@ import PatternMatcher from './lib/PatternMatcher.js'
  * @template T
  */
 function mapMatch({ map, subject, predicate, object, graph }) {
-  const matcher = new PatternMatcher({ subject, predicate, object, graph })
+  const matcher = new PatternMatcher(this.env, { subject, predicate, object, graph })
 
   return new Transform({
     objectMode: true,

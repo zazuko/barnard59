@@ -1,14 +1,13 @@
 import rdf from 'barnard59-env'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
-import * as ns from '../namespaces.js'
-import { xsd } from '../namespaces.js'
+import toNamedNode from '../toNamedNode.js'
 import { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms } from './datasetClasses.js'
 import { namedDateLiterals } from './namedDateLiterals.js'
 
 function subjectsWithDatasetType(dataset, classes) {
   const result = rdf.termSet()
   ;[...dataset]
-    .filter(quad => (quad.predicate.equals(ns.rdf.type) && classes.has(quad.object)))
+    .filter(quad => (quad.predicate.equals(rdf.ns.rdf.type) && classes.has(quad.object)))
     .forEach(quad => {
       result.add(quad.subject)
     })
@@ -32,11 +31,7 @@ function updateOrInsert(dataset, datasetClasses, predicate, object) {
 }
 
 function toDateLiteral(item) {
-  return typeof item === 'string' ? rdf.literal(item, xsd.dateTime) : item
-}
-
-function toNamedNode(item) {
-  return typeof item === 'string' ? rdf.namedNode(item) : item
+  return typeof item === 'string' ? rdf.literal(item, rdf.ns.xsd.dateTime) : item
 }
 
 function resolveNamedDate(value, metadata) {
@@ -56,20 +51,20 @@ async function applyOptions(quadStream, metadata = {}, options = {}) {
   if (options.dateModified) {
     const dateModifiedLiteral = resolveNamedDate(options.dateModified, metadata)
 
-    dataset = updateOrInsert(dataset, wellKnownDatasetClassesWithDcterms, ns.dcterms.modified, dateModifiedLiteral)
-    dataset = updateOrInsert(dataset, wellKnownDatasetClasses, ns.schema.dateModified, dateModifiedLiteral)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClassesWithDcterms, rdf.ns.dcterms.modified, dateModifiedLiteral)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClasses, rdf.ns.schema.dateModified, dateModifiedLiteral)
   }
 
   // dateCreated
   if (options.dateCreated) {
     const dateCreatedLiteral = resolveNamedDate(options.dateCreated, metadata)
-    dataset = updateOrInsert(dataset, wellKnownDatasetClassesWithDcterms, ns.dcterms.created, dateCreatedLiteral)
-    dataset = updateOrInsert(dataset, wellKnownDatasetClasses, ns.schema.dateCreated, dateCreatedLiteral)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClassesWithDcterms, rdf.ns.dcterms.created, dateCreatedLiteral)
+    dataset = updateOrInsert(dataset, wellKnownDatasetClasses, rdf.ns.schema.dateCreated, dateCreatedLiteral)
   }
 
   // Sets graph
   if (options.graph) {
-    return rdf.dataset([...dataset].map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(options.graph))))
+    return rdf.dataset([...dataset].map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(rdf, options.graph))))
   }
 
   return dataset

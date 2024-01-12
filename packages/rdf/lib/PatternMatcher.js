@@ -1,5 +1,3 @@
-import rdf from 'barnard59-env'
-
 /**
  * @typedef {'subject' | 'predicate' | 'object' | 'graph'} QuadPart
  * @typedef {import('@rdfjs/term-set').default} TermSet
@@ -7,13 +5,16 @@ import rdf from 'barnard59-env'
 
 class PatternMatcher {
   /**
+   * @param {import('barnard59-env').Environment} rdf
    * @param {object} [options]
    * @param {import('@rdfjs/types').Quad_Subject | Iterable<import('@rdfjs/types').Term>} [options.subject]
    * @param {import('@rdfjs/types').Quad_Predicate | Iterable<import('@rdfjs/types').Term>} [options.predicate]
    * @param {import('@rdfjs/types').Quad_Object | Iterable<import('@rdfjs/types').Term>} [options.object]
    * @param {import('@rdfjs/types').Quad_Graph | Iterable<import('@rdfjs/types').Term>} [options.graph]
    */
-  constructor({ subject, predicate, object, graph } = {}) {
+  constructor(rdf, { subject, predicate, object, graph } = {}) {
+    this.rdf = rdf
+
     /**
      * @type {Partial<Record<QuadPart, TermSet>>}
      */
@@ -44,9 +45,9 @@ class PatternMatcher {
     }
 
     if (Symbol.iterator in value) {
-      this.pattern[name] = rdf.termSet([...value])
+      this.pattern[name] = this.rdf.termSet([...value])
     } else {
-      this.pattern[name] = rdf.termSet([value])
+      this.pattern[name] = this.rdf.termSet([value])
     }
   }
 }
