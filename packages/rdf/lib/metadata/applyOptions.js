@@ -43,6 +43,12 @@ function resolveNamedDate(value, metadata) {
   return namedDateLiterals.has(value) ? namedDateLiterals.get(value)(metadata) : toDateLiteral(value)
 }
 
+/**
+ * @param {import('@rdfjs/types').Stream & import('stream').EventEmitter} quadStream
+ * @param metadata
+ * @param options
+ * @return {Promise<import('@rdfjs/types').DatasetCore>}
+ */
 async function applyOptions(quadStream, metadata = {}, options = {}) {
   let dataset = await fromStream(rdf.dataset(), quadStream)
 

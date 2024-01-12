@@ -2,7 +2,22 @@ import rdf from 'barnard59-env'
 import { Transform } from 'readable-stream'
 import * as ns from './namespaces.js'
 
+/**
+ * @typedef {(datasetUri: import('@rdfjs/types').NamedNode, index: number) => import('@rdfjs/types').NamedNode} CreatePartitionUri
+ */
+
 class VoidStats extends Transform {
+  /**
+   * @param {import('barnard59-core').Context} context
+   * @param {object} options
+   * @param {import('@rdfjs/types').NamedNode} options.voidDatasetUri
+   * @param {(import('@rdfjs/types').NamedNode | undefined)[]} options.classPartitions
+   * @param {(import('@rdfjs/types').NamedNode | undefined)[]} options.propertyPartitions
+   * @param {boolean} options.includeTotals
+   * @param {import('@rdfjs/types').NamedNode | undefined} options.graph
+   * @param {CreatePartitionUri} options.createClassPartitionUri
+   * @param {CreatePartitionUri} options.createPropertyPartitionUri
+   */
   constructor(context, {
     voidDatasetUri,
     classPartitions,
@@ -33,6 +48,11 @@ class VoidStats extends Transform {
     this.totalEntityCount = 0
   }
 
+  /**
+   * @param {import('@rdfjs/types').Quad} chunk
+   * @param {string} encoding
+   * @param {(error?: Error | null, chunk?: import('@rdfjs/types').Quad) => void} callback
+   */
   _transform(chunk, encoding, callback) {
     this.totalTripleCount++
 
@@ -54,6 +74,9 @@ class VoidStats extends Transform {
     callback(null, chunk)
   }
 
+  /**
+   * @param {() => void} callback
+   */
   async _flush(callback) {
     try {
       const datasetUri = toNamedNode(this.voidDatasetUri)
@@ -106,7 +129,7 @@ class VoidStats extends Transform {
       for (const quad of stats.dataset) {
         this.push(quad)
       }
-    } catch (err) {
+    } catch (/** @type {any} */ err) {
       this.destroy(err)
     } finally {
       callback()
@@ -114,6 +137,20 @@ class VoidStats extends Transform {
   }
 }
 
+/**
+ * @overload
+ * @param {string | import('@rdfjs/types').NamedNode} item
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
+/**
+ * @overload
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @returns {import('@rdfjs/types').NamedNode | undefined}
+ */
+/**
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @returns {import('@rdfjs/types').NamedNode | undefined}
+ */
 function toNamedNode(item) {
   if (item === undefined) {
     return undefined
@@ -121,6 +158,18 @@ function toNamedNode(item) {
   return typeof item === 'string' ? rdf.namedNode(item) : item
 }
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {object} options
+ * @param {string | import('@rdfjs/types').NamedNode} [options.voidDatasetUri]
+ * @param {(string | import('@rdfjs/types').NamedNode)[]} [options.classPartitions]
+ * @param {(string | import('@rdfjs/types').NamedNode)[]} [options.propertyPartitions]
+ * @param {boolean} [options.includeTotals]
+ * @param {string | import('@rdfjs/types').NamedNode} [options.graph]
+ * @param {CreatePartitionUri} [options.createClassPartitionUri]
+ * @param {CreatePartitionUri} [options.createPropertyPartitionUri]
+ * @return {Transform}
+ */
 function graphStats({
   voidDatasetUri = undefined,
   classPartitions = [],
