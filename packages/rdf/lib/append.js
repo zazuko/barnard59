@@ -6,11 +6,11 @@ class MetadataAppend extends Transform {
   /**
    * @param {import('barnard59-core').Context} context
    * @param {string | undefined} basePath
-   * @param {string | URL} input
+   * @param {string} input
    * @param {{
-   *   dateCreated?: Date,
-   *   dateModified?: Date,
-   *   graph: undefined
+   *   dateCreated?: import('./metadata/namedDateLiterals.js').NamedDateLiteral,
+   *   dateModified?: import('./metadata/namedDateLiterals.js').NamedDateLiteral,
+   *   graph?: string | import('@rdfjs/types').NamedNode
    * }} options
    */
   constructor(context, basePath, input, options) {
@@ -50,10 +50,10 @@ class MetadataAppend extends Transform {
 /**
  * @this import('barnard59-core').Context
  * @param {object} [options]
- * @param {string | URL | undefined} [options.input]
+ * @param {string | undefined} [options.input]
  * @param {string} [options.basepath]
- * @param {Date} [options.dateModified]
- * @param {Date} [options.dateCreated]
+ * @param {import('./metadata/namedDateLiterals.js').NamedDateLiteral} [options.dateModified]
+ * @param {import('./metadata/namedDateLiterals.js').NamedDateLiteral} [options.dateCreated]
  * @param {*} [options.graph]
  * @return {Promise<Transform>}
  */

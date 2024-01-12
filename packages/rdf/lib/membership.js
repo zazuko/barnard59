@@ -1,5 +1,5 @@
+import rdf from 'barnard59-env'
 import { Transform } from 'readable-stream'
-import _toNamedNode from './toNamedNode.js'
 
 class AddRelations extends Transform {
   /**
@@ -44,6 +44,12 @@ class AddRelations extends Transform {
 }
 
 /**
+ * @param {string|import('@rdfjs/types').NamedNode} item
+ * @return {import('@rdfjs/types').NamedNode}
+ */
+const toNamedNode = item => typeof item === 'string' ? rdf.namedNode(item) : item
+
+/**
  * @this {import('barnard59-core').Context}
  * @param {object} options
  * @param {string | import('@rdfjs/types').NamedNode} options.targetUri
@@ -71,7 +77,6 @@ function toTarget({
     throw new Error('Needs a list of classes to link')
   }
 
-  const toNamedNode = _toNamedNode.bind(null, this.env)
   return new AddRelations(this, {
     createRelation: sourceUri => this.env.quad(toNamedNode(sourceUri), toNamedNode(property), toNamedNode(targetUri)),
     additionalQuads: [this.env.quad(toNamedNode(targetUri), this.env.ns.rdf.type, toNamedNode(targetClass))],
@@ -107,7 +112,6 @@ function fromSource({
     throw new Error('Needs a list of classes to link')
   }
 
-  const toNamedNode = _toNamedNode.bind(null, this.env)
   return new AddRelations(this, {
     createRelation: targetUri => this.env.quad(toNamedNode(sourceUri), toNamedNode(property), toNamedNode(targetUri)),
     additionalQuads: [this.env.quad(toNamedNode(sourceUri), this.env.ns.rdf.type, toNamedNode(sourceClass))],

@@ -1,8 +1,25 @@
 import rdf from 'barnard59-env'
 
+/**
+ * @typedef {{
+ *   type?: string;
+ *   stats?: {
+ *     birthtimeMs?: number;
+ *     mtimeMs?: number;
+ *   }
+ * }} Metadata
+ */
+
+/**
+ * @typedef {'TIME_NOW' | 'TIME_FILE_CREATION' | 'TIME_FILE_MODIFICATION'} NamedDateLiteral
+ */
+
+/**
+ * @type {Map<NamedDateLiteral, (metadata?: Metadata) => import('@rdfjs/types').Literal>}
+ */
 const namedDateLiterals = new Map()
 
-namedDateLiterals.set('TIME_NOW', metadata => {
+namedDateLiterals.set('TIME_NOW', () => {
   return rdf.literal((new Date()).toISOString(), rdf.ns.xsd.dateTime)
 })
 

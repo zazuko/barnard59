@@ -1,10 +1,16 @@
 import rdf from 'barnard59-env'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
-import toNamedNode from '../toNamedNode.js'
 import { wellKnownDatasetClasses, wellKnownDatasetClassesWithDcterms } from './datasetClasses.js'
 import { namedDateLiterals } from './namedDateLiterals.js'
 
+/**
+ * @param {import('@rdfjs/types').DatasetCore} dataset
+ * @param {Set<import('@rdfjs/types').Term>} classes
+ * @return {Set<import('@rdfjs/types').Quad_Subject>}
+ */
 function subjectsWithDatasetType(dataset, classes) {
+  /**
+   * @type {Set<import('@rdfjs/types').Quad_Subject>}
+   */
   const result = rdf.termSet()
   ;[...dataset]
     .filter(quad => (quad.predicate.equals(rdf.ns.rdf.type) && classes.has(quad.object)))
@@ -14,6 +20,13 @@ function subjectsWithDatasetType(dataset, classes) {
   return result
 }
 
+/**
+ * @param {import('@rdfjs/types').DatasetCore} dataset
+ * @param {Set<import('@rdfjs/types').Term>} datasetClasses
+ * @param {import('@rdfjs/types').Quad_Predicate} predicate
+ * @param {import('@rdfjs/types').Quad_Object} object
+ * @return {import('@rdfjs/types').DatasetCore}
+ */
 function updateOrInsert(dataset, datasetClasses, predicate, object) {
   const targetSubjects = subjectsWithDatasetType(dataset, datasetClasses)
 
@@ -30,22 +43,44 @@ function updateOrInsert(dataset, datasetClasses, predicate, object) {
   return dataset
 }
 
-function toDateLiteral(item) {
-  return typeof item === 'string' ? rdf.literal(item, rdf.ns.xsd.dateTime) : item
+/**
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @return {import('@rdfjs/types').NamedNode | undefined}
+ */
+function toNamedNode(item) {
+  return typeof item === 'string' ? rdf.namedNode(item) : item
 }
 
+/**
+ * @param {import('@rdfjs/types').Literal | import('./namedDateLiterals.js').NamedDateLiteral} value
+ * @param {import('./namedDateLiterals.js').Metadata} metadata
+ * @return {import('@rdfjs/types').Literal}
+ */
 function resolveNamedDate(value, metadata) {
-  return namedDateLiterals.has(value) ? namedDateLiterals.get(value)(metadata) : toDateLiteral(value)
+  if (typeof value !== 'string') {
+    return value
+  }
+
+  const factory = namedDateLiterals.get(value)
+
+  return factory ? factory(metadata) : rdf.literal(value, rdf.ns.xsd.dateTime)
 }
 
 /**
  * @param {import('@rdfjs/types').Stream & import('stream').EventEmitter} quadStream
- * @param metadata
- * @param options
+ * @param {import('./namedDateLiterals.js').Metadata} [metadata]
+ * @param {{
+ *   dateModified?: import('./namedDateLiterals.js').NamedDateLiteral;
+ *   dateCreated?: import('./namedDateLiterals.js').NamedDateLiteral;
+ *   graph?: string | import('@rdfjs/types').NamedNode
+ * }} [options]
  * @return {Promise<import('@rdfjs/types').DatasetCore>}
  */
 async function applyOptions(quadStream, metadata = {}, options = {}) {
-  let dataset = await fromStream(rdf.dataset(), quadStream)
+  /**
+   * @type {import('@rdfjs/types').DatasetCore}
+   */
+  let dataset = await rdf.dataset().import(quadStream)
 
   // dateModified
   if (options.dateModified) {
@@ -64,7 +99,7 @@ async function applyOptions(quadStream, metadata = {}, options = {}) {
 
   // Sets graph
   if (options.graph) {
-    return rdf.dataset([...dataset].map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(rdf, options.graph))))
+    return rdf.dataset([...dataset].map(quad => rdf.quad(quad.subject, quad.predicate, quad.object, toNamedNode(options.graph))))
   }
 
   return dataset

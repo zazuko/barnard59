@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha",
-    "prebuild": "rimraf *.d.ts lib/*.d.ts",
+    "prebuild": "rimraf *.d.ts lib/**/*.d.ts lib/*.d.ts",
     "build": "tsc",
     "prepack": "npm run build"
   },
@@ -33,7 +33,6 @@
     "lodash": "^4.17.21",
     "mime-types": "^2.1.35",
     "proto-fetch": "^1.0.0",
-    "rdf-dataset-ext": "^1.0.1",
     "rdf-literal": "^1.3.0",
     "rdf-transform-graph-imports": "^0.2.2",
     "rdf-transform-triple-to-quad": "^2.0.0",

@@ -1,5 +1,5 @@
+import rdf from 'barnard59-env'
 import { Transform } from 'readable-stream'
-import _toNamedNode from './toNamedNode.js'
 
 /**
  * @typedef {(datasetUri: import('@rdfjs/types').NamedNode, index: number) => import('@rdfjs/types').NamedNode} CreatePartitionUri
@@ -138,6 +138,27 @@ class VoidStats extends Transform {
 }
 
 /**
+ * @overload
+ * @param {string | import('@rdfjs/types').NamedNode} item
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
+/**
+ * @overload
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @returns {import('@rdfjs/types').NamedNode | undefined}
+ */
+/**
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @returns {import('@rdfjs/types').NamedNode | undefined}
+ */
+function toNamedNode(item) {
+  if (item === undefined) {
+    return undefined
+  }
+  return typeof item === 'string' ? rdf.namedNode(item) : item
+}
+
+/**
  * @this {import('barnard59-core').Context}
  * @param {object} options
  * @param {string | import('@rdfjs/types').NamedNode} [options.voidDatasetUri]
@@ -161,8 +182,6 @@ function graphStats({
   if (!voidDatasetUri) {
     throw new Error('Needs voidDatasetUri as parameter')
   }
-
-  const toNamedNode = _toNamedNode.bind(null, this.env)
 
   return new VoidStats(this, {
     voidDatasetUri: toNamedNode(voidDatasetUri),
