@@ -109,7 +109,7 @@ async function fileToDataset(filename) {
  * @param {string | import('@rdfjs/types').NamedNode} [iri]
  * @param {object} [options]
  * @param {import('winston').Logger} [options.logger]
- * @return {Promise<{ basePath: string, ptr: import('clownface').GraphPointer<import('@rdfjs/types').Term, import('@zazuko/env/lib/Dataset.js').Dataset> }>}
+ * @return {Promise<{ basePath: string, ptr: import('clownface').GraphPointer }>}
  */
 export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
