@@ -46,9 +46,11 @@
     "lodash": "^4.17.21",
     "pkg-dir": "^8.0.0",
     "rdf-loader-code": "^2.1.1",
+    "rdf-transform-graph-imports": "^0.2.2",
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
+    "@rdfjs-elements/formats-pretty": "^0.6.5",
     "@types/lodash": "^4.14.202",
     "@types/readable-stream": "^4.0.10",
     "approvals": "^6.2.2",
@@ -59,6 +61,7 @@
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.3",
     "chai": "^4.3.7",
+    "mocha-chai-jest-snapshot": "^1.1.4",
     "shelljs": "^0.8.4",
     "strip-ansi": "^7.0.0"
   },
