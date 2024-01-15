@@ -1,0 +1,29 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+
+<report-summary> a p:Pipeline , p:Readable ;
+  p:steps
+    [
+      p:stepList (
+        [ base:stdin () ]
+        [ n3:parse () ]
+        [ rdf:getDataset () ]
+        [ base:map ([ 
+            a code:EcmaScriptModule ; 
+            code:link <file:../lib/report.js#getSummary> 
+          ]) 
+        ]
+        [ base:flatten () ]
+      )
+    ]
+.
+
