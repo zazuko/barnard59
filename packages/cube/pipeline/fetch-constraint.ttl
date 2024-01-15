@@ -1,0 +1,58 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+_:endpoint a p:Variable ;
+  p:name "endpoint" ;
+  rdfs:label "SPARQL endpoint" ;
+.
+
+_:cube a p:Variable ;
+  p:name "cube" ;
+  rdfs:label "cube URI" ;
+.
+
+<fetch-constraint> a p:Pipeline , p:Readable ;
+  p:variables [ p:variable _:endpoint, _:cube ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          _:queryConstraint
+          [ ntriples:serialize () ]
+        )
+    ]
+.
+
+
+_:queryConstraint a p:Pipeline, p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ # same query as in fetch-metadata (TODO: load both from file once https://github.com/zazuko/barnard59/issues/257 is available)
+            sparql:construct
+              [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] ,
+              [
+                code:name "query";
+                code:value """
+                #pragma describe.strategy cbd
+
+                PREFIX cube: <https://cube.link/>
+
+                DESCRIBE ?s
+                WHERE {
+                  <${cube}> cube:observationConstraint ?s .
+                }
+                """^^code:EcmaScriptTemplateLiteral
+              ]
+          ]
+        )
+    ]
+  .
+  
