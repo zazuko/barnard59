@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pipeline with code:imports merges the pipelines 1`] = `
+"@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+
+<http://example.org/pipeline/> a p:Pipeline ;
+	p:steps [
+		p:stepList (
+			[
+				rdf:type p:Step ;
+				code:arguments (
+					\\"foo\\"
+					\\"bar\\"
+				) ;
+				code:implementedBy [
+					rdf:type code:EcmaScriptModule ;
+					code:link <node:barnard59-base/Readable.js#from> ;
+				] ;
+			]
+			<http://example.org/pipeline/out>
+		) ;
+	] .
+
+<http://example.org/pipeline/out> a p:Pipeline, p:Writable ;
+	p:steps [
+		p:stepList (
+			[
+				rdf:type p:Step ;
+				code:implementedBy [
+					rdf:type code:EcmaScriptModule ;
+					code:link <node:barnard59-base/process.js#stdout> ;
+				] ;
+			]
+		) ;
+	] .
+
+"
+`;

@@ -92,6 +92,7 @@ jobs:
       - run: npx barnard59 run test/e2e/definitions/world-clock/async.ttl
       - run: npx barnard59 run test/e2e/definitions/world-clock/file.ttl
       - run: npx barnard59 run test/e2e/definitions/world-clock/node.ttl
+      - run: npx barnard59 run test/e2e/definitions/code-imports/main.ttl
 
   global-installation:
     runs-on: ubuntu-latest

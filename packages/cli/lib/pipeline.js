@@ -6,6 +6,7 @@ import { isGraphPointer } from 'is-graph-pointer'
 import { packageDirectory } from 'pkg-dir'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import isInstalledGlobally from 'is-installed-globally'
+import transformImports from 'rdf-transform-graph-imports'
 import findPipeline from '../findPipeline.js'
 import discoverManifests from './discoverManifests.js'
 
@@ -97,15 +98,18 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
  * @return {Promise<import('rdf-js').DatasetCore>}
  */
 async function fileToDataset(filename) {
-  return rdf.dataset().import(rdf.fromFile(filename))
+  const stream = rdf.fromFile(filename, {
+    implicitBaseIRI: true,
+  }).pipe(transformImports(rdf))
+  return rdf.dataset().import(stream)
 }
 
 /**
  * @param {string} filename
- * @param {string | import('@rdfjs/types').NamedNode | undefined} iri
+ * @param {string | import('@rdfjs/types').NamedNode} [iri]
  * @param {object} [options]
  * @param {import('winston').Logger} [options.logger]
- * @return {Promise<{ basePath: string, ptr: import('clownface').GraphPointer }>}
+ * @return {Promise<{ basePath: string, ptr: import('clownface').GraphPointer<import('@rdfjs/types').Term, import('@zazuko/env/lib/Dataset.js').Dataset> }>}
  */
 export async function parse(filename, iri, { logger } = {}) {
   const dataset = await fileToDataset(filename)
