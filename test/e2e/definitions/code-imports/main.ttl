@@ -1,0 +1,22 @@
+@prefix ex: <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+
+[
+  code:imports <./out-pipeline> ;
+  code:extension "ttl" ;
+] .
+
+ex:
+  a p:Pipeline ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ base:streamValues ( "foo" "bar" ) ]
+          ex:out
+        )
+    ] ;
+.
