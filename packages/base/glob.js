@@ -1,13 +1,13 @@
 import { promisify } from 'node:util'
 import { SpanStatusCode } from '@opentelemetry/api'
-import globFn from 'glob'
+import { glob as globFn } from 'glob'
 import onetime from 'onetime'
 import { Readable } from 'readable-stream'
 import tracer from './lib/tracer.js'
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {{ pattern: string } & import('glob').IOptions} options
+ * @param {{ pattern: string } & import('glob').GlobOptions} options
  * @return {Readable}
  */
 function glob({ pattern, ...options }) {
