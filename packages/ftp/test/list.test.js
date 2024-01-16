@@ -1,5 +1,5 @@
 import { deepStrictEqual, rejects, strictEqual } from 'assert'
-import getStream from 'get-stream'
+import { getStreamAsArray } from 'get-stream'
 import list from '../list.js'
 import FtpServer from './support/FtpServer.js'
 import { withServer } from './support/server.js'
@@ -16,7 +16,7 @@ describe('list', () => {
         const options = { ...server.options, ...additionalOptions }
 
         const stream = await list({ pathname: 'data', ...options })
-        const filenames = await getStream.array(stream)
+        const filenames = await getStreamAsArray(stream)
 
         deepStrictEqual(filenames, ['data/abc.txt', 'data/xyz.txt'])
       })
