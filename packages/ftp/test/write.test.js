@@ -1,10 +1,10 @@
-import { strictEqual } from 'assert'
-import fs from 'fs'
-import { dirname, resolve } from 'path'
-import getStream from 'get-stream'
+import { strictEqual } from 'node:assert'
+import fs from 'node:fs'
+import { dirname, resolve } from 'node:path'
 import write from '../write.js'
 import { withServer } from './support/server.js'
 import { ftpConfigurations } from './support/serverConfigurations.js'
+import { finished } from './support/stream.js'
 
 export const __dirname = dirname(new URL(import.meta.url).pathname)
 
@@ -19,7 +19,7 @@ describe('write', () => {
           const input = fs.createReadStream(resolve(__dirname, 'support/data/xyz.txt'))
           input.pipe(stream)
 
-          await getStream(stream)
+          await finished(stream)
         })
 
         strictEqual(fs.readFileSync(resolve(__dirname, 'support/tmp/foo.txt')).toString(), '987\n654')
