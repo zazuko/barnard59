@@ -62,7 +62,7 @@ SHACL reports for violations are written to `stdout`.
 
 In cases when a remote address give to `--profile` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--profileFormat` option to select the correct RDF parser. Its value must be a media type, such as `text/turtle`.
 
-```bash
+
 
 ### fetch observations
 
@@ -94,6 +94,18 @@ To leverage streaming, input is split and validated in little batches of adjusta
 SHACL reports for violations are written to `stdout`.
 
 To limit the output size, there is also a `maxViolations` option to stop validation when the given number of violations is reached.
+
+
+### Report Summary
+The validation pipelines write a machine-readable [standard](https://www.w3.org/TR/shacl/#validation-report) report to `stdout`. 
+An additional `report-summary` pipeline produces a human-readable summary of this report:
+
+```bash
+cat observations.ttl \
+| npx barnard59 cube check-observations --constraint metadata.ttl \
+| npx barnard59 cube report-summary
+```
+
 
 ### Known issues
 
