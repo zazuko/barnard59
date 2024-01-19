@@ -5,8 +5,6 @@
   "type": "module",
   "dependencies": {
     "@rdfjs/namespace": "^2.0.0",
-    "@zazuko/env": "^2",
-    "rdf-dataset-ext": "^1.0.1",
-    "@zazuko/rdf-utils-fs": "^3.3.1"
+    "@zazuko/env-node": "^2.1.1"
   }
 }

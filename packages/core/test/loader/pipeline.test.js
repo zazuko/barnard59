@@ -10,8 +10,7 @@ const context = { env: rdf }
 
 describe('loader/pipeline', () => {
   it('should use the given variables', async () => {
-    const basePath = resolve('test')
-    const { ptr } = await loadPipelineDefinition('plain')
+    const { ptr, basePath } = await loadPipelineDefinition('plain')
 
     const variables = new Map([
       ['foo', 'bar'],

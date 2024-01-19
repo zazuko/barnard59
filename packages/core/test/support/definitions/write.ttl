@@ -19,5 +19,5 @@
 
 <null> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:support/operations/null.js#default>
+    code:link <file:../operations/null.js#default>
   ].
