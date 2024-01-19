@@ -1,7 +1,7 @@
 import { resolve, dirname } from 'node:path'
 import * as url from 'node:url'
 import rdf from '@zazuko/env'
-import fromFile from 'rdf-utils-fs/fromFile.js'
+import fromFile from '@zazuko/rdf-utils-fs/fromFile.js'
 import namespace from '@rdfjs/namespace'
 import fromStream from 'rdf-dataset-ext/fromStream.js'
 // eslint-disable-next-line import/no-extraneous-dependencies
