@@ -123,3 +123,7 @@ jobs:
       - run: which barnard59
       - run: barnard59 --help
       - run: barnard59 shacl validate --shapes test/support/pipeline-shapes.ttl < test/e2e/definitions/file-loader.ttl
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      - run: barnard59 shacl validate --shapes test/support/pipeline-shapes.ttl < test/e2e/definitions/file-loader.ttl
+        if: matrix.os == 'windows-latest'
+        shell: cmd
