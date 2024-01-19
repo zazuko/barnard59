@@ -1,5 +1,4 @@
-import { strictEqual, rejects } from 'assert'
-import { resolve } from 'path'
+import { strictEqual, rejects } from 'node:assert'
 import rdf from 'barnard59-env'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { run } from '../../index.js'

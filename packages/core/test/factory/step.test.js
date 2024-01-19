@@ -1,5 +1,4 @@
-import { strictEqual, rejects } from 'assert'
-import { resolve } from 'path'
+import { strictEqual, rejects } from 'node:assert'
 import getStream from 'get-stream'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
