@@ -95,7 +95,14 @@ jobs:
       - run: npx barnard59 run test/e2e/definitions/code-imports/main.ttl
 
   global-installation:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
