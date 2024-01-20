@@ -1,4 +1,3 @@
-import { promisify } from 'node:util'
 import { SpanStatusCode } from '@opentelemetry/api'
 import { glob as globFn } from 'glob'
 import onetime from 'onetime'
@@ -19,7 +18,7 @@ function glob({ pattern, ...options }) {
 
   const init = onetime(async () => {
     span.addEvent('init')
-    filenames = await promisify(globFn)(pattern, options)
+    filenames = await globFn(pattern, options)
     return filenames.length === 0
   })
 
