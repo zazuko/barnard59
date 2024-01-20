@@ -39,7 +39,7 @@ program
 
 const runCommand = program
   .command('run <filename>')
-  .option('--output [filename]', 'output file', '-')
+  .option('--output [filename]', 'Output file', '-')
   .option('--pipeline [iri]', 'IRI of the pipeline description')
   .action(async (filename, options) => {
     const combinedOptions = combine(options)
