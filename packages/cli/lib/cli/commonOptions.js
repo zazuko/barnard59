@@ -1,9 +1,14 @@
 import { Option } from 'commander'
 
+/**
+ * @param {string} str
+ * @param {Map<string, string>} all
+ */
 function setVariable(str, all) {
   let [key, value] = str.split('=', 2)
 
   if (typeof value === 'undefined') {
+    // @ts-ignore
     value = process.env[key]
   }
 

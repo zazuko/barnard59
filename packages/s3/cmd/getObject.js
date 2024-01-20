@@ -1,4 +1,5 @@
 // @ts-check
+import { PassThrough } from 'node:stream'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
 import { createWritableStream } from '../lib/streams.js'
@@ -14,6 +15,7 @@ import { ensureFileDirectoryExists } from '../lib/paths.js'
  *  accessKeyId?: string;
  *  secretAccessKey?: string;
  * }} params Parameters.
+ * @returns {Promise<PassThrough>} Promise.
  */
 const getObject = async ({
   bucket,
@@ -40,6 +42,8 @@ const getObject = async ({
   const stream = data.Body.transformToWebStream()
   const writeStream = createWritableStream(destinationPath)
   await stream.pipeTo(writeStream)
+
+  return new PassThrough()
 }
 
 export default getObject

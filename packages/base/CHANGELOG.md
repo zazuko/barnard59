@@ -1,5 +1,16 @@
 # barnard59-base
 
+## 2.3.0
+
+### Minor Changes
+
+- 0c0245d: Bundle TypeScript type declarations
+- 464b09e: Added an operation which creates a readable from given values (closes #199)
+
+### Patch Changes
+
+- ba328de: Simplify `base:limit` and `base:offset` by using async generators
+
 ## 2.2.0
 
 ### Minor Changes

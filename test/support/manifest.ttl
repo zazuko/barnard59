@@ -5,26 +5,26 @@
 
 <getLength> a p:Operation;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/inlineTransform.js#default>
+    code:link <node:barnard59-test-e2e/operations/inlineTransform.js#default>
   ].
 
 <iterateDirectory> a p:Operation;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/iterateDirectory.js#default>
+    code:link <node:barnard59-test-e2e/operations/iterateDirectory.js#default>
   ].
 
 
 <parseCsv> a p:Operation;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/parseCsv.js#default>
+    code:link <node:barnard59-test-e2e/operations/parseCsv.js#default>
   ].
 
 <serializeJson> a p:Operation;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/serializeJson.js#default>
+    code:link <node:barnard59-test-e2e/operations/serializeJson.js#default>
   ].
 
 <duplicate> a p:Operation;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:operations/duplicate.js#default>
+    code:link <node:barnard59-test-e2e/operations/duplicate.js#default>
   ].

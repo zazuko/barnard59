@@ -1,5 +1,22 @@
 # barnard59
 
+## 4.4.0
+
+### Minor Changes
+
+- 86131dc: Bundle TypeScript type declarations
+
+### Patch Changes
+
+- a172b45: Warn when a CLI pipeline command is incomplete
+- Updated dependencies [86131dc]
+- Updated dependencies [ba328de]
+- Updated dependencies [70b50da]
+- Updated dependencies [a172b45]
+- Updated dependencies [86131dc]
+  - barnard59-env@1.2.1
+  - barnard59-core@5.3.0
+
 ## 4.3.2
 
 ### Patch Changes

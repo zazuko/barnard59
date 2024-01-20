@@ -1,0 +1,15 @@
+@base <http://example.org/pipeline/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+
+<> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ base:streamValues ( "{ age: 34 }"^^code:EcmaScript "{ age: 23 }"^^code:EcmaScript "{ age: 10 }"^^code:EcmaScript) ]
+          [ base:offset (1) ]
+          [ base:limit (1) ]
+        )
+    ] .

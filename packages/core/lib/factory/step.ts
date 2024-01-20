@@ -1,3 +1,5 @@
+import { Duplex } from 'node:stream'
+import { Stream } from 'readable-stream'
 import { SpanStatusCode } from '@opentelemetry/api'
 import type { GraphPointer } from 'clownface'
 import { Logger } from 'winston'
@@ -10,12 +12,19 @@ import { Context, VariableMap } from '../../index.js'
 import createArguments from './arguments.js'
 import createOperation from './operation.js'
 
-async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
+async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Context; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
   return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
       const operation = await createOperation(ptr.out(context.env.ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })
-      const stream = await operation.apply(context, args)
+      let stream: Stream
+      const streamOrGenerator = await operation.apply(context, args)
+
+      if (typeof streamOrGenerator === 'function') {
+        stream = <Stream><unknown>Duplex.from(streamOrGenerator)
+      } else {
+        stream = streamOrGenerator
+      }
 
       if (!stream || !isStream(stream)) {
         throw new Error(`${ptr.value} didn't return a stream`)

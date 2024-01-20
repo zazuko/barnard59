@@ -1,6 +1,12 @@
 import { finished, Readable } from 'readable-stream'
 
 class ConcatStream extends Readable {
+  /**
+   * @param {(import('stream').Duplex)[]} streams
+   * @param {{
+   *   objectMode?: boolean
+   * }} [options]
+   */
   constructor(streams, { objectMode = false } = {}) {
     super({ objectMode })
 
@@ -10,6 +16,9 @@ class ConcatStream extends Readable {
     this.next()
   }
 
+  /**
+   * @return {void|boolean|unknown}
+   */
   _read() {
     if (!this.current) {
       return this.push(null)
@@ -37,10 +46,18 @@ class ConcatStream extends Readable {
   }
 }
 
+/**
+ * @param {(import('stream').Duplex)[]} streams
+ * @return {Readable}
+ */
 function factory(...streams) {
   return new ConcatStream(streams)
 }
 
+/**
+ * @param {(import('stream').Duplex)[]} streams
+ * @return {Readable}
+ */
 const object = (...streams) => {
   return new ConcatStream(streams, { objectMode: true })
 }

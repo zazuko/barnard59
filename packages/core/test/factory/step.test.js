@@ -1,5 +1,4 @@
-import { strictEqual, rejects } from 'assert'
-import { resolve } from 'path'
+import { strictEqual, rejects } from 'node:assert'
 import getStream from 'get-stream'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
@@ -18,12 +17,12 @@ describe('factory/step', () => {
   })
 
   it('should load the given step', async () => {
-    const definition = await loadPipelineDefinition('plain')
+    const { ptr: definition, basePath } = await loadPipelineDefinition('plain')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const step = await createStep(ptr, {
       context,
-      basePath: resolve('test'),
+      basePath,
       loaderRegistry: defaultLoaderRegistry(env),
       logger: defaultLogger(),
     })
@@ -32,13 +31,13 @@ describe('factory/step', () => {
   })
 
   it('should forward errors thrown by the loader', async () => {
-    const definition = await loadPipelineDefinition('step-operation-missing-error')
+    const { ptr: definition, basePath } = await loadPipelineDefinition('step-operation-missing-error')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     await rejects(async () => {
       await createStep(ptr, {
         context,
-        basePath: resolve('test'),
+        basePath,
         loaderRegistry: defaultLoaderRegistry(env),
         logger: defaultLogger(),
       })
@@ -51,12 +50,12 @@ describe('factory/step', () => {
   })
 
   it('should attach step to the context', async () => {
-    const definition = await loadPipelineDefinition('step-ptr')
+    const { ptr: definition, basePath } = await loadPipelineDefinition('step-ptr')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
     const step = await createStep(ptr, {
       context,
-      basePath: resolve('test'),
+      basePath,
       loaderRegistry: defaultLoaderRegistry(env),
       logger: defaultLogger(),
     })

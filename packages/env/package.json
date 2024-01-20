@@ -1,14 +1,15 @@
 {
   "name": "barnard59-env",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "prepack": "tsc"
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "dependencies": {
-    "@zazuko/env-node": "^1.0.3",
-    "@zazuko/vocabulary-extras-builders": "^1.1.0"
+    "@zazuko/env-node": "^2.1.1",
+    "@zazuko/vocabulary-extras-builders": "^1.1.3"
   },
   "repository": {
     "type": "git",

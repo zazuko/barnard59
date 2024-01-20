@@ -1,0 +1,15 @@
+@base <http://example.org/pipeline/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+
+<out>
+  a p:Pipeline, p:Writable ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ base:stdout () ]
+        )
+    ] ;
+.

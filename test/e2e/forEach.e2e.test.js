@@ -1,5 +1,4 @@
-import { deepStrictEqual, strictEqual } from 'assert'
-import { resolve } from 'path'
+import { deepStrictEqual, strictEqual } from 'node:assert'
 import { createPipeline } from 'barnard59-core'
 import getStream from 'get-stream'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
@@ -9,8 +8,8 @@ const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'defini
 
 describe('forEach', () => {
   it('should execute the example correctly', async () => {
-    const ptr = await loadPipelineDefinition('foreach/csv-duplicate')
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('.') })
+    const { ptr, basePath } = await loadPipelineDefinition('foreach/csv-duplicate')
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     const out = JSON.parse(await getStream(pipeline.stream))
 
@@ -22,8 +21,8 @@ describe('forEach', () => {
   * added during pipeline execution of a forEach step
   * */
   it('should preserve variables set during forEach execution', async () => {
-    const ptr = await loadPipelineDefinition('foreach/with-handler')
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('.') })
+    const { ptr, basePath } = await loadPipelineDefinition('foreach/with-handler')
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     const out = await getStream.array(pipeline.stream)
 
@@ -32,8 +31,8 @@ describe('forEach', () => {
   })
 
   it('should be able to access variables from higher scopes', async () => {
-    const ptr = await loadPipelineDefinition('foreach/with-variable')
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('.') })
+    const { ptr, basePath } = await loadPipelineDefinition('foreach/with-variable')
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     const out = await getStream.array(pipeline.stream)
 

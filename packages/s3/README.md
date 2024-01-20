@@ -2,7 +2,9 @@
 
 Add support for S3 to barnard59.
 
-## `getObject`
+## Working with files
+
+### `getObject`
 
 Get an object from a S3 bucket into the file system.
 
@@ -20,7 +22,7 @@ And all options from [S3ClientConfigType](https://docs.aws.amazon.com/AWSJavaScr
 - `region` (type: `string` ; defaults to `us-east-1` if not specified)
 - `forcePathStyle` (type: `boolean`; set to `true` if you want to use a custom endpoint)
 
-## `putObject`
+### `putObject`
 
 Put an object from the file system into a S3 bucket.
 
@@ -37,3 +39,30 @@ And all options from [S3ClientConfigType](https://docs.aws.amazon.com/AWSJavaScr
 - `endpoint` (type: `string` ; configure a custom endpoint)
 - `region` (type: `string` ; defaults to `us-east-1` if not specified)
 - `forcePathStyle` (type: `boolean`; set to `true` if you want to use a custom endpoint)
+
+## Working with streams
+
+### `getObjectStream` (`getObject/stream` operation)
+
+Get an object from a S3 bucket as a `Readable` stream.
+
+| Option          | Type   | Required | Description               |
+| --------------- | ------ | -------- | ------------------------- |
+| bucket          | string | true     | The name of the S3 bucket |
+| key             | string | true     | The key of the object     |
+| accessKeyId     | string | false    | S3 Access Key ID          |
+| secretAccessKey | string | false    | S3 Secret Access Key      |
+
+And all options from [S3ClientConfigType](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-s3/TypeAlias/S3ClientConfigType/) of the AWS SDK, which includes those fields for example:
+
+- `endpoint` (type: `string` ; configure a custom endpoint)
+- `region` (type: `string` ; defaults to `us-east-1` if not specified)
+- `forcePathStyle` (type: `boolean`; set to `true` if you want to use a custom endpoint)
+
+This returns a `Readable` stream that contains the content of the requested object.
+
+### Upload data to S3
+
+To put a stream into a S3 bucket, you will need to first write the stream to a file and then use `putObject` to upload the file to S3.
+
+Direct stream to S3 upload is not supported.

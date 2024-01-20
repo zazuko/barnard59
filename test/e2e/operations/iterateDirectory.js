@@ -14,6 +14,11 @@ class FileIterator extends Readable {
     const directory = resolve(basePath, dirName)
 
     readdir(directory, (e, files) => {
+      if (e) {
+        this.emit('error', e)
+        return
+      }
+
       files.forEach(file => {
         this.push(resolve(directory, file))
       })

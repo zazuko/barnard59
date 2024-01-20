@@ -1,25 +1,18 @@
-import { obj } from 'through2'
-
 /**
  * Limit the amount of chunks in a pipe.
  * @param {number} limit Limit the amount of chunks passed through the pipe.
- * @memberof module:barnard59
  */
-function limit(limit) {
-  const t = obj(function (chunk, encoding, callback) {
-    t.count++
-
-    if (t.count <= t.limit) {
-      this.push(chunk)
+export default function limit(limit) {
+  /**
+   * @param {AsyncIterable<*>} stream
+   */
+  return async function * (stream) {
+    let count = 0
+    for await (const chunk of stream) {
+      count++
+      if (count <= limit) {
+        yield chunk
+      }
     }
-
-    callback()
-  })
-
-  t.limit = limit
-  t.count = 0
-
-  return t
+  }
 }
-
-export default limit

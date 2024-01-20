@@ -1,6 +1,13 @@
 import Client from 'sparql-http-client'
 import unpromiseReadable from './lib/unpromiseReadable.js'
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {Pick<import('sparql-http-client').StreamClientOptions, 'user' | 'password'> & {
+ *   endpoint: string,
+ *   graph: string | import('rdf-js').NamedNode | import('rdf-js').DefaultGraph,
+ * }} options
+ */
 function get({ endpoint, graph, user, password }) {
   const client = new Client({
     storeUrl: endpoint,
@@ -8,10 +15,14 @@ function get({ endpoint, graph, user, password }) {
     password,
   })
 
-  if (!graph || this.env.defaultGraph().equals(graph)) {
+  if (!graph) {
+    graph = this.env.defaultGraph()
+  } else if (typeof graph === 'string') {
+    graph = this.env.namedNode(graph)
+  } else if (this.env.defaultGraph().equals(graph)) {
     graph = this.env.defaultGraph()
   } else {
-    graph = this.env.namedNode(graph.value || graph)
+    graph = this.env.namedNode(graph.value)
   }
 
   return unpromiseReadable(client.store.get(graph))

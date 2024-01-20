@@ -1,11 +1,13 @@
 {
   "name": "barnard59-s3",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "S3 support for Linked Data pipelines",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "c8 --reporter=lcov --reporter=text npm run test",
+    "build": "tsc"
   },
   "keywords": [
     "barnard59",
@@ -23,7 +25,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59#readme",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.420.0",
+    "@aws-sdk/client-s3": "^3.481.0",
     "mkdirp": "^3.0.1"
   },
   "files": [
@@ -37,11 +39,13 @@
   },
   "devDependencies": {
     "@aws-sdk/util-stream-node": "^3.374.0",
-    "@types/mocha": "^10.0.2",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.5",
     "aws-sdk-client-mock": "^3.0.0",
+    "get-stream": "^8.0.1",
     "rimraf": "^5.0.5"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "loader": "tsm"
   }
 }

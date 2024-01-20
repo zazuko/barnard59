@@ -1,20 +1,19 @@
-import { obj } from 'through2'
+/**
+ * Limit the amount of chunks in a pipe.
+ * @param {number} offset
+ */
+export default function (offset) {
+  /**
+   * @param {AsyncIterable<*>} stream
+   */
+  return async function * (stream) {
+    let count = 0
 
-function offset(offset) {
-  const t = obj(function (chunk, encoding, callback) {
-    t.count++
-
-    if (t.count > t.offset) {
-      this.push(chunk)
+    for await (const chunk of stream) {
+      count++
+      if (count > offset) {
+        yield chunk
+      }
     }
-
-    callback()
-  })
-
-  t.offset = offset
-  t.count = 0
-
-  return t
+  }
 }
-
-export default offset
