@@ -1,4 +1,4 @@
-import { program } from 'commander'
+import { CommanderError, program } from 'commander'
 import isInstalledGlobally from 'is-installed-globally'
 import { MultipleRootsError } from '../findPipeline.js'
 import runAction from './cli/runAction.js'
@@ -68,8 +68,8 @@ export default async function () {
 
       try {
         await program.parseAsync(process.argv)
-      } catch (error) {
-        if (error instanceof program.CommanderError) {
+      } catch (/** @type {any} */ error) {
+        if (error instanceof CommanderError) {
           const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
           if (groups && groups.command) {
             /* eslint-disable no-console */

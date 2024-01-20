@@ -4,5 +4,5 @@ import cli from '../lib/cli.js'
 
 (async () => {
   const { program } = await cli()
-  process.stdout.write(await generateCompletionSpec(program))
+  process.stdout.write(await generateCompletionSpec(program) || '# Failed to generate completion spec\n')
 })()
