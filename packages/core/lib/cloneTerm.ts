@@ -1,4 +1,4 @@
-import type { Term } from 'rdf-js'
+import type { Term } from '@rdfjs/types'
 import type { Environment } from 'barnard59-env'
 
 function cloneTerm<T extends Term>(rdf: Environment, term: T | null | undefined): T | null {
