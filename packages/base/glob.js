@@ -6,7 +6,7 @@ import tracer from './lib/tracer.js'
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {{ pattern: string } & import('glob').GlobOptions} options
+ * @param {{ pattern: string } & Omit<import('glob').GlobOptions, 'withFileTypes'>} options
  * @return {Readable}
  */
 function glob({ pattern, ...options }) {
