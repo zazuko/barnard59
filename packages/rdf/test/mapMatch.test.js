@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import getStream from 'get-stream'
 import { isDuplexStream } from 'is-stream'
 import rdf from 'barnard59-env'

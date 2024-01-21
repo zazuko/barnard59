@@ -1,12 +1,10 @@
-import { equal, strictEqual, throws } from 'assert'
+import { equal, strictEqual, throws } from 'node:assert'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import append from '../lib/append.js'
 import { toTarget, fromSource } from '../lib/membership.js'
-import * as ns from '../lib/namespaces.js'
 
 const ex = rdf.namespace('http://example.org/')
 
@@ -42,17 +40,17 @@ describe('membership.toTarget', () => {
 
   it('should append meta-data to the data', async () => {
     const data = [
-      rdf.quad(ex.bob, ns.rdf.type, ex.Person),
-      rdf.quad(ex.alice, ns.rdf.type, ex.Person),
-      rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
+      rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.fido, rdf.ns.rdf.type, ex.Dog),
+      rdf.quad(ex.tom, rdf.ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.bob, ex.in, ex.house),
       rdf.quad(ex.alice, ex.in, ex.house),
       rdf.quad(ex.tom, ex.in, ex.house),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container),
+      rdf.quad(ex.house, rdf.ns.rdf.type, ex.Container),
     ]
 
     const step = toTarget({
@@ -65,24 +63,24 @@ describe('membership.toTarget', () => {
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
-      toCanonical(result),
-      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
+      result.toCanonical(),
+      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
     )
   })
 
   it('should append meta-data to the data with string parameters', async () => {
     const data = [
-      rdf.quad(ex.bob, ns.rdf.type, ex.Person),
-      rdf.quad(ex.alice, ns.rdf.type, ex.Person),
-      rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
+      rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.fido, rdf.ns.rdf.type, ex.Dog),
+      rdf.quad(ex.tom, rdf.ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.bob, ex.in, ex.house),
       rdf.quad(ex.alice, ex.in, ex.house),
       rdf.quad(ex.tom, ex.in, ex.house),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container),
+      rdf.quad(ex.house, rdf.ns.rdf.type, ex.Container),
     ]
 
     const step = toTarget({
@@ -95,8 +93,8 @@ describe('membership.toTarget', () => {
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
-      toCanonical(result),
-      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
+      result.toCanonical(),
+      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
     )
   })
 })
@@ -133,17 +131,17 @@ describe('membership.fromSource', () => {
 
   it('should append meta-data to the data', async () => {
     const data = [
-      rdf.quad(ex.bob, ns.rdf.type, ex.Person),
-      rdf.quad(ex.alice, ns.rdf.type, ex.Person),
-      rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
+      rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.fido, rdf.ns.rdf.type, ex.Dog),
+      rdf.quad(ex.tom, rdf.ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.house, ex.contains, ex.bob),
       rdf.quad(ex.house, ex.contains, ex.alice),
       rdf.quad(ex.house, ex.contains, ex.tom),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container),
+      rdf.quad(ex.house, rdf.ns.rdf.type, ex.Container),
     ]
 
     const step = fromSource({
@@ -156,24 +154,24 @@ describe('membership.fromSource', () => {
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
-      toCanonical(result),
-      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
+      result.toCanonical(),
+      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
     )
   })
 
   it('should append meta-data to the data with string parameters', async () => {
     const data = [
-      rdf.quad(ex.bob, ns.rdf.type, ex.Person),
-      rdf.quad(ex.alice, ns.rdf.type, ex.Person),
-      rdf.quad(ex.fido, ns.rdf.type, ex.Dog),
-      rdf.quad(ex.tom, ns.rdf.type, ex.Cat),
+      rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
+      rdf.quad(ex.fido, rdf.ns.rdf.type, ex.Dog),
+      rdf.quad(ex.tom, rdf.ns.rdf.type, ex.Cat),
     ]
 
     const expectedMetadata = [
       rdf.quad(ex.house, ex.contains, ex.bob),
       rdf.quad(ex.house, ex.contains, ex.alice),
       rdf.quad(ex.house, ex.contains, ex.tom),
-      rdf.quad(ex.house, ns.rdf.type, ex.Container),
+      rdf.quad(ex.house, rdf.ns.rdf.type, ex.Container),
     ]
 
     const step = fromSource({
@@ -186,8 +184,8 @@ describe('membership.fromSource', () => {
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     equal(
-      toCanonical(result),
-      toCanonical(rdf.dataset([...data, ...expectedMetadata])),
+      result.toCanonical(),
+      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
     )
   })
 })
