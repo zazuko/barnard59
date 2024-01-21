@@ -3,14 +3,12 @@ import getStream from 'get-stream'
 import { isDuplexStream } from 'is-stream'
 import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import mapMatch from '../mapMatch.js'
+import mapMatchUnbound from '../mapMatch.js'
 import * as ns from './support/namespaces.js'
 
-describe('mapMatch', () => {
-  it('should be a factory', () => {
-    strictEqual(typeof mapMatch, 'function')
-  })
+const mapMatch = mapMatchUnbound.bind({ env: rdf })
 
+describe('mapMatch', () => {
   it('should return a duplex stream', () => {
     const stream = mapMatch({ predicate: '', map: () => {} })
 

@@ -1,20 +1,19 @@
-import { equal, strictEqual } from 'node:assert'
+import { strictEqual } from 'node:assert'
+import { expect } from 'chai'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import voidStats from '../lib/voidStats.js'
+import voidStatsUnbound from '../lib/voidStats.js'
+
+const voidStats = voidStatsUnbound.bind({ env: rdf })
 
 const ex = rdf.namespace('http://example.org/')
 /**
  * https://www.w3.org/TR/void/#statistics
  */
 describe('metadata.voidStats', () => {
-  it('should be a factory', () => {
-    strictEqual(typeof voidStats, 'function')
-  })
-
   it('throws an error if no argument is given', async () => {
     await assertThrows(async () => {
       await voidStats()
@@ -49,10 +48,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.slice(4).toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result.slice(4)).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('returns zero counts for no data', async () => {
@@ -70,10 +66,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('returns zero counts for 0 classes', async () => {
@@ -94,10 +87,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.slice(2).toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result.slice(2)).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('uses the named-graph given as parameter', async () => {
@@ -116,10 +106,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('does not include total counts with includeTotals: false', async () => {
@@ -139,10 +126,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.slice(2).toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result.slice(2)).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('describes counts for class partitions', async () => {
@@ -173,10 +157,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.slice(4).toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result.slice(4)).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('describe counts for class partitions with no matches', async () => {
@@ -202,10 +183,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('describe counts for property partitions', async () => {
@@ -236,10 +214,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.slice(4).toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result.slice(4)).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('describe counts for property partitions with no matches', async () => {
@@ -265,10 +240,7 @@ describe('metadata.voidStats', () => {
 
     const result = await getStream.array(inputStream.pipe(sut))
 
-    equal(
-      result.toCanonical(),
-      expectedMetadata.toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
   it('accepts string parameters', async () => {

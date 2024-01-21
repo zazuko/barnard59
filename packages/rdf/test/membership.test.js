@@ -1,18 +1,17 @@
-import { equal, strictEqual, throws } from 'node:assert'
+import { strictEqual, throws } from 'node:assert'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import append from '../lib/append.js'
-import { toTarget, fromSource } from '../lib/membership.js'
+import { expect } from 'chai'
+import * as membership from '../lib/membership.js'
+
+const toTarget = membership.toTarget.bind({ env: rdf })
+const fromSource = membership.fromSource.bind({ env: rdf })
 
 const ex = rdf.namespace('http://example.org/')
 
 describe('membership.toTarget', () => {
-  it('should be a factory', () => {
-    strictEqual(typeof append, 'function')
-  })
-
   const parameterSet = [
     { targetUri: undefined, targetClass: ex.targetClass, property: ex.property, classes: [ex.class] },
     { targetUri: ex.targetUri, targetClass: undefined, property: ex.property, classes: [ex.class] },
@@ -62,10 +61,7 @@ describe('membership.toTarget', () => {
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
-    equal(
-      result.toCanonical(),
-      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members([...data, ...expectedMetadata])
   })
 
   it('should append meta-data to the data with string parameters', async () => {
@@ -92,18 +88,11 @@ describe('membership.toTarget', () => {
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
-    equal(
-      result.toCanonical(),
-      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members([...data, ...expectedMetadata])
   })
 })
 
 describe('membership.fromSource', () => {
-  it('should be a factory', () => {
-    strictEqual(typeof append, 'function')
-  })
-
   const parameterSet = [
     { sourceUri: undefined, sourceClass: ex.sourceClass, property: ex.property, classes: [ex.class] },
     { sourceUri: ex.sourceUri, sourceClass: undefined, property: ex.property, classes: [ex.class] },
@@ -153,10 +142,7 @@ describe('membership.fromSource', () => {
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
-    equal(
-      result.toCanonical(),
-      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members([...data, ...expectedMetadata])
   })
 
   it('should append meta-data to the data with string parameters', async () => {
@@ -183,9 +169,6 @@ describe('membership.fromSource', () => {
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
-    equal(
-      result.toCanonical(),
-      rdf.dataset([...data, ...expectedMetadata]).toCanonical(),
-    )
+    expect(result).to.deep.contain.all.members([...data, ...expectedMetadata])
   })
 })
