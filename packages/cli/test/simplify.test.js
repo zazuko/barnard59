@@ -4,7 +4,8 @@ import rdf from 'barnard59-env'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { desugar } from '../lib/pipeline.js'
 
-const dirname = resolve('test', 'support', 'approvals')
+const __dirname = new URL('.', import.meta.url).pathname
+const dirname = resolve(__dirname, 'support/approvals')
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url)
 

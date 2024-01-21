@@ -31,6 +31,13 @@
     code:link <node:barnard59-base/filter.js#default>
   ].
 
+<batch> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
+  rdfs:label "Batch";
+  rdfs:comment "Groups incoming items into arrays of the given size.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/batch.js#default>
+  ].
+
 <flatten> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Flatten";
   rdfs:comment "Separates incoming arrays into their elements and emits each element as a single chunk.";
@@ -84,7 +91,7 @@
   rdfs:label "/dev/null";
   rdfs:comment "Dummy output stream, just like /dev/null.";
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-base/nul.js#default>
+    code:link <node:barnard59-base/dev-nul.js#default>
   ].
 
 <offset> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;

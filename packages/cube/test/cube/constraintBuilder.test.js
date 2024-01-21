@@ -1,0 +1,5 @@
+import './constraintBuilder/DatatypeConstraintBuilder.test.js'
+import './constraintBuilder/RangeConstraintBuilder.test.js'
+import './constraintBuilder/ValuesConstraintBuilder.test.js'
+import './constraintBuilder/NodeKindConstraintBuilder.test.js'
+import './constraintBuilder/DimensionConstraintsBuilder.test.js'

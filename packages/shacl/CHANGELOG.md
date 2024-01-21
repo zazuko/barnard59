@@ -1,5 +1,18 @@
 # barnard59-shacl
 
+## 1.3.0
+
+### Minor Changes
+
+- cf2f15c: Bundle TypeScript type declarations
+
+### Patch Changes
+
+- Updated dependencies [0c0245d]
+- Updated dependencies [464b09e]
+- Updated dependencies [ba328de]
+  - barnard59-base@2.3.0
+
 ## 1.2.0
 
 ### Minor Changes

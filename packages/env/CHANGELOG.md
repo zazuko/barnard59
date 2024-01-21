@@ -1,5 +1,11 @@
 # barnard59-env
 
+## 1.2.1
+
+### Patch Changes
+
+- 86131dc: Updated `@zazuko/vocabulary-extras-builders`
+
 ## 1.2.0
 
 ### Minor Changes

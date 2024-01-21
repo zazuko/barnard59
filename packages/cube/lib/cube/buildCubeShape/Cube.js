@@ -2,7 +2,7 @@ import cbdCopy from '../../cbdCopy.js'
 import Dimension from './Dimension.js'
 
 class Cube {
-  constructor({ rdf, metadata, observationSet, shape, term, propertyShapeId }) {
+  constructor({ rdf, metadata, observationSet, shape, term, propertyShapeId, inListMaxSize }) {
     this.rdf = rdf
     this.metadata = metadata
     this.observationSet = observationSet
@@ -10,6 +10,11 @@ class Cube {
     this.term = term
     this.dimensions = rdf.termMap()
     this.propertyShapeId = propertyShapeId
+    this.inListMaxSize = inListMaxSize
+  }
+
+  get messages() {
+    return [...this.dimensions.values()].flatMap(({ messages }) => messages)
   }
 
   dimension({ predicate, object }) {
@@ -21,7 +26,7 @@ class Cube {
         .out(this.rdf.ns.sh.property)
         .has(this.rdf.ns.sh.path, predicate)
 
-      dimension = new Dimension({ rdf: this.rdf, metadata, predicate, object, shapeId: this.propertyShapeId })
+      dimension = new Dimension({ rdf: this.rdf, metadata, predicate, object, shapeId: this.propertyShapeId, inListMaxSize: this.inListMaxSize })
 
       this.dimensions.set(predicate, dimension)
     }
