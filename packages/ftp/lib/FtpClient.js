@@ -1,6 +1,6 @@
-import { promisify } from 'util'
+import { promisify } from 'node:util'
 import Ftp from 'ftp'
-import { PassThrough, Readable, Writable } from 'readable-stream'
+import { PassThrough, Readable } from 'readable-stream'
 
 class FtpClient {
   constructor({ host, port = 21, user, password }) {
@@ -46,24 +46,9 @@ class FtpClient {
   }
 
   async write(path) {
-    const output = new PassThrough()
-    const input = new Writable({
-      final(callback) {
-        output.end(callback)
-      },
-      write(chunk, encoding, callback) {
-        output.write(chunk, encoding, callback)
-      },
-    })
+    const input = new PassThrough()
 
-    const finished = require('readable-stream').finished
-
-    finished(output, () => {
-      // eslint-disable-next-line no-console
-      console.log('finished')
-    })
-
-    this.client.put(output, path, err => {
+    this.client.put(input, path, err => {
       if (err) {
         input.emit('error', err)
       }

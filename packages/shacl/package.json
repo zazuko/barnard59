@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "prebuild": "rimraf *.d.ts **/*.d.ts",
+    "prebuild": "rimraf -g *.d.ts **/*.d.ts",
     "build": "tsc",
     "prepack": "npm run build"
   },

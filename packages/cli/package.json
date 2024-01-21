@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "prebuild": "rimraf *.d.ts [!node_modules]/**/*.d.ts",
+    "prebuild": "rimraf -g *.d.ts [!node_modules]/**/*.d.ts",
     "build": "tsc",
     "prepack": "npm run build",
     "generate-autocomplete-spec": "node --loader ts-node/esm --no-warnings ./bin/generate-autocomplete-spec.js > fig-spec.ts"
