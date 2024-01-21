@@ -46,7 +46,7 @@
     "@types/proto-fetch": "^1.0.5",
     "@types/rdf-transform-triple-to-quad": "^2.0.5",
     "@types/rdfjs__fetch-lite": "^3.0.8",
-    "@types/rdfjs__fetch": "^3.0.5",
+    "@types/rdfjs__fetch": "^3.0.6",
     "assert-throws-async": "^3.0.0",
     "chai": "^4.3.7",
     "express-as-promise": "^1.2.0",
