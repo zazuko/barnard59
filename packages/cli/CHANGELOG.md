@@ -1,5 +1,13 @@
 # barnard59
 
+## 4.5.2
+
+### Patch Changes
+
+- e82aa36: Remove references of `rdf-js` types package, repaced with `@rdfjs/types`
+- Updated dependencies [e82aa36]
+  - barnard59-core@5.3.2
+
 ## 4.5.1
 
 ### Patch Changes

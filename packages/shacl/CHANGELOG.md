@@ -1,5 +1,11 @@
 # barnard59-shacl
 
+## 1.4.1
+
+### Patch Changes
+
+- e82aa36: Remove references of `rdf-js` types package, repaced with `@rdfjs/types`
+
 ## 1.4.0
 
 ### Minor Changes
