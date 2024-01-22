@@ -1,5 +1,4 @@
-import { strictEqual } from 'assert'
-import { resolve } from 'path'
+import { strictEqual } from 'node:assert'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
@@ -16,12 +15,12 @@ describe('factory/operation', () => {
   })
 
   it('should load the given operation', async () => {
-    const { ptr: definition } = await loadPipelineDefinition('plain')
+    const { ptr: definition, basePath } = await loadPipelineDefinition('plain')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0].out(ns.code.implementedBy)
 
     const operation = await createOperation(ptr, {
       context,
-      basePath: resolve('test'),
+      basePath,
       loaderRegistry: defaultLoaderRegistry(env),
     })
 

@@ -1,5 +1,4 @@
-import { strictEqual, throws } from 'assert'
-import { resolve } from 'path'
+import { strictEqual, throws } from 'node:assert'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import getStream from 'get-stream'
@@ -17,42 +16,41 @@ describe('factory/pipeline', () => {
   })
 
   it('should return a Pipeline object', async () => {
-    const { ptr } = await loadPipelineDefinition('plain')
+    const { ptr, basePath } = await loadPipelineDefinition('plain')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     strictEqual(pipeline instanceof Pipeline, true)
   })
 
   it('should load the given pipeline from a plain graph pointer', async () => {
-    const { ptr: definition } = await loadPipelineDefinition('plain')
+    const { ptr: definition, basePath } = await loadPipelineDefinition('plain')
     const ptr = { dataset: definition.dataset, term: definition.term }
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
     await pipeline.init()
 
     strictEqual(pipeline.children.length, 2)
   })
 
   it('should throw an error if the term property of the graph pointer is missing', async () => {
-    const { ptr: graph } = await loadPipelineDefinition('read')
+    const { ptr: graph, basePath } = await loadPipelineDefinition('read')
 
     throws(() => {
-      createPipeline(graph.any(), { env, basePath: resolve('test') })
+      createPipeline(graph.any(), { env, basePath })
     })
   })
 
   it('should throw an error if the dataset property of the graph pointer is missing', async () => {
-    const { ptr } = (await loadPipelineDefinition('read'))
+    const { ptr, basePath } = (await loadPipelineDefinition('read'))
 
     throws(() => {
-      createPipeline({ term: ptr.term }, { env, basePath: resolve('test') })
+      createPipeline({ term: ptr.term }, { env, basePath })
     })
   })
 
   it('should use the given basePath', async () => {
-    const basePath = resolve('test')
-    const { ptr } = await loadPipelineDefinition('read')
+    const { ptr, basePath } = await loadPipelineDefinition('read')
 
     const pipeline = createPipeline(ptr, { env, basePath })
 
@@ -61,52 +59,52 @@ describe('factory/pipeline', () => {
 
   it('should use the given context', async () => {
     const context = { abc: 'def', env }
-    const { ptr } = await loadPipelineDefinition('read')
+    const { ptr, basePath } = await loadPipelineDefinition('read')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test'), context })
+    const pipeline = createPipeline(ptr, { env, basePath, context })
     await getStream(pipeline.stream)
 
     strictEqual(pipeline.context.abc, context.abc)
   })
 
   it('should create a pipeline with readable interface matching the rdf:type', async () => {
-    const { ptr } = await loadPipelineDefinition('read')
+    const { ptr, basePath } = await loadPipelineDefinition('read')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     strictEqual(isReadable(pipeline.stream), true)
     strictEqual(!isReadableObjectMode(pipeline.stream), true)
   })
 
   it('should create a pipeline with readable object mode interface matching the rdf:type', async () => {
-    const { ptr } = await loadPipelineDefinition('read-object-mode')
+    const { ptr, basePath } = await loadPipelineDefinition('read-object-mode')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     strictEqual(isReadableObjectMode(pipeline.stream), true)
   })
 
   it('should create a pipeline with writable interface matching the rdf:type', async () => {
-    const { ptr } = await loadPipelineDefinition('write')
+    const { ptr, basePath } = await loadPipelineDefinition('write')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     strictEqual(isWritable(pipeline.stream), true)
     strictEqual(!isWritableObjectMode(pipeline.stream), true)
   })
 
   it('should create a pipeline with writable object mode interface matching the rdf:type', async () => {
-    const { ptr } = await loadPipelineDefinition('write-object-mode')
+    const { ptr, basePath } = await loadPipelineDefinition('write-object-mode')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
 
     strictEqual(isWritableObjectMode(pipeline.stream), true)
   })
 
   it('should attach createPipeline to the context', async () => {
-    const { ptr } = await loadPipelineDefinition('plain')
+    const { ptr, basePath } = await loadPipelineDefinition('plain')
 
-    const pipeline = createPipeline(ptr, { env, basePath: resolve('test') })
+    const pipeline = createPipeline(ptr, { env, basePath })
     await pipeline.init()
 
     strictEqual(typeof pipeline.context.createPipeline, 'function')
@@ -114,7 +112,7 @@ describe('factory/pipeline', () => {
 
   it('should log variables', async () => {
     // given
-    const { ptr } = await loadPipelineDefinition('nested')
+    const { ptr, basePath } = await loadPipelineDefinition('nested')
     const logger = {
       debug: sinon.spy(),
       info: sinon.spy(),
@@ -126,7 +124,7 @@ describe('factory/pipeline', () => {
     // when
     const pipeline = createPipeline(ptr, {
       env,
-      basePath: resolve('test'),
+      basePath,
       logger,
       variables: new Map([['bar', 'secret'], ['baz', 'baz']]),
     })

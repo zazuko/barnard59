@@ -26,6 +26,7 @@ describe('open', function () {
     const quadStream = sinon.stub().returns('foo')
     const env = {
       fetch: async () => ({
+        body: Readable.from(''),
         quadStream,
       }),
     }

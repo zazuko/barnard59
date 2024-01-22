@@ -1,6 +1,6 @@
-import assert from 'assert'
-import path from 'path'
-import * as url from 'url'
+import assert from 'node:assert'
+import path from 'node:path'
+import * as url from 'node:url'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import sinon from 'sinon'
 import esmock from 'esmock'
@@ -110,7 +110,7 @@ describe('parser', () => {
           'barnard59-formats': new Set(['node:barnard59-formats#ntriples.serialize']),
         },
         'file:': {
-          [path.join(process.cwd(), 'awesomeModule')]: new Set(['file:awesomeModule#awesomeFunction']),
+          [url.pathToFileURL(path.join(process.cwd(), 'awesomeModule'))]: new Set(['file:awesomeModule#awesomeFunction']),
         },
       }
       const actual = parser.getDependencies(input, process.cwd())
@@ -273,7 +273,7 @@ describe('parser', () => {
     it('should get operation properties from manifest.ttl file', async () => {
       const mockedParser = await esmock('../lib/parser.js', {
         '../lib/utils.js': {
-          getManifestPath: sinon.stub().returns('test/fixtures/manifest.ttl'),
+          getManifestPath: sinon.stub().returns(path.resolve(__dirname, 'fixtures/manifest.ttl')),
           isModuleInstalled: sinon.stub().returns(true),
         },
       })
@@ -320,7 +320,7 @@ describe('parser', () => {
     it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
       const parser = await esmock('../lib/parser.js', {
         '../lib/utils.js': {
-          getManifestPath: sinon.stub().returns('test/fixtures/manifest.ttl'),
+          getManifestPath: sinon.stub().returns(path.resolve(__dirname, 'fixtures/manifest.ttl')),
           isModuleInstalled: sinon.stub().returns(true),
         },
       })

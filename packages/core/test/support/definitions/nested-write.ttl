@@ -14,11 +14,11 @@
 
 <createContent> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:support/operations/argsToStream.js#default>
+    code:link <file:../operations/argsToStream.js#default>
   ];
   code:arguments ("t" "e" "s" "t").
 
 <toContext> a p:Step;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <file:support/operations/toContext.js#default>
+    code:link <file:../operations/toContext.js#default>
   ].
