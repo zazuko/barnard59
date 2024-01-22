@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 5.3.1
+
+### Patch Changes
+
+- 9d0ce9f: Improve Windows compatibility (re zazuko/rdf-loader-code#34)
+
 ## 5.3.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # barnard59-rdf
 
+## 3.4.0
+
+### Minor Changes
+
+- 82dbe7e: Bundle TypeScript type declarations
+
+### Patch Changes
+
+- Updated dependencies [c090ff2]
+- Updated dependencies [82dbe7e]
+  - barnard59-env@1.2.2
+
 ## 3.3.0
 
 ### Minor Changes

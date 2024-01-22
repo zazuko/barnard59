@@ -1,5 +1,14 @@
 # barnard59-validation
 
+## 0.4.2
+
+### Patch Changes
+
+- 9d0ce9f: Improve Windows compatibility (re zazuko/rdf-loader-code#34)
+- Updated dependencies [c090ff2]
+- Updated dependencies [82dbe7e]
+  - barnard59-env@1.2.2
+
 ## 0.4.1
 
 ### Patch Changes

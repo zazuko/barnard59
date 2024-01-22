@@ -1,5 +1,15 @@
 # barnard59-shacl
 
+## 1.3.1
+
+### Patch Changes
+
+- c090ff2: Updated `rdf-validate-shacl`
+- Updated dependencies [82dbe7e]
+- Updated dependencies [7456a6a]
+  - barnard59-rdf@3.4.0
+  - barnard59-base@2.4.0
+
 ## 1.3.0
 
 ### Minor Changes

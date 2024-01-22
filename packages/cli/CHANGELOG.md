@@ -1,5 +1,20 @@
 # barnard59
 
+## 4.5.0
+
+### Minor Changes
+
+- 68dff05: Support [`code:imports`](https://github.com/zazuko/rdf-transform-graph-imports) when loading pipeline definitions (closes #93)
+
+### Patch Changes
+
+- 9d0ce9f: Improve Windows compatibility (re zazuko/rdf-loader-code#34)
+- Updated dependencies [9d0ce9f]
+- Updated dependencies [c090ff2]
+- Updated dependencies [82dbe7e]
+  - barnard59-core@5.3.1
+  - barnard59-env@1.2.2
+
 ## 4.4.0
 
 ### Minor Changes
