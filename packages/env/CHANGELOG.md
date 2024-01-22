@@ -1,5 +1,11 @@
 # barnard59-env
 
+## 1.2.3
+
+### Patch Changes
+
+- 9178b7e: .d.ts files were not included in package
+
 ## 1.2.2
 
 ### Patch Changes
