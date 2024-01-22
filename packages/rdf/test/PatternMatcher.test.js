@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import rdf from 'barnard59-env'
 import PatternMatcher from '../lib/PatternMatcher.js'
 import { ex } from './support/namespaces.js'

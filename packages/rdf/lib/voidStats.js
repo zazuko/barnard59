@@ -1,8 +1,22 @@
 import rdf from 'barnard59-env'
 import { Transform } from 'readable-stream'
-import * as ns from './namespaces.js'
+
+/**
+ * @typedef {(datasetUri: import('@rdfjs/types').NamedNode, index: number) => import('@rdfjs/types').NamedNode} CreatePartitionUri
+ */
 
 class VoidStats extends Transform {
+  /**
+   * @param {import('barnard59-core').Context} context
+   * @param {object} options
+   * @param {import('@rdfjs/types').NamedNode} options.voidDatasetUri
+   * @param {(import('@rdfjs/types').NamedNode | undefined)[]} options.classPartitions
+   * @param {(import('@rdfjs/types').NamedNode | undefined)[]} options.propertyPartitions
+   * @param {boolean} options.includeTotals
+   * @param {import('@rdfjs/types').NamedNode | undefined} options.graph
+   * @param {CreatePartitionUri} options.createClassPartitionUri
+   * @param {CreatePartitionUri} options.createPropertyPartitionUri
+   */
   constructor(context, {
     voidDatasetUri,
     classPartitions,
@@ -13,6 +27,7 @@ class VoidStats extends Transform {
     createPropertyPartitionUri,
   }) {
     super({ objectMode: true })
+    this.rdf = context.env
     this.voidDatasetUri = voidDatasetUri
     this.includeTotals = includeTotals
     this.graph = graph
@@ -33,10 +48,15 @@ class VoidStats extends Transform {
     this.totalEntityCount = 0
   }
 
+  /**
+   * @param {import('@rdfjs/types').Quad} chunk
+   * @param {string} encoding
+   * @param {(error?: Error | null, chunk?: import('@rdfjs/types').Quad) => void} callback
+   */
   _transform(chunk, encoding, callback) {
     this.totalTripleCount++
 
-    if (chunk.predicate.equals(ns.rdf.type)) {
+    if (chunk.predicate.equals(this.rdf.ns.rdf.type)) {
       this.totalEntityCount++
       for (const [key, value] of this.classPartitionsCounts) {
         if (chunk.object.equals(key)) {
@@ -54,25 +74,28 @@ class VoidStats extends Transform {
     callback(null, chunk)
   }
 
+  /**
+   * @param {() => void} callback
+   */
   async _flush(callback) {
     try {
       const datasetUri = toNamedNode(this.voidDatasetUri)
       const datasetGraph = this.graph ? toNamedNode(this.graph) : undefined
 
-      const stats = rdf.clownface({
-        dataset: rdf.dataset(),
+      const stats = this.rdf.clownface({
+        dataset: this.rdf.dataset(),
         graph: datasetGraph,
       })
 
       stats
         .namedNode(datasetUri)
-        .addOut(ns.rdf.type, ns._void.Dataset)
+        .addOut(this.rdf.ns.rdf.type, this.rdf.ns._void.Dataset)
 
       if (this.includeTotals) {
         stats
           .namedNode(datasetUri)
-          .addOut(ns._void.triples, this.totalTripleCount)
-          .addOut(ns._void.entities, this.totalEntityCount)
+          .addOut(this.rdf.ns._void.triples, this.totalTripleCount)
+          .addOut(this.rdf.ns._void.entities, this.totalEntityCount)
       }
 
       if (this.classPartitionsCounts.size) {
@@ -80,10 +103,10 @@ class VoidStats extends Transform {
         for (const [currentClass, count] of this.classPartitionsCounts) {
           stats
             .namedNode(datasetUri)
-            .addOut(ns._void.classPartition, this.createClassPartitionUri(datasetUri, index), partition => {
+            .addOut(this.rdf.ns._void.classPartition, this.createClassPartitionUri(datasetUri, index), partition => {
               partition
-                .addOut(ns._void.class, currentClass)
-                .addOut(ns._void.entities, count)
+                .addOut(this.rdf.ns._void.class, currentClass)
+                .addOut(this.rdf.ns._void.entities, count)
             })
           index += 1
         }
@@ -94,10 +117,10 @@ class VoidStats extends Transform {
         for (const [currentProperty, count] of this.propertyPartitionsCounts) {
           stats
             .namedNode(datasetUri)
-            .addOut(ns._void.propertyPartition, this.createPropertyPartitionUri(datasetUri, index), partition => {
+            .addOut(this.rdf.ns._void.propertyPartition, this.createPropertyPartitionUri(datasetUri, index), partition => {
               partition
-                .addOut(ns._void.property, currentProperty)
-                .addOut(ns._void.entities, count)
+                .addOut(this.rdf.ns._void.property, currentProperty)
+                .addOut(this.rdf.ns._void.entities, count)
             })
           index += 1
         }
@@ -106,7 +129,7 @@ class VoidStats extends Transform {
       for (const quad of stats.dataset) {
         this.push(quad)
       }
-    } catch (err) {
+    } catch (/** @type {any} */ err) {
       this.destroy(err)
     } finally {
       callback()
@@ -114,6 +137,20 @@ class VoidStats extends Transform {
   }
 }
 
+/**
+ * @overload
+ * @param {string | import('@rdfjs/types').NamedNode} item
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
+/**
+ * @overload
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @returns {import('@rdfjs/types').NamedNode | undefined}
+ */
+/**
+ * @param {string | import('@rdfjs/types').NamedNode | undefined} item
+ * @returns {import('@rdfjs/types').NamedNode | undefined}
+ */
 function toNamedNode(item) {
   if (item === undefined) {
     return undefined
@@ -121,14 +158,26 @@ function toNamedNode(item) {
   return typeof item === 'string' ? rdf.namedNode(item) : item
 }
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {object} options
+ * @param {string | import('@rdfjs/types').NamedNode} [options.voidDatasetUri]
+ * @param {(string | import('@rdfjs/types').NamedNode)[]} [options.classPartitions]
+ * @param {(string | import('@rdfjs/types').NamedNode)[]} [options.propertyPartitions]
+ * @param {boolean} [options.includeTotals]
+ * @param {string | import('@rdfjs/types').NamedNode} [options.graph]
+ * @param {CreatePartitionUri} [options.createClassPartitionUri]
+ * @param {CreatePartitionUri} [options.createPropertyPartitionUri]
+ * @return {Transform}
+ */
 function graphStats({
   voidDatasetUri = undefined,
   classPartitions = [],
   propertyPartitions = [],
   includeTotals = true,
   graph = undefined,
-  createClassPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/classPartition/${index}`),
-  createPropertyPartitionUri = (datasetUri, index) => rdf.namedNode(`${datasetUri.value}/propertyPartition/${index}`),
+  createClassPartitionUri = (datasetUri, index) => this.env.namedNode(`${datasetUri.value}/classPartition/${index}`),
+  createPropertyPartitionUri = (datasetUri, index) => this.env.namedNode(`${datasetUri.value}/propertyPartition/${index}`),
 } = {}) {
   if (!voidDatasetUri) {
     throw new Error('Needs voidDatasetUri as parameter')
