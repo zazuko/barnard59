@@ -1,5 +1,5 @@
 import termToNt from '@rdfjs/to-ntriples'
-import rdf from 'barnard59-env'
+import rdf from 'barnard59-env' // TODO;remove this and get env from context
 import ValidationReport from 'rdf-validate-shacl/src/validation-report.js'
 
 function validationResultToString(result) {

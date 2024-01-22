@@ -24,3 +24,11 @@
   rdfs:label "Validates the RDF in standard input against a SHACL document" ;
   b59:source "barnard59-shacl/pipeline/validate.ttl" ;
 .
+
+
+<command/cube/report-summary>
+  a b59:CliCommand ;
+  b59:command "report-summary" ;
+  rdfs:label "Human-readable summary of SHACL validation report" ;
+  b59:source "barnard59-shacl/pipeline/report-summary.ttl" ;
+.
