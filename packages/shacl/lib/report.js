@@ -1,5 +1,4 @@
 import termToNt from '@rdfjs/to-ntriples'
-import rdf from 'barnard59-env' // TODO;remove this and get env from context
 import ValidationReport from 'rdf-validate-shacl/src/validation-report.js'
 
 function validationResultToString(result) {
@@ -25,5 +24,5 @@ function getMessages(report) {
 }
 
 export function getSummary(dataset) {
-  return getMessages(new ValidationReport(rdf.clownface({ dataset })))
+  return getMessages(new ValidationReport(this.env.clownface({ dataset })))
 }
