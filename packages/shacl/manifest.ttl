@@ -26,7 +26,7 @@
 .
 
 
-<command/cube/report-summary>
+<command/report-summary>
   a b59:CliCommand ;
   b59:command "report-summary" ;
   rdfs:label "Human-readable summary of SHACL validation report" ;
