@@ -1,5 +1,11 @@
 # barnard59-shacl
 
+## 1.4.0
+
+### Minor Changes
+
+- 452d885: Added `report-summary` command
+
 ## 1.3.1
 
 ### Patch Changes

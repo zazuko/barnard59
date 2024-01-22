@@ -1,5 +1,16 @@
 # barnard59-cube
 
+## 1.4.0
+
+### Minor Changes
+
+- 37b5b19: Additional commands: `fetch-cube`, `fetch-constraint`
+
+### Patch Changes
+
+- Updated dependencies [452d885]
+  - barnard59-shacl@1.4.0
+
 ## 1.3.0
 
 ### Minor Changes

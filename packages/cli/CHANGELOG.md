@@ -1,5 +1,12 @@
 # barnard59
 
+## 4.5.1
+
+### Patch Changes
+
+- Updated dependencies [9178b7e]
+  - barnard59-env@1.2.3
+
 ## 4.5.0
 
 ### Minor Changes
