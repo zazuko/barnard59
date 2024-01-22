@@ -1,14 +1,9 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
-@prefix base: <https://barnard59.zazuko.com/operations/base/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix : <http://barnard59.zazuko.com/pipeline/cube-validation/> .
 
-[
-  code:imports <./query-cube> ;
-  code:extension "ttl" ;
-] .
 [
   code:imports <./query-constraint> ;
   code:extension "ttl" ;
@@ -24,13 +19,13 @@ _:cube a p:Variable ;
   rdfs:label "cube URI" ;
 .
 
-:fetch-metadata a p:Pipeline , p:Readable ;
+:fetch-constraint a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:endpoint, _:cube ] ;
   p:steps
     [
       p:stepList
         (
-          [ base:concat\/object (:queryCube :queryConstraint) ]
+          :queryConstraint
           [ ntriples:serialize () ]
         )
     ]

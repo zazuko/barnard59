@@ -1,0 +1,25 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
+@prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
+
+@base <http://barnard59.zazuko.com/pipeline/shacl/> .
+
+<report-summary> a p:Pipeline , p:Readable ;
+  p:steps
+    [
+      p:stepList (
+        [ base:stdin () ]
+        [ n3:parse () ]
+        [ rdf:getDataset () ]
+        [ base:map ([ 
+            a code:EcmaScriptModule ; 
+            code:link <file:../lib/report.js#getSummary> 
+          ]) 
+        ]
+        [ base:flatten () ]
+      )
+    ]
+.
+
