@@ -5,7 +5,7 @@ import unpromiseReadable from './lib/unpromiseReadable.js'
  * @this {import('barnard59-core').Context}
  * @param {Pick<import('sparql-http-client').StreamClientOptions, 'user' | 'password'> & {
  *   endpoint: string,
- *   graph: string | import('rdf-js').NamedNode | import('rdf-js').DefaultGraph,
+ *   graph: string | import('@rdfjs/types').NamedNode | import('@rdfjs/types').DefaultGraph,
  * }} options
  */
 function get({ endpoint, graph, user, password }) {

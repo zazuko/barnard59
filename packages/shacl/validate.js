@@ -15,7 +15,7 @@ import { ValidationError } from './lib/errors.js'
 class ValidateChunk extends Transform {
   /**
    * @param {import('barnard59-core').Context} context
-   * @param {import('rdf-js').DatasetCore} shape
+   * @param {import('@rdfjs/types').DatasetCore} shape
    * @param {{ maxErrors?: number, onViolation?: OnViolation }} options
    */
   constructor(context, shape, { maxErrors, onViolation } = {}) {

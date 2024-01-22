@@ -1,4 +1,4 @@
-import type { DatasetCore, Term } from 'rdf-js'
+import type { DatasetCore, Term } from '@rdfjs/types'
 import type { GraphPointer, MultiPointer } from 'clownface'
 import { Logger } from 'winston'
 import { LoaderRegistry } from 'rdf-loaders-registry'
