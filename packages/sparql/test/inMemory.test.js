@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { ok, strictEqual } from 'assert'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import { Readable } from 'readable-stream'
@@ -22,19 +22,21 @@ describe('query', () => {
 
   it('should CONSTRUCT quads', async () => {
     const chunk1 = [
-      rdf.quad(ns.ex.s, ns.ex.p, rdf.literal('0')),
-      rdf.quad(ns.ex.s, ns.ex.p, rdf.literal('1')),
+      rdf.quad(ns.ex.s1, ns.ex.p, ns.ex.o1),
+      rdf.quad(ns.ex.s2, ns.ex.p, ns.ex.s2),
     ]
     const chunk2 = [
-      rdf.quad(ns.ex.s, ns.ex.p, rdf.literal('2')),
+      rdf.quad(ns.ex.s3, ns.ex.p, ns.ex.o3),
     ]
 
-    const construct = query('CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }')
+    const construct = query('CONSTRUCT { ?s ?p "ok" } WHERE { ?s ?p ?s }')
     const pipeline = Readable.from([chunk1, chunk2]).pipe(construct)
     const result = await getStream.array(pipeline)
+    const dataset = rdf.dataset(result.flat())
 
     strictEqual(result.length, 2)
-    strictEqual(result.flat().length, 3)
+    strictEqual(dataset.size, 1)
+    ok(dataset.has(rdf.quad(ns.ex.s2, ns.ex.p, rdf.literal('ok'))))
   })
 })
 
@@ -53,18 +55,21 @@ describe('update', () => {
   })
   it('should UPDATE quads', async () => {
     const chunk1 = [
-      rdf.quad(ns.ex.s, ns.ex.p, rdf.literal('0')),
-      rdf.quad(ns.ex.s, ns.ex.p, rdf.literal('1')),
+      rdf.quad(ns.ex.s1, ns.ex.p, ns.ex.o1),
+      rdf.quad(ns.ex.s2, ns.ex.p, ns.ex.s2),
     ]
     const chunk2 = [
-      rdf.quad(ns.ex.s, ns.ex.p, rdf.literal('2')),
+      rdf.quad(ns.ex.s3, ns.ex.p, ns.ex.o3),
     ]
 
-    const command = update('DELETE { ?s ?p ?o } WHERE { ?s ?p ?o }')
+    const command = update('DELETE { ?s ?p ?s } WHERE { ?s ?p ?s }')
     const pipeline = Readable.from([chunk1, chunk2]).pipe(command)
     const result = await getStream.array(pipeline)
 
     strictEqual(result.length, 2)
-    strictEqual(result.flat().length, 0)
+    const dataset = rdf.dataset(result.flat())
+    strictEqual(dataset.size, 2)
+    ok(dataset.has(rdf.quad(ns.ex.s1, ns.ex.p, ns.ex.o1)))
+    ok(dataset.has(rdf.quad(ns.ex.s3, ns.ex.p, ns.ex.o3)))
   })
 })
