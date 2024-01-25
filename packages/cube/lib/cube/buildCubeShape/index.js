@@ -24,7 +24,7 @@ function defaultShape({ term }) {
 }
 
 class CubeShapeBuilder extends Transform {
-  constructor({ rdf, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
+  constructor({ rdf, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize, targetFile } = {}) {
     super({ objectMode: true })
 
     this.rdf = rdf
@@ -37,6 +37,7 @@ class CubeShapeBuilder extends Transform {
       graph,
       propertyShapeId,
       inListMaxSize,
+      targetFile,
     }
 
     this.init = once(() => this._init())
@@ -93,9 +94,14 @@ class CubeShapeBuilder extends Transform {
   }
 
   _flush(callback) {
+    // TODO: handle multiple cubes in case of targetFile
+    const action = this.options.targetFile
+      ? x => this.rdf.toFile(x.toStream(), this.options.targetFile)
+      : x => this.push(x)
+
     for (const cube of this.options.cubes.values()) {
       const dataset = cube.toDataset({ shapeGraph: this.toNamedNode(this.options.graph) })
-      this.push(dataset)
+      action(dataset)
     }
 
     callback()
@@ -106,8 +112,8 @@ class CubeShapeBuilder extends Transform {
   }
 }
 
-function buildCubeShape({ excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
-  return new CubeShapeBuilder({ rdf: this.env, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize })
+function buildCubeShape({ excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize, targetFile } = {}) {
+  return new CubeShapeBuilder({ rdf: this.env, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize, targetFile })
 }
 
 export default buildCubeShape
