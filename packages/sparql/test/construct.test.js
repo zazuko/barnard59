@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert'
 import getStream from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream, isWritableStream } from 'is-stream'
 import nock from 'nock'
 import rdf from '@zazuko/env'
 import { turtle } from '@tpluscode/rdf-string'
@@ -22,8 +22,8 @@ describe('construct', () => {
 
     const result = await construct({ endpoint, query })
 
-    strictEqual(isReadable(result), true)
-    strictEqual(isWritable(result), false)
+    strictEqual(isReadableStream(result), true)
+    strictEqual(isWritableStream(result), false)
   })
 
   it('should send a GET request', async () => {

@@ -4,7 +4,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <construct> a p:Operation, p:ReadableObjectMode;
-  rdfs:label "SPARQL Select";
+  rdfs:label "SPARQL Construct";
   rdfs:comment "Runs the given CONSTRUCT query against the given endpoint parses the result.";
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-sparql/construct.js#default>
@@ -15,4 +15,18 @@
   rdfs:comment "Runs the given SELECT query against the given endpoint parses the result into rows of RDF/JS key-value pairs.";
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-sparql/select.js#default>
+  ].
+
+<in-memory/update> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "SPARQL in-memory Update";
+  rdfs:comment "Runs the given DELETE/INSERT command against each input chunk.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-sparql/inMemory.js#update>
+  ].
+
+<in-memory/query> a p:Operation, p:ReadableObjectMode;
+  rdfs:label "SPARQL in-memory Query";
+  rdfs:comment "Runs the given query against each input chunk.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-sparql/inMemory.js#query>
   ].
