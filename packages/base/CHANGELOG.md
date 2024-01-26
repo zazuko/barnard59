@@ -1,5 +1,11 @@
 # barnard59-base
 
+## 2.4.0
+
+### Minor Changes
+
+- 7456a6a: added batch operation
+
 ## 2.3.0
 
 ### Minor Changes

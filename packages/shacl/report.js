@@ -4,7 +4,7 @@ import SHACLValidator from 'rdf-validate-shacl'
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {import('rdf-js').DatasetCore} ds
+ * @param {import('@rdfjs/types').DatasetCore} ds
  * @param {number | undefined} maxViolations
  * @param {AsyncIterable<any>} iterable
  */

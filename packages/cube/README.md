@@ -38,7 +38,7 @@ Pipeline `fetch-metadata` queries a given SPARQL endpoint to retrieve
 a [concise bounded description](https://docs.stardog.com/query-stardog/#describe-queries) of a given cube and its constraint (excluding the observations).
 
 ```bash
-npx barnard59 cube fetch-metadata \
+barnard59 cube fetch-metadata \
   --cube https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
   --endpoint https://int.lindas.admin.ch/query
 ```
@@ -55,21 +55,21 @@ The pipeline reads the metadata from `stdin`, allowing input from a local file (
 
 ```bash
 cat cube.ttl \
-| npx barnard59 cube check-metadata \
+| barnard59 cube check-metadata \
     --profile https://cube.link/v0.1.0/shape/standalone-constraint-constraint
 ```
 SHACL reports for violations are written to `stdout`.
 
 In cases when a remote address give to `--profile` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--profileFormat` option to select the correct RDF parser. Its value must be a media type, such as `text/turtle`.
 
-```bash
+
 
 ### fetch observations
 
 Pipeline `fetch-observations` queries a given SPARQL endpoint to retrieve the observations of a given cube.
 
 ```bash
-npx barnard59 cube fetch-observations \
+barnard59 cube fetch-observations \
     --cube https://agriculture.ld.admin.ch/agroscope/PRIFm8t15/2 \
     --endpoint https://int.lindas.admin.ch/query
 ```
@@ -83,7 +83,7 @@ The pipeline reads the observations from `stdin`, allowing input from a local fi
 
 ```bash
 cat observations.ttl \
-| npx barnard59 cube check-observations \
+| barnard59 cube check-observations \
     --constraint metadata.ttl
 ```
 
@@ -94,6 +94,18 @@ To leverage streaming, input is split and validated in little batches of adjusta
 SHACL reports for violations are written to `stdout`.
 
 To limit the output size, there is also a `maxViolations` option to stop validation when the given number of violations is reached.
+
+
+### Report Summary
+The validation pipelines write a machine-readable [standard](https://www.w3.org/TR/shacl/#validation-report) report to `stdout`. 
+The `barnard59-shacl` package provides an additional `report-summary` pipeline to produce a human-readable summary of this report:
+
+```bash
+cat observations.ttl \
+| barnard59 cube check-observations --constraint metadata.ttl \
+| barnard59 shacl report-summary
+```
+
 
 ### Known issues
 

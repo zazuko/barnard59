@@ -3,14 +3,12 @@ import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import setGraph from '../setGraph.js'
+import setGraphUnbound from '../setGraph.js'
 import * as ns from './support/namespaces.js'
 
-describe('setGraph', () => {
-  it('should be a factory', () => {
-    strictEqual(typeof setGraph, 'function')
-  })
+const setGraph = setGraphUnbound.bind({ env: rdf })
 
+describe('setGraph', () => {
   it('should return a duplex stream', () => {
     const stream = setGraph(ns.ex.graph)
 

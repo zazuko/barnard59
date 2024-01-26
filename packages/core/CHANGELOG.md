@@ -1,5 +1,17 @@
 # barnard59-core
 
+## 5.3.2
+
+### Patch Changes
+
+- e82aa36: Remove references of `rdf-js` types package, repaced with `@rdfjs/types`
+
+## 5.3.1
+
+### Patch Changes
+
+- 9d0ce9f: Improve Windows compatibility (re zazuko/rdf-loader-code#34)
+
 ## 5.3.0
 
 ### Minor Changes

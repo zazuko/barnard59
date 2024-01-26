@@ -6,11 +6,12 @@ import { isGraphPointer } from 'is-graph-pointer'
 import { packageDirectory } from 'pkg-dir'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import isInstalledGlobally from 'is-installed-globally'
+import transformImports from 'rdf-transform-graph-imports'
 import findPipeline from '../findPipeline.js'
 import discoverManifests from './discoverManifests.js'
 
 /**
- * @typedef {Map<import('rdf-js').Term, { type: import('rdf-js').NamedNode, link: import('rdf-js').NamedNode }>} OperationMap
+ * @typedef {Map<import('@rdfjs/types').Term, { type: import('@rdfjs/types').NamedNode, link: import('@rdfjs/types').NamedNode }>} OperationMap
  */
 
 /**
@@ -34,12 +35,12 @@ const discoverOperations = async (pipelinePath) => {
 }
 
 /**
- * @param {import('rdf-js').DatasetCore} dataset
+ * @param {import('@rdfjs/types').DatasetCore} dataset
  * @param {object} options
  * @param {import('winston').Logger} [options.logger]
  * @param {OperationMap} [options.knownOperations]
  * @param {string} options.pipelinePath
- * @returns {Promise<import('rdf-js').DatasetCore>}
+ * @returns {Promise<import('@rdfjs/types').DatasetCore>}
  */
 export const desugar = async (dataset, { logger, knownOperations, pipelinePath }) => {
   const operations = knownOperations ?? await discoverOperations(pipelinePath)
@@ -94,15 +95,18 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
 
 /**
  * @param {string} filename
- * @return {Promise<import('rdf-js').DatasetCore>}
+ * @return {Promise<import('@rdfjs/types').DatasetCore>}
  */
 async function fileToDataset(filename) {
-  return rdf.dataset().import(rdf.fromFile(filename))
+  const stream = rdf.fromFile(filename, {
+    implicitBaseIRI: true,
+  }).pipe(transformImports(rdf))
+  return rdf.dataset().import(stream)
 }
 
 /**
  * @param {string} filename
- * @param {string | import('@rdfjs/types').NamedNode | undefined} iri
+ * @param {string | import('@rdfjs/types').NamedNode} [iri]
  * @param {object} [options]
  * @param {import('winston').Logger} [options.logger]
  * @return {Promise<{ basePath: string, ptr: import('clownface').GraphPointer }>}

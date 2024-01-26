@@ -1,4 +1,4 @@
-import { deepStrictEqual, strictEqual } from 'assert'
+import { deepStrictEqual, strictEqual } from 'node:assert'
 import { array } from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import { Readable } from 'readable-stream'

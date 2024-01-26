@@ -1,0 +1,45 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
+@prefix base: <https://barnard59.zazuko.com/operations/base/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+[
+  code:imports <./query-cube> ;
+  code:extension "ttl" ;
+] .
+[
+  code:imports <./query-observation-sets> ;
+  code:extension "ttl" ;
+] .
+[
+  code:imports <./query-observations> ;
+  code:extension "ttl" ;
+] .
+
+_:endpoint a p:Variable ;
+  p:name "endpoint" ;
+  rdfs:label "SPARQL endpoint" ;
+.
+
+_:cube a p:Variable ;
+  p:name "cube" ;
+  rdfs:label "cube URI" ;
+.
+
+:fetch-cube a p:Pipeline , p:Readable ;
+  p:variables [ p:variable _:endpoint, _:cube ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [ base:concat\/object (
+            :queryCube 
+            :queryObservationSet
+            :queryObservations
+            ) ]
+          [ ntriples:serialize () ]
+        )
+    ]
+.

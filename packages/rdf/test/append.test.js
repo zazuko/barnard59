@@ -1,41 +1,31 @@
-import { equal, strictEqual } from 'assert'
-import fs from 'fs'
+import { equal, strictEqual } from 'node:assert'
+import fs from 'node:fs'
 import fsp from 'fs/promises'
-import { fileURLToPath } from 'url'
-import { resolve } from 'path'
+import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import nock from 'nock'
 import rdf from 'barnard59-env'
 import { Readable } from 'readable-stream'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
-import addAll from 'rdf-dataset-ext/addAll.js'
-import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import appendUnbound from '../lib/append.js'
-import { schema, xsd, dcterms } from '../lib/namespaces.js'
-
-const dataPath = './support/dataset.ttl'
-
-const metadataPath = './support/dataset_description.ttl'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+const dataPath = resolve(__dirname, './support/dataset.ttl')
+
+const metadataPath = resolve(__dirname, './support/dataset_description.ttl')
 
 const ex = rdf.namespace('http://example.org/')
 
 async function getRDFDataset(filePath) {
-  return fromStream(rdf.dataset(), getRDFStream(filePath))
-}
-
-function getRDFStream(filePath) {
-  const stream = fs.createReadStream(resolve(__dirname, filePath))
-  const parser = rdf.formats.parsers.get('text/turtle')
-  return parser.import(stream)
+  return rdf.dataset().import(rdf.fromFile(filePath))
 }
 
 async function applyStep(transform) {
   const initial = await getRDFDataset(dataPath)
-  const stream = getRDFStream(dataPath).pipe(transform)
+  const stream = rdf.fromFile(dataPath).pipe(transform)
   const final = rdf.dataset(await getStream.array(stream))
   return { initial, final }
 }
@@ -51,7 +41,7 @@ describe('metadata.append', () => {
 
   it('should return a duplex stream with a stream metadata parameter', async () => {
     const step = await append({
-      input: getRDFStream(metadataPath),
+      input: rdf.fromFile(metadataPath),
     })
     strictEqual(isDuplex(step), true)
   })
@@ -78,24 +68,24 @@ describe('metadata.append', () => {
 
   it('should append data and metadata with default values', async () => {
     const all = rdf.dataset()
-    addAll(all, await getRDFDataset(dataPath))
-    addAll(all, await getRDFDataset(metadataPath))
+      .addAll(await getRDFDataset(dataPath))
+      .addAll(await getRDFDataset(metadataPath))
 
     const step = await append({
-      input: getRDFStream(metadataPath),
+      input: rdf.fromFile(metadataPath),
     })
     const { final } = await applyStep(step)
 
     equal(
-      toCanonical(final),
-      toCanonical(all), 'appended quads not as expected',
+      final.toCanonical(),
+      all.toCanonical(), 'appended quads not as expected',
     )
   })
 
   it('should append data and metadata with default values, and path as string', async () => {
     const all = rdf.dataset()
-    addAll(all, await getRDFDataset(dataPath))
-    addAll(all, await getRDFDataset(metadataPath))
+      .addAll(await getRDFDataset(dataPath))
+      .addAll(await getRDFDataset(metadataPath))
 
     const step = await append({
       input: metadataPath,
@@ -104,8 +94,8 @@ describe('metadata.append', () => {
     const { final } = await applyStep(step)
 
     equal(
-      toCanonical(final),
-      toCanonical(all), 'appended quads not as expected',
+      final.toCanonical(),
+      all.toCanonical(), 'appended quads not as expected',
     )
   })
 
@@ -173,14 +163,14 @@ describe('File System: metadata.append', () => {
     const result = await getStream.array(Readable.from(data).pipe(step))
     strictEqual(result.length, 7)
 
-    strictEqual(result[4].predicate.value, schema.dateModified.value)
+    strictEqual(result[4].predicate.value, rdf.ns.schema.dateModified.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, dcterms.created.value)
-    strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[5].predicate.value, rdf.ns.dcterms.created.value)
+    strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
 
-    strictEqual(result[6].predicate.value, schema.dateCreated.value)
-    strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[6].predicate.value, rdf.ns.schema.dateCreated.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_FILE_CREATION with dateModified', async () => {
@@ -199,14 +189,14 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result.length, 7)
 
-    strictEqual(result[4].predicate.value, schema.dateCreated.value)
+    strictEqual(result[4].predicate.value, rdf.ns.schema.dateCreated.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, dcterms.modified.value)
-    strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[5].predicate.value, rdf.ns.dcterms.modified.value)
+    strictEqual(result[5].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
 
-    strictEqual(result[6].predicate.value, schema.dateModified.value)
-    strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[6].predicate.value, rdf.ns.schema.dateModified.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_FILE_MODIFICATION with dateCreated', async () => {
@@ -224,14 +214,14 @@ describe('File System: metadata.append', () => {
     const result = await getStream.array(Readable.from(data).pipe(step))
     strictEqual(result.length, 7)
 
-    strictEqual(result[4].predicate.value, schema.dateModified.value)
+    strictEqual(result[4].predicate.value, rdf.ns.schema.dateModified.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, dcterms.created.value)
-    strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[5].predicate.value, rdf.ns.dcterms.created.value)
+    strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
 
-    strictEqual(result[6].predicate.value, schema.dateCreated.value)
-    strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[6].predicate.value, rdf.ns.schema.dateCreated.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_FILE_MODIFICATION with dateModified', async () => {
@@ -250,14 +240,14 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result.length, 7)
 
-    strictEqual(result[4].predicate.value, schema.dateCreated.value)
+    strictEqual(result[4].predicate.value, rdf.ns.schema.dateCreated.value)
     strictEqual(result[4].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[5].predicate.value, dcterms.modified.value)
-    strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[5].predicate.value, rdf.ns.dcterms.modified.value)
+    strictEqual(result[5].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
 
-    strictEqual(result[6].predicate.value, schema.dateModified.value)
-    strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), xsd.dateTime).value)
+    strictEqual(result[6].predicate.value, rdf.ns.schema.dateModified.value)
+    strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
   it('should use resolved literal TIME_NOW with dateModified', async () => {
@@ -265,9 +255,9 @@ describe('File System: metadata.append', () => {
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
     const metadata = [
-      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
-      rdf.quad(ex.subject1, schema.dateCreated, rdf.literal('2020-05-30')),
-      rdf.quad(ex.subject1, schema.dateModified, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdf.ns.schema.Dataset),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateCreated, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateModified, rdf.literal('2020-05-30')),
     ]
     const step = await append({
       input: Readable.from(metadata),
@@ -278,10 +268,10 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result.length, 4)
 
-    strictEqual(result[2].predicate.value, schema.dateCreated.value)
+    strictEqual(result[2].predicate.value, rdf.ns.schema.dateCreated.value)
     strictEqual(result[2].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[3].predicate.value, schema.dateModified.value)
+    strictEqual(result[3].predicate.value, rdf.ns.schema.dateModified.value)
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
   })
 
@@ -290,9 +280,9 @@ describe('File System: metadata.append', () => {
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
     const metadata = [
-      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
-      rdf.quad(ex.subject1, schema.dateCreated, rdf.literal('2020-05-30')),
-      rdf.quad(ex.subject1, schema.dateModified, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdf.ns.schema.Dataset),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateCreated, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateModified, rdf.literal('2020-05-30')),
     ]
     const step = await append({
       input: Readable.from(metadata),
@@ -303,10 +293,10 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result.length, 4)
 
-    strictEqual(result[2].predicate.value, schema.dateModified.value)
+    strictEqual(result[2].predicate.value, rdf.ns.schema.dateModified.value)
     strictEqual(result[2].object.value, rdf.literal('2020-05-30').value)
 
-    strictEqual(result[3].predicate.value, schema.dateCreated.value)
+    strictEqual(result[3].predicate.value, rdf.ns.schema.dateCreated.value)
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
   })
 
@@ -315,8 +305,8 @@ describe('File System: metadata.append', () => {
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
     const metadata = [
-      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
-      rdf.quad(ex.subject1, schema.dateModified, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdf.ns.schema.Dataset),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateModified, rdf.literal('2020-05-30')),
     ]
     const step = await append({
       input: Readable.from(metadata),
@@ -327,7 +317,7 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result.length, 3)
 
-    strictEqual(result[2].predicate.value, schema.dateModified.value)
+    strictEqual(result[2].predicate.value, rdf.ns.schema.dateModified.value)
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 
@@ -336,8 +326,8 @@ describe('File System: metadata.append', () => {
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
     const metadata = [
-      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
-      rdf.quad(ex.subject1, schema.dateCreated, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdf.ns.schema.Dataset),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateCreated, rdf.literal('2020-05-30')),
     ]
     const step = await append({
       input: Readable.from(metadata),
@@ -348,7 +338,7 @@ describe('File System: metadata.append', () => {
 
     strictEqual(result.length, 3)
 
-    strictEqual(result[2].predicate.value, schema.dateCreated.value)
+    strictEqual(result[2].predicate.value, rdf.ns.schema.dateCreated.value)
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 
@@ -357,19 +347,19 @@ describe('File System: metadata.append', () => {
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
     const metadata = [
-      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
-      rdf.quad(ex.subject1, schema.dateModified, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdf.ns.schema.Dataset),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateModified, rdf.literal('2020-05-30')),
     ]
     const step = await append({
       input: Readable.from(metadata),
-      dateModified: rdf.literal('1999-12-31', xsd.dateTime),
+      dateModified: rdf.literal('1999-12-31', rdf.ns.xsd.dateTime),
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     strictEqual(result.length, 3)
 
-    strictEqual(result[2].predicate.value, schema.dateModified.value)
+    strictEqual(result[2].predicate.value, rdf.ns.schema.dateModified.value)
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 
@@ -378,19 +368,19 @@ describe('File System: metadata.append', () => {
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
     const metadata = [
-      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), schema.Dataset),
-      rdf.quad(ex.subject1, schema.dateCreated, rdf.literal('2020-05-30')),
+      rdf.quad(ex.subject1, rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdf.ns.schema.Dataset),
+      rdf.quad(ex.subject1, rdf.ns.schema.dateCreated, rdf.literal('2020-05-30')),
     ]
     const step = await append({
       input: Readable.from(metadata),
-      dateCreated: rdf.literal('1999-12-31', xsd.dateTime),
+      dateCreated: rdf.literal('1999-12-31', rdf.ns.xsd.dateTime),
     })
 
     const result = await getStream.array(Readable.from(data).pipe(step))
 
     strictEqual(result.length, 3)
 
-    strictEqual(result[2].predicate.value, schema.dateCreated.value)
+    strictEqual(result[2].predicate.value, rdf.ns.schema.dateCreated.value)
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 })

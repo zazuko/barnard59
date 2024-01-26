@@ -1,5 +1,4 @@
-import { strictEqual, rejects } from 'assert'
-import { resolve } from 'path'
+import { strictEqual, rejects } from 'node:assert'
 import rdf from 'barnard59-env'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { run } from '../../index.js'
@@ -10,8 +9,7 @@ const context = { env: rdf }
 
 describe('loader/pipeline', () => {
   it('should use the given variables', async () => {
-    const basePath = resolve('test')
-    const { ptr } = await loadPipelineDefinition('plain')
+    const { ptr, basePath } = await loadPipelineDefinition('plain')
 
     const variables = new Map([
       ['foo', 'bar'],
