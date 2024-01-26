@@ -1,5 +1,12 @@
 # barnard59
 
+## 4.5.3
+
+### Patch Changes
+
+- Updated dependencies [ce6aca4]
+  - barnard59-core@5.3.3
+
 ## 4.5.2
 
 ### Patch Changes

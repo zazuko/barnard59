@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 5.3.3
+
+### Patch Changes
+
+- ce6aca4: Using anylogger caused errors when calling without a level
+
 ## 5.3.2
 
 ### Patch Changes
