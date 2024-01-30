@@ -33,7 +33,7 @@ async function * validate(ds, maxViolations, iterable) {
     const report = this.env.dataset()
     const blankNode = this.env.blankNode('report')
     report.add(this.env.quad(blankNode, this.env.ns.rdf.type, this.env.ns.sh.ValidationReport))
-    report.add(this.env.quad(blankNode, this.env.ns.sh.conforms, this.env.literal(true, this.env.ns.xsd.boolean)))
+    report.add(this.env.quad(blankNode, this.env.ns.sh.conforms, this.env.literal('true', this.env.ns.xsd.boolean)))
     yield report
   }
 }
