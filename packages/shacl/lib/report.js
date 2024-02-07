@@ -33,6 +33,8 @@ export function getSummary() {
     }
     if (total) {
       this.error(new Error(`${total} violations found`))
+    } else {
+      yield 'successful\n'
     }
   }.bind(this)
 }
