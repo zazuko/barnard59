@@ -1,11 +1,9 @@
-import { Readable } from 'stream'
-import { resolve } from 'path'
-import * as url from 'url'
+import { Readable } from 'node:stream'
+import { resolve } from 'node:path'
+import * as url from 'node:url'
 import $rdf from 'barnard59-env'
 import chai, { expect } from 'chai'
 import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
-import fromStream from 'rdf-dataset-ext/fromStream.js'
-import toCanonical from 'rdf-dataset-ext/toCanonical.js'
 import { parse as unbound } from '../fs.js'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
@@ -25,10 +23,10 @@ describe('fs', () => {
       ])
 
       // when
-      const dataset = await fromStream($rdf.dataset(), files.pipe(parse()))
+      const dataset = await $rdf.dataset().import(files.pipe(parse()))
 
       // then
-      expect(toCanonical(dataset)).toMatchSnapshot()
+      expect(dataset.toCanonical()).toMatchSnapshot()
     })
 
     it('fails when file does not exist', (done) => {

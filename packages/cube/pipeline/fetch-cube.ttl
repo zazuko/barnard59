@@ -10,7 +10,11 @@
   code:extension "ttl" ;
 ] .
 [
-  code:imports <./query-constraint> ;
+  code:imports <./query-observation-sets> ;
+  code:extension "ttl" ;
+] .
+[
+  code:imports <./query-observations> ;
   code:extension "ttl" ;
 ] .
 
@@ -24,13 +28,17 @@ _:cube a p:Variable ;
   rdfs:label "cube URI" ;
 .
 
-:fetch-metadata a p:Pipeline , p:Readable ;
+:fetch-cube a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:endpoint, _:cube ] ;
   p:steps
     [
       p:stepList
         (
-          [ base:concat\/object (:queryCube :queryConstraint) ]
+          [ base:concat\/object (
+            :queryCube 
+            :queryObservationSet
+            :queryObservations
+            ) ]
           [ ntriples:serialize () ]
         )
     ]

@@ -74,6 +74,7 @@ function factory({ console = true, errorFilename = null, filename = null, level 
         return ((<any>logger)[method] || logger.debug)(...args)
       }
     }
+    facade.log = facade.debug
     return facade
   }
 

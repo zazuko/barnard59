@@ -1,10 +1,13 @@
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
-@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://barnard59.zazuko.com/pipeline/cube-validation/> .
 
-@base <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+[
+  code:imports <./query-observations> ;
+  code:extension "ttl" ;
+] .
 
 _:endpoint a p:Variable ;
   p:name "endpoint" ;
@@ -16,34 +19,14 @@ _:cube a p:Variable ;
   rdfs:label "cube URI" ;
 .
 
-<fetch-observations> a p:Pipeline , p:Readable ;
+:fetch-observations a p:Pipeline , p:Readable ;
   p:variables [ p:variable _:endpoint, _:cube ] ;
   p:steps
     [
       p:stepList
         (
-          _:queryObservations
+          :queryObservations
           [ ntriples:serialize () ]
         )
-    ]
-.
-
-
-_:queryObservations sparql:construct
-    [
-      code:name "endpoint";
-      code:value "endpoint"^^p:VariableName
-    ] ,
-    [
-      code:name "query";
-      code:value """
-      PREFIX cube: <https://cube.link/>
-
-      CONSTRUCT { ?s ?p ?o }
-      WHERE {
-        <${cube}> cube:observationSet/cube:observation ?s .
-        ?s ?p ?o
-      }
-      """^^code:EcmaScriptTemplateLiteral
     ]
 .

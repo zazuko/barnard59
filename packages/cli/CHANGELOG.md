@@ -1,5 +1,42 @@
 # barnard59
 
+## 4.5.3
+
+### Patch Changes
+
+- Updated dependencies [ce6aca4]
+  - barnard59-core@5.3.3
+
+## 4.5.2
+
+### Patch Changes
+
+- e82aa36: Remove references of `rdf-js` types package, repaced with `@rdfjs/types`
+- Updated dependencies [e82aa36]
+  - barnard59-core@5.3.2
+
+## 4.5.1
+
+### Patch Changes
+
+- Updated dependencies [9178b7e]
+  - barnard59-env@1.2.3
+
+## 4.5.0
+
+### Minor Changes
+
+- 68dff05: Support [`code:imports`](https://github.com/zazuko/rdf-transform-graph-imports) when loading pipeline definitions (closes #93)
+
+### Patch Changes
+
+- 9d0ce9f: Improve Windows compatibility (re zazuko/rdf-loader-code#34)
+- Updated dependencies [9d0ce9f]
+- Updated dependencies [c090ff2]
+- Updated dependencies [82dbe7e]
+  - barnard59-core@5.3.1
+  - barnard59-env@1.2.2
+
 ## 4.4.0
 
 ### Minor Changes

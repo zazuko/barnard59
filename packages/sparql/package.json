@@ -19,13 +19,15 @@
   "homepage": "https://github.com/zazuko/barnard59-sparql",
   "dependencies": {
     "duplex-to": "^1.0.1",
+    "oxigraph": "^0.4.0-alpha.2",
+    "readable-stream": "^4.5.2",
     "sparql-http-client": "^2.4.0"
   },
   "devDependencies": {
     "@tpluscode/rdf-string": "^1.1.2",
     "@zazuko/env": "^2",
     "get-stream": "^6.0.0",
-    "isstream": "^0.1.2",
+    "is-stream": "^3.0.0",
     "nock": "^13.1.1"
   },
   "engines": {
