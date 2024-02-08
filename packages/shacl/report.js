@@ -1,6 +1,7 @@
 import { Duplex } from 'node:stream'
 import { isReadableStream, isStream } from 'is-stream'
 import SHACLValidator from 'rdf-validate-shacl'
+import TermCounter from './lib/TermCounter.js'
 
 /**
  * @this {import('barnard59-core').Context}
@@ -10,6 +11,7 @@ import SHACLValidator from 'rdf-validate-shacl'
  */
 async function * validate(ds, maxViolations, iterable) {
   let totalViolations = 0
+  const counter = new TermCounter(this.env)
 
   for await (const chunk of iterable) {
     if (maxViolations && totalViolations > maxViolations) {
@@ -21,11 +23,13 @@ async function * validate(ds, maxViolations, iterable) {
     const validator = new SHACLValidator(ds, { maxErrors: 0, factory: this.env })
     const report = validator.validate(chunk)
     if (!report.conforms) {
-      const violations = report.results.filter(r => this.env.ns.sh.Violation.equals(r.severity)).length
-      totalViolations += violations
+      report.results.forEach(r => counter.add(r.severity))
+      totalViolations = counter.termMap.get(this.env.ns.sh.Violation) ?? 0
       yield report.dataset
     }
   }
+
+  counter.termMap.forEach((count, term) => this.logger.warn(`${count} results with severity ${term.value}`))
 
   if (totalViolations) {
     this.error(new Error(`${totalViolations} violations found`))
