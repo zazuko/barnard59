@@ -17,6 +17,10 @@
   code:imports <./query-observations> ;
   code:extension "ttl" ;
 ] .
+[
+  code:imports <./query-constraint> ;
+  code:extension "ttl" ;
+] .
 
 _:endpoint a p:Variable ;
   p:name "endpoint" ;
@@ -35,7 +39,8 @@ _:cube a p:Variable ;
       p:stepList
         (
           [ base:concat\/object (
-            :queryCube 
+            :queryCube
+            :queryConstraint
             :queryObservationSet
             :queryObservations
             ) ]
