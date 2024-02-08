@@ -23,7 +23,10 @@ async function * validate(ds, maxViolations, iterable) {
     const validator = new SHACLValidator(ds, { maxErrors: 0, factory: this.env })
     const report = validator.validate(chunk)
     if (!report.conforms) {
-      report.results.forEach(r => counter.add(r.severity))
+      for (const result of report.results) {
+        if (result.severity) counter.add(result.severity)
+      }
+
       totalViolations = counter.termMap.get(this.env.ns.sh.Violation) ?? 0
       yield report.dataset
     }
