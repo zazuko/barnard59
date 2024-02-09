@@ -23,6 +23,18 @@ function getMessages(report) {
     .map(message => message + '\n')
 }
 
-export function getSummary(dataset) {
-  return getMessages(new ValidationReport(this.env.clownface({ dataset })))
+export function getSummary() {
+  return async function * (stream) {
+    let total = 0
+    for await (const dataset of stream) {
+      const messages = getMessages(new ValidationReport(this.env.clownface({ dataset })))
+      total += messages.length
+      yield messages
+    }
+    if (total) {
+      this.error(new Error(`${total} violations found`))
+    } else {
+      yield 'successful\n'
+    }
+  }.bind(this)
 }
