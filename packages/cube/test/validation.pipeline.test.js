@@ -51,4 +51,27 @@ describe('cube validation pipeline', function () {
     strictEqual(result.stdout, '')
     strictEqual(result.code, 0)
   })
+
+  it('should run check-cube-observations pipeline with error for cube.link examples', () => {
+    const constraintFile = `${support}/constraint.ttl`
+    // sh:class constraint fails because of batching
+    const command = `cat ${support}/cube.ttl | barnard59 cube check-observations --constraint ${constraintFile} --batchSize 10`
+
+    const result = shell.exec(command, { silent: true, cwd })
+
+    strictEqual(result.code, 1)
+    ok(result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
+  })
+
+  it('should run check-cube-observations pipeline with cube.link examples', () => {
+    const constraintFile = `${support}/constraint.ttl`
+    // disabling batching makes all data available when checking the sh:class constraint
+    const command = `cat ${support}/cube.ttl | barnard59 cube check-observations --constraint ${constraintFile} --batchSize 0`
+
+    const result = shell.exec(command, { silent: true, cwd })
+
+    strictEqual(result.stderr, '')
+    strictEqual(result.stdout, '')
+    strictEqual(result.code, 0)
+  })
 })

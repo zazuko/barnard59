@@ -46,7 +46,7 @@ _:sortChunkSize a p:Variable ;
         _:sortBySubject
         [ splitDataset:bySubject () ]
         [ base:batch ("batchSize"^^p:VariableName) ]
-        [ base:flatten () ]
+        _:merge
         [ shacl:report
           [code:name "shape" ; code:value _:getConstraint ] ,
           [code:name "maxErrors" ; code:value "maxViolations"^^p:VariableName ]
@@ -79,6 +79,13 @@ _:readConstraint a p:Step ;
   """^^code:EcmaScript ;
   code:arguments ("constraint"^^p:VariableName)
 .
+
+_:merge base:map (
+  [
+    a code:EcmaScriptModule ;
+    code:link <file:../lib/merge.js#default>
+  ]
+) .
 
 _:addTarget base:map (
   [
