@@ -1,5 +1,11 @@
 # barnard59-shacl
 
+## 1.4.2
+
+### Patch Changes
+
+- 052b1a5: Produce SHACL report on successful validation
+
 ## 1.4.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # barnard59-sparql
 
+## 2.2.0
+
+### Minor Changes
+
+- e2705c8: Add In-Memory SPARQL operations (closes #255)
+
 ## 2.1.1
 
 ### Patch Changes

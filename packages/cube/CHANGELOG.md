@@ -1,5 +1,17 @@
 # barnard59-cube
 
+## 1.4.1
+
+### Patch Changes
+
+- 2d61960: Fix batch size in check-observations
+- 8ae9c7e: Include `cube:Constraint` when calling `b59 cube fetch-cube`
+- e7f32d5: Updated dependency to avoid Windows errors in temp files cleanup
+- Updated dependencies [052b1a5]
+- Updated dependencies [e2705c8]
+  - barnard59-shacl@1.4.2
+  - barnard59-sparql@2.2.0
+
 ## 1.4.0
 
 ### Minor Changes
