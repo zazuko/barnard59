@@ -1,5 +1,18 @@
 # barnard59-env
 
+## 1.2.3
+
+### Patch Changes
+
+- 9178b7e: .d.ts files were not included in package
+
+## 1.2.2
+
+### Patch Changes
+
+- c090ff2: Update `@zazuko/env` to v2
+- 82dbe7e: Exported environment did not include fs functionality
+
 ## 1.2.1
 
 ### Patch Changes

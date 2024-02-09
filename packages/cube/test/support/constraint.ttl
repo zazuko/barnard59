@@ -1,0 +1,67 @@
+@base <http://example.org/cube-link-example/> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix cube: <https://cube.link/> .
+@prefix dh: <http://ns.bergnet.org/dark-horse#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix schema: <http://schema.org/>.
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+
+<temperature-sensor/cube/constraint> a sh:NodeShape, cube:Constraint ;
+  sh:closed true ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:nodeKind sh:IRI ;
+    sh:in ( cube:Observation )
+  ], [
+    sh:path cube:observedBy ;
+    sh:nodeKind sh:IRI ;
+    sh:in ( <temperature-sensor> )
+  ], [
+    schema:name "Date and Time"@en, "Datum und Zeit"@de, "Date et heure"@fr; # optional, label of the vocab can be used
+    sh:path dc:date ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    qudt:scaleType qudt:IntervalScale ;
+  ], [
+    schema:name "Humidity"@en, "Feuchtigkeit"@de, "Humidité"@fr ; # optional, label of the vocab can be used
+    sh:path dh:humidity ;
+    sh:datatype xsd:decimal ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:minInclusive 0 ;
+    sh:maxInclusive 100 ;
+    qudt:scaleType qudt:IntervalScale ;
+  ], [
+    schema:name "Low Battery Power"@en, "Niedrige Batterieleistung"@de, "Piles faibles"@fr  ; # optional, label of the vocab can be used
+    sh:path dh:lowBatteryPower ;
+    sh:datatype xsd:boolean ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:in ( "true"^^xsd:boolean "false"^^xsd:boolean ) ;
+    qudt:scaleType qudt:NominalScale ;
+  ], [
+    schema:name "Temperature"@en, "Temperatur"@de, "Température"@fr ; # optional, label of the vocab can be used
+    sh:path dh:temperature ;
+    sh:datatype xsd:decimal ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:minInclusive -50 ;
+    sh:maxInclusive 50 ;
+    qudt:scaleType qudt:IntervalScale ;
+  ], [
+    schema:name "Raum"@de , "Pièce"@fr ,"Room"@en ;
+    sh:path dh:room ;
+    sh:maxCount 1 ;
+    sh:class schema:Place ;
+    sh:nodeKind sh:IRI ;
+    sh:in ( <building1/level1/room1> <building1/level1/room2> <building1/level2/room1> <building1/level2/room2> <building2/level1/room1> <building2/level1/room2> <building2/level2/room1> <building2/level2/room2> ) ;
+    qudt:scaleType qudt:NominalScale ;
+  ] .

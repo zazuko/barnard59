@@ -1,0 +1,248 @@
+@base <http://example.org/cube-link-example/> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix cube: <https://cube.link/> .
+@prefix dh: <http://ns.bergnet.org/dark-horse#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix schema: <http://schema.org/>.
+
+<temperature-sensor> a dh:Device, dh:TemperatureSensor ;
+  schema:name "Thermometer"@en ;
+  schema:name "Thermometer"@de ;
+  schema:name "Thermomètre"@fr . 
+
+<temperature-sensor/cube> a cube:Cube, schema:Dataset ;
+  schema:name "Thermometer Historical Data"@en ;
+  schema:name "Historische Daten vom Thermometer"@de ;
+  schema:name "Données historiques du thermomètre"@fr ;
+  schema:description "Die Daten werden von Temperatursensoren in den verschiedenen Räumen automatisch erfasst."@de ;
+  schema:description "Les données sont automatiquement collectées par des capteurs de température dans les différentes pièces."@fr ;
+  schema:description "The data is automatically collected by temperature sensors in the various rooms."@en ;
+  schema:publisher <org/zazuko>;
+  schema:creator <org/zazuko> ;
+  schema:contactPoint <org/zazuko> ;
+  schema:contributor <org/zazuko> ;
+  cube:observationSet <temperature-sensor/cube/observation> ;
+  cube:observationConstraint <temperature-sensor/cube/constraint> ;
+  schema:dateCreated "2020-05-04"^^xsd:date ; # The date on which the CreativeWork was created or the item was added to a DataFeed.
+  schema:datePublished "2020-05-04"^^xsd:date ; # Date of first broadcast/publication.
+  schema:dateModified "2020-05-04"^^xsd:date ; # The date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed.
+  schema:workExample <http://my.fancy.webapp> . # What apps use/visualize this cube data
+
+<temperature-sensor/cube/observation> a cube:ObservationSet ;
+  cube:observation <temperature-sensor/cube/observation/20190102T120000058Z>,
+    <temperature-sensor/cube/observation/20190103T120000055Z>,
+    <temperature-sensor/cube/observation/20190104T120000013Z>,
+    <temperature-sensor/cube/observation/20190105T120000041Z>,
+    <temperature-sensor/cube/observation/20190106T120000057Z>,
+    <temperature-sensor/cube/observation/20190107T120000059Z>,
+    <temperature-sensor/cube/observation/20190108T120000017Z>,
+    <temperature-sensor/cube/observation/20190109T120000055Z>,
+    <temperature-sensor/cube/observation/20190110T120000059Z>,
+    <temperature-sensor/cube/observation/20190111T120000055Z>,
+    <temperature-sensor/cube/observation/20190112T120000055Z>,
+    <temperature-sensor/cube/observation/20190113T120000055Z>,
+    <temperature-sensor/cube/observation/20190114T120000015Z> .
+
+<temperature-sensor/cube/observation/20190102T120000058Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level1/room1> ;
+  dh:humidity 79.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 2.8999999999999999112 ;
+  dc:date "2019-01-02T12:00:00.058000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190103T120000055Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level1/room1> ;
+  dh:humidity 75.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 0.0 ;
+  dc:date "2019-01-03T12:00:00.055000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190104T120000013Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level1/room1> ;
+  dh:humidity 83.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 0.0 ;
+  dc:date "2019-01-04T12:00:00.013000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190105T120000041Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level1/room2> ;
+  dh:humidity 87.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 1.3000000000000000444 ;
+  dc:date "2019-01-05T12:00:00.041000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190106T120000057Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room1> ;
+  dh:humidity 88.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 2.3999999999999999112 ;
+  dc:date "2019-01-06T12:00:00.057000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190107T120000059Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room1> ;
+  dh:humidity 89.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 2.7999999999999998224 ;
+  dc:date "2019-01-07T12:00:00.059000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190108T120000017Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room2> ;
+  dh:humidity 88.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 2.7000000000000001776 ;
+  dc:date "2019-01-08T12:00:00.017000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190109T120000055Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room1> ;
+  dh:humidity 86.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 1.3000000000000000444 ;
+  dc:date "2019-01-09T12:00:00.055000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190110T120000059Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room1> ;
+  dh:humidity 86.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 1.1999999999999999556 ;
+  dc:date "2019-01-10T12:00:00.059000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190111T120000055Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level1/room1> ;
+  dh:humidity 80.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature -0.80000000000000004441 ;
+  dc:date "2019-01-11T12:00:00.055000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190112T120000055Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room1> ;
+  dh:humidity 87.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 1.5 ;
+  dc:date "2019-01-12T12:00:00.055000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190113T120000055Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level2/room2> ;
+  dh:humidity 89.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 2.5 ;
+  dc:date "2019-01-13T12:00:00.055000+00:00"^^xsd:dateTime .
+
+<temperature-sensor/cube/observation/20190114T120000015Z> a cube:Observation ;
+  cube:observedBy <temperature-sensor> ;
+  dh:room <building1/level1/room1> ;
+  dh:humidity 87.0 ;
+  dh:lowBatteryPower false ;
+  dh:temperature 3.5 ;
+  dc:date "2019-01-14T12:00:00.015000+00:00"^^xsd:dateTime .
+
+## TODO we should have a unit example IMO
+
+## Example of a nested structure.
+
+<building1/level1/room1> a schema:Place ;
+  schema:name "Room 1101"@en, "Raum 1101"@de, "Pièce 1101"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building1/level1> .
+
+<building1/level1/room2> a schema:Place ;
+  schema:name "Room 1102"@en, "Raum 1102"@de, "Pièce 1102"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building1/level1> .
+
+<building1/level2/room1> a schema:Place ;
+  schema:name "Room 1201"@en, "Raum 1201"@de, "Pièce 1201"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building1/level2> .
+
+<building1/level2/room2> a schema:Place ;
+  schema:name "Room 1202"@en, "Raum 1202"@de, "Pièce 1202"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building1/level2> .
+
+<building2/level1/room1> a schema:Place ;
+  schema:name "Room 2101"@en, "Raum 2101"@de, "Pièce 2101"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building2/level1> .
+
+<building2/level1/room2> a schema:Place ;
+  schema:name "Room 2102"@en, "Raum 2102"@de, "Pièce 2102"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building2/level1> .
+
+<building2/level2/room1> a schema:Place ;
+  schema:name "Room 2201"@en, "Raum 2201"@de, "Pièce 2201"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building2/level2> .
+
+<building2/level2/room2> a schema:Place ;
+  schema:name "Room 2202"@en, "Raum 2202"@de, "Pièce 2202"@fr ;
+  schema:inDefinedTermSet <rooms> ;
+  schema:containedInPlace <building2/level2> .
+
+<building1/level1> a schema:Place ;
+  schema:name "Building 1, Level 1"@en, "Gebäude 1, Etage 1"@de, "Bâtiment 1, étage 1"@fr ;
+  schema:inDefinedTermSet <levels> ;
+  schema:containedInPlace <building1> .
+
+<building1/level2> a schema:Place ;
+  schema:name "Building 1, Level 2"@en, "Gebäude 1, Etage 2"@de, "Bâtiment 1, étage 2"@fr ;
+  schema:inDefinedTermSet <levels> ;
+  schema:containedInPlace <building1> .
+
+<building2/level1> a schema:Place ;
+  schema:name "Building 2, Level 1"@en, "Gebäude 2, Etage 1"@de, "Bâtiment 2, étage 1"@fr ;
+  schema:inDefinedTermSet <levels> ;
+  schema:containedInPlace <building2> .
+
+<building2/level2> a schema:Place ;
+  schema:name "Building 2, Level 2"@en, "Gebäude 2, Etage 2"@de, "Bâtiment 2, étage 2"@fr ;
+  schema:inDefinedTermSet <levels> ;
+  schema:containedInPlace <building2> .
+
+<building1> a schema:Place ;
+  schema:name "Building 1"@en, "Gebäude 1"@de, "Bâtiment 1"@fr ;
+  schema:latitude 47.16277 ;
+  schema:longitude 7.28952 ;
+  schema:inDefinedTermSet <buildings> .
+
+<building2> a schema:Place ;
+  schema:name "Building 2"@en, "Gebäude 2"@de, "Bâtiment 2"@fr ;
+  schema:latitude 47.14396 ;
+  schema:longitude 7.26027 ;
+  schema:inDefinedTermSet <buildings> .
+
+<rooms> a schema:DefinedTermSet ;
+  schema:name "Räume"@de, "Rooms"@en, "Pièces"@fr .
+
+<buildings> a schema:DefinedTermSet ;
+  schema:name "Gebäude"@de, "Buildings"@en, "Immeubles"@fr .
+
+<levels> a schema:DefinedTermSet ;
+  schema:name "Etage"@de, "Level"@en, "Etage"@fr .
+
+# Orgs
+
+<org/zazuko> a schema:Corporation ;
+    schema:name "Zazuko GmbH" ;
+    rdfs:seeAlso <https://www.wikidata.org/wiki/Q93230157> ;
+    schema:url <https://zazuko.com/>
+    .

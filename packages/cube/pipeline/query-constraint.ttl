@@ -1,0 +1,32 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix : <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+# relying on cbd is not ideal (vendor specific)
+:queryConstraint a p:Pipeline, p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            sparql:construct
+              [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] ,
+              [
+                code:name "query";
+                code:value """
+                #pragma describe.strategy cbd
+
+                PREFIX cube: <https://cube.link/>
+
+                DESCRIBE ?s
+                WHERE {
+                  <${cube}> cube:observationConstraint ?s .
+                }
+                """^^code:EcmaScriptTemplateLiteral
+              ]
+          ]
+        )
+    ]
+  .
+  

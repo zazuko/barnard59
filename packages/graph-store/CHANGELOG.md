@@ -1,5 +1,11 @@
 # barnard59-graph-store
 
+## 5.1.1
+
+### Patch Changes
+
+- e82aa36: Remove references of `rdf-js` types package, repaced with `@rdfjs/types`
+
 ## 5.1.0
 
 ### Minor Changes

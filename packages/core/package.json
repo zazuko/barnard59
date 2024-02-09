@@ -1,6 +1,6 @@
 {
   "name": "barnard59-core",
-  "version": "5.3.0",
+  "version": "5.3.3",
   "description": "Core component of Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@rdfjs/namespace": "^2.0.0",
     "@types/readable-stream": "^4.0.9",
-    "barnard59-env": "^1.2.1",
+    "barnard59-env": "^1.2.2",
     "barnard59-http": "^2.0.0",
     "barnard59-test-support": "^0.0.3",
     "chai": "^4.3.7",

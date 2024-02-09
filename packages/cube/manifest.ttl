@@ -48,3 +48,18 @@
   rdfs:label "Validate input observations against cube constraint" ;
   b59:source "barnard59-cube/pipeline/check-observations.ttl" ;
 .
+
+<command/cube/fetch-constraint>
+  a b59:CliCommand ;
+  b59:command "fetch-constraint" ;
+  rdfs:label "Retrieves cube constraint from SPARQL endpoint" ;
+  b59:source "barnard59-cube/pipeline/fetch-constraint.ttl" ;
+.
+
+<command/cube/fetch-cube>
+  a b59:CliCommand ;
+  b59:command "fetch-cube" ;
+  rdfs:label "Retrieves cube with observations from SPARQL endpoint" ;
+  b59:source "barnard59-cube/pipeline/fetch-cube.ttl" ;
+.
+
