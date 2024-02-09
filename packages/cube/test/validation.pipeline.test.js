@@ -71,7 +71,8 @@ describe('cube validation pipeline', function () {
     const result = shell.exec(command, { silent: true, cwd })
 
     strictEqual(result.stderr, '')
-    strictEqual(result.stdout, '')
+    expect(result.stdout)
+      .to.include('_:report <http://www.w3.org/ns/shacl#conforms> "true"^^<http://www.w3.org/2001/XMLSchema#boolean>')
     strictEqual(result.code, 0)
   })
 })
