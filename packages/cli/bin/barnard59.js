@@ -6,10 +6,8 @@ import { Resource, envDetector, processDetector } from '@opentelemetry/resources
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import { BatchSpanProcessor } from '@opentelemetry/tracing'
-
 import { Command } from 'commander'
 import * as monitoringOptions from '../lib/cli/monitoringOptions.js'
-import { MultipleRootsError } from '../findPipeline.js'
 
 const sdk = new NodeSDK({
   // Automatic detection is disabled, see comment below
@@ -33,10 +31,9 @@ const onError = async err => {
   process.off('SIGTERM', onError)
 
   if (err) {
-    if (err instanceof MultipleRootsError) {
-      const alternatives = err.alternatives.map(x => `\n\t--pipeline ${x}`).join('')
+    if (err.skipTrace) {
       // eslint-disable-next-line no-console
-      console.error(`Multiple root pipelines found. Try one of these:${alternatives}`)
+      console.log(err.message)
     } else {
       // eslint-disable-next-line no-console
       console.error(err)
@@ -98,7 +95,8 @@ const onError = async err => {
 
   // Dynamically import the rest once the SDK started to ensure
   // monkey-patching was done properly
-  const { default: run } = await import('../lib/cli.js')
+  const { default: cli } = await import('../lib/cli.js')
+  const { run } = await cli()
   await run()
   await sdk.shutdown()
 })().catch(onError)

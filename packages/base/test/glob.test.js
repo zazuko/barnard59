@@ -1,4 +1,3 @@
-import { deepStrictEqual, strictEqual } from 'assert'
 import { array } from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import sinon from 'sinon'
@@ -19,15 +18,11 @@ describe('glob', () => {
     }
   })
 
-  it('should be a function', () => {
-    strictEqual(typeof glob, 'function')
-  })
-
   it('should return a Readable stream', () => {
     const s = glob.call({ logger }, { pattern: 'test/support/*' })
 
-    strictEqual(isReadable(s), true)
-    strictEqual(isWritable(s), false)
+    expect(isReadable(s)).to.be.true
+    expect(isWritable(s)).to.be.false
   })
 
   it('should emit each file name as a chunk', async () => {
@@ -35,7 +30,7 @@ describe('glob', () => {
 
     const filenames = await array(s)
 
-    deepStrictEqual(filenames, [
+    expect(filenames).to.contain.all.members([
       '../../test/e2e/definitions/foreach/csv-duplicate.ttl',
       '../../test/e2e/definitions/foreach/with-handler.ttl',
       '../../test/e2e/definitions/foreach/with-variable.ttl',
@@ -50,7 +45,7 @@ describe('glob', () => {
 
     const filenames = await array(s)
 
-    deepStrictEqual(filenames, [
+    expect(filenames).to.contain.all.members([
       'csv-duplicate.ttl',
       'with-handler.ttl',
       'with-variable.ttl',

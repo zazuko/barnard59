@@ -1,13 +1,12 @@
-import { promisify } from 'node:util'
 import { SpanStatusCode } from '@opentelemetry/api'
-import globFn from 'glob'
+import { glob as globFn } from 'glob'
 import onetime from 'onetime'
 import { Readable } from 'readable-stream'
 import tracer from './lib/tracer.js'
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {{ pattern: string } & import('glob').IOptions} options
+ * @param {{ pattern: string } & Omit<import('glob').GlobOptions, 'withFileTypes'>} options
  * @return {Readable}
  */
 function glob({ pattern, ...options }) {
@@ -19,7 +18,7 @@ function glob({ pattern, ...options }) {
 
   const init = onetime(async () => {
     span.addEvent('init')
-    filenames = await promisify(globFn)(pattern, options)
+    filenames = await globFn(pattern, options)
     return filenames.length === 0
   })
 
