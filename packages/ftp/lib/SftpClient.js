@@ -1,18 +1,16 @@
-import ftpParser from 'ftp/lib/parser.js'
-import { PassThrough } from 'readable-stream'
-import SFTP from 'sftp-promises'
-const { parseListEntry } = ftpParser
+import SFTP from 'ssh2-sftp-client'
+import { Writable } from 'readable-stream'
 
 class SftpClient {
-  constructor({ host, port = 22, user, password, privateKey, passphrase }) {
+  constructor({ host, port = 22, user, password, privateKey, passphrase, bufferSize = 64 * 1024 }) {
     this.host = host
     this.port = port
     this.user = user
     this.password = password
     this.privateKey = privateKey
     this.passphrase = passphrase
+    this.bufferSize = bufferSize
     this.client = new SFTP()
-    this.session = null
   }
 
   async connect() {
@@ -25,89 +23,35 @@ class SftpClient {
       passphrase: this.passphrase,
     }
 
-    this.session = await this.client.session(options)
-
-    return this.session
+    await this.client.connect(options)
   }
 
   async disconnect() {
-    if (this.session) {
-      return this.session.end()
-    }
+    this.client.end()
   }
 
   async list(path) {
-    return this.client.ls(path, this.session).then(result => {
-      return result.entries.map(entry => parseListEntry(entry.longname))
-    })
+    return this.client.list(path)
   }
 
   async move(source, target) {
-    return this.client.mv(source, target, this.session)
+    return this.client.rename(source, target)
   }
 
   async read(path) {
-    const stream = await createReadStream(this.client, path, this.session)
-    const through = new PassThrough()
-
-    stream.pipe(through)
-
-    return through
+    return this.client.createReadStream(path)
   }
 
   async write(path) {
-    throw new Error('Not implemented')
+    const output = this.client.createWriteStream(path)
+
+    return new Writable({
+      highWaterMark: this.bufferSize,
+      write(chunk, encoding, callback) {
+        output.write(chunk, encoding, callback)
+      },
+    })
   }
-}
-
-// Copied from sftp-promises
-// Fixed to resolve the promise directly instead of waiting `on('readable')`.
-async function createReadStream(client, path, session) {
-  const createReadStreamCmd = function (resolve, reject, conn) {
-    return function (err, sftp) {
-      if (err) {
-        return reject(err)
-      }
-
-      let stream
-
-      sftp.stat(path, function (err, stat) {
-        if (err) {
-          return reject(err)
-        }
-
-        let bytes = stat.size
-
-        if (bytes > 0) {
-          bytes -= 1
-        }
-
-        try {
-          stream = sftp.createReadStream(path, { start: 0, end: bytes })
-        } catch (err) {
-          return reject(err)
-        }
-
-        stream.on('close', () => {
-          // if there is no session we need to clean the connection
-          if (!session) {
-            conn.end()
-            conn.destroy()
-          }
-        })
-
-        stream.on('error', () => {
-          if (!session) {
-            conn.end()
-            conn.destroy()
-          }
-        })
-
-        resolve(stream)
-      })
-    }
-  }
-  return client.sftpCmd(createReadStreamCmd, session, true)
 }
 
 export default SftpClient
