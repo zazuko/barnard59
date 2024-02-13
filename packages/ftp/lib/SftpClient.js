@@ -1,5 +1,4 @@
 import SFTP from 'ssh2-sftp-client'
-import { Writable } from 'readable-stream'
 
 class SftpClient {
   constructor({ host, port = 22, user, password, privateKey, passphrase, bufferSize = 64 * 1024 }) {
@@ -43,13 +42,8 @@ class SftpClient {
   }
 
   async write(path) {
-    const output = this.client.createWriteStream(path)
-
-    return new Writable({
+    return this.client.createWriteStream(path, {
       highWaterMark: this.bufferSize,
-      write(chunk, encoding, callback) {
-        output.write(chunk, encoding, callback)
-      },
     })
   }
 }
