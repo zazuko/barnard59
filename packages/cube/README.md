@@ -67,7 +67,7 @@ barnard59 cube fetch-constraint \
 ### fetch metadata
 
 Pipeline `fetch-metadata` queries a given SPARQL endpoint to retrieve 
-a concise bounded description of a given cube and its constraint (excluding the observations).
+cube metadata and its [constraint shape](https://cube.link/#constraints) (excluding the observations).
 
 ```bash
 barnard59 cube fetch-metadata \
