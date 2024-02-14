@@ -6,32 +6,46 @@ The `manifest.ttl` file contains a full list of all operations included in this 
 ## Installation
 
 ```
-npm i barnard59-cube
+npm install barnard59-cube
 ```
 
 ## Operations
 
-### `cube/buildCubeShape`
+### `toObservation`
 
-TBD
+A pipeline step can use `toObservation` to create
+cube observations according to the [cube.link](https://cube.link/) specification. 
 
-### `cube/toObservation`
+Each input chunk is expected to be a dataset (or quads array)
+with data for a single observation (usually obtained from a CSVW mapping).
+The operation cleans up the data, adding suitable defaults and identifiers.
 
-TBD
+
+### `buildCubeShape`
+
+The `buildCubeShape` operation derives a SHACL shape from observations.
+
+Each input chunk is expected to be a dataset (or quads array)
+representing a single observation (usually obtained with `toObservation`).
+The operation collects information about the values of observation properties and propagates the chunk.
+Once the input stream is over, it creates and emits a shape describing the properties of the observations.
+
 
 
 ## Commands
 
-Once the package is installed, run `barnard59 cube` to list the pipelines available as CLI commands.
-You can get help on each one, for example, `barnard59 cube fetch-metadata --help`
+The package provides pipelines to retrieve and validate cube observations and metadata.
 
-## Cube validation
+Once `barnard59-cube` is installed, run `barnard59 cube` to list the pipelines available as CLI commands.
+You can get help on each one, for example, `barnard59 cube fetch-cube --help`
 
-The following pipelines retrieve and validate cube observations and metadata.
+
+
+
 
 ### fetch cube
 
-Pipeline `fetch-cube` queries a given SPARQL endpoint to retrieve a given cube.
+Pipeline `fetch-cube` queries a given SPARQL endpoint to retrieve all the data and metadata of a given cube.
 
 ```bash
 barnard59 cube fetch-cube \
@@ -79,7 +93,7 @@ The output of all the fetch pipelines is written to `stdout` and can be redirect
 
 ### check metadata
 
-Pipeline `check-metadata` validates the input metadata against the shapes provided with the `profile` variable (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
+Pipeline `check-metadata` validates the input metadata against the shapes provided with the `--profile` option (the default profile is https://cube.link/latest/shape/standalone-constraint-constraint).
 
 The pipeline reads the metadata from `stdin`, allowing input from a local file (as in the following example) as well as directly from the output of the `fetch-metadata` pipeline (in most cases it's useful to have the metadata in a local file because it's needed also for the `check-observations` pipeline).
 
@@ -99,7 +113,7 @@ The value of `--profile` can also be a local file.
 
 ### check observations
 
-Pipeline `check-observations` validates the input observations against the shapes provided with the `constraint` variable.
+Pipeline `check-observations` validates the input observations against the shapes provided with the `--constraint` option.
 
 The pipeline reads the observations from `stdin`, allowing input from a local file (as in the following example) as well as directly from the output of the `fetch-observations` pipeline.
 
@@ -113,7 +127,7 @@ To enable validation, the pipeline adds to the constraint a `sh:targetClass` pro
 
 To leverage streaming, input is split and validated in little batches of adjustable size (the default is 50 and likely it's appropriate in most cases). This allows the validation of very big cubes because observations are not loaded in memory all at once. To ensure triples for the same observation are adjacent (hence processed in the same batch), the input is sorted by subject (and in case the input is large the sorting step relies on temporary local files).
 
-SHACL reports for violations are written to `stdout`.
+SHACL reports with violations are written to `stdout`.
 
 To limit the output size, there is also a `maxViolations` option to stop validation when the given number of violations is reached.
 
