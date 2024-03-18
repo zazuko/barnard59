@@ -24,6 +24,7 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "duplex-to": "^1.0.0",
+    "is-graph-pointer": "^2.1.0",
     "onetime": "^6.0.0",
     "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
@@ -40,7 +41,7 @@
     "@zazuko/env": "^2",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
-    "isstream": "^0.1.2"
+    "is-stream": "^3"
   },
   "engines": {
     "node": ">= 14.0.0"
