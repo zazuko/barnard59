@@ -1,57 +1,24 @@
 import { strictEqual } from 'assert'
-import { resolve, dirname } from 'path'
+import { resolve } from 'path'
 import getStream from 'get-stream'
 import { Readable } from 'readable-stream'
 import move from '../move.js'
 import fs from './support/fs.js'
-import FtpServer from './support/FtpServer.js'
 import { withServer } from './support/server.js'
-import SftpServer from './support/SftpServer.js'
-
-const __dirname = dirname(new URL(import.meta.url).pathname)
+import serverConfigurations, { base } from './support/serverConfigurations.js'
 
 describe('move', () => {
   it('is a function', () => {
     strictEqual(typeof move, 'function')
   })
 
-  ;[
-    [
-      'on a FTP server with anonymous user',
-      () => new FtpServer(),
-      {},
-    ],
-    [
-      'on a FTP server with username/password',
-      () => new FtpServer({ user: 'test', password: '1234' }),
-      {},
-    ],
-    [
-      'on a SFTP server with anonymous user',
-      () => new SftpServer(),
-      {},
-    ],
-    [
-      'on a SFTP server with username/password',
-      () => new SftpServer({ user: 'test', password: '1234' }),
-      {},
-    ],
-    [
-      'on a SFTP server with private key',
-      () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: fs.readFileSync(resolve(__dirname, 'support/test.key')) },
-    ], [
-      'on a SFTP server with private key specified as a file',
-      () => new SftpServer({ user: 'test', password: '1234' }),
-      { password: undefined, privateKey: resolve(__dirname, 'support/test.key') },
-    ],
-  ].forEach(([label, serverFactory, additionalOptions]) => {
+  serverConfigurations.forEach(([label, serverFactory, additionalOptions]) => {
     it(`moves a file from the given place to another place ${label}`, async () => {
       await withServer(serverFactory, async server => {
         const options = { ...server.options, ...additionalOptions }
 
-        const root = resolve(__dirname, 'support/tmp/move')
-        const original = resolve(__dirname, 'support/data/xyz.txt')
+        const root = resolve(base, 'tmp/move')
+        const original = resolve(base, 'data/xyz.txt')
         const source = resolve(root, 'xyz.txt')
         const target = resolve(root, 'xyz.moved')
         await fs.rmdir(root)
