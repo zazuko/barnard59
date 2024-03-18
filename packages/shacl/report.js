@@ -36,7 +36,8 @@ async function * validate(ds, maxViolations, iterable) {
 
   if (totalViolations) {
     this.error(new Error(`${totalViolations} violations found`))
-  } else {
+  }
+  if (counter.termMap.size === 0) {
     const report = this.env.dataset()
     const blankNode = this.env.blankNode('report')
     report.add(this.env.quad(blankNode, this.env.ns.rdf.type, this.env.ns.sh.ValidationReport))
