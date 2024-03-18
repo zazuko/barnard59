@@ -33,7 +33,7 @@
     "through2": "^4.0.2"
   },
   "devDependencies": {
-    "@rdfjs/to-ntriples": "^2.0.0",
+    "@rdfjs/to-ntriples": "^3.0.0",
     "barnard59-env": "^1.2.3",
     "chai": "^4.3.7",
     "get-stream": "^6.0.1",

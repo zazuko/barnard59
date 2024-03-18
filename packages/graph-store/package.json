@@ -32,7 +32,7 @@
     "barnard59-rdf": "^3.0.0"
   },
   "devDependencies": {
-    "@rdfjs/to-ntriples": "^2.0.0",
+    "@rdfjs/to-ntriples": "^3.0.0",
     "@types/duplex-to": "^1.0.3",
     "@types/promise-the-world": "^1.0.6",
     "@types/readable-stream": "^4.0.10",
