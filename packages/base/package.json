@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/duplexify": "^3.6.4",
     "@types/parallel-transform": "^1.1.4",
-    "@types/readable-stream": "^4.0.10",
+    "@types/readable-stream": "^4.0.11",
     "@types/readable-to-readable": "^0.1.0",
     "@types/through2": "^2.0.41",
     "barnard59-core": "^5.3.1",
