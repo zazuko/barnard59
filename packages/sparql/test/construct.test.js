@@ -101,6 +101,6 @@ describe('construct', () => {
 
     await getStream.array(await construct({ endpoint, user, password, query }))
 
-    strictEqual(credentials[0], 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
+    strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
   })
 })
