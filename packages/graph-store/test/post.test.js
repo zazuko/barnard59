@@ -1,11 +1,10 @@
 import { strictEqual } from 'node:assert'
 import { promisify } from 'node:util'
+import { Readable, finished } from 'node:stream'
 import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
-import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
-import { finished } from 'readable-stream'
 import postUnbound from '../post.js'
 
 const post = postUnbound.bind({ env: rdf })
@@ -13,19 +12,6 @@ const post = postUnbound.bind({ env: rdf })
 const ns = rdf.namespace('http://example.org/')
 
 describe('post', () => {
-  it('should return a writable stream', async () => {
-    await withServer(async server => {
-      const baseUrl = await server.listen()
-
-      const stream = post({ endpoint: baseUrl, graph: 'default' })
-
-      strictEqual(isReadable(stream), false)
-      strictEqual(isWritable(stream), true)
-
-      stream.end()
-    })
-  })
-
   it('should send a POST request', async () => {
     await withServer(async server => {
       let called = false
@@ -40,10 +26,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from([quad]).pipe(stream))
 
       strictEqual(called, true)
     })
@@ -62,9 +45,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from([]).pipe(stream))
 
       strictEqual(called, false)
     })
@@ -84,8 +65,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
+      await getStream(Readable.from([quad]).pipe(stream))
 
       await promisify(finished)(stream)
 
@@ -115,13 +95,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from(quads).pipe(stream))
 
       strictEqual(content[quads[0].graph.value], expected)
     })
@@ -151,13 +125,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: 'default' })
 
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from(quads).pipe(stream))
 
       strictEqual(typeof graph, 'undefined')
       strictEqual(content, expected)
@@ -178,8 +146,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, user: 'testuser', password: 'testpassword', graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
+      await getStream(Readable.from([quad]).pipe(stream))
 
       await promisify(finished)(stream)
 
@@ -198,13 +165,10 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
-
       let error = null
 
       try {
-        await promisify(finished)(stream)
+        await getStream(Readable.from([quad]).pipe(stream))
       } catch (err) {
         error = err
       }

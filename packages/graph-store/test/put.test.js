@@ -1,11 +1,10 @@
 import { strictEqual } from 'node:assert'
-import { promisify } from 'node:util'
+import { Readable } from 'node:stream'
 import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
-import { finished } from 'readable-stream'
 import putUnbound from '../put.js'
 
 const put = putUnbound.bind({ env: rdf })
@@ -40,10 +39,7 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from([quad]).pipe(stream))
 
       strictEqual(called, true)
     })
@@ -62,9 +58,7 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from([]).pipe(stream))
 
       strictEqual(called, false)
     })
@@ -84,10 +78,7 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from([quad]).pipe(stream))
 
       strictEqual(mediaType, 'application/n-triples')
     })
@@ -115,13 +106,7 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from(quads).pipe(stream))
 
       strictEqual(content[quads[0].graph.value], expected)
     })
@@ -151,13 +136,7 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, graph: 'default' })
 
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from(quads).pipe(stream))
 
       strictEqual(typeof graph, 'undefined')
       strictEqual(content, expected)
@@ -178,10 +157,7 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, user: 'testuser', password: 'testpassword', graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
-
-      await promisify(finished)(stream)
+      await getStream(Readable.from([quad]).pipe(stream))
 
       strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
     })
@@ -198,13 +174,10 @@ describe('put', () => {
       const baseUrl = await server.listen()
       const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
-      stream.write(quad)
-      stream.end()
-
       let error = null
 
       try {
-        await promisify(finished)(stream)
+        await getStream(Readable.from([quad]).pipe(stream))
       } catch (err) {
         error = err
       }

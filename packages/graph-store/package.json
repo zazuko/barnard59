@@ -24,8 +24,6 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "duplex-to": "^1.0.0",
-    "onetime": "^6.0.0",
-    "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
     "sparql-http-client": "^3.0.0",
     "barnard59-base": "^2.3.0",
