@@ -54,6 +54,10 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
           [
             op:graph-store\/put
               [
+                code:name "graph" ;
+                code:value "graph"^^p:VariableName ;
+              ],
+              [
                 code:name "endpoint" ;
                 code:value "endpoint"^^p:VariableName ;
               ],
