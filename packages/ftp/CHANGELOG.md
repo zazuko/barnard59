@@ -1,5 +1,15 @@
 # barnard59-ftp
 
+## 2.1.0
+
+### Minor Changes
+
+- e518854: Added `write` operation
+
+### Patch Changes
+
+- bc717f6: Fix accidental breaking change when importing `readable-stream`
+
 ## 2.0.0
 
 ### Major Changes

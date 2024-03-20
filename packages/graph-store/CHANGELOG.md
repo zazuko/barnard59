@@ -1,5 +1,14 @@
 # barnard59-graph-store
 
+## 5.1.2
+
+### Patch Changes
+
+- d48f198: Remove usage of `rdf-js` package (deprecated)
+- Updated dependencies [d48f198]
+- Updated dependencies [94551a4]
+  - barnard59-base@2.4.1
+
 ## 5.1.1
 
 ### Patch Changes
