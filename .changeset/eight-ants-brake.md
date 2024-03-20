@@ -1,4 +1,5 @@
 ---
+"barnard59": major
 "barnard59-core": major
 ---
 
