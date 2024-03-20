@@ -1,5 +1,15 @@
 # barnard59-shacl
 
+## 1.4.3
+
+### Patch Changes
+
+- d48f198: Remove usage of `rdf-js` package (deprecated)
+- f8e7504: Fix sh:conforms in case of results with any severity
+- Updated dependencies [d48f198]
+- Updated dependencies [94551a4]
+  - barnard59-base@2.4.1
+
 ## 1.4.2
 
 ### Patch Changes
