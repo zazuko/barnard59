@@ -6,6 +6,7 @@ import { finished, Readable, Writable } from 'readable-stream'
 class SinkToWritable extends Writable {
   /**
    * @param {(readable: Readable) => Promise<void>} factory
+   * @param {import('barnard59-core').Context} options
    */
   constructor(factory, { logger }) {
     let hadQuads = false
