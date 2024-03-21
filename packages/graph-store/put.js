@@ -24,7 +24,7 @@ function put({ endpoint, graph, user, password }) {
 
   return new SinkToWritable(readable => client.store.put(readable, {
     graph: toTerm(this.env, graph),
-  }))
+  }), this)
 }
 
 export default put

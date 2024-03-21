@@ -6,7 +6,7 @@ import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDef
 import env from 'barnard59-env/index.ts'
 import { createPipeline } from 'barnard59-core/index.ts'
 import getStream from 'get-stream'
-import { SELECT } from '@tpluscode/sparql-builder'
+import { CONSTRUCT, SELECT } from '@tpluscode/sparql-builder'
 import { fromRdf } from 'rdf-literal'
 
 const support = (new URL('./support', import.meta.url)).pathname
@@ -37,10 +37,6 @@ describe('graph-store pipeline', function () {
     password,
   })
 
-  const selectAll = () => {
-    return client.query.construct('CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }')
-  }
-
   it('should run graph-store put pipeline without error', async () => {
     const data = `${support}/data.ttl`
     const { ptr, basePath } = await loadPipelineDefinition('pipeline/put', {
@@ -60,7 +56,10 @@ describe('graph-store pipeline', function () {
 
     await getStream(pipeline.stream)
 
-    const storedData = await selectAll()
+    const storedData = await CONSTRUCT`?s ?p ?o`
+      .FROM(env.namedNode(graph))
+      .WHERE`?s ?p ?o`
+      .execute(client)
     const expectedData = await env.dataset().import(env.fromFile(data))
     strictEqual(storedData.toCanonical(), expectedData.toCanonical())
   })

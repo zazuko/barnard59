@@ -24,7 +24,7 @@ function post({ endpoint, graph, user, password }) {
 
   return new SinkToWritable(readable => client.store.post(readable, {
     graph: toTerm(this.env, graph),
-  }))
+  }), this)
 }
 
 export default post
