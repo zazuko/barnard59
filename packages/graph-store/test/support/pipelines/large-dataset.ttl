@@ -1,0 +1,48 @@
+prefix p: <https://pipeline.described.at/>
+prefix code: <https://code.described.at/>
+prefix op: <https://barnard59.zazuko.com/operations/>
+
+<http://example.org/pipeline/>
+  a p:Pipeline ;
+  p:variables
+    [
+      p:variable
+        [
+          a p:Variable ;
+          p:name "triple-count" ;
+        ] ;
+    ] ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            code:implementedBy
+              [
+                a code:EcmaScriptModule ;
+                code:link <file:../data.js#generate> ;
+              ] ;
+          ]
+          [ op:base\/limit ( "triple-count"^^p:VariableName ) ]
+          [
+            op:graph-store\/put
+              [
+                code:name "graph" ;
+                code:value "graph"^^p:VariableName ;
+              ],
+              [
+                code:name "endpoint" ;
+                code:value "endpoint"^^p:VariableName ;
+              ],
+              [
+                code:name "user" ;
+                code:value "user"^^p:VariableName ;
+              ],
+              [
+                code:name "password" ;
+                code:value "password"^^p:VariableName ;
+              ]
+          ]
+        ) ;
+    ] ;
+.

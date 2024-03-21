@@ -1,12 +1,14 @@
-import { deepStrictEqual, strictEqual } from 'assert'
-import { promisify } from 'util'
+import { strictEqual } from 'node:assert'
+import { promisify } from 'node:util'
 import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import { finished } from 'readable-stream'
-import put from '../put.js'
+import putUnbound from '../put.js'
+
+const put = putUnbound.bind({ env: rdf })
 
 const ns = rdf.namespace('http://example.org/')
 
@@ -15,7 +17,7 @@ describe('put', () => {
     await withServer(async server => {
       const baseUrl = await server.listen()
 
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: 'default' })
 
       strictEqual(isReadable(stream), false)
       strictEqual(isWritable(stream), true)
@@ -36,7 +38,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()
@@ -58,7 +60,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.end()
 
@@ -80,7 +82,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()
@@ -111,7 +113,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
       quads.forEach(quad => {
         stream.write(quad)
@@ -147,7 +149,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: 'default' })
 
       quads.forEach(quad => {
         stream.write(quad)
@@ -159,90 +161,6 @@ describe('put', () => {
 
       strictEqual(typeof graph, 'undefined')
       strictEqual(content, expected)
-    })
-  })
-
-  it('should use multiple requests to send multiple graphs', async () => {
-    await withServer(async server => {
-      const content = {}
-      const quads = [
-        rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
-        rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
-        rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
-        rdf.quad(ns.subject5, ns.predicate5, ns.object5, ns.graph2),
-        rdf.quad(ns.subject6, ns.predicate6, ns.object6, ns.graph2),
-      ]
-      const expected = quads.reduce((expected, quad) => {
-        const graphIri = quad.graph.value || 'default'
-
-        expected[graphIri] = (expected[graphIri] || '') +
-          quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
-
-        return expected
-      }, {})
-
-      server.app.put('/', async (req, res) => {
-        content[typeof req.query.graph === 'string' ? req.query.graph : 'default'] = await getStream(req)
-
-        res.status(204).end()
-      })
-
-      const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
-
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
-
-      Object.entries(expected).forEach(([graphIri, graphContent]) => {
-        strictEqual(graphContent, content[graphIri])
-      })
-    })
-  })
-
-  it('should use PUT and POST methods to combine multiple requests split by maxQuadsPerRequest', async () => {
-    await withServer(async server => {
-      const contentPut = []
-      const contentPost = []
-      const quads = [
-        rdf.quad(ns.subject1, ns.predicate1, ns.object1),
-        rdf.quad(ns.subject2, ns.predicate2, ns.object2),
-        rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
-      ]
-      const expectedPut = [quadToNTriples(quads[0]) + '\n' + quadToNTriples(quads[1]) + '\n']
-      const expectedPost = [quadToNTriples(quads[2]) + '\n' + quadToNTriples(quads[3]) + '\n']
-
-      server.app.post('/', async (req, res) => {
-        contentPost.push(await getStream(req))
-
-        res.status(204).end()
-      })
-
-      server.app.put('/', async (req, res) => {
-        contentPut.push(await getStream(req))
-
-        res.status(204).end()
-      })
-
-      const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl, maxQuadsPerRequest: 2 })
-
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
-
-      deepStrictEqual(contentPut, expectedPut)
-      deepStrictEqual(contentPost, expectedPost)
     })
   })
 
@@ -258,7 +176,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl, user: 'testuser', password: 'testpassword' })
+      const stream = put({ endpoint: baseUrl, user: 'testuser', password: 'testpassword', graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()
@@ -278,7 +196,7 @@ describe('put', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = put({ endpoint: baseUrl })
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()

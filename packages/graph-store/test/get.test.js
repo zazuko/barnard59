@@ -1,9 +1,9 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import { array } from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import getUnbound from '../get.js'
 
 const ns = rdf.namespace('http://example.org/')
