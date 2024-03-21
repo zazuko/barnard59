@@ -38,11 +38,13 @@
     "@types/readable-stream": "^4.0.10",
     "@types/sparql-http-client": "^3.0.0",
     "@zazuko/env": "^2",
+    "barnard59-core": "^5.3.3",
+    "barnard59-env": "^1.2.3",
+    "barnard59-test-support": "*",
     "docker-compose": "^0.24.7",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
     "is-stream": "^3",
-    "shelljs": "^0.8.5",
     "wait-on": "^7.2.0"
   },
   "engines": {

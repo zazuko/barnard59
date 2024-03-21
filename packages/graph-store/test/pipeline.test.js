@@ -1,11 +1,15 @@
-import { strictEqual } from 'assert'
-import shell from 'shelljs'
+import { strictEqual } from 'node:assert'
 import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import * as compose from 'docker-compose'
 import waitOn from 'wait-on'
+import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
+import env from 'barnard59-env/index.ts'
+import { createPipeline } from 'barnard59-core/index.ts'
+import getStream from 'get-stream'
 
 const support = (new URL('./support', import.meta.url)).pathname
-const cwd = new URL('..', import.meta.url).pathname
+
+const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../pipeline')
 
 const user = 'admin'
 const password = 'admin'
@@ -24,25 +28,37 @@ describe('graph-store pipeline', function () {
 
   const graph = 'http://example.org/'
 
-  const selectAll = async () => {
+  const selectAll = () => {
     const client = new ParsingClient({
+      factory: env,
       endpointUrl: endpoint + '/query',
       user,
       password,
     })
-    const response = await client.query.select('SELECT * WHERE { ?s ?p ?o }')
-    return response
+    return client.query.construct('CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }')
   }
 
-  it.only('should run graph-store put pipeline without error', async () => {
-    this.timeout(10000)
+  it('should run graph-store put pipeline without error', async () => {
     const data = `${support}/data.ttl`
-    const command = `barnard59 graph-store put --endpoint ${endpoint} --user ${user} --password ${password} --graph ${graph} --source ${data}`
-    const result = shell.exec(command, { silent: true, cwd })
+    const { ptr, basePath } = await loadPipelineDefinition('put', {
+      term: env.namedNode('https://barnard59.zazuko.com/pipeline/graph-store/put'),
+    })
+    const pipeline = createPipeline(ptr, {
+      env,
+      basePath,
+      variables: new Map([
+        ['endpoint', endpoint],
+        ['user', user],
+        ['password', password],
+        ['graph', graph],
+        ['source', data],
+      ]),
+    })
 
-    strictEqual(result.code, 0)
+    await getStream(pipeline.stream)
 
     const storedData = await selectAll()
-    strictEqual(storedData.length, 1)
+    const expectedData = await env.dataset().import(env.fromFile(data))
+    strictEqual(storedData.toCanonical(), expectedData.toCanonical())
   })
 })
