@@ -1,6 +1,11 @@
 import { Transform } from 'readable-stream'
 
+/**
+ * @param {number} [size]
+ * @return {Transform}
+ */
 function batch(size = 0) {
+  /** @type {any[]} */
   let array = []
   const maxSize = Number(size)
   return new Transform({
@@ -16,6 +21,9 @@ function batch(size = 0) {
       }
       callback()
     },
+    /**
+     * @this {Transform}
+     */
     flush(callback) {
       if (array.length > 0) this.push(array)
       callback()

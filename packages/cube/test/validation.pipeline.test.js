@@ -30,6 +30,19 @@ describe('cube validation pipeline', function () {
     ok(result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
   })
 
+  it('should run check-cube-observations pipeline with warning', () => {
+    const constraintFile = `${support}/constraint01.ttl`
+    const command = `cat ${support}/observations03.ttl | barnard59 cube check-observations --constraint ${constraintFile}`
+
+    const result = shell.exec(command, { silent: true, cwd })
+
+    strictEqual(result.code, 0) // successful because there are no reults with severity sh:Violation
+    expect(result.stderr).to.match(/1 results with severity http:\/\/www.w3.org\/ns\/shacl#Warning/)
+    // sh:conforms is false because of the warning
+    strictEqual(true, result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
+    strictEqual(false, result.stdout.includes('_:report <http://www.w3.org/ns/shacl#conforms> "true"^^<http://www.w3.org/2001/XMLSchema#boolean>'))
+  })
+
   it('should run check-cube-observations when maxViolations is not exceeded', () => {
     const constraintFile = `${support}/constraint01.ttl`
     const command = `cat ${support}/observations02.ttl | barnard59 cube check-observations --constraint ${constraintFile}`

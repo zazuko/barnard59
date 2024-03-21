@@ -85,7 +85,7 @@ function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: 
     context.createPipeline = (ptr, { context, ...args } = {}) => createPipeline(ptr, { ...defaults, ...args })
 
     pipeline.variables = variables
-    pipeline.context = context
+    pipeline.context = Object.freeze(context)
 
     for (const stepPtr of ptr.out(context.env.ns.p.steps).out(context.env.ns.p.stepList).list()!) {
       if (stepPtr.has(context.env.ns.rdf.type, context.env.ns.p.Pipeline).terms.length > 0) {
