@@ -1,5 +1,15 @@
 # barnard59-sparql
 
+## 2.3.0
+
+### Minor Changes
+
+- f240b0f: Added TS declarations
+
+### Patch Changes
+
+- f240b0f: Updated `sparql-http-client` to v3
+
 ## 2.2.0
 
 ### Minor Changes

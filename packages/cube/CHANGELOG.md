@@ -1,5 +1,19 @@
 # barnard59-cube
 
+## 1.4.2
+
+### Patch Changes
+
+- 600eb0e: Updated `rdf-validate-shacl` to v0.5.4
+- Updated dependencies [f240b0f]
+- Updated dependencies [600eb0e]
+- Updated dependencies [f6d593c]
+- Updated dependencies [f240b0f]
+- Updated dependencies [49dcd13]
+  - barnard59-sparql@2.3.0
+  - barnard59-shacl@1.4.4
+  - barnard59-base@2.4.2
+
 ## 1.4.1
 
 ### Patch Changes

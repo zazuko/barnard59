@@ -1,5 +1,14 @@
 # barnard59-shacl
 
+## 1.4.4
+
+### Patch Changes
+
+- 600eb0e: Updated `rdf-validate-shacl` to v0.5.4
+- 49dcd13: Update `@rdfjs/to-ntriples` to v3
+- Updated dependencies [f6d593c]
+  - barnard59-base@2.4.2
+
 ## 1.4.3
 
 ### Patch Changes
