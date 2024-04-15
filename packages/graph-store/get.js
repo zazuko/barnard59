@@ -1,8 +1,5 @@
 import Client from 'sparql-http-client'
 
-// Trying to switch tabs... doesn't work
-// now it did...
-
 /**
  * @this {import('barnard59-core').Context}
  * @param {Pick<import('sparql-http-client/StreamClient.js').Options<any>, 'user' | 'password'> & {
