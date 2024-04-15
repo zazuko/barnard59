@@ -1,12 +1,14 @@
-import { strictEqual } from 'assert'
-import { promisify } from 'util'
+import { strictEqual } from 'node:assert'
+import { promisify } from 'node:util'
 import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
-import { isReadable, isWritable } from 'isstream'
+import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import { finished } from 'readable-stream'
-import post from '../post.js'
+import postUnbound from '../post.js'
+
+const post = postUnbound.bind({ env: rdf })
 
 const ns = rdf.namespace('http://example.org/')
 
@@ -15,7 +17,7 @@ describe('post', () => {
     await withServer(async server => {
       const baseUrl = await server.listen()
 
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: 'default' })
 
       strictEqual(isReadable(stream), false)
       strictEqual(isWritable(stream), true)
@@ -36,7 +38,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()
@@ -58,7 +60,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.end()
 
@@ -80,7 +82,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()
@@ -111,7 +113,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
       quads.forEach(quad => {
         stream.write(quad)
@@ -147,7 +149,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: 'default' })
 
       quads.forEach(quad => {
         stream.write(quad)
@@ -159,49 +161,6 @@ describe('post', () => {
 
       strictEqual(typeof graph, 'undefined')
       strictEqual(content, expected)
-    })
-  })
-
-  it('should use multiple requests to send multiple graphs', async () => {
-    await withServer(async server => {
-      const content = {}
-      const quads = [
-        rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
-        rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
-        rdf.quad(ns.subject3, ns.predicate3, ns.object3),
-        rdf.quad(ns.subject4, ns.predicate4, ns.object4),
-        rdf.quad(ns.subject5, ns.predicate5, ns.object5, ns.graph2),
-        rdf.quad(ns.subject6, ns.predicate6, ns.object6, ns.graph2),
-      ]
-      const expected = quads.reduce((expected, quad) => {
-        const graphIri = quad.graph.value || 'default'
-
-        expected[graphIri] = (expected[graphIri] || '') +
-          quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
-
-        return expected
-      }, {})
-
-      server.app.post('/', async (req, res) => {
-        content[typeof req.query.graph === 'string' ? req.query.graph : 'default'] = await getStream(req)
-
-        res.status(204).end()
-      })
-
-      const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
-
-      quads.forEach(quad => {
-        stream.write(quad)
-      })
-
-      stream.end()
-
-      await promisify(finished)(stream)
-
-      Object.entries(expected).forEach(([graphIri, graphContent]) => {
-        strictEqual(graphContent, content[graphIri])
-      })
     })
   })
 
@@ -217,7 +176,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl, user: 'testuser', password: 'testpassword' })
+      const stream = post({ endpoint: baseUrl, user: 'testuser', password: 'testpassword', graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()
@@ -237,7 +196,7 @@ describe('post', () => {
       })
 
       const baseUrl = await server.listen()
-      const stream = post({ endpoint: baseUrl })
+      const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
       stream.write(quad)
       stream.end()

@@ -6,11 +6,16 @@ import { finished, Readable, Writable } from 'readable-stream'
 class SinkToWritable extends Writable {
   /**
    * @param {(readable: Readable) => Promise<void>} factory
+   * @param {import('barnard59-core').Context} options
    */
-  constructor(factory) {
+  constructor(factory, { logger }) {
+    let hadQuads = false
+
     super({
       objectMode: true,
       write: async (chunk, encoding, callback) => {
+        hadQuads = true
+
         init()
 
         await read.promise
@@ -22,6 +27,11 @@ class SinkToWritable extends Writable {
         callback()
       },
       final: async callback => {
+        if (!hadQuads) {
+          logger?.warn('No quads sent to the server. No request was made.')
+          return callback()
+        }
+
         init()
 
         readable.push(null)
