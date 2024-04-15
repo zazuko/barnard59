@@ -1,6 +1,6 @@
 {
   "name": "barnard59-graph-store",
-  "version": "5.1.2",
+  "version": "6.0.0",
   "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
-    "barnard59-base": "^2.4.1",
+    "barnard59-base": "^2.4.2",
     "barnard59-rdf": "^3.0.0",
     "duplex-to": "^1.0.0",
     "onetime": "^6.0.0",
