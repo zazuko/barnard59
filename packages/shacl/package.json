@@ -29,12 +29,12 @@
     "barnard59-formats": "^2.1.0",
     "barnard59-rdf": "^3.4.0",
     "is-stream": "^3.0.0",
-    "rdf-validate-shacl": "^0.5.3",
+    "rdf-validate-shacl": "^0.5.4",
     "readable-stream": "3 - 4"
   },
   "devDependencies": {
     "@tpluscode/rdf-string": "^1.1.2",
-    "@types/rdf-validate-shacl": "^0.4.6",
+    "@types/rdf-validate-shacl": "^0.4.7",
     "assert-throws-async": "^3.0.0",
     "barnard59-core": "^6.0.0",
     "barnard59-env": "^1.2.3",
