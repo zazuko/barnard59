@@ -1,5 +1,11 @@
 # barnard59-cube
 
+## 1.4.3
+
+### Patch Changes
+
+- 13a297f: Include a sample observation in fetch-metadata
+
 ## 1.4.2
 
 ### Patch Changes
