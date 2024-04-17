@@ -1,0 +1,37 @@
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix sparql: <https://barnard59.zazuko.com/operations/sparql/> .
+@prefix : <http://barnard59.zazuko.com/pipeline/cube-validation/> .
+
+:queryObservationSample a p:Pipeline, p:ReadableObjectMode ;
+  p:steps
+    [
+      p:stepList
+        (
+          [
+            sparql:construct
+              [ code:name "endpoint"; code:value "endpoint"^^p:VariableName ] ,
+              [
+                code:name "query";
+                code:value """
+                PREFIX cube: <https://cube.link/>
+                
+                CONSTRUCT { 
+                  <${cube}> cube:observationSet ?set .
+                  ?set cube:observation ?obs .
+                  ?obs ?p ?o .
+                } 
+                WHERE {
+                  { SELECT ?set ?obs WHERE {
+                      <${cube}> cube:observationSet ?set .
+                      ?set cube:observation ?obs .
+                    } LIMIT 1
+                  }
+                  ?obs ?p ?o
+                }
+                """^^code:EcmaScriptTemplateLiteral
+              ]
+          ]
+        )
+    ]
+  .
