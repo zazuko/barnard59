@@ -1,5 +1,5 @@
 /**
- * @param {import('rdf-validate-shacl/src/validation-report').ValidationReport} report
+ * @param {import('rdf-validate-shacl/src/validation-report.js').ValidationReport} report
  */
 function buildErrorMessage(report) {
   return JSON.stringify(report.results.map(x => {
@@ -23,7 +23,7 @@ function buildErrorMessage(report) {
 
 export class ValidationError extends Error {
   /**
-   * @param {import('rdf-validate-shacl/src/validation-report').ValidationReport} report
+   * @param {import('rdf-validate-shacl/src/validation-report.js').ValidationReport} report
    * @param {import('@rdfjs/types').DatasetCore} shapesGraph
    * @param {import('@rdfjs/types').DatasetCore} dataGraph
    */
