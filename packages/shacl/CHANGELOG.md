@@ -1,5 +1,11 @@
 # barnard59-shacl
 
+## 1.4.5
+
+### Patch Changes
+
+- 287efab: Accurate imports to work with `moduleResolution=NodeNext`
+
 ## 1.4.4
 
 ### Patch Changes

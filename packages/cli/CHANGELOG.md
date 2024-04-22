@@ -1,5 +1,12 @@
 # barnard59
 
+## 5.0.1
+
+### Patch Changes
+
+- Updated dependencies [287efab]
+  - barnard59-env@1.2.4
+
 ## 5.0.0
 
 ### Major Changes

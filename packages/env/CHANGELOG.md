@@ -1,5 +1,11 @@
 # barnard59-env
 
+## 1.2.4
+
+### Patch Changes
+
+- 287efab: Accurate imports to work with `moduleResolution=NodeNext`
+
 ## 1.2.3
 
 ### Patch Changes
