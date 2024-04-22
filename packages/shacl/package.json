@@ -1,6 +1,6 @@
 {
   "name": "barnard59-shacl",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "A barnard59 step that validates RDF using the Shapes Constraint Language (SHACL).",
   "type": "module",
   "main": "index.js",
@@ -37,7 +37,7 @@
     "@types/rdf-validate-shacl": "^0.4.7",
     "assert-throws-async": "^3.0.0",
     "barnard59-core": "^6.0.0",
-    "barnard59-env": "^1.2.3",
+    "barnard59-env": "^1.2.4",
     "barnard59-test-support": "*",
     "chai": "^4.3.4",
     "express": "^4.19.2",
