@@ -9,7 +9,7 @@ function validationResultToString(result) {
   const sourceConstraintComponent = result.sourceConstraintComponent.value.split('#')[1]
   const sourceShape = termToNt(result.sourceShape)
 
-  return `${severity} of ${sourceConstraintComponent}: "${message}" with path ${path} at focus node ${focusNode} (source: ${sourceShape})`
+  return `${severity}: "${message}" at focus node ${focusNode} with path ${path} (${sourceConstraintComponent} of source: ${sourceShape})`
 }
 
 function includeNestedResult(result) {
