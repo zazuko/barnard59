@@ -5,7 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prebuild": "rimraf -g *.d.ts lib/*.d.ts",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -32,6 +35,7 @@
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
+    "@zazuko/env-core": "^1.1.2",
     "barnard59-env": "^1.0.0",
     "chai": "^4.3.7"
   },

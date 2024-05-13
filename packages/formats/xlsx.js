@@ -22,6 +22,7 @@ function parse(args) {
       const dataset = await toDataset(this.env, metadata)
       span.addEvent('metadata')
       return sinkToDuplex(new CsvwXlsxParser({
+        factory: this.env,
         metadata: dataset,
         timezone,
       }), {
