@@ -1,5 +1,11 @@
 # barnard59-env
 
+## 1.2.5
+
+### Patch Changes
+
+- 57bb930: Update `@zazuko/env-node`
+
 ## 1.2.4
 
 ### Patch Changes

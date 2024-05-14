@@ -1,5 +1,14 @@
 # barnard59-shacl
 
+## 1.4.6
+
+### Patch Changes
+
+- f1caca5: barnard59-shacl: rephrase messages in human-readable report
+- a292c2e: Updated `rdf-validate-shacl` to v0.5.5
+- Updated dependencies [57bb930]
+  - barnard59-formats@2.1.1
+
 ## 1.4.5
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "barnard59-formats",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@zazuko/env-core": "^1.1.2",
-    "barnard59-env": "^1.0.0",
+    "barnard59-env": "^1.2.5",
     "chai": "^4.3.7"
   },
   "engines": {
