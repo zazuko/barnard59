@@ -1,7 +1,9 @@
-import fs from 'fs'
-import rdf from 'barnard59-env'
+import fs from 'node:fs'
 import { expect } from 'chai'
-import { parse } from '../jsonld.js'
+import { parse as unbound } from '../jsonld.js'
+import rdf from './support/env.js'
+
+const parse = unbound.bind({ env: rdf })
 
 describe('jsonld', () => {
   describe('parse', () => {
@@ -38,6 +40,15 @@ describe('jsonld', () => {
       const dataset = await rdf.dataset().import(input.pipe(parser))
 
       expect(dataset).to.have.property('size').gt(0)
+    })
+
+    it('should use factory from context', async () => {
+      const input = fs.createReadStream(new URL('./assets/test.json', import.meta.url))
+
+      const parser = parse()
+      const [quad] = await rdf.dataset().import(input.pipe(parser))
+
+      expect(quad.extended).to.be.true
     })
   })
 })

@@ -18,7 +18,7 @@ function parse({ localContext } = {}) {
   }
 
   return tracer.startActiveSpan('jsonld:parse', span => {
-    const stream = sinkToDuplex(new Parser({ documentLoader }), { objectMode: true })
+    const stream = sinkToDuplex(new Parser({ factory: this.env, documentLoader }), { objectMode: true })
     stream.on('error', err => {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
@@ -31,7 +31,7 @@ function parse({ localContext } = {}) {
 
 const parseObject = () => {
   return tracer.startActiveSpan('jsonld:parse.object', span => {
-    const stream = combine([jsonStringify(), parse()], { objectMode: true })
+    const stream = combine([jsonStringify(), parse.call(this)], { objectMode: true })
     stream.on('error', err => {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })

@@ -32,6 +32,7 @@ function parse(args) {
       const dataset = await toDataset(this.env, metadata)
       span.addEvent('metadata')
       return sinkToDuplex(new CsvwParser({
+        factory: this.env,
         metadata: dataset,
         relaxColumnCount,
         skipLinesWithError,
