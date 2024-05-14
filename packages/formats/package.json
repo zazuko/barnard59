@@ -5,10 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha",
-    "prebuild": "rimraf -g *.d.ts lib/*.d.ts",
-    "build": "tsc",
-    "prepack": "npm run build"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
