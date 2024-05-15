@@ -53,6 +53,6 @@
     "node": ">= 14.0.0"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "loader": "ts-node/esm/transpile-only"
   }
 }
