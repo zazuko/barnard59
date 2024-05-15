@@ -5,10 +5,16 @@ const { assert } = chai
 chai.use(chaiExec)
 chaiExec.defaults = {
   command: './cli.js',
+  options: {
+    env: {
+      ...process.env,
+      NODE_OPTIONS: '--no-warnings --loader ts-node/esm',
+    },
+  },
 }
 
 describe('barnard59-validate', function () {
-  this.timeout(10000)
+  this.timeout(20000)
 
   it('should exit with a zero exit code', () => {
     const cli = chaiExec(' ./sample-pipelines/fetch-json-to-ntriples.ttl')

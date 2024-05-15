@@ -7,6 +7,8 @@ import { manifestLocation } from './config.js'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 const require = module.createRequire(url.fileURLToPath(import.meta.url))
 
+require.extensions['.ts'] = require.extensions['.js']
+
 const resolvePaths = [
   process.cwd(),
   __dirname,

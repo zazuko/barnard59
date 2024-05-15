@@ -29,7 +29,7 @@ function parse({ localContext } = {}) {
   })
 }
 
-const parseObject = () => {
+const parseObject = function () {
   return tracer.startActiveSpan('jsonld:parse.object', span => {
     const stream = combine([jsonStringify(), parse.call(this)], { objectMode: true })
     stream.on('error', err => {

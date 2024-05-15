@@ -35,6 +35,6 @@
     "ssh2": "^1.15.0"
   },
   "mocha": {
-    "loader": "tsm"
+    "loader": "ts-node/esm"
   }
 }

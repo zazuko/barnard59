@@ -39,6 +39,6 @@
     "node": ">= 14.0.0"
   },
   "mocha": {
-    "loader": "tsm"
+    "loader": "ts-node/esm/transpile-only"
   }
 }
