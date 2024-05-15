@@ -5,6 +5,12 @@ const { assert } = chai
 chai.use(chaiExec)
 chaiExec.defaults = {
   command: './cli.js',
+  options: {
+    env: {
+      ...process.env,
+      NODE_OPTIONS: '--no-warnings --loader ts-node/esm',
+    },
+  },
 }
 
 describe('barnard59-validate', function () {

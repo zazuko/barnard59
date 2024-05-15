@@ -42,6 +42,6 @@
     "shelljs": "^0.8.5"
   },
   "mocha": {
-    "loader": "tsm"
+    "loader": "ts-node/esm"
   }
 }

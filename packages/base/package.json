@@ -51,6 +51,6 @@
   },
   "mocha": {
     "require": "../../test/mocha-setup.cjs",
-    "loader": "tsm"
+    "loader": "ts-node/esm"
   }
 }

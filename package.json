@@ -16,6 +16,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
     "@tpluscode/eslint-config": "^0.4.5",
+    "@types/chai": "^4.3.16",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
@@ -27,7 +28,6 @@
     "mocha": "^10.2.0",
     "sinon-chai": "^3.7.0",
     "ts-node": "^10.9.2",
-    "tsm": "^2.3.0",
     "typescript": "^5.3.2",
     "wsrun": "^5.2.4"
   },
