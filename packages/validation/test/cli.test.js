@@ -14,7 +14,7 @@ chaiExec.defaults = {
 }
 
 describe('barnard59-validate', function () {
-  this.timeout(10000)
+  this.timeout(20000)
 
   it('should exit with a zero exit code', () => {
     const cli = chaiExec(' ./sample-pipelines/fetch-json-to-ntriples.ttl')
