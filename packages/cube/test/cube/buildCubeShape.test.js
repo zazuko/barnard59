@@ -72,6 +72,44 @@ describe('cube.buildCubeShape', () => {
     strictEqual(cube.terms.length, 1)
   })
 
+  it('should use a custom function to build the cube IRI', async () => {
+    const input = createObservationsStream()
+
+    const transform = buildCubeShape({ cube: () => ex('my-cube') })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const cube = result
+      .node(ex('my-cube'))
+      .has(ns.rdf.type, ns.cube.Cube)
+
+    strictEqual(cube.terms.length, 1)
+  })
+
+  it('should use a custom function to build the shape IRI', async () => {
+    const input = createObservationsStream()
+
+    let shapeNode
+
+    function shape({ term }) {
+      shapeNode = this.rdf.namedNode(`${term.value}/my-shape`)
+      return shapeNode
+    }
+    const transform = buildCubeShape({ shape })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const cube = result
+      .node(shapeNode)
+      .has(ns.rdf.type, ns.cube.Constraint)
+
+    strictEqual(cube.terms.length, 1)
+  })
+
   it('should create a observation set', async () => {
     const input = createObservationsStream()
     const transform = buildCubeShape()
