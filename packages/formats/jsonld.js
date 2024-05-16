@@ -13,9 +13,9 @@ import tracer from './lib/tracer.js'
  */
 function parse({ localContext } = {}) {
   /**
-   * @type {import('@rdfjs/parser-jsonld').DocumentLoader | null}
+   * @type {import('@rdfjs/parser-jsonld').DocumentLoader | undefined}
    */
-  let documentLoader = null
+  let documentLoader
 
   if (localContext) {
     if (typeof localContext === 'string') {
@@ -43,7 +43,7 @@ function parse({ localContext } = {}) {
 const parseObject = function () {
   return tracer.startActiveSpan('jsonld:parse.object', span => {
     const stream = combine([jsonStringify(), parse.call(this)], { objectMode: true })
-    stream.on('error', err => {
+    stream.on('error', (/** @type Error */ err) => {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       span.end()
