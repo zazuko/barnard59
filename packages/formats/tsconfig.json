@@ -7,8 +7,5 @@
   },
   "files": [
     "./index.js"
-  ],
-  "include": [
-    "../base/index.js"
   ]
 }
