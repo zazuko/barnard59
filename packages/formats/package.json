@@ -5,7 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prebuild": "rimraf -g *.d.ts lib/*.d.ts",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -27,11 +30,17 @@
     "@rdfjs/serializer-ntriples": "^2.0.0",
     "@rdfjs/sink-to-duplex": "^1.0.0",
     "barnard59-base": "^2.0.1",
+    "is-stream": "^3.0.0",
     "rdf-parser-csvw": "^0.15.0",
     "rdf-parser-csvw-xlsx": "^0.1.0",
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
+    "@types/rdfjs__sink-to-duplex": "^1.0.0",
+    "@types/rdf-parser-csvw": "^0.15.0",
+    "@types/rdf-parser-csvw-xlsx": "^0.1.0",
+    "@types/rdfjs__parser-jsonld": "^2.1.7",
+    "@types/sax": "^1.2.7",
     "@zazuko/env-core": "^1.1.2",
     "barnard59-env": "^1.2.5",
     "chai": "^4.3.7"
@@ -40,6 +49,6 @@
     "node": ">= 14.0.0"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "loader": "ts-node/esm/transpile-only"
   }
 }
