@@ -1,7 +1,16 @@
-import { Readable, Duplex } from 'stream'
+import { Readable, Duplex } from 'node:stream'
 import { sort, compareOn, createStore } from 'external-merge-sort'
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {string | number} sortChunkSize
+ */
 export function sortBySubject(sortChunkSize) {
+  /**
+   * @param {string} filename
+   * @param {ReturnType<Readable.from>} chunk
+   * @returns {Promise<import('@rdfjs/types').Stream>}
+   */
   const write = async (chunk, filename) => {
     await this.env.toFile(Readable.from(chunk), filename)
     return this.env.fromFile(filename)

@@ -1,3 +1,6 @@
+/**
+ * @param {string} date
+ */
 function dateToId(date) {
   return (new Date(date)).toISOString()
     .split('-').join('')

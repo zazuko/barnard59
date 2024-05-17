@@ -1,8 +1,19 @@
-import { URL } from 'url'
+import { URL } from 'node:url'
 import { Transform } from 'readable-stream'
+import { isLiteral, isNamedNode } from 'is-graph-pointer'
 import dateToId from '../dateToId.js'
 import urlJoin from '../urlJoin.js'
 
+/**
+ * @typedef {import('barnard59-env').Environment} Environment
+ */
+
+/**
+ * @param {Environment} $rdf
+ * @param {Object} options
+ * @param {import('@rdfjs/types').DatasetCore} options.dataset
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
 function findRoot($rdf, { dataset }) {
   const subjects = [...dataset].filter(quad => quad.subject.termType === 'NamedNode').reduce((subjects, quad) => {
     const count = subjects.get(quad.subject) || 0
@@ -12,16 +23,24 @@ function findRoot($rdf, { dataset }) {
     return subjects
   }, $rdf.termMap())
 
+  /** @type {any} */
   const subject = [...subjects.entries()].sort((a, b) => a[1] - b[1])[0][0]
 
   return subject
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ * @param {Object} options
+ * @param {import('@rdfjs/types').DatasetCore} options.dataset
+ * @param {import('@rdfjs/types').NamedNode} options.subject
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
 function defaultObserver({ dataset, subject }) {
-  const observer = this.rdf.clownface({ dataset }).out(this.rdf.ns.cube.observedBy).term
+  const observer = this.rdf.clownface({ dataset }).out(this.rdf.ns.cube.observedBy)
 
-  if (observer) {
-    return observer
+  if (isNamedNode(observer)) {
+    return observer.term
   }
 
   const iri = new URL(subject.value)
@@ -31,6 +50,12 @@ function defaultObserver({ dataset, subject }) {
   return this.rdf.namedNode(iri.toString())
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ * @param {Object} options
+ * @param {import('@rdfjs/types').NamedNode} options.subject
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
 function defaultObservations({ subject }) {
   const iri = urlJoin(subject.value, '..')
 
@@ -41,6 +66,12 @@ function defaultObservations({ subject }) {
   return this.rdf.namedNode(`${iri}/observation/`)
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ * @param {Object} options
+ * @param {import('@rdfjs/types').NamedNode} options.observations
+ * @param {import('@rdfjs/types').NamedNode} options.subject
+ */
 function defaultObservation({ observations, subject }) {
   const url = new URL(subject.value)
   const id = url.pathname.split('/').slice(-1)[0]
@@ -48,18 +79,50 @@ function defaultObservation({ observations, subject }) {
   return this.rdf.namedNode(urlJoin(observations.value, id))
 }
 
+/**
+ * @param {import('@rdfjs/types').NamedNode} property
+ * @return DateCallback
+ */
 function dateByProperty(property) {
+  /**
+   * @this {{ rdf: Environment }}
+   * @param {Object} options
+   * @param {import('@rdfjs/types').DatasetCore} options.dataset
+   * @returns {import('@rdfjs/types').Literal}
+   */
   return function ({ dataset }) {
-    return this.rdf.clownface({ dataset }).out(property).term
+    const date = this.rdf.clownface({ dataset }).out(property)
+
+    if (!isLiteral(date)) {
+      throw new Error(`Expected a date literal at property ${property.value} but found ${date.term?.value}`)
+    }
+
+    return date.term
   }
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ */
 function dateNow() {
   return this.rdf.literal((new Date()).toISOString(), this.rdf.ns.xsd.dateTime)
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ * @param {Object} options
+ * @param {import('@rdfjs/types').DatasetCore} options.dataset
+ */
 function dateByDatatype({ dataset }) {
-  const terms = this.rdf.clownface({ dataset }).out().filter(ptr => this.rdf.ns.xsd.dateTime.equals(ptr.term.datatype)).terms
+  /**
+   *
+   * @type {Array<import('@rdfjs/types').Literal>}
+   */
+  const terms = this.rdf.clownface({ dataset })
+    .out()
+    .filter(isLiteral)
+    .filter(ptr => this.rdf.ns.xsd.dateTime.equals(ptr.term.datatype))
+    .terms
 
   if (terms.length === 0) {
     throw new Error('now date value found')
@@ -72,98 +135,197 @@ function dateByDatatype({ dataset }) {
   return terms[0]
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ * @param {Object} options
+ * @param {import('@rdfjs/types').NamedNode} options.observations
+ * @param {import('@rdfjs/types').DatasetCore} options.dataset
+ * @param {DateCallback} [options.useDate]
+ * @returns {import('@rdfjs/types').NamedNode}
+ */
 function dateObservation({ dataset, observations, useDate }) {
+  if (!useDate) {
+    throw new Error('useDate callback is required')
+  }
+
   const date = useDate({ dataset })
 
   return this.rdf.namedNode(urlJoin(observations.value, dateToId(date.value)))
 }
 
+/**
+ * @this {{ rdf: Environment }}
+ * @param {Object} options
+ * @param {import('@rdfjs/types').NamedNode} options.observations
+ * @param {number} options.index
+ */
 function indexObservation({ index, observations }) {
   return this.rdf.namedNode(urlJoin(observations.value, `./${index.toString()}`))
 }
 
+/**
+ * @param {Environment} $rdf
+ * @param {import('@rdfjs/types').NamedNode | string} value
+ * @returns {() => import('@rdfjs/types').NamedNode}
+ */
 function asTermObject($rdf, value) {
-  if (typeof value === 'string') {
-    value = $rdf.namedNode(value)
-  }
+  const term = typeof value === 'string' ? $rdf.namedNode(value) : value
 
   return () => {
-    return value
+    return term
   }
 }
 
+/**
+ * @typedef {(arg: Omit<Context, 'observation'>) => import('@rdfjs/types').NamedNode} ObservationCallback
+ */
+
+/**
+ * @typedef {(arg: Omit<Context, 'observation' | 'observations'>) => import('@rdfjs/types').NamedNode} ObservationsCallback
+ */
+
+/**
+ * @typedef {(arg: Omit<Context, 'observer' | 'observation' | 'observations'>) => import('@rdfjs/types').NamedNode | undefined | null} ObserverCallback
+ */
+
+/**
+ * @typedef {(arg: { dataset: import('@rdfjs/types').DatasetCore }) => import('@rdfjs/types').Literal} DateCallback
+ */
+
+/**
+ * @typedef {{
+ *   index: number,
+ *   blacklist: Set<import('@rdfjs/types').Term>,
+ *   dimensions: Set<import('@rdfjs/types').NamedNode>
+ *   observation: ObservationCallback
+ *   observations: ObservationsCallback
+ *   observer: ObserverCallback
+ *   useDate?: DateCallback
+ *   dateProperty?: import('@rdfjs/types').NamedNode
+ * }} Options
+ */
+
+/**
+ * @typedef {Omit<Options, 'observer' | 'observation' | 'observations'> & {
+ *   dataset: import('@rdfjs/types').DatasetCore,
+ *   subject: import('@rdfjs/types').NamedNode,
+ *   observer?: import('@rdfjs/types').NamedNode | null,
+ *   observations: import('@rdfjs/types').NamedNode,
+ *   observation: import('@rdfjs/types').NamedNode,
+ *   date?: import('@rdfjs/types').Literal,
+ *   dateProperty?: import('@rdfjs/types').NamedNode,
+ * }} Context
+ */
+
 class ToObservation extends Transform {
-  constructor({ rdf, blacklist, dimensions, observation, observations, observer, useDate, useIndex } = {}) {
+  /**
+   * @param {Object} options
+   * @param {Environment} options.rdf
+   * @param {Array<string | import('clownface').GraphPointer<import('@rdfjs/types').NamedNode>>} [options.blacklist]
+   * @param {Array<string | import('clownface').GraphPointer<import('@rdfjs/types').NamedNode>>} [options.dimensions]
+   * @param {string | ObservationCallback} [options.observation]
+   * @param {string | ObservationsCallback} [options.observations]
+   * @param {string | ObserverCallback} [options.observer]
+   * @param {boolean | 'true' | 'now' | string | import('@rdfjs/types').NamedNode | DateCallback} [options.useDate]
+   * @param {import('@rdfjs/types').NamedNode} [options.dateProperty]
+   * @param {boolean} [options.useIndex]
+   */
+  constructor({ rdf, dateProperty, ...options }) {
     super({ objectMode: true })
 
+    /**
+     * @private
+     * @type {Environment}
+     */
     this.rdf = rdf
+
+    /** @type {Set<import('@rdfjs/types').NamedNode>} */
+    const blacklist = this.rdf.termSet()
+    if (options.blacklist) {
+      for (const item of options.blacklist) {
+        blacklist.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
+      }
+    }
+
+    /** @type {Set<import('@rdfjs/types').NamedNode>} */
+    const dimensions = this.rdf.termSet()
+    if (options.dimensions) {
+      for (const item of options.dimensions) {
+        dimensions.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
+      }
+    }
+
+    /** @type {ObserverCallback} */
+    let observer = defaultObserver.bind({ rdf })
+    if (options.observer) {
+      if (typeof options.observer === 'function') {
+        observer = options.observer
+      } else if (options.observer) {
+        observer = asTermObject(rdf, options.observer)
+      }
+    }
+
+    /** @type {ObservationsCallback} */
+    let observations = defaultObservations.bind({ rdf })
+    if (options.observations) {
+      if (typeof options.observations === 'function') {
+        observations = options.observations
+      } else if (options.observations) {
+        observations = asTermObject(rdf, options.observations)
+      }
+    }
+
+    /** @type {DateCallback | undefined} */
+    let useDate
+    if (options.useDate) {
+      if (options.useDate === true || options.useDate === 'true') {
+        useDate = dateByDatatype.bind({ rdf })
+      } else if (options.useDate === 'now') {
+        useDate = dateNow.bind({ rdf })
+      } else if (typeof options.useDate === 'string') {
+        useDate = dateByProperty(this.rdf.namedNode(options.useDate)).bind({ rdf })
+      } else if (typeof options.useDate === 'object') {
+        useDate = dateByProperty(options.useDate).bind({ rdf })
+      } else if (typeof useDate === 'function') {
+        useDate = options.useDate
+      }
+    }
+
+    /** @type {ObservationCallback} */
+    let observation = defaultObservation.bind({ rdf })
+    if (options.observation && typeof options.observation === 'function') {
+      observation = options.observation
+    } else if (useDate) {
+      observation = dateObservation.bind({ rdf })
+    } else if (options.useIndex) {
+      observation = indexObservation.bind({ rdf })
+    }
+
+    /**
+     * @type {Options}
+     */
     this.options = {
       index: 0,
-      blacklist: this.rdf.termSet(),
-      dimensions: this.rdf.termSet(),
-    }
-
-    if (blacklist) {
-      for (const item of blacklist) {
-        this.options.blacklist.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
-      }
-    }
-
-    if (dimensions) {
-      for (const item of dimensions) {
-        this.options.dimensions.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
-      }
-    }
-
-    if (observer) {
-      if (typeof observer === 'function') {
-        this.options.observer = observer
-      } else if (observer) {
-        this.options.observer = asTermObject(rdf, observer)
-      }
-    } else {
-      this.options.observer = defaultObserver.bind({ rdf })
-    }
-
-    if (observations) {
-      if (typeof observations === 'function') {
-        this.options.observations = observations
-      } else if (observations) {
-        this.options.observations = asTermObject(rdf, observations)
-      }
-    } else {
-      this.options.observations = defaultObservations.bind({ rdf })
-    }
-
-    if (useDate) {
-      if (useDate === true || useDate === 'true') {
-        this.options.useDate = dateByDatatype.bind({ rdf })
-      } else if (useDate === 'now') {
-        this.options.useDate = dateNow.bind({ rdf })
-      } else if (typeof useDate === 'string') {
-        this.options.useDate = dateByProperty(this.rdf.namedNode(useDate)).bind({ rdf })
-      } else if (useDate.termType) {
-        this.options.useDate = dateByProperty(useDate).bind({ rdf })
-      } else if (typeof useDate === 'function') {
-        this.options.useDate = useDate
-      }
-    }
-
-    if (observation && typeof observation === 'function') {
-      this.options.observation = observation
-    } else {
-      if (this.options.useDate) {
-        this.options.observation = dateObservation.bind({ rdf })
-      } else if (useIndex) {
-        this.options.observation = indexObservation.bind({ rdf })
-      } else {
-        this.options.observation = defaultObservation.bind({ rdf })
-      }
+      blacklist,
+      dimensions,
+      dateProperty,
+      observer,
+      observations,
+      useDate,
+      observation,
     }
   }
 
+  /**
+   * @param {import('@rdfjs/types').DatasetCore} chunk
+   * @param {BufferEncoding} encoding
+   * @param {(error?: Error | null, data?: any) => void} callback
+   */
   _transform(chunk, encoding, callback) {
     try {
+      /**
+       * @type {any}
+       */
       const context = {
         dataset: this.rdf.dataset([...chunk]),
         ...this.options,
@@ -203,21 +365,32 @@ class ToObservation extends Transform {
         }
       }
 
-      if (context.observations) {
-        dataset.add(this.rdf.quad(context.observations, this.rdf.ns.cube.observation, context.observation))
-      }
+      dataset.add(this.rdf.quad(context.observations, this.rdf.ns.cube.observation, context.observation))
 
       this.push([...dataset])
 
       this.options.index++
 
       callback()
-    } catch (err) {
+    } catch (/** @type {any} */ err) {
       callback(err)
     }
   }
 }
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {Object} options
+ * @param {Array<string | import('clownface').GraphPointer<import('@rdfjs/types').NamedNode>>} [options.blacklist]
+ * @param {Array<string | import('clownface').GraphPointer<import('@rdfjs/types').NamedNode>>} [options.dimensions]
+ * @param {string} [options.observation]
+ * @param {string} [options.observations]
+ * @param {string} [options.observer]
+ * @param {boolean} [options.useDate]
+ * @param {import('@rdfjs/types').NamedNode} [options.dateProperty]
+ * @param {boolean} [options.useIndex]
+ * @returns {Transform}
+ */
 function toObservation({
   blacklist,
   dimensions,
