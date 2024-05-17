@@ -24,16 +24,16 @@ function defaultShape({ term }) {
 }
 
 class CubeShapeBuilder extends Transform {
-  constructor({ rdf, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
+  constructor({ rdf, cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
     super({ objectMode: true })
 
     this.rdf = rdf
     this.options = {
       cubes: this.rdf.termMap(),
-      cube: defaultCube.bind({ rdf }),
+      cube: (cube || defaultCube).bind({ rdf }),
       excludeValuesOf: this.rdf.termSet(excludeValuesOf ? excludeValuesOf.map(v => this.rdf.namedNode(v)) : []),
       metadataStream: metadata,
-      shape: defaultShape.bind({ rdf }),
+      shape: (shape || defaultShape).bind({ rdf }),
       graph,
       propertyShapeId,
       inListMaxSize,
@@ -106,8 +106,8 @@ class CubeShapeBuilder extends Transform {
   }
 }
 
-function buildCubeShape({ excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
-  return new CubeShapeBuilder({ rdf: this.env, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize })
+function buildCubeShape({ cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
+  return new CubeShapeBuilder({ rdf: this.env, cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize })
 }
 
 export default buildCubeShape
