@@ -1,5 +1,15 @@
 # barnard59-cube
 
+## 1.4.5
+
+### Patch Changes
+
+- 8f08421: Accept custom functions to create cube IRI and shape IRI
+- Updated dependencies [cd81cc1]
+- Updated dependencies [6fea1cc]
+- Updated dependencies [1df0b79]
+  - barnard59-formats@2.1.2
+
 ## 1.4.4
 
 ### Patch Changes
