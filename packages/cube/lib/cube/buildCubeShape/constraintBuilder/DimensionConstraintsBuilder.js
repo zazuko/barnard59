@@ -2,6 +2,7 @@ import { DatatypeConstraintBuilder } from './DatatypeConstraintBuilder.js'
 import { CompositeConstraintBuilder } from './CompositeConstraintBuilder.js'
 import { RangeConstraintBuilder } from './RangeConstraintBuilder.js'
 import { ValuesConstraintBuilder } from './ValuesConstraintBuilder.js'
+import { NodeKindConstraintBuilder } from './NodeKindConstraintBuilder.js'
 
 export class DimensionConstraintsBuilder {
   constructor({ rdf, datatypeParsers, inListMaxSize }) {
@@ -37,7 +38,9 @@ export class DimensionConstraintsBuilder {
     if (this.valuesBuilder) {
       this.valuesBuilder.add(object)
     } else {
-      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, this.inListMaxSize)
+      this.valuesBuilder = new CompositeConstraintBuilder(
+        new ValuesConstraintBuilder(this.rdf, this.inListMaxSize),
+        new NodeKindConstraintBuilder(this.rdf))
       this.valuesBuilder.add(object)
     }
   }

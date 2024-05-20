@@ -36,7 +36,10 @@ describe('DimensionConstraintsBuilder', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers, inListMaxSize: 1 })
     const validator = buildShape(builder, namedNode1, namedNode2)
     const assertConforms = conforms.bind(null, validator)
-    it('everything conforms', () => assertConforms(namedNode1, namedNode2, namedNode3, string1, one))
+    const assertNotConforms = notConforms.bind(null, validator)
+    it.only('all named nodes conform', () => assertConforms(namedNode1, namedNode2, namedNode3))
+    it('a string literal does not conform', () => assertNotConforms(string1))
+    it('an integer literal does not conform', () => assertNotConforms(one))
   })
   context('built from two strings', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
