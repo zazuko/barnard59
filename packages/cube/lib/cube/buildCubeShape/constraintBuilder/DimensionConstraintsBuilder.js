@@ -51,11 +51,6 @@ export class DimensionConstraintsBuilder {
   }
 
   build(ptr) {
-    if (this.valuesBuilder?.message) {
-      ptr.addOut(this.rdf.ns.sh.description, this.valuesBuilder.message)
-      return
-    }
-
     const builders = [...this.builders.values()]
     if (this.valuesBuilder) {
       builders.push(this.valuesBuilder)
