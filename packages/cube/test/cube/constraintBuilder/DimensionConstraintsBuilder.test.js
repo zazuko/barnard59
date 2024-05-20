@@ -3,7 +3,7 @@ import { fromRdf } from 'rdf-literal'
 import { DimensionConstraintsBuilder } from '../../../lib/cube/buildCubeShape/constraintBuilder/DimensionConstraintsBuilder.js'
 import { buildShape, conforms, notConforms } from './support.js'
 
-const { xsd } = rdf.ns
+const { xsd, cube } = rdf.ns
 
 const datatypeParsers = rdf.termMap([
   [xsd.integer, fromRdf],
@@ -20,6 +20,7 @@ describe('DimensionConstraintsBuilder', () => {
   const two = rdf.literal('2', xsd.integer)
   const three = rdf.literal('3', xsd.integer)
   const four = rdf.literal('4', xsd.integer)
+  const cubeUndefined = rdf.literal('', cube.Undefined)
 
   context('built from two named nodes', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
@@ -37,7 +38,7 @@ describe('DimensionConstraintsBuilder', () => {
     const validator = buildShape(builder, namedNode1, namedNode2)
     const assertConforms = conforms.bind(null, validator)
     const assertNotConforms = notConforms.bind(null, validator)
-    it.only('all named nodes conform', () => assertConforms(namedNode1, namedNode2, namedNode3))
+    it('all named nodes conform', () => assertConforms(namedNode1, namedNode2, namedNode3))
     it('a string literal does not conform', () => assertNotConforms(string1))
     it('an integer literal does not conform', () => assertNotConforms(one))
   })
@@ -73,7 +74,7 @@ describe('DimensionConstraintsBuilder', () => {
     it('a string literal does not conform', () => assertNotConforms(string1))
     it('a named node does not conform', () => assertNotConforms(namedNode1))
   })
-  context('built two named nodes, two strings and two integers', () => {
+  context('built from two named nodes, two strings and two integers', () => {
     const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
     const validator = buildShape(builder, namedNode1, namedNode2, string1, string2, one, three)
     const assertConforms = conforms.bind(null, validator)
@@ -86,5 +87,24 @@ describe('DimensionConstraintsBuilder', () => {
     it('the two integers conform', () => assertConforms(one, three))
     it('an integer in between conforms', () => assertConforms(two))
     it('an integer outside the range does not conform', () => assertNotConforms(four))
+  })
+  context('built from a string and a cube:Undefined', () => {
+    const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
+    const validator = buildShape(builder, string1, cubeUndefined)
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('the two values conform', () => assertConforms(string1, cubeUndefined))
+    it('another string does not conform', () => assertNotConforms(string2))
+  })
+  context('built from a string and a named node', () => {
+    const builder = new DimensionConstraintsBuilder({ rdf, datatypeParsers })
+    const validator = buildShape(builder, string1, namedNode1)
+    const assertConforms = conforms.bind(null, validator)
+    const assertNotConforms = notConforms.bind(null, validator)
+
+    it('the two values conform', () => assertConforms(string1, namedNode1))
+    it('another string does not conform', () => assertNotConforms(string2))
+    it('another named node does not conform', () => assertNotConforms(namedNode2))
   })
 })
