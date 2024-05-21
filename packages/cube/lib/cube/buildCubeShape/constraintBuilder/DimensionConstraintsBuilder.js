@@ -2,6 +2,10 @@ import { DatatypeConstraintBuilder } from './DatatypeConstraintBuilder.js'
 import { CompositeConstraintBuilder } from './CompositeConstraintBuilder.js'
 import { RangeConstraintBuilder } from './RangeConstraintBuilder.js'
 import { ValuesConstraintBuilder } from './ValuesConstraintBuilder.js'
+import { NodeKindConstraintBuilder } from './NodeKindConstraintBuilder.js'
+
+const getValuesBuilder = compositeBuilder =>
+  compositeBuilder.builders.find(builder => builder instanceof ValuesConstraintBuilder)
 
 export class DimensionConstraintsBuilder {
   constructor({ rdf, datatypeParsers, inListMaxSize }) {
@@ -37,7 +41,9 @@ export class DimensionConstraintsBuilder {
     if (this.valuesBuilder) {
       this.valuesBuilder.add(object)
     } else {
-      this.valuesBuilder = new ValuesConstraintBuilder(this.rdf, this.inListMaxSize)
+      this.valuesBuilder = new CompositeConstraintBuilder(
+        new ValuesConstraintBuilder(this.rdf, this.inListMaxSize),
+        new NodeKindConstraintBuilder(this.rdf))
       this.valuesBuilder.add(object)
     }
   }
@@ -51,11 +57,6 @@ export class DimensionConstraintsBuilder {
   }
 
   build(ptr) {
-    if (this.valuesBuilder?.message) {
-      ptr.addOut(this.rdf.ns.sh.description, this.valuesBuilder.message)
-      return
-    }
-
     const builders = [...this.builders.values()]
     if (this.valuesBuilder) {
       builders.push(this.valuesBuilder)
@@ -65,6 +66,16 @@ export class DimensionConstraintsBuilder {
       builders[0].build(ptr)
     }
     if (builders.length > 1) {
+      // if all builders have sh:in, then merge them
+      const valuesBuilders = builders.map(getValuesBuilder)
+      if (valuesBuilders.every(builder => builder?.enabled)) {
+        const merged = new ValuesConstraintBuilder(this.rdf)
+        const allValues = valuesBuilders.flatMap(builder => Array.from(builder.values))
+        allValues.forEach(value => merged.add(value))
+        valuesBuilders.forEach(builder => { builder.enabled = false })
+        merged.build(ptr)
+      }
+
       ptr.addList(this.rdf.ns.sh.or, builders.map(builder => {
         const blankNode = ptr.blankNode()
         builder.build(blankNode)
