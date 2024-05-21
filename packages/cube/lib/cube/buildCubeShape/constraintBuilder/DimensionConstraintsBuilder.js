@@ -4,9 +4,6 @@ import { RangeConstraintBuilder } from './RangeConstraintBuilder.js'
 import { ValuesConstraintBuilder } from './ValuesConstraintBuilder.js'
 import { NodeKindConstraintBuilder } from './NodeKindConstraintBuilder.js'
 
-const hasValuesBuilder = compositeBuilder =>
-  compositeBuilder.builders.some(builder => builder instanceof ValuesConstraintBuilder && builder.enabled)
-
 const getValuesBuilder = compositeBuilder =>
   compositeBuilder.builders.find(builder => builder instanceof ValuesConstraintBuilder)
 
@@ -70,13 +67,12 @@ export class DimensionConstraintsBuilder {
     }
     if (builders.length > 1) {
       // if all builders have sh:in, then merge them
-      if (builders.every(hasValuesBuilder)) {
+      const valuesBuilders = builders.map(getValuesBuilder)
+      if (valuesBuilders.every(builder => builder?.enabled)) {
         const merged = new ValuesConstraintBuilder(this.rdf)
-        for (const compositeBuilder of builders) {
-          const valuesBuilder = getValuesBuilder(compositeBuilder)
-          valuesBuilder.enabled = false
-          valuesBuilder.values.forEach(value => merged.add(value))
-        }
+        const allValues = valuesBuilders.flatMap(builder => Array.from(builder.values))
+        allValues.forEach(value => merged.add(value))
+        valuesBuilders.forEach(builder => { builder.enabled = false })
         merged.build(ptr)
       }
 
