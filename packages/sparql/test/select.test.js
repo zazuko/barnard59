@@ -1,8 +1,11 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import nock from 'nock'
-import select from '../select.js'
+import rdf from 'barnard59-env'
+import selectUnbound from '../select.js'
+
+const select = selectUnbound.bind({ env: rdf })
 
 describe('select', () => {
   it('should be a function', () => {
@@ -101,6 +104,6 @@ describe('select', () => {
 
     await getStream.array(await select({ endpoint, user, password, query }))
 
-    strictEqual(credentials[0], 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
+    strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
   })
 })

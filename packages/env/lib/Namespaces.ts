@@ -1,4 +1,4 @@
-import type { NsBuildersFactory } from '@tpluscode/rdf-ns-builders/Factory.js'
+import type NsBuildersFactory from '@tpluscode/rdf-ns-builders'
 import type { Environment } from '@rdfjs/environment/Environment.js'
 import type { NamespaceFactory } from '@rdfjs/namespace/Factory.js'
 import * as Builders from '@zazuko/vocabulary-extras-builders'

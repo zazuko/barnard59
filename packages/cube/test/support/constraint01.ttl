@@ -42,6 +42,7 @@
 		sh:minCount 1 ;
 		sh:maxCount 1 ;
 	], [
+    sh:severity sh:Warning ;
 		sh:path cube:observedBy ;
 		sh:in (
 			<https://agriculture.ld.admin.ch/>

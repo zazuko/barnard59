@@ -17,6 +17,10 @@ export class ValuesConstraintBuilder {
   }
 
   build(ptr) {
+    if (this.message) {
+      ptr.addOut(this.sh.description, this.message)
+      return
+    }
     if (this.enabled && this.values.size > 0) {
       ptr.addList(this.sh.in, this.values)
     }

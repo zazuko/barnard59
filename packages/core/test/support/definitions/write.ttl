@@ -11,8 +11,8 @@
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-base#map>
   ];
-  code:arguments ("""input => {
-    this.content = input
+  code:arguments ("""function (input) {
+    this.variables.set('input', input)
 
     return input
   }"""^^code:EcmaScript).

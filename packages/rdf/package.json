@@ -40,7 +40,7 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
-    "@rdfjs/to-ntriples": "^2.0.0",
+    "@rdfjs/to-ntriples": "^3.0.0",
     "@types/file-fetch": "^1.6.6",
     "@types/mime-types": "^2.1.4",
     "@types/proto-fetch": "^1.0.5",
@@ -60,6 +60,6 @@
   },
   "mocha": {
     "require": "../../test/mocha-setup.cjs",
-    "loader": "tsm"
+    "loader": "ts-node/esm/transpile-only"
   }
 }

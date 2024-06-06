@@ -1,11 +1,13 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import nock from 'nock'
 import rdf from '@zazuko/env'
 import { turtle } from '@tpluscode/rdf-string'
-import construct from '../construct.js'
+import constructUnbound from '../construct.js'
 import * as ns from './support/namespaces.js'
+
+const construct = constructUnbound.bind({ env: rdf })
 
 describe('construct', () => {
   it('should be a function', () => {
@@ -99,6 +101,6 @@ describe('construct', () => {
 
     await getStream.array(await construct({ endpoint, user, password, query }))
 
-    strictEqual(credentials[0], 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
+    strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
   })
 })

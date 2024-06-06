@@ -23,3 +23,10 @@
   code:implementedBy [ a code:EcmaScriptModule;
     code:link <node:barnard59-ftp/read.js#default>
   ].
+
+<write> a p:Operation, p:Writable;
+  rdfs:label "Put file (FTP)";
+  rdfs:comment "Uploads the stream to FTP.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-ftp/write.js#default>
+  ].

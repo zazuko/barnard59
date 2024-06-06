@@ -1,31 +1,33 @@
 import Client from 'sparql-http-client'
-import unpromiseReadable from './lib/unpromiseReadable.js'
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {Pick<import('sparql-http-client').StreamClientOptions, 'user' | 'password'> & {
+ * @param {Pick<import('sparql-http-client/StreamClient.js').Options<any>, 'user' | 'password'> & {
  *   endpoint: string,
  *   graph: string | import('@rdfjs/types').NamedNode | import('@rdfjs/types').DefaultGraph,
  * }} options
  */
 function get({ endpoint, graph, user, password }) {
   const client = new Client({
+    factory: this.env,
     storeUrl: endpoint,
     user,
     password,
   })
 
+  /** @type {import('@rdfjs/types').Quad_Graph} */
+  let graphTerm
   if (!graph) {
-    graph = this.env.defaultGraph()
+    graphTerm = this.env.defaultGraph()
   } else if (typeof graph === 'string') {
-    graph = this.env.namedNode(graph)
+    graphTerm = this.env.namedNode(graph)
   } else if (this.env.defaultGraph().equals(graph)) {
-    graph = this.env.defaultGraph()
+    graphTerm = this.env.defaultGraph()
   } else {
-    graph = this.env.namedNode(graph.value)
+    graphTerm = this.env.namedNode(graph.value)
   }
 
-  return unpromiseReadable(client.store.get(graph))
+  return client.store.get(graphTerm)
 }
 
 export default get

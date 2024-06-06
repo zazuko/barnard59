@@ -1,6 +1,6 @@
 import type { Literal, DataFactory } from '@rdfjs/types'
 import type { Environment } from '@rdfjs/environment/Environment.js'
-import type { NsBuildersFactory } from '@tpluscode/rdf-ns-builders/Factory.js'
+import type NsBuildersFactory from '@tpluscode/rdf-ns-builders'
 
 export default class ConstantsFactory {
   FALSE!: Literal

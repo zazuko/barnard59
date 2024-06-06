@@ -1,6 +1,6 @@
 {
   "name": "barnard59",
-  "version": "4.5.3",
+  "version": "5.0.3",
   "description": "Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -37,8 +37,8 @@
     "@opentelemetry/semantic-conventions": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "@rdfjs/namespace": "^2.0.0",
-    "barnard59-core": "5.3.3",
-    "barnard59-env": "1.2.3",
+    "barnard59-core": "6.0.0",
+    "barnard59-env": "1.2.6",
     "commander": "^11.0.0",
     "pkgscan": "^1.0.24",
     "find-up": "^7.0.0",
@@ -51,14 +51,15 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
-    "@fig/complete-commander": "^3.0.0",
+    "@fig/complete-commander": "^3.1.0",
     "@rdfjs-elements/formats-pretty": "^0.6.7",
     "@types/lodash": "^4.14.202",
     "@types/readable-stream": "^4.0.10",
+    "@types/shelljs": "^0.8.15",
     "approvals": "^6.2.2",
-    "barnard59-base": "^2.4.0",
-    "barnard59-formats": "^2.1.0",
-    "barnard59-graph-store": "^5.1.1",
+    "barnard59-base": "^2.4.2",
+    "barnard59-formats": "^2.1.2",
+    "barnard59-graph-store": "^6.0.0",
     "barnard59-http": "^2.0.0",
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.3",
@@ -68,6 +69,6 @@
     "strip-ansi": "^7.0.0"
   },
   "mocha": {
-    "loader": "esmock"
+    "loader": "ts-node/esm/transpile-only"
   }
 }

@@ -6,20 +6,28 @@ import sinkToDuplex from '@rdfjs/sink-to-duplex'
 import { combine, jsonStringify } from 'barnard59-base'
 import tracer from './lib/tracer.js'
 
+/**
+ * @this {import('barnard59-core').Context}
+ * @param {Object} [options]
+ * @param {string | Record<string, string>} [options.localContext]
+ */
 function parse({ localContext } = {}) {
-  let documentLoader = null
+  /**
+   * @type {import('@rdfjs/parser-jsonld').DocumentLoader | undefined}
+   */
+  let documentLoader
 
   if (localContext) {
     if (typeof localContext === 'string') {
-      localContext = JSON.parse(localContext)
+      documentLoader = new FsDocumentLoader(JSON.parse(localContext))
+    } else {
+      documentLoader = new FsDocumentLoader(localContext)
     }
-
-    documentLoader = new FsDocumentLoader(localContext)
   }
 
   return tracer.startActiveSpan('jsonld:parse', span => {
-    const stream = sinkToDuplex(new Parser({ documentLoader }), { objectMode: true })
-    stream.on('error', err => {
+    const stream = sinkToDuplex(new Parser({ factory: this.env, documentLoader }), { objectMode: true })
+    stream.on('error', /** @type {any} */ err => {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       span.end()
@@ -29,10 +37,13 @@ function parse({ localContext } = {}) {
   })
 }
 
-const parseObject = () => {
+/**
+ * @this {import('barnard59-core').Context}
+ */
+const parseObject = function () {
   return tracer.startActiveSpan('jsonld:parse.object', span => {
-    const stream = combine([jsonStringify(), parse()], { objectMode: true })
-    stream.on('error', err => {
+    const stream = combine([jsonStringify(), parse.call(this)], { objectMode: true })
+    stream.on('error', (/** @type Error */ err) => {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       span.end()

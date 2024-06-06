@@ -1,5 +1,23 @@
 # barnard59-env
 
+## 1.2.6
+
+### Patch Changes
+
+- 1df0b79: Update `@zazuko/env-node`
+
+## 1.2.5
+
+### Patch Changes
+
+- 57bb930: Update `@zazuko/env-node`
+
+## 1.2.4
+
+### Patch Changes
+
+- 287efab: Accurate imports to work with `moduleResolution=NodeNext`
+
 ## 1.2.3
 
 ### Patch Changes

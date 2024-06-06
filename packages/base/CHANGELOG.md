@@ -1,5 +1,18 @@
 # barnard59-base
 
+## 2.4.2
+
+### Patch Changes
+
+- f6d593c: `limit` step would not break the pipeline when the stream produces a very large or infinite stream
+
+## 2.4.1
+
+### Patch Changes
+
+- d48f198: Update [glob](https://npm.im/glob) to v10
+- 94551a4: Missing type declarations for `batch.js` and `Readable.js`
+
 ## 2.4.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "barnard59-base",
-  "version": "2.4.0",
+  "version": "2.4.2",
   "description": "Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -35,10 +35,10 @@
   "devDependencies": {
     "@types/duplexify": "^3.6.4",
     "@types/parallel-transform": "^1.1.4",
-    "@types/readable-stream": "^4.0.10",
+    "@types/readable-stream": "^4.0.11",
     "@types/readable-to-readable": "^0.1.0",
     "@types/through2": "^2.0.41",
-    "barnard59-core": "^5.3.1",
+    "barnard59-core": "^6.0.0",
     "chai": "^4.3.10",
     "get-stream": "^6.0.1",
     "into-stream": "^7.0.0",
@@ -51,6 +51,6 @@
   },
   "mocha": {
     "require": "../../test/mocha-setup.cjs",
-    "loader": "tsm"
+    "loader": "ts-node/esm/transpile-only"
   }
 }

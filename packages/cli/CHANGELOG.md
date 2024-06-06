@@ -1,5 +1,39 @@
 # barnard59
 
+## 5.0.3
+
+### Patch Changes
+
+- Updated dependencies [1df0b79]
+  - barnard59-env@1.2.6
+
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies [57bb930]
+  - barnard59-env@1.2.5
+
+## 5.0.1
+
+### Patch Changes
+
+- Updated dependencies [287efab]
+  - barnard59-env@1.2.4
+
+## 5.0.0
+
+### Major Changes
+
+- 3caf9e4: Freeze pipeline context object to prevent accidental modifications
+
+### Patch Changes
+
+- d48f198: Remove usage of `rdf-js` package (deprecated)
+- Updated dependencies [d48f198]
+- Updated dependencies [3caf9e4]
+  - barnard59-core@6.0.0
+
 ## 4.5.3
 
 ### Patch Changes

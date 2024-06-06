@@ -1,11 +1,14 @@
 {
   "name": "barnard59-sparql",
-  "version": "2.1.1",
+  "version": "2.3.0",
   "description": "SPARQL support for Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prebuild": "rimraf -g *.d.ts",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "author": "Zazuko GmbH",
   "license": "MIT",
@@ -21,11 +24,13 @@
     "duplex-to": "^1.0.1",
     "oxigraph": "^0.4.0-alpha.2",
     "readable-stream": "^4.5.2",
-    "sparql-http-client": "^2.4.0"
+    "sparql-http-client": "^3.0.0"
   },
   "devDependencies": {
     "@tpluscode/rdf-string": "^1.1.2",
+    "@types/sparql-http-client": "^3.0.0",
     "@zazuko/env": "^2",
+    "barnard59-env": "^1.2.3",
     "get-stream": "^6.0.0",
     "is-stream": "^3.0.0",
     "nock": "^13.1.1"
@@ -34,6 +39,6 @@
     "node": ">= 14.0.0"
   },
   "mocha": {
-    "loader": "tsm"
+    "loader": "ts-node/esm/transpile-only"
   }
 }

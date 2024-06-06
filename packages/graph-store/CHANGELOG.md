@@ -1,5 +1,26 @@
 # barnard59-graph-store
 
+## 6.0.0
+
+### Major Changes
+
+- f240b0f: Updated `sparql-http-client` to v3
+  Removed `maxQuadsPerRequest` from PUT and POST operations
+
+### Patch Changes
+
+- Updated dependencies [f6d593c]
+  - barnard59-base@2.4.2
+
+## 5.1.2
+
+### Patch Changes
+
+- d48f198: Remove usage of `rdf-js` package (deprecated)
+- Updated dependencies [d48f198]
+- Updated dependencies [94551a4]
+  - barnard59-base@2.4.1
+
 ## 5.1.1
 
 ### Patch Changes

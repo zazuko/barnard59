@@ -1,5 +1,64 @@
 # barnard59-cube
 
+## 1.4.6
+
+### Patch Changes
+
+- 08d880c: Preferably create a single `sh:in` when building a cube shape
+
+## 1.4.5
+
+### Patch Changes
+
+- 8f08421: Accept custom functions to create cube IRI and shape IRI
+- Updated dependencies [cd81cc1]
+- Updated dependencies [6fea1cc]
+- Updated dependencies [1df0b79]
+  - barnard59-formats@2.1.2
+
+## 1.4.4
+
+### Patch Changes
+
+- a292c2e: Updated `rdf-validate-shacl` to v0.5.5
+- Updated dependencies [f1caca5]
+- Updated dependencies [a292c2e]
+- Updated dependencies [57bb930]
+  - barnard59-shacl@1.4.6
+  - barnard59-formats@2.1.1
+
+## 1.4.3
+
+### Patch Changes
+
+- 13a297f: Include a sample observation in fetch-metadata
+
+## 1.4.2
+
+### Patch Changes
+
+- 600eb0e: Updated `rdf-validate-shacl` to v0.5.4
+- Updated dependencies [f240b0f]
+- Updated dependencies [600eb0e]
+- Updated dependencies [f6d593c]
+- Updated dependencies [f240b0f]
+- Updated dependencies [49dcd13]
+  - barnard59-sparql@2.3.0
+  - barnard59-shacl@1.4.4
+  - barnard59-base@2.4.2
+
+## 1.4.1
+
+### Patch Changes
+
+- 2d61960: Fix batch size in check-observations
+- 8ae9c7e: Include `cube:Constraint` when calling `b59 cube fetch-cube`
+- e7f32d5: Updated dependency to avoid Windows errors in temp files cleanup
+- Updated dependencies [052b1a5]
+- Updated dependencies [e2705c8]
+  - barnard59-shacl@1.4.2
+  - barnard59-sparql@2.2.0
+
 ## 1.4.0
 
 ### Minor Changes

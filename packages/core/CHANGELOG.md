@@ -1,5 +1,15 @@
 # barnard59-core
 
+## 6.0.0
+
+### Major Changes
+
+- 3caf9e4: Freeze pipeline context object to prevent accidental modifications
+
+### Patch Changes
+
+- d48f198: Remove usage of `rdf-js` package (deprecated)
+
 ## 5.3.3
 
 ### Patch Changes

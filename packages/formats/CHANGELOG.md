@@ -1,5 +1,19 @@
 # barnard59-formats
 
+## 2.1.2
+
+### Patch Changes
+
+- cd81cc1: Added type declarations
+- 6fea1cc: Context was unbound in step `jsonld/parse/object`
+- 1df0b79: Ensures that the RDF/JS environment is used with parser streams
+
+## 2.1.1
+
+### Patch Changes
+
+- 57bb930: Ensures that the RDF/JS environment is used with parser streams
+
 ## 2.1.0
 
 ### Minor Changes

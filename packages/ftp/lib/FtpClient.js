@@ -1,13 +1,14 @@
 import { promisify } from 'node:util'
 import Ftp from 'ftp'
-import { PassThrough, Readable } from 'readable-stream'
+import { Readable, Writable } from 'readable-stream'
 
 class FtpClient {
-  constructor({ host, port = 21, user, password }) {
+  constructor({ host, port = 21, user, password, bufferSize = 64 * 1024 }) {
     this.host = host
     this.port = port
     this.user = user
     this.password = password
+    this.bufferSize = bufferSize
     this.client = new Ftp()
   }
 
@@ -46,15 +47,20 @@ class FtpClient {
   }
 
   async write(path) {
-    const input = new PassThrough()
+    const { client } = this
+    let firstChunk = true
 
-    this.client.put(input, path, err => {
-      if (err) {
-        input.emit('error', err)
-      }
+    return new Writable({
+      highWaterMark: this.bufferSize,
+      write(chunk, encoding, callback) {
+        if (firstChunk) {
+          firstChunk = false
+          client.put(chunk, path, callback)
+        } else {
+          client.append(chunk, path, callback)
+        }
+      },
     })
-
-    return input
   }
 }
 

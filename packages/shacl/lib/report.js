@@ -9,7 +9,7 @@ function validationResultToString(result) {
   const sourceConstraintComponent = result.sourceConstraintComponent.value.split('#')[1]
   const sourceShape = termToNt(result.sourceShape)
 
-  return `${severity} of ${sourceConstraintComponent}: "${message}" with path ${path} at focus node ${focusNode} (source: ${sourceShape})`
+  return `${severity}: "${message}" at focus node ${focusNode} with path ${path} (${sourceConstraintComponent} of source: ${sourceShape})`
 }
 
 function includeNestedResult(result) {
@@ -23,6 +23,18 @@ function getMessages(report) {
     .map(message => message + '\n')
 }
 
-export function getSummary(dataset) {
-  return getMessages(new ValidationReport(this.env.clownface({ dataset })))
+export function getSummary() {
+  return async function * (stream) {
+    let total = 0
+    for await (const dataset of stream) {
+      const messages = getMessages(new ValidationReport(this.env.clownface({ dataset })))
+      total += messages.length
+      yield messages
+    }
+    if (total) {
+      this.error(new Error(`${total} violations found`))
+    } else {
+      yield 'successful\n'
+    }
+  }.bind(this)
 }

@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { deepEqual, strictEqual } from 'assert'
 import toNT from '@rdfjs/to-ntriples'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
@@ -68,6 +68,44 @@ describe('cube.buildCubeShape', () => {
     const cube = result
       .node(ex('cube'))
       .has(ns.rdf.type, ns.cube.Cube)
+
+    strictEqual(cube.terms.length, 1)
+  })
+
+  it('should use a custom function to build the cube IRI', async () => {
+    const input = createObservationsStream()
+
+    const transform = buildCubeShape({ cube: () => ex('my-cube') })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const cube = result
+      .node(ex('my-cube'))
+      .has(ns.rdf.type, ns.cube.Cube)
+
+    strictEqual(cube.terms.length, 1)
+  })
+
+  it('should use a custom function to build the shape IRI', async () => {
+    const input = createObservationsStream()
+
+    let shapeNode
+
+    function shape({ term }) {
+      shapeNode = this.rdf.namedNode(`${term.value}/my-shape`)
+      return shapeNode
+    }
+    const transform = buildCubeShape({ shape })
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const cube = result
+      .node(shapeNode)
+      .has(ns.rdf.type, ns.cube.Constraint)
 
     strictEqual(cube.terms.length, 1)
   })
@@ -515,6 +553,33 @@ describe('cube.buildCubeShape', () => {
     const undefinedType = disjuncts.find(x => x.out(ns.sh.datatype).term.equals(ns.cube.Undefined))
     checkRange(integer, two, five)
     checkValues(undefinedType, undefinedValue)
+  })
+
+  it('should merge sh:in constraints if there are strings and named nodes', async () => {
+    const stringValue = rdf.literal('a', ns.xsd.string)
+
+    const input = createObservationsStream({
+      observations: [{
+        [ex.property.value]: stringValue,
+      }, {
+        [ex.property.value]: ex.valueA,
+      }],
+    })
+    const transform = buildCubeShape()
+
+    input.pipe(transform)
+
+    const result = await datasetStreamToClownface(transform)
+
+    const propertyShape = result.has(ns.sh.path, ex.property)
+
+    const disjuncts = [...propertyShape.out(ns.sh.or).list()]
+    const nodeKind = disjuncts.find(x => x.has(ns.sh.nodeKind).term)
+    const datatype = disjuncts.find(x => x.has(ns.sh.datatype).term)
+
+    deepEqual(nodeKind.out(ns.sh.nodeKind).term, ns.sh.IRI)
+    deepEqual(datatype.out(ns.sh.datatype).term, ns.xsd.string)
+    checkValues(propertyShape, stringValue, ex.valueA)
   })
 
   it('should create no range constraints on parsing error', async () => {

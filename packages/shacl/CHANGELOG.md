@@ -1,5 +1,45 @@
 # barnard59-shacl
 
+## 1.4.6
+
+### Patch Changes
+
+- f1caca5: barnard59-shacl: rephrase messages in human-readable report
+- a292c2e: Updated `rdf-validate-shacl` to v0.5.5
+- Updated dependencies [57bb930]
+  - barnard59-formats@2.1.1
+
+## 1.4.5
+
+### Patch Changes
+
+- 287efab: Accurate imports to work with `moduleResolution=NodeNext`
+
+## 1.4.4
+
+### Patch Changes
+
+- 600eb0e: Updated `rdf-validate-shacl` to v0.5.4
+- 49dcd13: Update `@rdfjs/to-ntriples` to v3
+- Updated dependencies [f6d593c]
+  - barnard59-base@2.4.2
+
+## 1.4.3
+
+### Patch Changes
+
+- d48f198: Remove usage of `rdf-js` package (deprecated)
+- f8e7504: Fix sh:conforms in case of results with any severity
+- Updated dependencies [d48f198]
+- Updated dependencies [94551a4]
+  - barnard59-base@2.4.1
+
+## 1.4.2
+
+### Patch Changes
+
+- 052b1a5: Produce SHACL report on successful validation
+
 ## 1.4.1
 
 ### Patch Changes
