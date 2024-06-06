@@ -1,5 +1,5 @@
 import sinkToDuplex from '@rdfjs/sink-to-duplex'
-import CsvwParser from 'rdf-parser-csvw'
+import CsvwParser from '@zazuko/rdf-parser-csvw'
 import tracer from './lib/tracer.js'
 import { toDataset } from './lib/stream.js'
 
@@ -9,6 +9,8 @@ import { toDataset } from './lib/stream.js'
  *   timezone?: string
  *   relaxColumnCount?: boolean
  *   skipLinesWithError?: boolean
+ *   trimHeaders?: boolean
+ *   skipEmptyLines?: boolean
  * }} Options
  */
 
@@ -36,6 +38,11 @@ function parse(args) {
   let relaxColumnCount = false
   let skipLinesWithError = false
   let timezone = 'local'
+  let trimHeaders = true
+  /**
+   * @type {Boolean | undefined}
+   */
+  let skipEmptyLines
 
   if ('metadata' in args) {
     metadata = args.metadata
@@ -51,6 +58,14 @@ function parse(args) {
     if (typeof args.timezone !== 'undefined') {
       timezone = args.timezone
     }
+
+    if (typeof args.trimHeaders !== 'undefined') {
+      trimHeaders = Boolean(args.trimHeaders)
+    }
+
+    if (typeof args.skipEmptyLines !== 'undefined') {
+      skipEmptyLines = Boolean(args.skipEmptyLines)
+    }
   } else {
     metadata = args
   }
@@ -65,6 +80,8 @@ function parse(args) {
         relaxColumnCount,
         skipLinesWithError,
         timezone,
+        trimHeaders,
+        skipEmptyLines,
       }), {
         readableObjectMode: true,
       })
