@@ -1,6 +1,6 @@
 {
   "name": "barnard59-test-e2e",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
     "barnard59-base": "^2.4.1",
     "barnard59-core": "^6.0.0",
     "barnard59-env": "^1.2.1",
-    "barnard59-formats": "^2.1.0",
+    "barnard59-formats": "^3.0.0",
     "barnard59-http": "^2.0.0",
     "chai": "^4.3.7",
     "get-stream": "^6.0.0",

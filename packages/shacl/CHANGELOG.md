@@ -1,5 +1,13 @@
 # barnard59-shacl
 
+## 1.4.7
+
+### Patch Changes
+
+- Updated dependencies [8282b0e]
+- Updated dependencies [8282b0e]
+  - barnard59-formats@3.0.0
+
 ## 1.4.6
 
 ### Patch Changes
