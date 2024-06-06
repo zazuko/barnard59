@@ -1,6 +1,6 @@
 {
   "name": "barnard59-cube",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Build and check RDF cubes in Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -21,10 +21,10 @@
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
     "barnard59-base": "^2.4.2",
-    "barnard59-formats": "^2.1.2",
+    "barnard59-formats": "^3.0.0",
     "barnard59-http": "^2.0.0",
     "barnard59-rdf": "^3.4.0",
-    "barnard59-shacl": "^1.4.6",
+    "barnard59-shacl": "^1.4.7",
     "barnard59-sparql": "^2.3.0",
     "external-merge-sort": "^0.1.4",
     "lodash": "^4.17.21",

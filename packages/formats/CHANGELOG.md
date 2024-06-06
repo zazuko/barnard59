@@ -1,5 +1,15 @@
 # barnard59-formats
 
+## 3.0.0
+
+### Major Changes
+
+- 8282b0e: CSVW: By default, will trim whitespace from header names
+
+### Patch Changes
+
+- 8282b0e: Use `@zazuko/rdf-parser-csvw` and `@zazuko/rdf-parser-csvw-xlsx`
+
 ## 2.1.2
 
 ### Patch Changes
