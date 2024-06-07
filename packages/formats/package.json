@@ -29,15 +29,15 @@
     "@rdfjs/serializer-jsonld": "^2.0.0",
     "@rdfjs/serializer-ntriples": "^2.0.0",
     "@rdfjs/sink-to-duplex": "^1.0.0",
+    "@zazuko/rdf-parser-csvw": "^0.16.5",
+    "@zazuko/rdf-parser-csvw-xlsx": "^0.2.1",
     "barnard59-base": "^2.0.1",
     "is-stream": "^3.0.0",
-    "@zazuko/rdf-parser-csvw": "^0.16.4",
-    "@zazuko/rdf-parser-csvw-xlsx": "^0.2.1",
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
-    "@types/rdfjs__sink-to-duplex": "^1.0.0",
     "@types/rdfjs__parser-jsonld": "^2.1.7",
+    "@types/rdfjs__sink-to-duplex": "^1.0.0",
     "@types/sax": "^1.2.7",
     "@zazuko/env-core": "^1.1.2",
     "barnard59-env": "^1.2.6",
