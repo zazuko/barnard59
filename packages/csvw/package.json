@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "prepare": "npm run prepack:context",
     "test": "mocha",
     "prepack": "run-p prepack:*",
     "prepack:build": "tsc",
