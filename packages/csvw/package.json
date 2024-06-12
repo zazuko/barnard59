@@ -9,7 +9,7 @@
     "test": "mocha",
     "prepack": "run-p prepack:*",
     "prepack:build": "tsc",
-    "prepack:context": "build/fetchContext.ts"
+    "prepack:context": "./build/fetchContext.ts"
   },
   "files": [
     "*.js",
