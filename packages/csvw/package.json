@@ -5,8 +5,16 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
+  "files": [
+    "*.js",
+    "*.d.ts",
+    "lib/*.js",
+    "lib/*.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/zazuko/barnard59.git",
@@ -37,6 +45,7 @@
     "node": ">= 14.0.0"
   },
   "mocha": {
+    "require": "../../test/mocha-setup.cjs",
     "loader": "ts-node/esm"
   }
 }

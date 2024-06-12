@@ -1,4 +1,7 @@
-export function excludeCsvwTriples(quad) {
+import type { Context } from 'barnard59-core'
+import type { Quad } from '@rdfjs/types'
+
+export function excludeCsvwTriples(this: Context, quad: Quad) {
   if (quad.predicate.value.startsWith(this.env.ns.csvw('').value)) {
     return false
   }
