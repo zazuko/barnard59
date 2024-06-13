@@ -1,9 +1,10 @@
 import path from 'node:path'
 import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
+import * as url from 'node:url'
 import { FetchDocumentLoader } from 'jsonld-context-parser'
 
-const __dirname = new URL('.', import.meta.url).pathname
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 export const contextPath = path.resolve(__dirname, '../context.jsonld')
 
 export const contextUrl = 'http://www.w3.org/ns/csvw'
