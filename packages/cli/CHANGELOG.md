@@ -1,5 +1,14 @@
 # barnard59
 
+## 5.0.4
+
+### Patch Changes
+
+- b86a9ab: Suggest package to install when a CLI command is not found
+- 83583d2: Type annotations: remove references to `rdf-js`, using `@rdfjs/types` instead
+- Updated dependencies [83583d2]
+  - barnard59-core@6.0.1
+
 ## 5.0.3
 
 ### Patch Changes
