@@ -7,8 +7,8 @@ import { FetchDocumentLoader } from 'jsonld-context-parser'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 export const contextPath = path.resolve(__dirname, '../context.jsonld')
 
-export const contextUrl = 'http://www.w3.org/ns/csvw'
-const contextUrlHttps = 'http://www.w3.org/ns/csvw'
+export const contextUrl: string = 'http://www.w3.org/ns/csvw'
+const contextUrlHttps: string = 'https://www.w3.org/ns/csvw'
 
 const defaultLoader = new FetchDocumentLoader()
 
