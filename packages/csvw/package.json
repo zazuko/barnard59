@@ -9,7 +9,7 @@
     "test": "mocha",
     "prepack": "run-p prepack:*",
     "prepack:build": "tsc",
-    "prepack:context": "./build/fetchContext.ts"
+    "prepack:context": "node --loader ts-node/esm/transpile-only --no-warnings ./build/fetchContext.ts"
   },
   "files": [
     "*.js",
