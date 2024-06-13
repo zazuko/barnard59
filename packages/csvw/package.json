@@ -16,7 +16,8 @@
     "*.d.ts",
     "lib/*.js",
     "lib/*.d.ts",
-    "context.jsonld"
+    "context.jsonld",
+    "manifest.json"
   ],
   "repository": {
     "type": "git",
