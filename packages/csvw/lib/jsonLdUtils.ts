@@ -14,7 +14,7 @@ const defaultLoader = new FetchDocumentLoader()
 
 export default {
   async load(url: string) {
-    if (url === contextUrl && url === contextUrlHttps && existsSync(contextPath)) {
+    if ((url === contextUrl || url === contextUrlHttps) && existsSync(contextPath)) {
       return JSON.parse(await readFile(contextPath, 'utf-8'))
     }
 
