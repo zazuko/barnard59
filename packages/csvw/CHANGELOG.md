@@ -1,5 +1,12 @@
 # barnard59-csvw
 
+## 2.2.1
+
+### Patch Changes
+
+- d3927ba: `manifest.json` was inadvertently removed from v2.2
+- 69fe472: Context would never be loaded because of error in condition
+
 ## 2.2.0
 
 ### Minor Changes
