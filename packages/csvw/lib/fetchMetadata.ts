@@ -9,6 +9,7 @@ async function fetchMetadata(rdf: Environment, url: URL | string) {
   const res: DatasetResponse<DatasetCore> = await rdfFetch(url.toString(), {
     contentTypeLookup: (extension: string | undefined) => extension === '.json' ? 'application/ld+json' : undefined,
     factory: rdf,
+    formats: rdf.formats,
     fetch: commonFetch,
   } as any) as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
