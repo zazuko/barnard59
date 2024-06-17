@@ -3,7 +3,7 @@ name: Fig integration
 on:
   push:
     branches:
-      - cli-command-help
+      - master
 
 jobs:
   push-autocomplete-spec:
