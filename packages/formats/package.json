@@ -31,8 +31,8 @@
     "@rdfjs/sink-to-duplex": "^1.0.0",
     "barnard59-base": "^2.0.1",
     "is-stream": "^3.0.0",
-    "@zazuko/rdf-parser-csvw": "^0.16.4",
-    "@zazuko/rdf-parser-csvw-xlsx": "^0.2.1",
+    "@zazuko/rdf-parser-csvw": "^0.17.0",
+    "@zazuko/rdf-parser-csvw-xlsx": "^0.3",
     "rdfxml-streaming-parser": "^1.2.0"
   },
   "devDependencies": {
