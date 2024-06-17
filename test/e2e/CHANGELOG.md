@@ -1,5 +1,12 @@
 # barnard59-test-e2e
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [01682f7]
+  - barnard59-formats@4.0.0
+
 ## 0.1.2
 
 ### Patch Changes
