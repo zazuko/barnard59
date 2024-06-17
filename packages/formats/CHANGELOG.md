@@ -1,5 +1,11 @@
 # barnard59-formats
 
+## 4.0.0
+
+### Major Changes
+
+- 01682f7: Updating `@zazuko/rdf-parser-csvw` to v0.17. See https://github.com/zazuko/rdf-parser-csvw/blob/master/CHANGELOG.md#0170
+
 ## 3.0.0
 
 ### Major Changes
