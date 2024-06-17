@@ -2,8 +2,9 @@ name: Fig integration
 
 on:
   push:
-    branches:
-      - master
+    tags: '*'
+
+concurrency: ${{ github.workflow }}-${{ github.sha }}
 
 jobs:
   push-autocomplete-spec:
