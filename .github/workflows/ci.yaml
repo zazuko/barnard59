@@ -77,6 +77,14 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
+  ensure-manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci
+      - run: node .github/ensureManifests.js
+
   smoke-test-cli:
     strategy:
       fail-fast: false

@@ -23,6 +23,7 @@
     "c8": "^7.6.0",
     "chai": "^4.3.10",
     "eslint-import-resolver-typescript": "^3.6.1",
+    "find-workspaces": "^0.3.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "mocha": "^10.2.0",
