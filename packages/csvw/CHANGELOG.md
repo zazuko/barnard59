@@ -1,5 +1,11 @@
 # barnard59-csvw
 
+## 2.2.2
+
+### Patch Changes
+
+- f669954: Wrong name for the manifest was listed in `package.json`
+
 ## 2.2.1
 
 ### Patch Changes
