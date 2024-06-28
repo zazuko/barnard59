@@ -50,9 +50,9 @@ function defaultShape(this: { rdf: Environment }, { term }: Context) {
 interface Options {
   excludeValuesOf?: string[]
   cube?: CubeIdCallback
-  metadata: Stream
+  metadata?: Stream
   shape?: ShapeIdCallback
-  graph: NamedNode
+  graph?: NamedNode
   propertyShapeId?: PropertyShapeIdCallback
   inListMaxSize?: number
 }
@@ -63,10 +63,10 @@ class CubeShapeBuilder extends Transform {
     excludeValuesOf: Set<Term>
     cubes: Map<Term, Cube>
     cube: CubeIdCallback
-    metadataStream: Stream
+    metadataStream?: Stream
     metadata: DatasetCore
     shape: ShapeIdCallback
-    graph: NamedNode
+    graph?: NamedNode
     propertyShapeId: PropertyShapeIdCallback
     inListMaxSize?: number
   }
@@ -108,33 +108,28 @@ class CubeShapeBuilder extends Transform {
 
     const dataset = this.rdf.dataset([...chunk])
 
-    const { rdf, options } = this
-    const context: Context = {
+    const context = {
       dataset,
       ptr: this.rdf.clownface({ dataset }).has(this.rdf.ns.rdf.type, this.rdf.ns.cube.Observation),
-      get observationSet() {
-        return this.ptr.out(rdf.ns.cube.observationSet).term!
-      },
-      get term() {
-        return options.cube(this)
-      },
-      get shape() {
-        return options.shape(this)
-      },
-      get cube() {
-        const cube = options.cubes.get(this.term) || new Cube({
-          rdf,
-          term: this.term,
-          metadata: rdf.clownface({ dataset: options.metadata, term: this.term }),
-          observationSet: this.observationSet,
-          shape: this.shape,
-          propertyShapeId: options.propertyShapeId,
-          inListMaxSize: options.inListMaxSize,
-        })
+    } as unknown as Context
 
-        options.cubes.set(this.term, cube)
-        return cube
-      },
+    context.observationSet = context.ptr.in(this.rdf.ns.cube.observation).term!
+    context.term = this.options.cube(context)
+    context.shape = this.options.shape(context)
+    context.cube = this.options.cubes.get(context.term)!
+
+    if (!context.cube) {
+      context.cube = new Cube({
+        rdf: this.rdf,
+        term: context.term,
+        metadata: this.rdf.clownface({ dataset: this.options.metadata, term: context.term }),
+        observationSet: context.observationSet,
+        shape: context.shape,
+        propertyShapeId: this.options.propertyShapeId,
+        inListMaxSize: this.options.inListMaxSize,
+      })
+
+      this.options.cubes.set(context.term, context.cube)
     }
 
     for (const quad of context.dataset.match(context.ptr.term)) {
@@ -155,7 +150,7 @@ class CubeShapeBuilder extends Transform {
     callback()
   }
 
-  toNamedNode(item: NamedNode | string) {
+  toNamedNode(item: NamedNode | string | undefined) {
     return typeof item === 'string' ? this.rdf.namedNode(item) : item
   }
 }
@@ -164,11 +159,11 @@ function buildCubeShape(this: BarnardContext, { cube, shape, excludeValuesOf, me
   cube?: CubeIdCallback
   shape?: ShapeIdCallback
   excludeValuesOf?: string[]
-  metadata: Stream
-  graph: NamedNode
+  metadata?: Stream
+  graph?: NamedNode
   propertyShapeId?: PropertyShapeIdCallback
   inListMaxSize?: number
-}) {
+} = {}) {
   return new CubeShapeBuilder({ rdf: this.env, cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize })
 }
 

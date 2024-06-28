@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { isResource } from 'is-graph-pointer'
 import type { Environment } from 'barnard59-env'
-import type { GraphPointer } from 'clownface'
+import type { AnyPointer } from 'clownface'
 import type { BlankNode, NamedNode, Term, Quad_Predicate as Predicate } from '@rdfjs/types'
 import cbdCopy from '../../cbdCopy.js'
 import datatypeParsers from './datatypes.js'
@@ -12,7 +12,7 @@ import type Cube from './Cube.js'
 
 interface DimensionOptions {
   rdf: Environment
-  metadata: GraphPointer
+  metadata: AnyPointer
   predicate: Predicate
   shapeId?: (cube: Cube, dimension: Dimension) => NamedNode | BlankNode
   inListMaxSize?: number
@@ -20,7 +20,7 @@ interface DimensionOptions {
 
 class Dimension {
   declare rdf: Environment
-  declare metadata: GraphPointer
+  declare metadata: AnyPointer
   declare predicate: Predicate
   declare shapeId: (cube: Cube, dimension: Dimension) => NamedNode | BlankNode
   declare constraints: CompositeConstraintBuilder

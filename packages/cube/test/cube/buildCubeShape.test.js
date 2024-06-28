@@ -1,4 +1,4 @@
-import { deepEqual, strictEqual } from 'assert'
+import { deepEqual, strictEqual } from 'node:assert'
 import toNT from '@rdfjs/to-ntriples'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
@@ -34,10 +34,6 @@ function checkValues(ptr, ...expectedValues) {
 }
 
 describe('cube.buildCubeShape', () => {
-  it('should be a factory', () => {
-    strictEqual(typeof buildCubeShape, 'function')
-  })
-
   it('should return a duplex stream', async () => {
     const transform = buildCubeShape()
 

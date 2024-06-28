@@ -2,7 +2,6 @@
 import type { BlankNode, DatasetCore, NamedNode, Quad, Quad_Predicate as Predicate, Term } from '@rdfjs/types'
 import type { Environment } from 'barnard59-env'
 import type { GraphPointer } from 'clownface'
-import { isGraphPointer } from 'is-graph-pointer'
 import cbdCopy from '../../cbdCopy.js'
 import Dimension from './Dimension.js'
 
@@ -50,10 +49,6 @@ class Cube {
         .out(this.rdf.ns.cube.observationConstraint)
         .out(this.rdf.ns.sh.property)
         .has(this.rdf.ns.sh.path, predicate)
-
-      if (!isGraphPointer(metadata)) {
-        throw new Error(`No metadata found for ${predicate.value}`)
-      }
 
       dimension = new Dimension({ rdf: this.rdf, metadata, predicate, shapeId: this.propertyShapeId, inListMaxSize: this.inListMaxSize })
 
