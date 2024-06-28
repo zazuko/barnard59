@@ -1,5 +1,26 @@
 # barnard59-shacl
 
+## 1.4.9
+
+### Patch Changes
+
+- Updated dependencies [01682f7]
+  - barnard59-formats@4.0.0
+
+## 1.4.8
+
+### Patch Changes
+
+- 83583d2: Type annotations: remove references to `rdf-js`, using `@rdfjs/types` instead
+
+## 1.4.7
+
+### Patch Changes
+
+- Updated dependencies [8282b0e]
+- Updated dependencies [8282b0e]
+  - barnard59-formats@3.0.0
+
 ## 1.4.6
 
 ### Patch Changes

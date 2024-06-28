@@ -15,13 +15,13 @@ function setVariable(str, all) {
   return all.set(key, value)
 }
 
-export const variable = new Option('--variable <name=value>', 'variable key value pairs')
+export const variable = new Option('--variable <name=value>', 'Variable key/value pairs')
   .default(new Map())
   .argParser(setVariable)
 
 export const variableAll = new Option('--variable-all', 'Import all environment variables')
 
-export const verbose = new Option('-v, --verbose', 'enable diagnostic console output')
+export const verbose = new Option('-v, --verbose', 'Enable diagnostic console output')
   .default(0)
   .argParser((v, total) => ++total)
 

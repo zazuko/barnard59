@@ -1,5 +1,22 @@
 # barnard59-cube
 
+## 1.4.8
+
+### Patch Changes
+
+- Updated dependencies [01682f7]
+  - barnard59-formats@4.0.0
+  - barnard59-shacl@1.4.9
+
+## 1.4.7
+
+### Patch Changes
+
+- Updated dependencies [8282b0e]
+- Updated dependencies [8282b0e]
+  - barnard59-formats@3.0.0
+  - barnard59-shacl@1.4.7
+
 ## 1.4.6
 
 ### Patch Changes

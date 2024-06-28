@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 6.0.1
+
+### Patch Changes
+
+- 83583d2: Type annotations: remove references to `rdf-js`, using `@rdfjs/types` instead
+
 ## 6.0.0
 
 ### Major Changes

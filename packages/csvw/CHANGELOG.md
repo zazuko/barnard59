@@ -1,5 +1,25 @@
 # barnard59-csvw
 
+## 2.2.2
+
+### Patch Changes
+
+- f669954: Wrong name for the manifest was listed in `package.json`
+
+## 2.2.1
+
+### Patch Changes
+
+- d3927ba: `manifest.json` was inadvertently removed from v2.2
+- 69fe472: Context would never be loaded because of error in condition
+
+## 2.2.0
+
+### Minor Changes
+
+- 5867c79: Added type declarations
+- d8bdf29: The package now includes a copy of the CSVW context to avoid rate limiting issues when frequently loading the context from the web. To force using the remote context, pass `useRemoteCsvwContext: true` to the `fetch` step options.
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "barnard59",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "description": "Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -12,7 +12,8 @@
     "test": "mocha",
     "prebuild": "rimraf -g *.d.ts [!node_modules]/**/*.d.ts",
     "build": "tsc",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "generate-autocomplete-spec": "node --loader ts-node/esm --no-warnings ./bin/generate-autocomplete-spec.js > fig-spec.ts"
   },
   "repository": {
     "type": "git",
@@ -36,7 +37,7 @@
     "@opentelemetry/semantic-conventions": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "@rdfjs/namespace": "^2.0.0",
-    "barnard59-core": "6.0.0",
+    "barnard59-core": "6.0.1",
     "barnard59-env": "1.2.6",
     "commander": "^11.0.0",
     "pkgscan": "^1.0.24",
@@ -50,14 +51,15 @@
     "readable-stream": "^3.6.0"
   },
   "devDependencies": {
+    "@fig/complete-commander": "^3.1.0",
     "@rdfjs-elements/formats-pretty": "^0.6.7",
     "@types/lodash": "^4.14.202",
     "@types/readable-stream": "^4.0.10",
     "@types/shelljs": "^0.8.15",
     "approvals": "^6.2.2",
     "barnard59-base": "^2.4.2",
-    "barnard59-formats": "^2.1.2",
-    "barnard59-graph-store": "^6.0.0",
+    "barnard59-formats": "^4.0.0",
+    "barnard59-graph-store": "^6.0.1",
     "barnard59-http": "^2.0.0",
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.3",

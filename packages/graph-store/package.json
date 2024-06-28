@@ -1,6 +1,6 @@
 {
   "name": "barnard59-graph-store",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "SPARQL Graph Store Protocol support for Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -39,7 +39,7 @@
     "@types/readable-stream": "^4.0.10",
     "@types/sparql-http-client": "^3.0.0",
     "@zazuko/env": "^2",
-    "barnard59-core": "^6.0.0",
+    "barnard59-core": "^6.0.1",
     "barnard59-env": "^1.2.3",
     "barnard59-test-support": "*",
     "docker-compose": "^0.24.7",
