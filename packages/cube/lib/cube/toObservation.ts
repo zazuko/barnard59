@@ -142,7 +142,7 @@ interface Options {
   observation?: ObservationCallback
   observations?: ObservationsCallback
   observer?: ObserverCallback
-  useDate?: boolean | 'now' | 'true' | string | DateCallback
+  useDate?: boolean | 'now' | 'true' | string | DateCallback | GraphPointer<NamedNode>
   dateProperty?: NamedNode
   useIndex?: boolean
 }
@@ -160,76 +160,72 @@ class ToObservation extends Transform {
     dateProperty?: NamedNode
   }
 
-  constructor({ rdf, dateProperty, ...options }: Options & { rdf: Environment }) {
+  constructor({ rdf, blacklist, dimensions, observation, observations, observer, useDate, useIndex }: Options & { rdf: Environment }) {
     super({ objectMode: true })
 
     this.rdf = rdf
-
-    const blacklist = this.rdf.termSet<NamedNode>()
-    if (options.blacklist) {
-      for (const item of options.blacklist) {
-        blacklist.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
-      }
-    }
-
-    const dimensions = this.rdf.termSet<NamedNode>()
-    if (options.dimensions) {
-      for (const item of options.dimensions) {
-        dimensions.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
-      }
-    }
-
-    let observer: ObserverCallback = defaultObserver.bind({ rdf })
-    if (options.observer) {
-      if (typeof options.observer === 'function') {
-        observer = options.observer
-      } else if (options.observer) {
-        observer = asTermObject(rdf, options.observer)
-      }
-    }
-
-    let observations: ObservationsCallback = defaultObservations.bind({ rdf })
-    if (options.observations) {
-      if (typeof options.observations === 'function') {
-        observations = options.observations
-      } else if (options.observations) {
-        observations = asTermObject(rdf, options.observations)
-      }
-    }
-
-    let useDate: DateCallback | undefined
-    if (options.useDate) {
-      if (options.useDate === true || options.useDate === 'true') {
-        useDate = dateByDatatype.bind({ rdf })
-      } else if (options.useDate === 'now') {
-        useDate = dateNow.bind({ rdf })
-      } else if (typeof options.useDate === 'string') {
-        useDate = dateByProperty(this.rdf.namedNode(options.useDate)).bind({ rdf })
-      } else if (typeof options.useDate === 'object') {
-        useDate = dateByProperty(options.useDate).bind({ rdf })
-      } else if (typeof useDate === 'function') {
-        useDate = options.useDate
-      }
-    }
-
-    let observation: ObservationCallback = defaultObservation.bind({ rdf })
-    if (options.observation && typeof options.observation === 'function') {
-      observation = options.observation
-    } else if (useDate) {
-      observation = dateObservation.bind({ rdf })
-    } else if (options.useIndex) {
-      observation = indexObservation.bind({ rdf })
-    }
-
     this.options = {
       index: 0,
-      blacklist,
-      dimensions,
-      dateProperty,
-      observer,
-      observations,
-      useDate,
-      observation,
+      blacklist: this.rdf.termSet(),
+      dimensions: this.rdf.termSet(),
+    } as unknown as typeof this.options
+
+    if (blacklist) {
+      for (const item of blacklist) {
+        this.options.blacklist.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
+      }
+    }
+
+    if (dimensions) {
+      for (const item of dimensions) {
+        this.options.dimensions.add(typeof item === 'string' ? this.rdf.namedNode(item) : item.term)
+      }
+    }
+
+    if (observer) {
+      if (typeof observer === 'function') {
+        this.options.observer = observer
+      } else if (observer) {
+        this.options.observer = asTermObject(rdf, observer)
+      }
+    } else {
+      this.options.observer = defaultObserver.bind({ rdf })
+    }
+
+    if (observations) {
+      if (typeof observations === 'function') {
+        this.options.observations = observations
+      } else if (observations) {
+        this.options.observations = asTermObject(rdf, observations)
+      }
+    } else {
+      this.options.observations = defaultObservations.bind({ rdf })
+    }
+
+    if (useDate) {
+      if (useDate === true || useDate === 'true') {
+        this.options.useDate = dateByDatatype.bind({ rdf })
+      } else if (useDate === 'now') {
+        this.options.useDate = dateNow.bind({ rdf })
+      } else if (typeof useDate === 'string') {
+        this.options.useDate = dateByProperty(this.rdf.namedNode(useDate)).bind({ rdf })
+      } else if ('term' in useDate) {
+        this.options.useDate = dateByProperty(useDate.term).bind({ rdf })
+      } else if (typeof useDate === 'function') {
+        this.options.useDate = useDate
+      }
+    }
+
+    if (observation && typeof observation === 'function') {
+      this.options.observation = observation
+    } else {
+      if (this.options.useDate) {
+        this.options.observation = dateObservation.bind({ rdf })
+      } else if (useIndex) {
+        this.options.observation = indexObservation.bind({ rdf })
+      } else {
+        this.options.observation = defaultObservation.bind({ rdf })
+      }
     }
   }
 
@@ -302,7 +298,7 @@ function toObservation(this: BarnardContext, {
   observation?: ObservationCallback
   observations?: ObservationsCallback
   observer?: ObserverCallback
-  useDate?: boolean | 'now' | 'true' | string | DateCallback
+  useDate?: boolean | 'now' | 'true' | string | DateCallback | GraphPointer<NamedNode>
   dateProperty?: NamedNode
   useIndex?: boolean
 } = {}) {
