@@ -1,15 +1,3 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "emitDeclarationOnly": true
-  },
-  "files": [
-    "cube.js",
-    "lib/merge.js",
-    "lib/sort.js",
-    "lib/cbdCopy.js",
-    "lib/target.js"
-  ]
+  "extends": "../../tsconfig.json"
 }
