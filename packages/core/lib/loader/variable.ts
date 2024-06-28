@@ -1,7 +1,7 @@
 import type { Term } from '@rdfjs/types'
 import type { Environment } from 'barnard59-env'
 import type { GraphPointer } from 'clownface'
-import LoaderRegistry from 'rdf-loaders-registry'
+import type LoaderRegistry from 'rdf-loaders-registry'
 import cloneTerm from '../cloneTerm.js'
 import { VariableMap } from '../VariableMap.js'
 

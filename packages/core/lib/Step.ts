@@ -1,6 +1,7 @@
 import once from 'onetime'
-import { Stream } from 'readable-stream'
-import StreamObject, { Options as BaseOptions } from './StreamObject.js'
+import type { Stream } from 'readable-stream'
+import type { Options as BaseOptions } from './StreamObject.js'
+import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
 import type { Operation } from './factory/operation.js'
 

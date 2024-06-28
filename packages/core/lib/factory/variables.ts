@@ -1,9 +1,9 @@
 import type { MultiPointer } from 'clownface'
-import { Logger } from 'winston'
-import { LoaderRegistry } from 'rdf-loaders-registry'
+import type { Logger } from 'winston'
+import type { LoaderRegistry } from 'rdf-loaders-registry'
 import { isGraphPointer } from 'is-graph-pointer'
 import { VariableMap } from '../VariableMap.js'
-import { Context } from '../../index.js'
+import type { Context } from '../../index.js'
 
 async function createVariables(ptr: MultiPointer, { basePath, context, loaderRegistry, logger }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger }) {
   const variables = new VariableMap()

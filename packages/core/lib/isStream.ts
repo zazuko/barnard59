@@ -3,7 +3,7 @@ import {
   isWritableStream as isWritable,
   isDuplexStream as isDuplex,
 } from 'is-stream'
-import { Stream, Writable } from 'readable-stream'
+import type { Stream, Writable } from 'readable-stream'
 
 const isReadableObjectMode = (stream: Stream) => isReadable(stream) && stream._readableState.objectMode
 const isWritableObjectMode = (stream: Stream) => isWritable(stream) && (stream as Writable)._writableState.objectMode
