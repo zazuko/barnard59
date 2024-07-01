@@ -1,5 +1,11 @@
 # barnard59-cube
 
+## 1.4.9
+
+### Patch Changes
+
+- a0b2928: TypeScript declarations
+
 ## 1.4.8
 
 ### Patch Changes
