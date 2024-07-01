@@ -1,4 +1,4 @@
-function dateToId(date) {
+function dateToId(date: string) {
   return (new Date(date)).toISOString()
     .split('-').join('')
     .split(':').join('')

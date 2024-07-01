@@ -1,9 +1,33 @@
+import type { NamedNode, DatasetCore, Term, Stream, Quad, BlankNode } from '@rdfjs/types'
 import once from 'lodash/once.js'
 import { Transform } from 'readable-stream'
+import type { AnyPointer } from 'clownface'
+import type { Environment } from 'barnard59-env'
+import type { Context as BarnardContext } from 'barnard59-core'
 import urlJoin from '../../urlJoin.js'
 import Cube from './Cube.js'
 
-function defaultCube({ observationSet }) {
+interface Context {
+  dataset: DatasetCore
+  ptr: AnyPointer
+  observationSet: Term
+  term: NamedNode
+  shape: Term
+  cube: Cube
+}
+
+interface CubeIdCallback {
+  (context: Context): NamedNode
+}
+
+interface ShapeIdCallback {
+  (context: Context): NamedNode
+}
+interface PropertyShapeIdCallback {
+  (cube: Cube): NamedNode | BlankNode
+}
+
+function defaultCube(this: { rdf: Environment }, { observationSet }: Context) {
   const observationSetIri = observationSet && observationSet.value
 
   if (!observationSetIri) {
@@ -13,7 +37,7 @@ function defaultCube({ observationSet }) {
   return this.rdf.namedNode(urlJoin(observationSetIri, '..'))
 }
 
-function defaultShape({ term }) {
+function defaultShape(this: { rdf: Environment }, { term }: Context) {
   const cubeIri = term && term.value
 
   if (!cubeIri) {
@@ -23,8 +47,33 @@ function defaultShape({ term }) {
   return this.rdf.namedNode(urlJoin(cubeIri, 'shape'))
 }
 
+interface Options {
+  excludeValuesOf?: string[]
+  cube?: CubeIdCallback
+  metadata?: Stream
+  shape?: ShapeIdCallback
+  graph?: NamedNode
+  propertyShapeId?: PropertyShapeIdCallback
+  inListMaxSize?: number
+}
+
 class CubeShapeBuilder extends Transform {
-  constructor({ rdf, cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
+  declare rdf: Environment
+  declare options: {
+    excludeValuesOf: Set<Term>
+    cubes: Map<Term, Cube>
+    cube: CubeIdCallback
+    metadataStream?: Stream
+    metadata: DatasetCore
+    shape: ShapeIdCallback
+    graph?: NamedNode
+    propertyShapeId: PropertyShapeIdCallback
+    inListMaxSize?: number
+  }
+
+  declare init: () => Promise<void>
+
+  constructor({ rdf, cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize }: Options & { rdf: Environment }) {
     super({ objectMode: true })
 
     this.rdf = rdf
@@ -37,7 +86,7 @@ class CubeShapeBuilder extends Transform {
       graph,
       propertyShapeId,
       inListMaxSize,
-    }
+    } as unknown as typeof this.options
 
     this.init = once(() => this._init())
   }
@@ -50,10 +99,10 @@ class CubeShapeBuilder extends Transform {
     }
   }
 
-  async _transform(chunk, encoding, callback) {
+  async _transform(chunk: Quad[], encoding: string, callback: (err: Error | null, chunk?: Quad[]) => void) {
     try {
       await this.init()
-    } catch (err) {
+    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       return callback(err)
     }
 
@@ -62,12 +111,12 @@ class CubeShapeBuilder extends Transform {
     const context = {
       dataset,
       ptr: this.rdf.clownface({ dataset }).has(this.rdf.ns.rdf.type, this.rdf.ns.cube.Observation),
-    }
+    } as unknown as Context
 
-    context.observationSet = context.ptr.in(this.rdf.ns.cube.observation).term
+    context.observationSet = context.ptr.in(this.rdf.ns.cube.observation).term!
     context.term = this.options.cube(context)
     context.shape = this.options.shape(context)
-    context.cube = this.options.cubes.get(context.term)
+    context.cube = this.options.cubes.get(context.term)!
 
     if (!context.cube) {
       context.cube = new Cube({
@@ -92,7 +141,7 @@ class CubeShapeBuilder extends Transform {
     callback(null, [...context.dataset])
   }
 
-  _flush(callback) {
+  _flush(callback: () => void) {
     for (const cube of this.options.cubes.values()) {
       const dataset = cube.toDataset({ shapeGraph: this.toNamedNode(this.options.graph) })
       this.push(dataset)
@@ -101,12 +150,20 @@ class CubeShapeBuilder extends Transform {
     callback()
   }
 
-  toNamedNode(item) {
+  toNamedNode(item: NamedNode | string | undefined) {
     return typeof item === 'string' ? this.rdf.namedNode(item) : item
   }
 }
 
-function buildCubeShape({ cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize } = {}) {
+function buildCubeShape(this: BarnardContext, { cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize }:{
+  cube?: CubeIdCallback
+  shape?: ShapeIdCallback
+  excludeValuesOf?: string[]
+  metadata?: Stream
+  graph?: NamedNode
+  propertyShapeId?: PropertyShapeIdCallback
+  inListMaxSize?: number
+} = {}) {
   return new CubeShapeBuilder({ rdf: this.env, cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize })
 }
 

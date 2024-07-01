@@ -1,4 +1,11 @@
-function cbdCopy(rdf, source, target, { ignore = rdf.termSet() } = {}) {
+import type { BlankNode, NamedNode, Term } from '@rdfjs/types'
+import type { GraphPointer } from 'clownface'
+
+import type { Environment } from 'barnard59-env'
+
+type GraphPointerLike = Pick<GraphPointer<NamedNode | BlankNode>, 'dataset' | 'term'>
+
+function cbdCopy(rdf: Environment, source: GraphPointerLike, target: GraphPointerLike, { ignore = rdf.termSet() }: { ignore?: Set<Term> } = {}) {
   for (const quad of source.dataset.match(source.term)) {
     if (ignore.has(quad.predicate)) {
       continue

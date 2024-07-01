@@ -1,9 +1,14 @@
-import { URL } from 'url'
+import { URL } from 'node:url'
+import type { NamedNode, Literal, DatasetCore, Term } from '@rdfjs/types'
 import { Transform } from 'readable-stream'
+import { isLiteral, isNamedNode } from 'is-graph-pointer'
+import type { Environment } from 'barnard59-env'
+import type { Context as BarnardContext } from 'barnard59-core'
+import type { GraphPointer } from 'clownface'
 import dateToId from '../dateToId.js'
 import urlJoin from '../urlJoin.js'
 
-function findRoot($rdf, { dataset }) {
+function findRoot($rdf: Environment, { dataset }: { dataset: DatasetCore }): NamedNode {
   const subjects = [...dataset].filter(quad => quad.subject.termType === 'NamedNode').reduce((subjects, quad) => {
     const count = subjects.get(quad.subject) || 0
 
@@ -14,14 +19,14 @@ function findRoot($rdf, { dataset }) {
 
   const subject = [...subjects.entries()].sort((a, b) => a[1] - b[1])[0][0]
 
-  return subject
+  return subject as unknown as NamedNode
 }
 
-function defaultObserver({ dataset, subject }) {
-  const observer = this.rdf.clownface({ dataset }).out(this.rdf.ns.cube.observedBy).term
+function defaultObserver(this: { rdf: Environment }, { dataset, subject }: { dataset: DatasetCore; subject: NamedNode }): NamedNode {
+  const observer = this.rdf.clownface({ dataset }).out(this.rdf.ns.cube.observedBy)
 
-  if (observer) {
-    return observer
+  if (isNamedNode(observer)) {
+    return observer.term
   }
 
   const iri = new URL(subject.value)
@@ -31,7 +36,7 @@ function defaultObserver({ dataset, subject }) {
   return this.rdf.namedNode(iri.toString())
 }
 
-function defaultObservations({ subject }) {
+function defaultObservations(this: { rdf: Environment }, { subject }: { subject: NamedNode }): NamedNode {
   const iri = urlJoin(subject.value, '..')
 
   if (iri.endsWith('/observation')) {
@@ -41,25 +46,39 @@ function defaultObservations({ subject }) {
   return this.rdf.namedNode(`${iri}/observation/`)
 }
 
-function defaultObservation({ observations, subject }) {
+function defaultObservation(this: { rdf: Environment }, { observations, subject }: { observations: NamedNode; subject: NamedNode }) {
   const url = new URL(subject.value)
   const id = url.pathname.split('/').slice(-1)[0]
 
   return this.rdf.namedNode(urlJoin(observations.value, id))
 }
 
-function dateByProperty(property) {
-  return function ({ dataset }) {
-    return this.rdf.clownface({ dataset }).out(property).term
+interface DateCallback {
+  (arg: { dataset: DatasetCore }): Literal
+}
+
+function dateByProperty(property: NamedNode): DateCallback {
+  return function (this:{ rdf: Environment }, { dataset }: { dataset: DatasetCore }): Literal {
+    const date = this.rdf.clownface({ dataset }).out(property)
+
+    if (!isLiteral(date)) {
+      throw new Error(`Expected a date literal at property ${property.value} but found ${date.term?.value}`)
+    }
+
+    return date.term
   }
 }
 
-function dateNow() {
+function dateNow(this: { rdf: Environment }) {
   return this.rdf.literal((new Date()).toISOString(), this.rdf.ns.xsd.dateTime)
 }
 
-function dateByDatatype({ dataset }) {
-  const terms = this.rdf.clownface({ dataset }).out().filter(ptr => this.rdf.ns.xsd.dateTime.equals(ptr.term.datatype)).terms
+function dateByDatatype(this: { rdf: Environment }, { dataset }: { dataset: DatasetCore }) {
+  const terms: Literal[] = this.rdf.clownface({ dataset })
+    .out()
+    .filter(isLiteral)
+    .filter(ptr => this.rdf.ns.xsd.dateTime.equals(ptr.term.datatype))
+    .terms
 
   if (terms.length === 0) {
     throw new Error('now date value found')
@@ -72,28 +91,76 @@ function dateByDatatype({ dataset }) {
   return terms[0]
 }
 
-function dateObservation({ dataset, observations, useDate }) {
+function dateObservation(this: { rdf: Environment }, { dataset, observations, useDate }: { dataset: DatasetCore; observations: NamedNode; useDate?: DateCallback }): NamedNode {
+  if (!useDate) {
+    throw new Error('useDate callback is required')
+  }
+
   const date = useDate({ dataset })
 
   return this.rdf.namedNode(urlJoin(observations.value, dateToId(date.value)))
 }
 
-function indexObservation({ index, observations }) {
+function indexObservation(this: { rdf: Environment }, { index, observations }: { index: number; observations: NamedNode }) {
   return this.rdf.namedNode(urlJoin(observations.value, `./${index.toString()}`))
 }
 
-function asTermObject($rdf, value) {
-  if (typeof value === 'string') {
-    value = $rdf.namedNode(value)
-  }
+function asTermObject($rdf: Environment, value: NamedNode | string): () => NamedNode {
+  const term = typeof value === 'string' ? $rdf.namedNode(value) : value
 
   return () => {
-    return value
+    return term
   }
 }
 
+interface Context {
+  index: number
+  dataset: DatasetCore
+  subject: NamedNode
+  observer?: NamedNode | null
+  observations: NamedNode
+  observation: NamedNode
+  date?: Literal
+  dateProperty?: NamedNode
+}
+
+interface ObservationsCallback {
+  (arg: Omit<Context, 'observation'>): NamedNode
+}
+
+interface ObservationCallback {
+  (arg: Omit<Context, 'observation'>): NamedNode
+}
+
+interface ObserverCallback {
+  (arg: Omit<Context, 'observer' | 'observation' | 'observations'>): NamedNode | undefined | null
+}
+
+interface Options {
+  blacklist?: Array<GraphPointer<NamedNode>> | string[]
+  dimensions?: Array<GraphPointer<NamedNode>> | string[]
+  observation?: ObservationCallback
+  observations?: ObservationsCallback
+  observer?: ObserverCallback
+  useDate?: boolean | 'now' | 'true' | string | DateCallback | GraphPointer<NamedNode>
+  dateProperty?: NamedNode
+  useIndex?: boolean
+}
+
 class ToObservation extends Transform {
-  constructor({ rdf, blacklist, dimensions, observation, observations, observer, useDate, useIndex } = {}) {
+  declare rdf: Environment
+  declare options: {
+    index: number
+    blacklist: Set<Term>
+    dimensions: Set<NamedNode>
+    observation: ObservationCallback
+    observations: ObservationsCallback
+    observer: ObserverCallback
+    useDate?: DateCallback
+    dateProperty?: NamedNode
+  }
+
+  constructor({ rdf, blacklist, dimensions, observation, observations, observer, useDate, useIndex }: Options & { rdf: Environment }) {
     super({ objectMode: true })
 
     this.rdf = rdf
@@ -101,7 +168,7 @@ class ToObservation extends Transform {
       index: 0,
       blacklist: this.rdf.termSet(),
       dimensions: this.rdf.termSet(),
-    }
+    } as unknown as typeof this.options
 
     if (blacklist) {
       for (const item of blacklist) {
@@ -142,8 +209,8 @@ class ToObservation extends Transform {
         this.options.useDate = dateNow.bind({ rdf })
       } else if (typeof useDate === 'string') {
         this.options.useDate = dateByProperty(this.rdf.namedNode(useDate)).bind({ rdf })
-      } else if (useDate.termType) {
-        this.options.useDate = dateByProperty(useDate).bind({ rdf })
+      } else if ('term' in useDate) {
+        this.options.useDate = dateByProperty(useDate.term).bind({ rdf })
       } else if (typeof useDate === 'function') {
         this.options.useDate = useDate
       }
@@ -162,12 +229,12 @@ class ToObservation extends Transform {
     }
   }
 
-  _transform(chunk, encoding, callback) {
+  _transform(chunk: DatasetCore, encoding: BufferEncoding, callback: (error?: Error | null, data?: unknown) => void) {
     try {
       const context = {
         dataset: this.rdf.dataset([...chunk]),
         ...this.options,
-      }
+      } as unknown as Context
 
       context.subject = findRoot(this.rdf, context)
       context.observer = this.options.observer(context)
@@ -203,22 +270,20 @@ class ToObservation extends Transform {
         }
       }
 
-      if (context.observations) {
-        dataset.add(this.rdf.quad(context.observations, this.rdf.ns.cube.observation, context.observation))
-      }
+      dataset.add(this.rdf.quad(context.observations, this.rdf.ns.cube.observation, context.observation))
 
       this.push([...dataset])
 
       this.options.index++
 
       callback()
-    } catch (err) {
+    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       callback(err)
     }
   }
 }
 
-function toObservation({
+function toObservation(this: BarnardContext, {
   blacklist,
   dimensions,
   observation,
@@ -227,6 +292,15 @@ function toObservation({
   useDate,
   dateProperty,
   useIndex,
+}: {
+  blacklist?: string[] | GraphPointer<NamedNode>[]
+  dimensions?: string[] | GraphPointer<NamedNode>[]
+  observation?: ObservationCallback
+  observations?: ObservationsCallback
+  observer?: ObserverCallback
+  useDate?: boolean | 'now' | 'true' | string | DateCallback | GraphPointer<NamedNode>
+  dateProperty?: NamedNode
+  useIndex?: boolean
 } = {}) {
   return new ToObservation({ rdf: this.env, blacklist, dimensions, observation, observations, observer, useDate, dateProperty, useIndex })
 }

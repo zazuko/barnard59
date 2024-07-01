@@ -1,10 +1,12 @@
 import * as otel from '@opentelemetry/api'
 import once from 'onetime'
-import streams, { Stream } from 'readable-stream'
+import type { Stream } from 'readable-stream'
+import streams from 'readable-stream'
 import createStream, { assertWritable } from './factory/stream.js'
 import { isReadable } from './isStream.js'
 import nextLoop from './nextLoop.js'
-import StreamObject, { Options as BaseOptions } from './StreamObject.js'
+import type { Options as BaseOptions } from './StreamObject.js'
+import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
 
 const { finished } = streams

@@ -1,11 +1,22 @@
-export class NodeKindConstraintBuilder {
+import type { Term } from '@rdfjs/types'
+import type { Environment } from 'barnard59-env'
+import type { Sh } from '@tpluscode/rdf-ns-builders/vocabularies/sh'
+import type { GraphPointer } from 'clownface'
+import type { Builder } from './CompositeConstraintBuilder.js'
+
+export class NodeKindConstraintBuilder implements Builder {
+  declare sh: Sh
+
   #termTypes = new Set()
 
-  constructor(rdf) {
+  /**
+   * @param {import('barnard59-env').Environment} rdf
+   */
+  constructor(rdf: Environment) {
     this.sh = rdf.ns.sh
   }
 
-  add(object) {
+  add(object: Term) {
     this.#termTypes.add(object.termType)
   }
 
@@ -34,7 +45,7 @@ export class NodeKindConstraintBuilder {
     }
   }
 
-  build(ptr) {
+  build(ptr: GraphPointer) {
     if (this.#nodeKind !== undefined) {
       ptr.addOut(this.sh.nodeKind, this.#nodeKind)
     }

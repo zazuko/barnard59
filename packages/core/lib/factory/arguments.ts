@@ -1,9 +1,9 @@
 import parseArguments from 'rdf-loader-code/arguments.js'
 import type { GraphPointer } from 'clownface'
-import { Logger } from 'winston'
-import { LoaderRegistry } from 'rdf-loaders-registry'
+import type { Logger } from 'winston'
+import type { LoaderRegistry } from 'rdf-loaders-registry'
 import { unknownVariable } from '../loader/variable.js'
-import { Context, VariableMap } from '../../index.js'
+import type { Context, VariableMap } from '../../index.js'
 
 async function createArguments(ptr: GraphPointer, { basePath, context, loaderRegistry, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

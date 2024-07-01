@@ -1,8 +1,32 @@
+/* eslint-disable no-use-before-define */
+import type { BlankNode, DatasetCore, NamedNode, Quad, Quad_Predicate as Predicate, Term } from '@rdfjs/types'
+import type { Environment } from 'barnard59-env'
+import type { GraphPointer } from 'clownface'
 import cbdCopy from '../../cbdCopy.js'
 import Dimension from './Dimension.js'
 
+interface CubeOptions {
+  rdf: Environment
+  metadata: GraphPointer<NamedNode | BlankNode>
+  observationSet: Term
+  shape: Term
+  term: NamedNode
+  propertyShapeId: (cube: Cube, dimension: Dimension) => NamedNode | BlankNode
+  inListMaxSize?: number
+
+}
+
 class Cube {
-  constructor({ rdf, metadata, observationSet, shape, term, propertyShapeId, inListMaxSize }) {
+  declare rdf: Environment
+  declare metadata: GraphPointer<NamedNode | BlankNode>
+  declare observationSet: Term
+  declare shape: Term
+  declare term: NamedNode
+  declare dimensions: Map<Predicate, Dimension>
+  declare propertyShapeId: (cube: Cube, dimension: Dimension) => NamedNode | BlankNode
+  declare inListMaxSize: number | undefined
+
+  constructor({ rdf, metadata, observationSet, shape, term, propertyShapeId, inListMaxSize }: CubeOptions) {
     this.rdf = rdf
     this.metadata = metadata
     this.observationSet = observationSet
@@ -17,7 +41,7 @@ class Cube {
     return [...this.dimensions.values()].flatMap(({ messages }) => messages)
   }
 
-  dimension({ predicate, object }) {
+  dimension({ predicate }: Pick<Quad, 'predicate'>) {
     let dimension = this.dimensions.get(predicate)
 
     if (!dimension) {
@@ -26,7 +50,7 @@ class Cube {
         .out(this.rdf.ns.sh.property)
         .has(this.rdf.ns.sh.path, predicate)
 
-      dimension = new Dimension({ rdf: this.rdf, metadata, predicate, object, shapeId: this.propertyShapeId, inListMaxSize: this.inListMaxSize })
+      dimension = new Dimension({ rdf: this.rdf, metadata, predicate, shapeId: this.propertyShapeId, inListMaxSize: this.inListMaxSize })
 
       this.dimensions.set(predicate, dimension)
     }
@@ -34,11 +58,11 @@ class Cube {
     return dimension
   }
 
-  update({ predicate, object }) {
-    this.dimension({ predicate, object }).update({ predicate, object })
+  update({ predicate, object }: Quad) {
+    this.dimension({ predicate }).update({ object })
   }
 
-  toDataset({ shapeGraph } = { shapeGraph: undefined }) {
+  toDataset({ shapeGraph }: { shapeGraph?: NamedNode } = { }): DatasetCore {
     const dataset = this.rdf.dataset()
 
     const cube = this.rdf.clownface({ dataset, term: this.term })
@@ -60,7 +84,7 @@ class Cube {
     for (const dimension of this.dimensions.values()) {
       shapeDataset.addAll(dimension.toDataset({ cube: this, shape: this.shape }))
     }
-    const setGraph = quad => this.rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
+    const setGraph = (quad: Quad) => this.rdf.quad(quad.subject, quad.predicate, quad.object, shapeGraph)
 
     return dataset.addAll([...shapeDataset].map(setGraph))
   }

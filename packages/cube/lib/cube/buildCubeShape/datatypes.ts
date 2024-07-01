@@ -1,6 +1,9 @@
+import type { NamedNode } from '@rdfjs/types'
 import { fromRdf } from 'rdf-literal'
+import type { Environment } from 'barnard59-env'
+import type { Xsd } from '@tpluscode/rdf-ns-builders/vocabularies/xsd'
 
-const datatypes = [
+const datatypes: Array<keyof Xsd> = [
   'byte',
   'date',
   'dateTime',
@@ -25,6 +28,8 @@ const datatypes = [
   'unsignedShort',
 ]
 
-export default function datatypeParsers(rdf) {
+export type DatatypeParser = typeof fromRdf
+
+export default function datatypeParsers(rdf: Environment): Map<NamedNode, DatatypeParser> {
   return rdf.termMap(datatypes.map(datatype => [rdf.ns.xsd[datatype], fromRdf]))
 }

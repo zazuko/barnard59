@@ -1,11 +1,32 @@
+/* eslint-disable no-use-before-define */
+import { isResource } from 'is-graph-pointer'
+import type { Environment } from 'barnard59-env'
+import type { AnyPointer } from 'clownface'
+import type { BlankNode, NamedNode, Term, Quad_Predicate as Predicate } from '@rdfjs/types'
 import cbdCopy from '../../cbdCopy.js'
 import datatypeParsers from './datatypes.js'
 import { CompositeConstraintBuilder } from './constraintBuilder/CompositeConstraintBuilder.js'
 import { DimensionConstraintsBuilder } from './constraintBuilder/DimensionConstraintsBuilder.js'
 import { NodeKindConstraintBuilder } from './constraintBuilder/NodeKindConstraintBuilder.js'
+import type Cube from './Cube.js'
+
+interface DimensionOptions {
+  rdf: Environment
+  metadata: AnyPointer
+  predicate: Predicate
+  shapeId?: (cube: Cube, dimension: Dimension) => NamedNode | BlankNode
+  inListMaxSize?: number
+}
 
 class Dimension {
-  constructor({ rdf, metadata, predicate, shapeId = () => rdf.blankNode(), inListMaxSize }) {
+  declare rdf: Environment
+  declare metadata: AnyPointer
+  declare predicate: Predicate
+  declare shapeId: (cube: Cube, dimension: Dimension) => NamedNode | BlankNode
+  declare constraints: CompositeConstraintBuilder
+  declare messages: string[]
+
+  constructor({ rdf, metadata, predicate, shapeId = () => rdf.blankNode(), inListMaxSize }: DimensionOptions) {
     this.rdf = rdf
     this.metadata = metadata
     this.predicate = predicate
@@ -16,11 +37,11 @@ class Dimension {
     this.messages = []
   }
 
-  update({ object }) {
+  update({ object }: { object: Term }) {
     this.constraints.add(object)
   }
 
-  toDataset({ cube, shape }) {
+  toDataset({ cube, shape }: { cube: Cube; shape: Term }) {
     const dataset = this.rdf.dataset()
 
     const graph = this.rdf.clownface({ dataset })
@@ -39,7 +60,7 @@ class Dimension {
         this.messages.push(`${this.predicate.value}: ${description.term.value}`)
       })
 
-    if (this.metadata.term) {
+    if (isResource(this.metadata)) {
       cbdCopy(this.rdf, this.metadata, ptr)
     }
 

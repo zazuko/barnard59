@@ -194,7 +194,9 @@ describe('cube.toObservation', () => {
         .addOut(ex.date3, rdf.literal(date3.toISOString(), rdf.ns.xsd.dateTime))
         .dataset
 
-      const transform = toObservation({ useDate: ex.date2 })
+      const transform = toObservation({
+        useDate: rdf.clownface({ term: ex.date2 }),
+      })
 
       Readable.from([dataset]).pipe(transform)
 

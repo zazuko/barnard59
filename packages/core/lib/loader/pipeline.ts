@@ -1,8 +1,8 @@
-import { LoaderRegistry } from 'rdf-loaders-registry'
+import type { LoaderRegistry } from 'rdf-loaders-registry'
 import type { Environment } from 'barnard59-env'
 import type { GraphPointer } from 'clownface'
 import createPipeline from '../factory/pipeline.js'
-import { Context, VariableMap } from '../../index.js'
+import type { Context, VariableMap } from '../../index.js'
 
 interface Options {
   basePath: string

@@ -1,9 +1,9 @@
 import type { MultiPointer } from 'clownface'
-import { Logger } from 'winston'
-import { LoaderRegistry } from 'rdf-loaders-registry'
+import type { Logger } from 'winston'
+import type { LoaderRegistry } from 'rdf-loaders-registry'
 import { isGraphPointer } from 'is-graph-pointer'
-import { Stream } from 'readable-stream'
-import { Context, VariableMap } from '../../index.js'
+import type { Stream } from 'readable-stream'
+import type { Context, VariableMap } from '../../index.js'
 
 export type Operation = (this: Context, ...args: unknown[]) => Promise<Stream | (() => AsyncGenerator)> | Stream | (() => AsyncGenerator)
 
