@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Duplex } from 'node:stream'
 import { PassThrough } from 'readable-stream'
-import duplexify from 'duplexify'
 import type { RequestInit } from 'node-fetch'
-import fetch from 'node-fetch'
+import nodeFetch from 'node-fetch'
+import duplexify from 'duplexify'
 import tracer from './tracer.js'
 
 export type PostInit = RequestInit & { url: string }
@@ -14,7 +14,7 @@ export default async function writableFetch({ method = 'POST', url, ...options }
 
   tracer.startActiveSpan('writableFetch', span => setTimeout(async () => {
     try {
-      const response = await fetch(url, { method, body: inputStream, ...options })
+      const response = await nodeFetch(url, { method, body: inputStream, ...options })
 
       response.body!.pipe(outputStream)
     } catch (err) {
