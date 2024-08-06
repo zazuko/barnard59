@@ -1,6 +1,7 @@
+import type { PostInit } from './lib/writableFetch.js'
 import writableFetch from './lib/writableFetch.js'
 
-function post(options) {
+function post(options: PostInit) {
   return writableFetch(options)
 }
 
