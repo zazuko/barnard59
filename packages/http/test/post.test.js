@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
@@ -43,6 +43,28 @@ describe('post', () => {
       await getStream(stream)
 
       strictEqual(content, expected.content)
+    })
+  })
+
+  it('can be called with 2 arguments', async () => {
+    await withServer(async server => {
+      let response
+      const expected = chunksAndContent()
+
+      server.app.post('/', async (req, res) => {
+        response = await getStream(req)
+
+        res.status(204).end()
+      })
+
+      const baseUrl = await server.listen()
+      const stream = await post(baseUrl)
+
+      expected.stream.pipe(stream)
+
+      await getStream(stream)
+
+      strictEqual(response, expected.content)
     })
   })
 })
