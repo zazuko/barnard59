@@ -42,7 +42,7 @@
     "barnard59-core": "^6.0.1",
     "barnard59-env": "^1.2.3",
     "barnard59-test-support": "*",
-    "docker-compose": "^0.24.7",
+    "docker-compose": "^0.24.8",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
     "is-stream": "^3",
