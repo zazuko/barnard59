@@ -1,6 +1,6 @@
 import { strictEqual } from 'node:assert'
 import ParsingClient from 'sparql-http-client/ParsingClient.js'
-import * as compose from 'docker-compose'
+import { upAll } from 'docker-compose/dist/v2.js'
 import waitOn from 'wait-on'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env/index.ts'
@@ -20,7 +20,7 @@ const endpoint = 'http://localhost:3030/test'
 describe('graph-store pipeline', function () {
   before(async function () {
     this.timeout(100000)
-    await compose.upAll({
+    await upAll({
       cwd: support,
     })
     await waitOn({

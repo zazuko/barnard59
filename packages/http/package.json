@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
     "readable-stream": ">=3"
   },
   "devDependencies": {
+    "@types/duplexify": "^3.6.4",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
     "is-stream": "^3.0.0"
