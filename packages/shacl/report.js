@@ -65,7 +65,7 @@ export async function shacl(arg) {
 
   let ds
   if (!shape) {
-    this.logger.info('No shapes found. Will validate each chunk against shapes found in teh chunk itself')
+    this.logger.info('No shapes found. Will validate each chunk against shapes found in the chunk itself')
   } else {
     if (!isReadableStream(shape)) {
       throw new Error(`${shape} is not a readable stream`)
