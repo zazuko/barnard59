@@ -3,27 +3,31 @@
 @prefix base: <https://barnard59.zazuko.com/operations/base/> .
 @prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
 @prefix ntriples: <https://barnard59.zazuko.com/operations/formats/ntriples/> .
-@prefix getDataset: <https://barnard59.zazuko.com/operations/rdf/getDataset> .
 @prefix shacl: <https://barnard59.zazuko.com/operations/shacl/> .
 @prefix code: <https://code.described.at/> .
 @prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
 
-@base <http://barnard59.zazuko.com/pipeline/shacl/> .
+@base <https://barnard59.zazuko.com/pipeline/shacl/> .
 
-_:shapes a p:Variable ;
-  p:name "shapes" ;
-  rdfs:label "URL or path of the shapes graph" ;
-.
-
-_:shapesMediaType a p:Variable ;
-  p:name "shapesMediaType" ;
-  rdfs:label "Override the shapes graph format" ;
-  p:required false ;
+_:variables
+  p:variable
+    [
+      a p:Variable ;
+      p:name "shapes" ;
+      rdfs:label "URL or path of the shapes graph" ;
+      p:required false ;
+    ],
+    [
+      a p:Variable ;
+      p:name "shapesMediaType" ;
+      rdfs:label "Override the shapes graph format" ;
+      p:required false ;
+    ] ;
 .
 
 <validate>
   a p:Pipeline, p:Readable ;
-  p:variables [ p:variable _:shapes, _:shapesMediaType ] ;
+  p:variables _:variables ;
   p:steps
     [
       p:stepList
@@ -41,15 +45,23 @@ _:shapesMediaType a p:Variable ;
       p:stepList
         (
           [ n3:parse () ]
-          [ getDataset: () ]
-          [ shacl:report ( _:getShapes ) ]
+          [ rdf:getDataset () ]
+          [
+            a p:Step ;
+            code:implementedBy
+              [
+                a code:EcmaScriptModule ;
+                code:link <file:validate.js#default> ;
+              ] ;
+          ]
           [ base:flatten () ]
           [ ntriples:serialize () ]
         )
     ] ;
 .
 
-_:getShapes a p:Pipeline, p:ReadableObjectMode ;
+<_getShapes> a p:Pipeline, p:ReadableObjectMode ;
+  p:variables _:variables ;
   p:steps
     [
       p:stepList

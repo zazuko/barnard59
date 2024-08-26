@@ -4,7 +4,7 @@
 @prefix n3: <https://barnard59.zazuko.com/operations/formats/n3/> .
 @prefix rdf: <https://barnard59.zazuko.com/operations/rdf/> .
 
-@base <http://barnard59.zazuko.com/pipeline/shacl/> .
+@base <https://barnard59.zazuko.com/pipeline/shacl/> .
 
 <report-summary> a p:Pipeline , p:Readable ;
   p:steps

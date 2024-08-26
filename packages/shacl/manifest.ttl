@@ -23,6 +23,7 @@
   b59:command "validate" ;
   rdfs:label "Validates the RDF in standard input against a SHACL document" ;
   b59:source "barnard59-shacl/pipeline/validate.ttl" ;
+  b59:pipeline <https://barnard59.zazuko.com/pipeline/shacl/validate> ;
 .
 
 

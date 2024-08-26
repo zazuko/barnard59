@@ -10,9 +10,8 @@ import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDef
 import getStream from 'get-stream'
 
 const ex = env.namespace('http://example.org/')
-const ns = env.namespace('http://barnard59.zazuko.com/pipeline/shacl/')
+const ns = env.namespace('https://barnard59.zazuko.com/pipeline/shacl/')
 
-const basePath = url.fileURLToPath(new URL('../../pipeline', import.meta.url))
 const loadPipeline = pipelineDefinitionLoader(import.meta.url, '../../pipeline')
 
 describe('pipeline/validate', function () {
@@ -24,7 +23,7 @@ describe('pipeline/validate', function () {
         ${env.ns.schema.name} "John Doe" ;
       .
     `.toString()
-    const ptr = await loadPipeline('validate', {
+    const { ptr, basePath } = await loadPipeline('validate', {
       term: ns._validate,
     })
     const variables = new Map([
@@ -36,7 +35,37 @@ describe('pipeline/validate', function () {
     const output = await getStream(toStream(data).pipe(pipeline.stream))
 
     // then
-    expect(output).to.be.empty
+    expect(output).to.match(/conforms> "true"/)
+  })
+
+  it('validates against shapes from input', async () => {
+    // given
+    const data = turtle`
+      ${ex.Person}
+        a ${env.ns.schema.Person} ;
+        ${env.ns.schema.name} "John Doe" ;
+      .
+      
+      []
+        a ${env.ns.sh.NodeShape} ;
+        ${env.ns.sh.targetClass} ${env.ns.schema.Person} ;
+        ${env.ns.sh.property} [
+          a ${env.ns.sh.PropertyShape} ;
+          ${env.ns.sh.path} ${env.ns.schema.name} ;
+          ${env.ns.sh.hasValue} "Jane Doe" ;
+        ] ;
+      .
+    `.toString()
+    const { ptr, basePath } = await loadPipeline('validate', {
+      term: ns._validate,
+    })
+    const pipeline = createPipeline(ptr, { basePath, env })
+
+    // when
+    const output = await getStream(toStream(data).pipe(pipeline.stream))
+
+    // then
+    expect(output).to.match(/conforms> "false"/)
   })
 
   it('validates against remote shapes', () => {
@@ -51,7 +80,7 @@ describe('pipeline/validate', function () {
         ${env.ns.schema.name} "John Doe" ;
       .
     `.toString()
-      const ptr = await loadPipeline('validate', {
+      const { ptr, basePath } = await loadPipeline('validate', {
         term: ns._validate,
       })
       const variables = new Map([
@@ -63,7 +92,7 @@ describe('pipeline/validate', function () {
       const output = await getStream(toStream(data).pipe(pipeline.stream))
 
       // then
-      expect(output).to.be.empty
+      expect(output).to.match(/conforms> "true"/)
     })
   })
 
@@ -75,7 +104,7 @@ describe('pipeline/validate', function () {
         ${env.ns.schema.name} "" ;
       .
     `.toString()
-    const ptr = await loadPipeline('validate', {
+    const { ptr, basePath } = await loadPipeline('validate', {
       term: ns._validate,
     })
     const variables = new Map([

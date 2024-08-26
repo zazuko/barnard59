@@ -5,11 +5,12 @@ import TermCounter from './lib/TermCounter.js'
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {import('@rdfjs/types').DatasetCore} ds
- * @param {number | undefined} maxViolations
+ * @param {object} options
+ * @param {import('@rdfjs/types').DatasetCore | undefined} options.shapes
+ * @param {number | undefined} options.maxViolations
  * @param {AsyncIterable<any>} iterable
  */
-async function * validate(ds, maxViolations, iterable) {
+async function * validate({ shapes, maxViolations }, iterable) {
   let totalViolations = 0
   const counter = new TermCounter(this.env)
 
@@ -19,8 +20,7 @@ async function * validate(ds, maxViolations, iterable) {
       break
     }
 
-    // create a new validator instance at each iteration to avoid memory leaks
-    const validator = new SHACLValidator(ds, { maxErrors: 0, factory: this.env })
+    const validator = new SHACLValidator(shapes || chunk, { maxErrors: 0, factory: this.env })
     const report = validator.validate(chunk)
     if (!report.conforms) {
       for (const result of report.results) {
@@ -63,14 +63,18 @@ export async function shacl(arg) {
     maxViolations = options.maxErrors < 1 ? 0 : Number(options.maxErrors)
   }
 
+  let ds
   if (!shape) {
-    throw new Error('Needs a SHACL shape as parameter')
-  }
-  if (!isReadableStream(shape)) {
-    throw new Error(`${shape} is not a readable stream`)
+    this.logger.info('No shapes found. Will validate each chunk against shapes found in the chunk itself')
+  } else {
+    if (!isReadableStream(shape)) {
+      throw new Error(`${shape} is not a readable stream`)
+    }
+    ds = await this.env.dataset().import(shape)
   }
 
-  const ds = await this.env.dataset().import(shape)
-
-  return Duplex.from(validate.bind(this, ds, maxViolations))
+  return Duplex.from(validate.bind(this, {
+    shapes: ds,
+    maxViolations,
+  }))
 }

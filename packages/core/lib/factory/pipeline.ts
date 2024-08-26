@@ -13,14 +13,15 @@ import createStep from './step.js'
 import createVariables from './variables.js'
 
 function createPipelineContext(
-  { basePath, context, logger, variables, error }: {
+  { ptr, basePath, context, logger, variables, error }: {
+    ptr: GraphPointer
     basePath: string
     context: Pick<Context, 'env'>
     logger: Logger
     variables: VariableMap
     error: (err: Error) => void
   }) {
-  return { error, ...context, basePath, logger, variables } as unknown as Context
+  return { error, ...context, graph: ptr.any(), basePath, logger, variables } as unknown as Context
 }
 
 async function createPipelineVariables(
@@ -75,7 +76,7 @@ function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: 
     }
 
     variables = await createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables })
-    context = await createPipelineContext({ basePath, context, logger, variables, error })
+    context = await createPipelineContext({ ptr, basePath, context, logger, variables, error })
 
     logVariables(ptr, context, variables)
 

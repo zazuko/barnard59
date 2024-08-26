@@ -1,6 +1,6 @@
 import type { Logger } from 'winston'
 import type { Environment } from 'barnard59-env'
-import type { GraphPointer } from 'clownface'
+import type { GraphPointer, AnyPointer } from 'clownface'
 import defaultLoaderRegistry from './lib/defaultLoaderRegistry.js'
 import defaultLogger from './lib/defaultLogger.js'
 import createPipeline from './lib/factory/pipeline.js'
@@ -24,6 +24,7 @@ interface TypedMap extends Map<Keys, unknown> {
 export type VariableMap = (keyof Variables extends never ? Map<string, unknown> : TypedMap)
 
 export interface Context {
+  graph: AnyPointer
   env: Environment
   logger: Logger
   variables: VariableMap
