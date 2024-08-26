@@ -1,5 +1,15 @@
 # barnard59-http
 
+## 2.1.0
+
+### Minor Changes
+
+- f4c4fc6: Add overload to `get` and `post` to match the signature of native `fetch`
+
+### Patch Changes
+
+- cb4223b: Added TS declarations
+
 ## 2.0.0
 
 ### Major Changes

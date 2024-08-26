@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 6.1.0
+
+### Minor Changes
+
+- 0170c58: Include the current graph in pipeline context
+
 ## 6.0.1
 
 ### Patch Changes
