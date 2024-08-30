@@ -1,5 +1,11 @@
 # barnard59-shacl
 
+## 1.4.10
+
+### Patch Changes
+
+- d4e9dd7: Makes `--shapes` optional when running `b59 validate`. If skipped, will validate against shapes found in the standard input alongside data
+
 ## 1.4.9
 
 ### Patch Changes
