@@ -144,5 +144,4 @@ cat observations.ttl \
 
 ### Known issues
 
-- Command `check-metadata` may fail if there are `sh:in` constraints with too many values.
 - `sh:class` constraints require all cube data in memory at once (`--batchSize 0`).
