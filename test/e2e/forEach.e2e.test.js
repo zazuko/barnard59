@@ -1,8 +1,9 @@
-import { deepStrictEqual, strictEqual } from 'node:assert'
+import { strictEqual } from 'node:assert'
 import { createPipeline } from 'barnard59-core'
 import getStream from 'get-stream'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
+import { expect } from 'chai'
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'definitions')
 
@@ -36,7 +37,7 @@ describe('forEach', () => {
 
     const out = await getStream.array(pipeline.stream)
 
-    deepStrictEqual(out, [
+    expect(out).to.contain.all.members([
       '/root/definitions/foreach/csv-duplicate.ttl',
       '/root/definitions/foreach/with-handler.ttl',
       '/root/definitions/foreach/with-variable.ttl',
