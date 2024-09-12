@@ -12,8 +12,6 @@ export default function limit(limit) {
       count++
       if (count <= limit) {
         yield chunk
-      } else {
-        break
       }
     }
   }
