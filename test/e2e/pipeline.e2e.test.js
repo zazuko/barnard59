@@ -76,7 +76,7 @@ describe('Pipeline', () => {
     const out = await fromStream(env.dataset(), env.formats.parsers.import('text/turtle', pipeline.stream))
 
     // then
-    const source = await fromStream(env.dataset(), fromFile('definitions/file-loader.ttl'))
+    const source = await fromStream(env.dataset(), fromFile(env, 'definitions/file-loader.ttl'))
     expect(toCanonical(out)).to.eq(toCanonical(source))
   })
 
