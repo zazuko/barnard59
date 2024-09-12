@@ -25,6 +25,40 @@ describe('map', () => {
     deepStrictEqual(output, ['foo_a', 'foo_b'])
   })
 
+  it('should pass optional arguments to mapper function', async () => {
+    const input = new Readable({
+      read: () => {
+        input.push('a')
+        input.push('b')
+        input.push(null)
+      },
+    })
+
+    const prependPrefix = (chunk, prefix) => prefix + chunk
+    const outStream = input.pipe(map.call(context, prependPrefix, 'foo_'))
+    const output = await array(outStream)
+
+    deepStrictEqual(output, ['foo_a', 'foo_b'])
+  })
+
+  it('should pass optional arguments to mapper function when used with options object', async () => {
+    const input = new Readable({
+      read: () => {
+        input.push('a')
+        input.push('b')
+        input.push(null)
+      },
+    })
+
+    const prependPrefix = (chunk, prefix) => prefix + chunk
+    const outStream = input.pipe(map.call(context, {
+      map: prependPrefix,
+    }, 'foo_'))
+    const output = await array(outStream)
+
+    deepStrictEqual(output, ['foo_a', 'foo_b'])
+  })
+
   it('accepts a function as parameter', async () => {
     // given
     const transform = letter => letter.toUpperCase()
