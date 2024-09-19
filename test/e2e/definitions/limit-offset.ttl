@@ -11,9 +11,5 @@
           [ base:streamValues ( "{ age: 34 }"^^code:EcmaScript "{ age: 23 }"^^code:EcmaScript "{ age: 10 }"^^code:EcmaScript) ]
           [ base:offset (1) ]
           [ base:limit (1) ]
-          # pipeline stalls if limit is last step
-          [
-            base:map( "value => value"^^code:EcmaScript )
-          ]
         )
     ] .

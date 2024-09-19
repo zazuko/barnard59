@@ -116,15 +116,9 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
         this.children[index].stream.pipe(child.stream)
       }
 
-      finished(this.lastChild.stream, err => {
-        if (!err) {
-          this.finish()
-        } else {
-          this.logger.error(err)
-        }
-      })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+      this.lastChild.stream.on('error', this.logger.error.bind(this.logger))
+      this.lastChild.stream.on('end', this.finish.bind(this))
+    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       this.destroy(err)
 
       this.logger.error(err, { iri: this.ptr.value })
