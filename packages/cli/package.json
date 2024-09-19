@@ -1,6 +1,6 @@
 {
   "name": "barnard59",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "description": "Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -37,7 +37,7 @@
     "@opentelemetry/semantic-conventions": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "@rdfjs/namespace": "^2.0.0",
-    "barnard59-core": "6.1.0",
+    "barnard59-core": "6.1.1",
     "barnard59-env": "1.2.6",
     "commander": "^11.0.0",
     "pkgscan": "^1.0.24",
