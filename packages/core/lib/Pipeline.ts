@@ -116,8 +116,11 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
         this.children[index].stream.pipe(child.stream)
       }
 
+      const finished = once(() => this.finish())
+
       this.lastChild.stream.on('error', this.logger.error.bind(this.logger))
-      this.lastChild.stream.on('end', this.finish.bind(this))
+      this.lastChild.stream.on('end', finished)
+      this.lastChild.stream.on('finish', finished)
     } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       this.destroy(err)
 
