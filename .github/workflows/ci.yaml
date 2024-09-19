@@ -46,6 +46,16 @@ jobs:
       - run: npm ci
       - run: npx wsrun -mc build
 
+  test-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run -w barnard59-test-e2e test
+
   test-cli:
     runs-on: ubuntu-latest
     strategy:

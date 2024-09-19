@@ -3,7 +3,7 @@ import once from 'onetime'
 import type { Stream } from 'readable-stream'
 import streams from 'readable-stream'
 import createStream, { assertWritable } from './factory/stream.js'
-import { isReadable } from './isStream.js'
+import { isReadable, isWritable } from './isStream.js'
 import nextLoop from './nextLoop.js'
 import type { Options as BaseOptions } from './StreamObject.js'
 import StreamObject from './StreamObject.js'
@@ -116,6 +116,15 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
         this.children[index].stream.pipe(child.stream)
       }
 
+      this.lastChild.stream.on('end', () => {
+        // in some cases, a duplex stream emits the end event but is still writable
+        // which prevents the pipeline from reaching the finished callback below
+        // in such case, a pipeline never finishes, and the process hangs
+        if (!isWritable(this.lastChild.stream) && !isReadable(this.lastChild.stream)) {
+          this.finish()
+        }
+      })
+
       finished(this.lastChild.stream, err => {
         if (!err) {
           this.finish()
@@ -123,8 +132,7 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
           this.logger.error(err)
         }
       })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       this.destroy(err)
 
       this.logger.error(err, { iri: this.ptr.value })
