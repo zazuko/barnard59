@@ -3,7 +3,7 @@ import once from 'onetime'
 import type { Stream } from 'readable-stream'
 import streams from 'readable-stream'
 import createStream, { assertWritable } from './factory/stream.js'
-import { isReadable } from './isStream.js'
+import { isReadable, isWritable } from './isStream.js'
 import nextLoop from './nextLoop.js'
 import type { Options as BaseOptions } from './StreamObject.js'
 import StreamObject from './StreamObject.js'
@@ -116,11 +116,19 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
         this.children[index].stream.pipe(child.stream)
       }
 
-      const finished = once(() => this.finish())
+      this.lastChild.stream.on('end', () => {
+        if (!isWritable(this.lastChild.stream) && !isReadable(this.lastChild.stream)) {
+          this.lastChild.stream.emit('finish')
+        }
+      })
 
-      this.lastChild.stream.on('error', this.logger.error.bind(this.logger))
-      this.lastChild.stream.on('end', finished)
-      this.lastChild.stream.on('finish', finished)
+      finished(this.lastChild.stream, err => {
+        if (!err) {
+          this.finish()
+        } else {
+          this.logger.error(err)
+        }
+      })
     } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       this.destroy(err)
 
