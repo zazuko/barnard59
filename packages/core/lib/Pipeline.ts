@@ -117,8 +117,11 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
       }
 
       this.lastChild.stream.on('end', () => {
+        // in some cases, a duplex stream emits the end event but is still writable
+        // which prevents the pipeline from reaching the finished callback below
+        // in such case, a pipeline never finishes, and the process hangs
         if (!isWritable(this.lastChild.stream) && !isReadable(this.lastChild.stream)) {
-          this.lastChild.stream.emit('finish')
+          this.finish()
         }
       })
 
