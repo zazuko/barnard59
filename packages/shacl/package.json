@@ -40,7 +40,7 @@
     "barnard59-env": "^1.2.5",
     "barnard59-test-support": "*",
     "chai": "^4.3.4",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^8.0.1",
     "rdf-dataset-ext": "^1.1.0",
