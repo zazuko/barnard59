@@ -1,31 +1,35 @@
 import transform from 'parallel-transform'
 
 /**
- * @typedef {(this: import('barnard59-core').Context, chunk: From) => Promise<To> | To} MapCallback
+ * @typedef {(this: import('barnard59-core').Context, chunk: From, ...args: Args) => Promise<To> | To} MapCallback
  * @template From, To
+ * @template {Array<unknown>} Args
  */
 
 /**
  * @typedef {{
- *   map: MapCallback<From, To>
+ *   map: MapCallback<From, To, Args>
  *   concurrency?: number
  *   ordered?: boolean
  *   objectMode?: boolean
- * }|MapCallback<From, To>} MapOptions
+ * }|MapCallback<From, To, Args>} MapOptions
  * @template From, To
+ * @template {Array<unknown>} Args
  */
 
 /**
  * Processes chunks with a transform function
  *
  * @this {import('barnard59-core').Context}
- * @param {MapOptions<From, To>} options Transform function or complex options
+ * @param {MapOptions<From, To, Args>} options Transform function or complex options
+ * @param {Args} args Additional arguments to pass to the transform function
  * @return {import('stream').Transform}
  * @template From, To
+ * @template {Array<unknown>} Args
  */
-export default function map(options) {
+export default function map(options, ...args) {
   /**
-   * @type {MapCallback<*, *>}
+   * @type {MapCallback<*, *, Args>}
    */
   let func
   let concurrency = 1
@@ -42,7 +46,7 @@ export default function map(options) {
 
   return transform(concurrency, { ordered, objectMode }, (data, callback) => {
     Promise.resolve().then(() => {
-      return func.call(this, data)
+      return func.call(this, data, ...args)
     }).then(result => {
       callback(null, result)
     }).catch(callback)
