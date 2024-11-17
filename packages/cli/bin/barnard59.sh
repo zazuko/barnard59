@@ -10,6 +10,12 @@ then
   barnard59=$(node -e "console.log(require('path').join('$NODE_PATH', '/lib/node_modules/barnard59/bin/barnard59.js'))")
 fi
 
+if [ -z "$barnard59" ]
+then
+  echo "Could not find barnard59/bin/barnard59.js" >&2
+  exit 1
+fi
+
 # if ts-node exists in path
 if command -v ts-node &> /dev/null
 then
