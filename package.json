@@ -14,7 +14,7 @@
     "test/*"
   ],
   "devDependencies": {
-    "@changesets/cli": "^2.26.1",
+    "@changesets/cli": "^2.27.10",
     "@tpluscode/eslint-config": "^0.4.9",
     "@types/chai": "^4.3.16",
     "@types/node": "^18",
