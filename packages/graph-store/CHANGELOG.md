@@ -1,5 +1,11 @@
 # barnard59-graph-store
 
+## 6.0.2
+
+### Patch Changes
+
+- 9cad30b: Updated onetime to v7
+
 ## 6.0.1
 
 ### Patch Changes

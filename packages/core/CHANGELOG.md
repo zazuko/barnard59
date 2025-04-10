@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 6.1.1
+
+### Patch Changes
+
+- 10e1437: Pipeline would never finish if the last step was an async generator with a `break` statement
+
 ## 6.1.0
 
 ### Minor Changes
