@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@fig/complete-commander": "^3.1.0",
-    "@rdfjs-elements/formats-pretty": "^0.6.7",
+    "@rdfjs-elements/formats-pretty": "^0.6.8",
     "@types/lodash": "^4.14.202",
     "@types/readable-stream": "^4.0.10",
     "@types/shelljs": "^0.8.15",
