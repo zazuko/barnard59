@@ -18,9 +18,11 @@ async function createArguments(ptr: GraphPointer, { basePath, context, loaderReg
   }
 
   // key/value pairs
-  for (const [key, value] of Object.entries(args[0])) {
-    if (value === unknownVariable) {
-      args[0][key] = undefined
+  if (args.length) {
+    for (const [key, value] of Object.entries(args[0])) {
+      if (value === unknownVariable) {
+        args[0][key] = undefined
+      }
     }
   }
 
