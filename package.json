@@ -26,7 +26,7 @@
     "find-workspaces": "^0.3.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
-    "mocha": "^10.2.0",
+    "mocha": "^10.8.2",
     "sinon-chai": "^3.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
