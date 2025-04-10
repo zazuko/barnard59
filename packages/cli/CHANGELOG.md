@@ -1,5 +1,17 @@
 # barnard59
 
+## 5.1.0
+
+### Minor Changes
+
+- 298500f: Uses `tsx` as node module loader when it's available in path
+
+### Patch Changes
+
+- 7a4abad: Handle the improbable case of a corrupt, incomplete installation
+- Updated dependencies [10e1437]
+  - barnard59-core@6.1.1
+
 ## 5.0.5
 
 ### Patch Changes
