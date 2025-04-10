@@ -1,5 +1,12 @@
 # barnard59
 
+## 5.1.1
+
+### Patch Changes
+
+- Updated dependencies [c2746c5]
+  - barnard59-core@6.1.2
+
 ## 5.1.0
 
 ### Minor Changes

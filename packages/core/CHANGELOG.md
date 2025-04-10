@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 6.1.2
+
+### Patch Changes
+
+- c2746c5: Loading steps without arguments would fail (caused by https://github.com/zazuko/rdf-loader-code/pull/43)
+
 ## 6.1.1
 
 ### Patch Changes
