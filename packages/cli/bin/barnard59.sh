@@ -16,8 +16,11 @@ then
   exit 1
 fi
 
-# if ts-node exists in path
-if command -v ts-node &> /dev/null
+# if tsx or ts-node exists in path, use them
+if command -v tsx > /dev/null 2>&1
+then
+  node --import tsx --no-warnings "$barnard59" "$@"
+elif command -v ts-node &> /dev/null
 then
   # use ts-node
   node --loader ts-node/esm/transpile-only --no-warnings "$barnard59" "$@"
