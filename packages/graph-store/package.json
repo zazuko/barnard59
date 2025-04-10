@@ -26,7 +26,7 @@
     "barnard59-base": "^2.4.2",
     "barnard59-rdf": "^3.0.0",
     "duplex-to": "^1.0.0",
-    "onetime": "^6.0.0",
+    "onetime": "^7.0.0",
     "promise-the-world": "^1.0.1",
     "readable-stream": "^3.6.0",
     "sparql-http-client": "^3.0.0"
