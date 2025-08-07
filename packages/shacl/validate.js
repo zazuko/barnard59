@@ -34,22 +34,23 @@ class ValidateChunk extends Transform {
    * @param {(error?: Error | null, chunk?: unknown) => void} callback
    */
   _transform(data, encoding, callback) {
-    const report = this.validator.validate(data)
-    let shouldContinue = report.conforms
+    this.validator.validate(data).then(report => {
+      let shouldContinue = report.conforms
 
-    if (!shouldContinue && typeof this.onViolation === 'function') {
-      shouldContinue = this.onViolation({
-        context: this.context,
-        report,
-        data,
-      })
-    }
+      if (!shouldContinue && typeof this.onViolation === 'function') {
+        shouldContinue = this.onViolation({
+          context: this.context,
+          report,
+          data,
+        })
+      }
 
-    if (shouldContinue) {
-      return callback(null, data)
-    }
-    // @ts-ignore
-    this.destroy(new ValidationError(report, this.validator.$shapes.dataset, data))
+      if (shouldContinue) {
+        return callback(null, data)
+      }
+      // @ts-ignore
+      this.destroy(new ValidationError(report, this.validator.$shapes.dataset, data))
+    })
   }
 }
 

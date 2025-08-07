@@ -21,7 +21,7 @@ async function * validate({ shapes, maxViolations }, iterable) {
     }
 
     const validator = new SHACLValidator(shapes || chunk, { maxErrors: 0, factory: this.env })
-    const report = validator.validate(chunk)
+    const report = await validator.validate(chunk)
     if (!report.conforms) {
       for (const result of report.results) {
         if (result.severity) counter.add(result.severity)
