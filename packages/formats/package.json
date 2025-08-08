@@ -27,13 +27,13 @@
     "@rdfjs/parser-jsonld": "^2.1.0",
     "@rdfjs/parser-n3": "^2.0.1",
     "@rdfjs/serializer-jsonld": "^2.0.0",
-    "@rdfjs/serializer-ntriples": "^2.0.0",
+    "@rdfjs/serializer-ntriples": "^2.0.1",
     "@rdfjs/sink-to-duplex": "^1.0.0",
     "barnard59-base": "^2.0.1",
     "is-stream": "^3.0.0",
     "@zazuko/rdf-parser-csvw": "^0.17.0",
     "@zazuko/rdf-parser-csvw-xlsx": "^0.3",
-    "rdfxml-streaming-parser": "^1.2.0"
+    "rdfxml-streaming-parser": "^3.1.0"
   },
   "devDependencies": {
     "@types/rdfjs__sink-to-duplex": "^1.0.0",

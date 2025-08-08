@@ -29,7 +29,7 @@
   "devDependencies": {
     "@tpluscode/rdf-string": "^1.1.2",
     "@types/sparql-http-client": "^3.0.0",
-    "@zazuko/env": "^2",
+    "@zazuko/env": "^3",
     "barnard59-env": "^1.2.3",
     "get-stream": "^6.0.0",
     "is-stream": "^3.0.0",

@@ -5,6 +5,6 @@
   "type": "module",
   "dependencies": {
     "@rdfjs/namespace": "^2.0.0",
-    "@zazuko/env-node": "^2.1.1"
+    "@zazuko/env-node": "^3.0.0"
   }
 }

@@ -33,7 +33,7 @@
     "readable-stream": "3 - 4"
   },
   "devDependencies": {
-    "@tpluscode/rdf-string": "^1.1.2",
+    "@tpluscode/rdf-string": "^1.3.4",
     "assert-throws-async": "^3.0.0",
     "barnard59-core": "^6.0.1",
     "barnard59-env": "^1.2.5",
