@@ -1,7 +1,7 @@
 import rdf from 'barnard59-env'
 import { fromRdf } from 'rdf-literal'
 import { RangeConstraintBuilder } from '../../../lib/cube/buildCubeShape/constraintBuilder/RangeConstraintBuilder.js'
-import { buildShape, conforms, notConforms } from './support.js'
+import { prepareValidator, buildShape, conforms } from './support.js'
 
 const { xsd } = rdf.ns
 
@@ -12,13 +12,10 @@ describe('RangeConstraintBuilder', () => {
   const namedNode = rdf.namedNode('http://example.org/namedNode')
 
   context('built from integers between 2 and 7', () => {
-    const builder = new RangeConstraintBuilder(rdf, fromRdf)
-    const validator = buildShape(builder, four, two, three, seven)
-    const assertConforms = conforms.bind(null, validator)
-    const assertNotConforms = notConforms.bind(null, validator)
+    before(prepareValidator(new RangeConstraintBuilder(rdf, fromRdf), four, two, three, seven))
 
-    it('integers in range conform', () => assertConforms(five, six))
-    it('integers outside range do not conform', () => assertNotConforms(one, eight))
+    it('integers in range conform', function () { this.assertConforms(five, six) })
+    it('integers outside range do not conform', function () { this.assertNotConforms(one, eight) })
   })
   it('should create an unconstrained shape due to wrong datatype', () => {
     const builder = new RangeConstraintBuilder(rdf, fromRdf)

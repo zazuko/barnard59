@@ -43,7 +43,7 @@
     "chai": "^4.3.7",
     "get-stream": "^6.0.1",
     "is-stream": "^3.0.0",
-    "rdf-validate-shacl": "^0.5.5",
+    "rdf-validate-shacl": "^0.6.5",
     "shelljs": "^0.8.5"
   },
   "mocha": {
