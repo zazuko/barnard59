@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --quiet --ignore-path .gitignore",
-    "test": "wsrun -sm --report test",
+    "test": "npm run -ws --if-present test",
     "release": "changeset publish"
   },
   "workspaces": [
@@ -29,8 +29,7 @@
     "mocha": "^11.7.1",
     "sinon-chai": "^3.7.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "wsrun": "^5.2.4"
+    "typescript": "^5.4.5"
   },
   "lint-staged": {
     "*.js": [
