@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "mocha *.test.js"
+    "test": "mocha *.test.js",
+    "clock": "barnard59 run definitions/world-clock/file.ttl"
   },
   "dependencies": {
     "@zazuko/rdf-utils-fs": "^3.3.1",
