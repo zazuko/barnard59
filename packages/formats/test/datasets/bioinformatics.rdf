@@ -20,8 +20,7 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <owl:Ontology rdf:about="">
-        <dc:creator rdf:datatype="&xsd;string"
-            >Satya S. Sahoo, Kei Cheung, Jun Zhao</dc:creator>
+        <dc:creator rdf:datatype="&xsd;string">Satya S. Sahoo, Kei Cheung, Jun Zhao</dc:creator>
     </owl:Ontology>
 <!--
     ///////////////////////////////////////////////////////////////////////
@@ -94,9 +93,7 @@ rdf:resource="&BioRDFMicroarray;microarray_expression_experiment"/>
     <!-- http://purl.org/BioRDFMicroarray.owl#Alzheimers_disease -->
     <owl:Class rdf:about="&BioRDFMicroarray;Alzheimers_disease">
         <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
-        <rdfs:comment
-            >http://ontology.neuinfo.org/NIF/Dysfunction/NIF-
-Dysfunction.owl#birnlex_2092</rdfs:comment>
+        <rdfs:comment>http://ontology.neuinfo.org/NIF/Dysfunction/NIF-Dysfunction.owl#birnlex_2092</rdfs:comment>
     </owl:Class>
     <!-- http://purl.org/BioRDFMicroarray.owl#Detection -->
     <owl:Class rdf:about="&BioRDFMicroarray;Detection">
@@ -106,16 +103,12 @@ Dysfunction.owl#birnlex_2092</rdfs:comment>
      <!-- http://purl.org/BioRDFMicroarray.owl#Entorhinal_Cortex -->
     <owl:Class rdf:about="&BioRDFMicroarray;Entorhinal_Cortex">
         <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
-        <rdfs:comment
-            >http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-
-GrossAnatomy.owl#birnlex_1508</rdfs:comment>
+        <rdfs:comment>http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-GrossAnatomy.owl#birnlex_1508</rdfs:comment>
     </owl:Class>
     <!-- http://purl.org/BioRDFMicroarray.owl#Human -->
     <owl:Class rdf:about="&BioRDFMicroarray;Human">
         <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;Organism"/>
-        <rdfs:comment
-            >http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-
-Organism.owl#birnlex_516</rdfs:comment>
+        <rdfs:comment>http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Organism.owl#birnlex_516</rdfs:comment>
     </owl:Class>
     <!-- http://purl.org/BioRDFMicroarray.owl#Organism -->
     <owl:Class rdf:about="&BioRDFMicroarray;Organism">
@@ -146,8 +139,7 @@ rdf:about="&BioRDFMicroarray;sample"/>
     <!-- http://purl.org/BioRDFMicroarray.owl#gene -->
     <owl:Class rdf:about="&BioRDFMicroarray;gene">
         <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
-        <rdfs:comment
-            >http://purl.org/obo/owl/SO#SO_0000704</rdfs:comment>
+        <rdfs:comment>http://purl.org/obo/owl/SO#SO_0000704</rdfs:comment>
     </owl:Class>
     <!-- http://purl.org/
 BioRDFMicroarray.owl#microarray_expression_experiment -->
@@ -167,17 +159,12 @@ rdf:about="&BioRDFMicroarray;microarray_expression_experiment">
 rdf:resource="&BioRDFMicroarray;Entorhinal_Cortex"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment
-
-             >http://knoesis.wright.edu/ParasiteExperiment.owl#sample</
-rdfs:comment>
+        <rdfs:comment>http://knoesis.wright.edu/ParasiteExperiment.owl#sample</rdfs:comment>
     </owl:Class>
     <!-- http://purl.org/BioRDFMicroarray.owl#signal -->
     <owl:Class rdf:about="&BioRDFMicroarray;signal">
         <rdfs:subClassOf rdf:resource="&BioRDFMicroarray;continuant"/>
-        <rdfs:comment
-            >http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Signal</
-rdfs:comment>
+        <rdfs:comment>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Signal</rdfs:comment>
     </owl:Class>
     <!-- http://purl.org/net/biordfmicroarray.owl#probeID -->
     <owl:Class rdf:about="#probeID">

@@ -6,10 +6,10 @@
 
 <variables> p:variable [ a p:Variable;
   p:name "url" ;
-  p:value "http://worldtimeapi.org/api/timezone/CET"
+  p:value "https://timeapi.io/api/time/current/zone?timeZone=CET"
 ], [ a p:Variable;
   p:name "context" ;
-  p:value """{"date\":"http://purl.org/dc/elements/1.1/date"}"""
+  p:value """{"dateTime\":"http://purl.org/dc/elements/1.1/date"}"""
 ].
 
 <> a p:Pipeline, p:Readable;
@@ -35,6 +35,6 @@
     return {
       '@context': JSON.parse(this.variables.get('context')),
       '@id': this.variables.get('url'),
-      date: json.datetime
+      date: json.dateTime
     }
   }"""^^code:EcmaScript) .

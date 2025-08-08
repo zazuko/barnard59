@@ -28,7 +28,7 @@ import { toDataset } from './lib/stream.js'
  */
 function parse(args) {
   /**
-   * @type {import('rdf-js').DatasetCore}
+   * @type {import('@rdfjs/types').DatasetCore}
    */
   let metadata
   let timezone = 'local'
