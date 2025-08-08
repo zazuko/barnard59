@@ -1,25 +1,21 @@
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
-import { CollectorTraceExporter, CollectorMetricExporter } from '@opentelemetry/exporter-collector'
+import { diag, DiagConsoleLogger, DiagLogLevel, metrics } from '@opentelemetry/api'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http'
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
 import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
-import { Resource, envDetector, processDetector } from '@opentelemetry/resources'
+import { resourceFromAttributes, envDetector, processDetector } from '@opentelemetry/resources'
 import { NodeSDK } from '@opentelemetry/sdk-node'
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
-import { BatchSpanProcessor } from '@opentelemetry/tracing'
+import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions'
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
+import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { Command } from 'commander'
 import * as monitoringOptions from '../lib/cli/monitoringOptions.js'
 
-const sdk = new NodeSDK({
-  // Automatic detection is disabled, see comment below
-  autoDetectResources: false,
-  instrumentations: [
-    new HttpInstrumentation(),
-    new WinstonInstrumentation(),
-  ],
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'barnard59',
-  }),
-})
+/**
+ * @type NodeSDK | undefined
+ * @private
+ */
+let sdk
 
 /**
  * @param {any} [err]
@@ -39,7 +35,7 @@ const onError = async err => {
       console.error(err)
     }
   }
-  await sdk.shutdown()
+  await sdk?.shutdown()
   process.exit(1)
 }
 
@@ -64,34 +60,50 @@ const onError = async err => {
 
   const { otelTracesExporter, otelMetricsExporter, otelDebug, otelMetricsInterval } = program.opts()
 
+  const spanProcessors = []
   // Export the traces to a collector. By default it exports to
   // http://localhost:55681/v1/traces, but it can be changed with the
   // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
   if (otelTracesExporter === 'otlp') {
-    const exporter = new CollectorTraceExporter()
-    const spanProcessor = new BatchSpanProcessor(exporter)
-    sdk.configureTracerProvider({}, spanProcessor)
+    const exporter = new OTLPTraceExporter()
+    spanProcessors.push(new BatchSpanProcessor(exporter))
   }
+
   // Export the metrics to a collector. By default it exports to
   // http://localhost:55681/v1/metrics, but it can be changed with the
   // OTEL_EXPORTER_OTLP_METRICS_ENDPOINT environment variable.
   if (otelMetricsExporter === 'otlp') {
-    const exporter = new CollectorMetricExporter()
-    sdk.configureMeterProvider({
-      exporter,
-      interval: otelMetricsInterval,
+    const exporter = new OTLPMetricExporter()
+    const meterProvider = new MeterProvider({
+      readers: [new PeriodicExportingMetricReader({
+        exporter,
+        exportIntervalMillis: otelMetricsInterval,
+      })],
     })
+    metrics.setGlobalMeterProvider(meterProvider)
   }
   // @ts-ignore
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel[otelDebug])
 
-  // Automatic resource detection is disabled because the default AWS and
-  // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
-  // the resources manually here, since we still want process informations
-  // TODO: make this configurable if we're ever running in GCP/AWS environment?
-  await sdk.detectResources({ detectors: [envDetector, processDetector] })
+  sdk = new NodeSDK({
+    // Automatic detection is disabled, see comment below
+    autoDetectResources: false,
+    instrumentations: [
+      new HttpInstrumentation(),
+      new WinstonInstrumentation(),
+    ],
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: 'barnard59',
+    }),
+    spanProcessors,
+    // Automatic resource detection is disabled because the default AWS and
+    // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
+    // the resources manually here, since we still want process informations
+    // TODO: make this configurable if we're ever running in GCP/AWS environment?
+    resourceDetectors: [envDetector, processDetector],
+  })
 
-  await sdk.start()
+  sdk.start()
 
   // Dynamically import the rest once the SDK started to ensure
   // monkey-patching was done properly
