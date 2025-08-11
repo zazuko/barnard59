@@ -1,6 +1,6 @@
 import rdf from 'barnard59-env'
 import { DatatypeConstraintBuilder } from '../../../lib/cube/buildCubeShape/constraintBuilder/DatatypeConstraintBuilder.js'
-import { buildShape, conforms, notConforms } from './support.js'
+import { prepareValidator } from './support.js'
 
 const { xsd } = rdf.ns
 
@@ -12,20 +12,15 @@ describe('DatatypeConstraintBuilder', () => {
   const namedNode = rdf.namedNode('http://example.org/namedNode')
 
   context('built from all strings', () => {
-    const builder = new DatatypeConstraintBuilder(rdf, xsd.string)
-    const validator = buildShape(builder, string1, string2)
-    const assertConforms = conforms.bind(null, validator)
-    const assertNotConforms = notConforms.bind(null, validator)
+    before(prepareValidator(new DatatypeConstraintBuilder(rdf, xsd.string), string1, string2))
 
-    it('string conforms', () => assertConforms(string3))
-    it('integer does not conform', () => assertNotConforms(integer))
-    it('named node does not conform', () => assertNotConforms(namedNode))
+    it('string conforms', function () { this.assertConforms(string3) })
+    it('integer does not conform', function () { this.assertNotConforms(integer) })
+    it('named node does not conform', function () { this.assertNotConforms(namedNode) })
   })
   context('built from not only strings', () => {
-    const builder = new DatatypeConstraintBuilder(rdf, xsd.string)
-    const validator = buildShape(builder, string1, string2, namedNode)
-    const assertConforms = conforms.bind(null, validator)
+    before(prepareValidator(new DatatypeConstraintBuilder(rdf, xsd.string), string1, string2, namedNode))
 
-    it('everything conforms', () => assertConforms(string1, string2, string3, integer, namedNode))
+    it('everything conforms', function () { this.assertConforms(string1, string2, string3, integer, namedNode) })
   })
 })

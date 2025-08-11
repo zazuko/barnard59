@@ -15,20 +15,20 @@ const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'defini
 
 const dateTimeLd = {
   '@context': {
-    date: 'http://purl.org/dc/elements/1.1/date',
+    dateTime: 'http://purl.org/dc/elements/1.1/date',
   },
-  '@id': 'http://worldtimeapi.org/api/timezone/CET',
+  '@id': 'https://timeapi.io/api/time/current/zone?timeZone=CET',
   date: '2019-03-07T12:58:54.094127+01:00',
 }
 
 const dateTime = {
-  datetime: '2019-03-07T12:58:54.094127+01:00',
+  dateTime: '2019-03-07T12:58:54.094127+01:00',
 }
 
 describe('Pipeline', () => {
   beforeEach(() => {
-    nock('http://worldtimeapi.org')
-      .get('/api/timezone/CET')
+    nock('https://timeapi.io')
+      .get('/api/time/current/zone?timeZone=CET')
       .reply(200, dateTime)
   })
 
