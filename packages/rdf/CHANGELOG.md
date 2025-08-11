@@ -1,5 +1,13 @@
 # barnard59-rdf
 
+## 3.4.1
+
+### Patch Changes
+
+- 4de8909: Update `rdf-literal` to v2
+- Updated dependencies [4de8909]
+  - barnard59-env@1.2.7
+
 ## 3.4.0
 
 ### Minor Changes

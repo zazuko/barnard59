@@ -1,5 +1,18 @@
 # barnard59-cube
 
+## 1.4.10
+
+### Patch Changes
+
+- 4de8909: Update `rdf-literal` to v2
+- Updated dependencies [4de8909]
+- Updated dependencies [4de8909]
+- Updated dependencies [4de8909]
+- Updated dependencies [bbfcc2d]
+  - barnard59-formats@4.0.1
+  - barnard59-rdf@3.4.1
+  - barnard59-shacl@1.4.11
+
 ## 1.4.9
 
 ### Patch Changes

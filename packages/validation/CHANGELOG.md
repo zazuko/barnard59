@@ -1,5 +1,13 @@
 # barnard59-validation
 
+## 0.4.3
+
+### Patch Changes
+
+- 4de8909: Update `rdf-loader-code` to v2.2.2
+- Updated dependencies [4de8909]
+  - barnard59-env@1.2.7
+
 ## 0.4.2
 
 ### Patch Changes
