@@ -140,14 +140,18 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
   }
 
   destroy(err: Error) {
-    this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
-    this._span.end()
+    if (this._span.isRecording()) {
+      this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
+      this._span.end()
+    }
     this.stream.destroy(err)
   }
 
   finish() {
-    this._span.setStatus({ code: otel.SpanStatusCode.OK })
-    this._span.end()
+    if (this._span.isRecording()) {
+      this._span.setStatus({ code: otel.SpanStatusCode.OK })
+      this._span.end()
+    }
     if (isReadable(this.stream)) {
       return this.stream.push(null)
     }
