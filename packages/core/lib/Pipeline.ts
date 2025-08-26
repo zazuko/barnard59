@@ -1,15 +1,13 @@
 import * as otel from '@opentelemetry/api'
 import once from 'onetime'
 import type { Stream } from 'readable-stream'
-import streams from 'readable-stream'
+import { finished } from 'readable-stream'
 import createStream, { assertWritable } from './factory/stream.js'
 import { isReadable, isWritable } from './isStream.js'
 import nextLoop from './nextLoop.js'
 import type { Options as BaseOptions } from './StreamObject.js'
 import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
-
-const { finished } = streams
 
 export interface PipelineOptions extends BaseOptions {
   // eslint-disable-next-line no-use-before-define

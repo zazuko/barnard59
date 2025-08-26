@@ -76,14 +76,13 @@ function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: 
     }
 
     variables = await createPipelineVariables(ptr, { basePath, context, loaderRegistry, logger, variables })
-    context = await createPipelineContext({ ptr, basePath, context, logger, variables, error })
+    context = createPipelineContext({ ptr, basePath, context, logger, variables, error })
 
     logVariables(ptr, context, variables)
 
     // add pipeline factory with current values as defaults
     const defaults = { basePath, context, loaderRegistry, logger, variables }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    context.createPipeline = (ptr, { context, ...args } = {}) => createPipeline(ptr, { ...defaults, ...args })
+    context.createPipeline = (ptr, { context: _context, ...args } = {}) => createPipeline(ptr, { ...defaults, ...args })
 
     pipeline.variables = variables
     pipeline.context = Object.freeze(context)
