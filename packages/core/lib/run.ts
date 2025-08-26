@@ -1,12 +1,14 @@
-import { promisify } from 'util'
+import { promisify } from 'node:util'
 import { SpanStatusCode } from '@opentelemetry/api'
 import { finished } from 'readable-stream'
 import tracer from './tracer.js'
 import type Pipeline from './Pipeline.js'
 import { isWritable } from './factory/stream.js'
 
+const finishedAsync = promisify(finished)
+
 async function run(pipeline: Pipeline, { end = false, resume = false } = {}) {
-  await tracer.startActiveSpan('run', async span => {
+  await tracer.startActiveSpan('run', async (span) => {
     try {
       if (end && isWritable(pipeline)) {
         pipeline.stream.end()
@@ -16,9 +18,9 @@ async function run(pipeline: Pipeline, { end = false, resume = false } = {}) {
         pipeline.stream.resume()
       }
 
-      await promisify(finished)(pipeline.stream)
+      await finishedAsync(pipeline.stream)
 
-      const p = new Promise<void>(resolve => {
+      const p = new Promise<void>((resolve) => {
         pipeline.logger.on('finish', () => resolve())
       })
 
@@ -27,7 +29,7 @@ async function run(pipeline: Pipeline, { end = false, resume = false } = {}) {
       }
       pipeline.logger.end()
       await p
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })

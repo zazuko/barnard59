@@ -1,15 +1,13 @@
 import * as otel from '@opentelemetry/api'
 import once from 'onetime'
 import type { Stream } from 'readable-stream'
-import streams from 'readable-stream'
+import { finished } from 'readable-stream'
 import createStream, { assertWritable } from './factory/stream.js'
 import { isReadable, isWritable } from './isStream.js'
 import nextLoop from './nextLoop.js'
 import type { Options as BaseOptions } from './StreamObject.js'
 import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
-
-const { finished } = streams
 
 export interface PipelineOptions extends BaseOptions {
   // eslint-disable-next-line no-use-before-define
@@ -142,14 +140,18 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
   }
 
   destroy(err: Error) {
-    this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
-    this._span.end()
+    if (this._span.isRecording()) {
+      this._span.setStatus({ code: otel.SpanStatusCode.ERROR })
+      this._span.end()
+    }
     this.stream.destroy(err)
   }
 
   finish() {
-    this._span.setStatus({ code: otel.SpanStatusCode.OK })
-    this._span.end()
+    if (this._span.isRecording()) {
+      this._span.setStatus({ code: otel.SpanStatusCode.OK })
+      this._span.end()
+    }
     if (isReadable(this.stream)) {
       return this.stream.push(null)
     }

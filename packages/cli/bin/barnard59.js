@@ -1,30 +1,25 @@
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
-import { CollectorTraceExporter, CollectorMetricExporter } from '@opentelemetry/exporter-collector'
-import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
-import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston'
-import { Resource, envDetector, processDetector } from '@opentelemetry/resources'
+import { diag, DiagLogLevel } from '@opentelemetry/api'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http'
+import { resourceFromAttributes } from '@opentelemetry/resources'
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
 import { NodeSDK } from '@opentelemetry/sdk-node'
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
-import { BatchSpanProcessor } from '@opentelemetry/tracing'
+import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions'
+import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { Command } from 'commander'
 import * as monitoringOptions from '../lib/cli/monitoringOptions.js'
+import DiagConsoleLogger from '../lib/DiagConsoleLogger.js'
 
-const sdk = new NodeSDK({
-  // Automatic detection is disabled, see comment below
-  autoDetectResources: false,
-  instrumentations: [
-    new HttpInstrumentation(),
-    new WinstonInstrumentation(),
-  ],
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'barnard59',
-  }),
-})
+/**
+ * @type NodeSDK | undefined
+ * @private
+ */
+let sdk
 
 /**
  * @param {any} [err]
  */
-const onError = async err => {
+const onError = async (err) => {
   // Remove signal handler to quit immediately when receiving multiple
   // SIGINT/SIGTEM
   process.off('SIGINT', onError)
@@ -39,11 +34,16 @@ const onError = async err => {
       console.error(err)
     }
   }
-  await sdk.shutdown()
+  try {
+    await sdk?.shutdown()
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('Error during SDK shutdown', e)
+  }
   process.exit(1)
 }
 
-(async () => {
+const run = async () => {
   // Create a new commander instance that only parses the OTEL-related options.
   // This is needed because we want to keep the actual command definition in
   // the same file, but we need to figure out what exporter is being used
@@ -64,42 +64,57 @@ const onError = async err => {
 
   const { otelTracesExporter, otelMetricsExporter, otelDebug, otelMetricsInterval } = program.opts()
 
+  /**
+   * Configuration for the OpenTelemetry SDK.
+   *
+   * @type {Partial<import('@opentelemetry/sdk-node').NodeSDKConfiguration>}
+   */
+  const otelSdkConfig = {}
+
   // Export the traces to a collector. By default it exports to
-  // http://localhost:55681/v1/traces, but it can be changed with the
+  // http://localhost:4318/v1/traces, but it can be changed with the
   // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
   if (otelTracesExporter === 'otlp') {
-    const exporter = new CollectorTraceExporter()
-    const spanProcessor = new BatchSpanProcessor(exporter)
-    sdk.configureTracerProvider({}, spanProcessor)
+    otelSdkConfig.traceExporter = new OTLPTraceExporter()
+  } else {
+    process.env.OTEL_TRACES_EXPORTER = 'none'
   }
+
   // Export the metrics to a collector. By default it exports to
-  // http://localhost:55681/v1/metrics, but it can be changed with the
+  // http://localhost:4318/v1/metrics, but it can be changed with the
   // OTEL_EXPORTER_OTLP_METRICS_ENDPOINT environment variable.
   if (otelMetricsExporter === 'otlp') {
-    const exporter = new CollectorMetricExporter()
-    sdk.configureMeterProvider({
+    const exporter = new OTLPMetricExporter()
+    otelSdkConfig.metricReader = new PeriodicExportingMetricReader({
       exporter,
-      interval: otelMetricsInterval,
+      exportIntervalMillis: otelMetricsInterval,
     })
+  } else {
+    process.env.OTEL_METRICS_EXPORTER = 'none'
   }
-  // @ts-ignore
-  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel[otelDebug])
 
-  // Automatic resource detection is disabled because the default AWS and
-  // GCP detectors are slow (add 500ms-2s to startup). Instead, we detect
-  // the resources manually here, since we still want process informations
-  // TODO: make this configurable if we're ever running in GCP/AWS environment?
-  await sdk.detectResources({ detectors: [envDetector, processDetector] })
+  const diagLogLevel = /** @type {keyof typeof DiagLogLevel} */ (otelDebug || 'ERROR')
+  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel[diagLogLevel])
 
-  await sdk.start()
+  sdk = new NodeSDK({
+    ...otelSdkConfig,
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: 'barnard59',
+    }),
+    instrumentations: [
+      getNodeAutoInstrumentations(),
+    ],
+  })
+  sdk.start()
 
-  // Dynamically import the rest once the SDK started to ensure
-  // monkey-patching was done properly
+  // Dynamically import the rest once the SDK started to ensure monkey-patching was done properly
   const { default: cli } = await import('../lib/cli.js')
   const { run } = await cli()
   await run()
   await sdk.shutdown()
-})().catch(onError)
+}
+
+run().catch(onError)
 
 process.on('uncaughtException', onError)
 process.on('SIGINT', onError)

@@ -1,5 +1,5 @@
-import { promisify } from 'util'
-import { createWriteStream } from 'fs'
+import { createWriteStream } from 'node:fs'
+import { promisify } from 'node:util'
 import { finished, PassThrough } from 'readable-stream'
 import { SpanStatusCode } from '@opentelemetry/api'
 import env from 'barnard59-env'
@@ -7,14 +7,19 @@ import runner from '../../runner.js'
 import bufferDebug from './../bufferDebug.js'
 import tracer from './../tracer.js'
 
-function createOutputStream(output = '-') {
+const finishedAsync = promisify(finished)
+
+const createOutputStream = (output = '-') => {
   if (output === '-') {
     // Use a PassThrough stream instead of just process.stdout to avoid closing
     // stdout too early
     const stream = new PassThrough()
-
     stream.pipe(process.stdout)
-
+    stream.on('end', () => {
+      if (process.stdout.writableFinished === false) {
+        process.stdout.write('\n')
+      }
+    })
     return stream
   }
 
@@ -27,7 +32,7 @@ function createOutputStream(output = '-') {
  * @param {Partial<import('../cli.js').CliOptions>} [options]
  */
 export default async function (ptr, basePath, options = {}) {
-  await tracer.startActiveSpan('barnard59 run', async span => {
+  await tracer.startActiveSpan('barnard59 run', async (span) => {
     try {
       const { output, variables, enableBufferMonitor, logger, level, quiet } = options
 
@@ -50,8 +55,9 @@ export default async function (ptr, basePath, options = {}) {
       }
 
       await runFinished
-      // TODO: this has some issues
-      await promisify(finished)(outputStream)
+      if (output !== '-') {
+        await finishedAsync(outputStream)
+      }
     } catch (/** @type any */ err) {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
