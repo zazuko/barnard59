@@ -58,7 +58,7 @@
     "@types/lodash": "^4.14.202",
     "@types/readable-stream": "^4.0.10",
     "@types/shelljs": "^0.8.15",
-    "approvals": "^6.2.2",
+    "approvals": "^7.3.0",
     "barnard59-base": "^2.4.2",
     "barnard59-formats": "^4.0.0",
     "barnard59-graph-store": "^6.0.2",
