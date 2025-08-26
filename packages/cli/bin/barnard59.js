@@ -33,7 +33,12 @@ const onError = async (err) => {
       console.error(err)
     }
   }
-  await sdk?.shutdown()
+  try {
+    await sdk?.shutdown()
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('Error during SDK shutdown', e)
+  }
   process.exit(1)
 }
 
@@ -70,6 +75,8 @@ const run = async () => {
   // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
   if (otelTracesExporter === 'otlp') {
     otelSdkConfig.traceExporter = new OTLPTraceExporter()
+  } else {
+    process.env.OTEL_TRACES_EXPORTER = 'none'
   }
 
   // Export the metrics to a collector. By default it exports to
@@ -82,6 +89,8 @@ const run = async () => {
       exportIntervalMillis: otelMetricsInterval,
     })
     otelSdkConfig.metricReader = meterProvider
+  } else {
+    process.env.OTEL_METRICS_EXPORTER = 'none'
   }
 
   const diagLogLevel = /** @type {keyof typeof DiagLogLevel} */ (otelDebug || 'ERROR')
