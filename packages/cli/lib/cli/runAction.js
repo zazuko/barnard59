@@ -15,6 +15,11 @@ const createOutputStream = (output = '-') => {
     // stdout too early
     const stream = new PassThrough()
     stream.pipe(process.stdout)
+    stream.on('end', () => {
+      if (process.stdout.writableFinished === false) {
+        process.stdout.write('\n')
+      }
+    })
     return stream
   }
 
