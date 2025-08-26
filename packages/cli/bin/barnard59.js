@@ -85,11 +85,10 @@ const run = async () => {
   // OTEL_EXPORTER_OTLP_METRICS_ENDPOINT environment variable.
   if (otelMetricsExporter === 'otlp') {
     const exporter = new OTLPMetricExporter()
-    const meterProvider = new PeriodicExportingMetricReader({
+    otelSdkConfig.metricReader = new PeriodicExportingMetricReader({
       exporter,
       exportIntervalMillis: otelMetricsInterval,
     })
-    otelSdkConfig.metricReader = meterProvider
   } else {
     process.env.OTEL_METRICS_EXPORTER = 'none'
   }
