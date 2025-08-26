@@ -1,4 +1,4 @@
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
+import { diag, DiagLogLevel } from '@opentelemetry/api'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http'
 import { resourceFromAttributes } from '@opentelemetry/resources'
@@ -8,6 +8,7 @@ import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions'
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { Command } from 'commander'
 import * as monitoringOptions from '../lib/cli/monitoringOptions.js'
+import DiagConsoleLogger from '../lib/DiagConsoleLogger.js'
 
 /**
  * @type NodeSDK | undefined
