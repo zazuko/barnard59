@@ -1,5 +1,12 @@
 # barnard59-formats
 
+## 4.0.1
+
+### Patch Changes
+
+- 4de8909: Updated `@rdfjs/serializer-ntriples`
+- 4de8909: Update `rdfxml-streaming-parser` to v3
+
 ## 4.0.0
 
 ### Major Changes

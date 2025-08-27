@@ -1,5 +1,13 @@
 # barnard59-graph-store
 
+## 6.0.3
+
+### Patch Changes
+
+- 4de8909: Update `rdf-literal` to v2
+- Updated dependencies [4de8909]
+  - barnard59-rdf@3.4.1
+
 ## 6.0.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "barnard59-formats",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -40,7 +40,7 @@
     "@types/rdfjs__parser-jsonld": "^2.1.7",
     "@types/sax": "^1.2.7",
     "@zazuko/env-core": "^1.1.2",
-    "barnard59-env": "^1.2.6",
+    "barnard59-env": "^1.2.7",
     "chai": "^4.3.7"
   },
   "engines": {
