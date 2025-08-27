@@ -7,8 +7,8 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - "18"
-          - "20"
+          - "lts/*"
+          - "lts/-1"
         package:
           - base
           - core
@@ -28,6 +28,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
       - run: npm ci
       - run: npx c8 --all --src packages/${{ matrix.package }} -x "packages/!(${{ matrix.package }})" --reporter lcovonly --reporter text npm run -w barnard59-${{ matrix.package }} test
       - name: Codecov
@@ -42,7 +43,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "lts/*"
+          cache: npm
       - run: npm ci
       - run: npm run -ws --if-present build
 
@@ -52,7 +54,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "lts/*"
+          cache: npm
       - run: npm ci
       - run: npm run -w barnard59-test-e2e test
 
@@ -62,13 +65,14 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - "18"
-          - "20"
+          - "lts/*"
+          - "lts/-1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
       - run: npm ci
       - name: Compile TypeScript packages
         run: npm run -ws --if-present build -- --sourceMap
@@ -84,6 +88,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
       - run: npm ci
       - run: npm run lint
 
@@ -92,6 +99,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
       - run: npm ci
       - run: node .github/ensureManifests.js
 
@@ -99,19 +109,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env:
-          - os: ubuntu-latest
-            node: 20
-          - os: macos-latest
-            node: 20
-          - os: windows-latest
-            node: 20.12.1 # Pinned, because of https://github.com/approvals/Approvals.NodeJS/issues/176
-    runs-on: ${{ matrix.env.os }}
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.env.node }}
+          node-version: "lts/*"
           cache: npm
       - run: npm ci
       - run: npx barnard59 run test/e2e/definitions/file-loader.ttl
@@ -127,31 +134,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env:
-          - os: ubuntu-latest
-            node: 20
-          - os: macos-latest
-            node: 20
-          - os: windows-latest
-            node: 20.12.1 # Pinned, because of https://github.com/approvals/Approvals.NodeJS/issues/176
-    runs-on: ${{ matrix.env.os }}
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.env.node }}
+          node-version: "lts/*"
           cache: npm
       - run: npm ci
       - name: pack all
         run: npm pack -ws
       - run: npm install -g barnard59-*.tgz
-        if: matrix.env.os == 'ubuntu-latest' || matrix.env.os == 'macos-latest'
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
       - run: cmd /c npm install -g (Get-ChildItem -Filter barnard59-*.tgz).FullName
-        if: matrix.env.os == 'windows-latest'
+        if: matrix.os == 'windows-latest'
       - run: which barnard59
       - run: barnard59 --help
       - run: barnard59 shacl validate --shapes test/support/pipeline-shapes.ttl < test/e2e/definitions/file-loader.ttl
-        if: matrix.env.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
       - run: barnard59 shacl validate --shapes test/support/pipeline-shapes.ttl < test/e2e/definitions/file-loader.ttl
-        if: matrix.env.os == 'windows-latest'
+        if: matrix.os == 'windows-latest'
         shell: cmd
