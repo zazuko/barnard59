@@ -1,5 +1,11 @@
 # barnard59-csvw
 
+## 2.2.3
+
+### Patch Changes
+
+- 4de8909: Updated `jsonld-streaming-parser` and `jsonld-context-parser`
+
 ## 2.2.2
 
 ### Patch Changes

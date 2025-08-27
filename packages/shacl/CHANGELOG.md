@@ -1,5 +1,16 @@
 # barnard59-shacl
 
+## 1.4.11
+
+### Patch Changes
+
+- bbfcc2d: Updated `rdf-validate-shacl` to 0.6
+- Updated dependencies [4de8909]
+- Updated dependencies [4de8909]
+- Updated dependencies [4de8909]
+  - barnard59-formats@4.0.1
+  - barnard59-rdf@3.4.1
+
 ## 1.4.10
 
 ### Patch Changes

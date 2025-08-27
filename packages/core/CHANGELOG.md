@@ -1,5 +1,13 @@
 # barnard59-core
 
+## 6.1.3
+
+### Patch Changes
+
+- 4de8909: Update `rdf-loader-code` to v2.2.2
+- b80f314: Updated `@opentelemetry/*` packages
+- 4de8909: Updated `rdf-loaders-registry` to v1.0.3
+
 ## 6.1.2
 
 ### Patch Changes
