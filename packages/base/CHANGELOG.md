@@ -1,5 +1,11 @@
 # barnard59-base
 
+## 2.5.0
+
+### Minor Changes
+
+- 65983ad: Adds a variadic parameter to `map` and` filter` steps, which will be forwarded to their respecitve callback functions called for each chunk
+
 ## 2.4.2
 
 ### Patch Changes
