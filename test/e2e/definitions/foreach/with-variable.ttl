@@ -36,6 +36,12 @@
     [
       p:stepList
         (
-          [ base:map ( "filename => this.variables.get('root') + filename"^^code:EcmaScript ) ]
+          [
+            base:map
+              (
+                "(filename, root) => root + filename"^^code:EcmaScript
+                "root"^^p:VariableName
+              )
+          ]
         )
     ] .
