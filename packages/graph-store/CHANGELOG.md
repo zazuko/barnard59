@@ -1,5 +1,11 @@
 # barnard59-graph-store
 
+## 6.0.4
+
+### Patch Changes
+
+- 713def9: Remove mention of unused `maxQuadsPerRequest` option from the readme
+
 ## 6.0.3
 
 ### Patch Changes
