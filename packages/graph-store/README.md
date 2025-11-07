@@ -29,8 +29,6 @@ The following options are supported:
 - `endpoint`: The URL of the graph store endpoint as a string.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
-- `maxQuadsPerRequest`: The maximum number of quads per request until a new request is made.
-  (default: 500000)
 
 ### put ({ endpoint, user, password, maxQuadsPerRequest })
 
@@ -41,8 +39,6 @@ The following options are supported:
 - `endpoint`: The URL of the graph store endpoint as a string.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
-- `maxQuadsPerRequest`: The maximum number of quads per request until a new request is made.
-  (default: 500000)
 
 ## Examples
 
