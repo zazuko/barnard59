@@ -30,7 +30,7 @@
     "barnard59-sparql": "^2.3.0",
     "external-merge-sort": "^0.1.5",
     "is-graph-pointer": "^2.1.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "rdf-literal": "^2.0.0",
     "readable-stream": "3 - 4",
     "through2": "^4.0.2"
