@@ -1,0 +1,32 @@
+@base <http://example.org/pipeline/> .
+@prefix p:    <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+
+# INVALID pipeline: first step is a pure sink (Writable only, not Readable/ReadableObjectMode)
+# Error: first operation must be either Readable or ReadableObjectMode.
+#        fs/createWriteStream is purely Writable — it cannot start a pipeline.
+#
+# Expected error [0009]: first operation is neither Readable nor ReadableObjectMode
+
+<main> a p:Pipeline, p:Readable ;
+  p:steps [
+    p:stepList ( <write> <parse> <serialize> )
+  ] .
+
+# BUG: createWriteStream is a pure sink (Writable only).
+#      First step must be a source (Readable or ReadableObjectMode).
+<write> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:fs#createWriteStream>
+  ] ;
+  code:arguments ( "output.nt" ) .
+
+<parse> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-formats/n3.js#parse>
+  ] .
+
+<serialize> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-formats/ntriples.js#serialize>
+  ] .

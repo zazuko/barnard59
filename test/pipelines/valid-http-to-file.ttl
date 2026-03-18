@@ -1,0 +1,36 @@
+@base <http://example.org/pipeline/> .
+@prefix p:    <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+
+# Valid pipeline: HTTP GET → parse N3 → serialize N-Triples → write file
+# Stream types: → Readable → (Writable|ReadableObjectMode) → (WritableObjectMode|Readable) → Writable
+
+<main> a p:Pipeline ;
+  p:steps [
+    p:stepList ( <fetch> <parse> <serialize> <write> )
+  ] .
+
+<fetch> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-http/get.js#default>
+  ] ;
+  code:arguments [
+    code:name "url" ;
+    code:value "https://example.org/data.ttl"
+  ] .
+
+<parse> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-formats/n3.js#parse>
+  ] .
+
+<serialize> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-formats/ntriples.js#serialize>
+  ] .
+
+<write> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:fs#createWriteStream>
+  ] ;
+  code:arguments ( "output.nt" ) .

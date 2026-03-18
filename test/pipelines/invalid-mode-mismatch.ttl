@@ -1,0 +1,42 @@
+@base <http://example.org/pipeline/> .
+@prefix p:    <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+
+# INVALID pipeline: ReadableObjectMode → Writable (object mode into byte sink)
+# Error: ntriples/serialize (WritableObjectMode→Readable) is followed by
+#        n3/parse (Writable→ReadableObjectMode) — bytes fed into byte parser is fine,
+#        but here we directly connect ReadableObjectMode (graph-store/get)
+#        into Writable (fs/createWriteStream), which is a type mismatch.
+#
+# Chain: graph-store/get (→ReadableObjectMode) → fs/createWriteStream (Writable→)
+# Expected error: ReadableObjectMode cannot connect to Writable
+
+<main> a p:Pipeline ;
+  p:variables [
+    p:variable
+      [ a p:Variable ; p:name "endpoint" ; p:value "http://localhost:3030/data"     ] ,
+      [ a p:Variable ; p:name "graph"    ; p:value "https://example.org/some-graph" ]
+  ] ;
+  p:steps [
+    p:stepList ( <source> <write> )
+  ] .
+
+<source> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-graph-store/get.js#default>
+  ] ;
+  code:arguments [
+    code:name "endpoint" ;
+    code:value "endpoint"^^p:VariableName
+  ] , [
+    code:name "graph" ;
+    code:value "graph"^^p:VariableName
+  ] .
+
+# BUG: graph-store/get produces ReadableObjectMode (quads),
+#      but createWriteStream expects Writable (bytes).
+<write> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:fs#createWriteStream>
+  ] ;
+  code:arguments ( "output.nt" ) .

@@ -1,0 +1,56 @@
+@base <http://example.org/pipeline/> .
+@prefix p:    <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+
+# Valid pipeline: Glob files → forEach (parse each) → serialize N-Triples → write file
+# Stream types: → ReadableObjectMode → (WritableObjectMode|ReadableObjectMode) → (WritableObjectMode|Readable) → Writable
+
+<main> a p:Pipeline ;
+  p:variables [
+    p:variable [ a p:Variable ; p:name "pattern" ; p:value "data/*.ttl" ]
+  ] ;
+  p:steps [
+    p:stepList ( <glob> <forEach> <serialize> <write> )
+  ] .
+
+<glob> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-base/glob.js#default>
+  ] ;
+  code:arguments [
+    code:name "pattern" ;
+    code:value "pattern"^^p:VariableName
+  ] .
+
+<forEach> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-base/forEach.js#default>
+  ] ;
+  code:arguments ( <parseTurtle> "filename" ) .
+
+<parseTurtle> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps [
+    p:stepList ( <readFile> <parseN3> )
+  ] .
+
+<readFile> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:fs#createReadStream>
+  ] ;
+  code:arguments ( "filename"^^p:VariableName ) .
+
+<parseN3> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-formats/n3.js#parse>
+  ] .
+
+<serialize> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-formats/ntriples.js#serialize>
+  ] .
+
+<write> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:fs#createWriteStream>
+  ] ;
+  code:arguments ( "output.nt" ) .

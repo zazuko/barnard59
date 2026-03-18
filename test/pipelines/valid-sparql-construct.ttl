@@ -1,0 +1,52 @@
+@base <http://example.org/pipeline/> .
+@prefix p:    <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+
+# Valid pipeline: SPARQL CONSTRUCT → setGraph → Graph Store PUT
+# Stream types: → ReadableObjectMode → (WritableObjectMode|ReadableObjectMode) → WritableObjectMode
+
+<main> a p:Pipeline ;
+  p:variables [
+    p:variable
+      [ a p:Variable ; p:name "endpoint"    ; p:value "https://query.example.org/sparql"   ] ,
+      [ a p:Variable ; p:name "store"       ; p:value "http://localhost:3030/data"           ] ,
+      [ a p:Variable ; p:name "graph"       ; p:value "https://example.org/my-graph"         ] ,
+      [ a p:Variable ; p:name "storeUser"   ; p:value ""                                     ] ,
+      [ a p:Variable ; p:name "storePass"   ; p:value ""                                     ]
+  ] ;
+  p:steps [
+    p:stepList ( <construct> <setGraph> <upload> )
+  ] .
+
+<construct> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-sparql/construct.js#default>
+  ] ;
+  code:arguments [
+    code:name "query" ;
+    code:value "CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o } LIMIT 1000"
+  ] , [
+    code:name "endpoint" ;
+    code:value "endpoint"^^p:VariableName
+  ] .
+
+<setGraph> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-rdf/setGraph.js#default>
+  ] ;
+  code:arguments ( "graph"^^p:VariableName ) .
+
+<upload> a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <node:barnard59-graph-store/put.js#default>
+  ] ;
+  code:arguments [
+    code:name "endpoint" ;
+    code:value "store"^^p:VariableName
+  ] , [
+    code:name "user" ;
+    code:value "storeUser"^^p:VariableName
+  ] , [
+    code:name "password" ;
+    code:value "storePass"^^p:VariableName
+  ] .
