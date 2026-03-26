@@ -1,0 +1,43 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix p: <https://pipeline.described.at/> .
+@prefix code: <https://code.described.at/> .
+@base <https://barnard59.zazuko.com/operations/> .
+
+[] a p:Pipeline , p:Readable;
+  p:variables [
+    p:variable [ 
+      a p:Variable ;
+      p:name "rules" ; 
+      rdfs:label "Path of the N3 rules file" ;
+      p:required true ;
+    ] , [
+      a p:Variable ;
+      p:name "include" ; 
+      rdfs:label "Set to 'all' to include the input dataset" ;
+      p:required false ;
+    ] ;
+  ] ;
+  p:steps
+    [
+      p:stepList
+      (
+        [ <base/stdin> () ]
+        [ <formats/n3/parse> () ]
+        [ <rdf/getDataset> () ]
+        _:applyRules
+        [ <base/flatten> () ]
+        [ <formats/ntriples/serialize> () ]
+      )
+    ]
+.
+
+
+_:applyRules a p:Step ;
+  code:implementedBy [ a code:EcmaScriptModule ;
+    code:link <file:../applyRules.js#default>
+  ] ;
+  code:arguments 
+    [ code:name "rulesText" ; code:value "rules"^^p:FileContents ] ,
+    [ code:name "includeInput" ; code:value "this.variables.get('include') === 'all'"^^code:EcmaScript ]
+.

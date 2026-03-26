@@ -1,0 +1,48 @@
+{
+  "name": "barnard59-n3-rules",
+  "version": "0.1.0",
+  "description": "Applies N3 rules to datasets in barnard59 pipelines",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "prepack": "run-p prepack:*",
+    "prepack:build": "tsc"
+  },
+  "files": [
+    "*.js",
+    "*.d.ts",
+    "lib/*.js",
+    "lib/*.d.ts",
+    "manifest.ttl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zazuko/barnard59.git",
+    "directory": "packages/n3-rules"
+  },
+  "keywords": [],
+  "author": "Zazuko GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zazuko/barnard59/issues"
+  },
+  "homepage": "https://github.com/zazuko/barnard59",
+  "dependencies": {
+    "eyeling": "^1.16.1"
+  },
+  "devDependencies": {
+    "barnard59-env": "^1.2.7",
+    "express-as-promise": "^1.2.0",
+    "get-stream": "^7.0.1",
+    "is-stream": "^3.0.0",
+    "npm-run-all": "^4.1.5"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "mocha": {
+    "require": "../../test/mocha-setup.cjs",
+    "loader": "ts-node/esm"
+  }
+}
