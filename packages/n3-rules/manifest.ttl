@@ -16,4 +16,5 @@
   b59:command "apply" ;
   rdfs:label "Applies N3 rules to datasets in barnard59 pipelines" ;
   b59:source "barnard59-n3-rules/pipeline/applyRules.ttl" ;
+  b59:pipeline <https://barnard59.zazuko.com/pipeline/n3-rules/apply> ;
 .

@@ -4,7 +4,7 @@
 @prefix code: <https://code.described.at/> .
 @base <https://barnard59.zazuko.com/operations/> .
 
-[] a p:Pipeline , p:Readable;
+<https://barnard59.zazuko.com/pipeline/n3-rules/apply> a p:Pipeline, p:Readable ;
   p:variables [
     p:variable [ 
       a p:Variable ;
@@ -21,8 +21,18 @@
   p:steps
     [
       p:stepList
+        (
+          [ <base/stdin> () ]
+          <https://barnard59.zazuko.com/pipeline/n3-rules/_apply>
+        )
+    ] ;
+.
+
+<https://barnard59.zazuko.com/pipeline/n3-rules/_apply> a p:Pipeline , p:Writable, p:Readable;
+  p:steps
+    [
+      p:stepList
       (
-        [ <base/stdin> () ]
         [ <formats/n3/parse> () ]
         [ <rdf/getDataset> () ]
         _:applyRules
