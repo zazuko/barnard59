@@ -13,7 +13,7 @@ const ns = env.namespace('https://barnard59.zazuko.com/pipeline/n3-rules/')
 const loadPipeline = pipelineDefinitionLoader(import.meta.url, '../../pipeline')
 
 describe('pipeline/apply', function () {
-    it('runs deriving triple', async () => {
+  it('runs deriving triple', async () => {
     // given
     const data = turtle`
       ${ex.Person}
@@ -63,5 +63,4 @@ describe('pipeline/apply', function () {
 <http://example.org/Person> <http://xmlns.com/foaf/0.1/name> "John Doe" .
 `)
   })
-
 })
