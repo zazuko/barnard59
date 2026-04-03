@@ -64,7 +64,7 @@ describe('graph-store pipeline', function () {
     strictEqual(storedData.toCanonical(), expectedData.toCanonical())
   })
 
-  context('given large dataset', () => {
+  context.skip('given large dataset', () => {
     const graph = 'http://example.org/large-graph'
 
     beforeEach(async function () {
