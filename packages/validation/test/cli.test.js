@@ -16,29 +16,31 @@ chaiExec.defaults = {
 describe('barnard59-validate', function () {
   this.timeout(20000)
 
-  it('should exit with a zero exit code', () => {
-    const cli = chaiExec(' ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(cli, 0)
-
-    const quiet = chaiExec('-q ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(quiet, 0)
-
-    const verbose = chaiExec('-v ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(verbose, 0)
+  describe('should exit with a zero exit code', () => {
+    [
+      ' ./sample-pipelines/fetch-json-to-ntriples.ttl',
+      '-q ./sample-pipelines/fetch-json-to-ntriples.ttl',
+      '-v ./sample-pipelines/fetch-json-to-ntriples.ttl',
+    ].forEach(args => {
+      it(`called with ${args}`, () => {
+        const cli = chaiExec(args)
+        assert.exitCode(cli, 0)
+      })
+    })
   })
 
-  it('should exit with a non-zero exit code in strict mode', () => {
-    const strict = chaiExec('-s ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(strict, 255)
-
-    const strictQuiet = chaiExec('-sq ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(strictQuiet, 255)
-
-    const strictVerbose = chaiExec('-sv ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(strictVerbose, 255)
-
-    const strictQuietVerbose = chaiExec('-sqv ./sample-pipelines/fetch-json-to-ntriples.ttl')
-    assert.exitCode(strictQuietVerbose, 255)
+  describe('should exit with a non-zero exit code in strict mode', () => {
+    [
+      '-s ./sample-pipelines/fetch-json-to-ntriples.ttl',
+      '-sq ./sample-pipelines/fetch-json-to-ntriples.ttl',
+      '-sv ./sample-pipelines/fetch-json-to-ntriples.ttl',
+      '-sqv ./sample-pipelines/fetch-json-to-ntriples.ttl',
+    ].forEach((args) => {
+      it(`called with ${args}`, () => {
+        const strict = chaiExec(args)
+        assert.exitCode(strict, 255)
+      })
+    })
   })
 
   it('should report parsing errors', () => {
