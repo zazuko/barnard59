@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
-function monitor(stream, prefix) {
+import type { Stream } from 'node:stream'
+
+function monitor(stream: Stream, prefix: string) {
   stream.on('close', () => {
     console.log(`${prefix}: close`)
   })
