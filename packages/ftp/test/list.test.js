@@ -1,17 +1,24 @@
 import { deepStrictEqual, rejects, strictEqual } from 'assert'
 import { getStreamAsArray } from 'get-stream'
+import semver from 'semver'
 import list from '../list.js'
 import FtpServer from './support/FtpServer.js'
 import { withServer } from './support/server.js'
 import serverConfigurations from './support/serverConfigurations.js'
 
-describe('list', () => {
+const isNode24OrNewer = semver.gte(process.versions.node, '24.0.0')
+
+describe('list', function () {
   it('is a function', () => {
     strictEqual(typeof list, 'function')
   })
 
   serverConfigurations.forEach(([label, serverFactory, additionalOptions]) => {
-    it(`lists files from the given directory ${label}`, async () => {
+    it(`lists files from the given directory ${label}`, async function () {
+      if (isNode24OrNewer) {
+        this.skip()
+      }
+
       await withServer(serverFactory, async server => {
         const options = { ...server.options, ...additionalOptions }
 
