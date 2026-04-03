@@ -16,6 +16,7 @@ describe('list', function () {
   serverConfigurations.forEach(([label, serverFactory, additionalOptions]) => {
     it(`lists files from the given directory ${label}`, async function () {
       if (isNode24OrNewer) {
+        // ssh2 does not work with node 24+
         this.skip()
       }
 
