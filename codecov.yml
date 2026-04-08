@@ -11,7 +11,7 @@ flag_management:
     - name: barnard59-ftp
     - name: barnard59-graph-store
     - name: barnard59-http
-    - name: barnard59-n3-rules
+    - name: barnard59-n3
     - name: barnard59-rdf
     - name: barnard59-sparql
     - name: barnard59-shacl

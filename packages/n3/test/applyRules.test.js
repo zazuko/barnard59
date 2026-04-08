@@ -28,7 +28,7 @@ const rulesText = `
 { ?s ex:p1 ?o } => { ?s a ex:C } .
 `
 
-describe('n3-rules', () => {
+describe('n3', () => {
   describe('applyRules', () => {
     it('should be a factory', () => {
       strictEqual(typeof applyRules, 'function')

@@ -8,7 +8,7 @@ import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDef
 import getStream from 'get-stream'
 
 const ex = env.namespace('http://example.org/')
-const ns = env.namespace('https://barnard59.zazuko.com/pipeline/n3-rules/')
+const ns = env.namespace('https://barnard59.zazuko.com/pipeline/n3/')
 
 const loadPipeline = pipelineDefinitionLoader(import.meta.url, '../../pipeline')
 

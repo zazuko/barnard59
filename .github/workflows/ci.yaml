@@ -18,7 +18,7 @@ jobs:
           - ftp
           - graph-store
           - http
-          - n3-rules
+          - n3
           - rdf
           - s3
           - sparql

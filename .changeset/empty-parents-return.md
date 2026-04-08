@@ -1,5 +1,5 @@
 ---
-"barnard59-n3-rules": minor
+"barnard59-n3": minor
 ---
 
 Initial release
