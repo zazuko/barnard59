@@ -1,5 +1,12 @@
 # barnard59-base
 
+## 2.5.1
+
+### Patch Changes
+
+- 2e75bf3: Updated `@aws-sdk/client-s3`
+- bda7bf9: build(deps): bump glob from 10.3.10 to 10.5.0
+
 ## 2.5.0
 
 ### Minor Changes

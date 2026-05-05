@@ -1,5 +1,11 @@
 # barnard59-ftp
 
+## 2.2.0
+
+### Minor Changes
+
+- 4a8cac8: Update `ssh2-sftp-client` to v12 - fixes usage in node 24
+
 ## 2.1.0
 
 ### Minor Changes
