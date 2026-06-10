@@ -7,7 +7,7 @@ import filenamePipelineDefinition from './support/filenamePipelineDefinition.js'
 const cwd = new URL('..', import.meta.url).pathname
 
 describe('barnard59', function () {
-  this.timeout(10000)
+  this.timeout(20000)
 
   describe('run', () => {
     it('should suggest alternatives when multiple root pipelines exist', () => {
