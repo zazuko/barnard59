@@ -1,6 +1,6 @@
 import { strictEqual } from 'node:assert'
 import ParsingClient from 'sparql-http-client/ParsingClient.js'
-import { upAll } from 'docker-compose/dist/v2.js'
+import { upAll } from 'docker-compose'
 import waitOn from 'wait-on'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env/index.ts'
