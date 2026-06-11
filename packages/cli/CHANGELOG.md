@@ -1,5 +1,11 @@
 # barnard59
 
+## 5.1.4
+
+### Patch Changes
+
+- b54fecf: fix: do not requrie bash to run the CLI
+
 ## 5.1.3
 
 ### Patch Changes
