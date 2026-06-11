@@ -1,5 +1,11 @@
 # barnard59-s3
 
+## 0.3.1
+
+### Patch Changes
+
+- 130ae96: Updated @aws-sdk/client-s3
+
 ## 0.3.0
 
 ### Minor Changes
