@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # find local barnard59
 barnard59=$(node -e "console.log(require.resolve('barnard59/bin/barnard59.js'))" 2> /dev/null)
@@ -20,7 +20,7 @@ fi
 if command -v tsx > /dev/null 2>&1
 then
   node --import tsx --no-warnings "$barnard59" "$@"
-elif command -v ts-node &> /dev/null
+elif command -v ts-node > /dev/null 2>&1
 then
   # use ts-node
   node --loader ts-node/esm/transpile-only --no-warnings "$barnard59" "$@"
