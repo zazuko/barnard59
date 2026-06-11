@@ -1,5 +1,11 @@
 # barnard59
 
+## 5.1.3
+
+### Patch Changes
+
+- b842059: build(deps): bump @opentelemetry/exporter-prometheus, @opentelemetry/auto-instrumentations-node and @opentelemetry/sdk-node
+
 ## 5.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "barnard59-base",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Linked Data pipelines",
   "main": "index.js",
   "type": "module",

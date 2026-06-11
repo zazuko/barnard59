@@ -1,6 +1,6 @@
 {
   "name": "barnard59-n3",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Applies N3 rules to datasets in barnard59 pipelines",
   "type": "module",
   "main": "index.js",
