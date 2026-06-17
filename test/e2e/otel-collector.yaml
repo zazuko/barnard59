@@ -4,15 +4,19 @@ receivers:
       http:
         endpoint: 0.0.0.0:4318
 exporters:
-  logging:
-    loglevel: debug
+  debug:
+    verbosity: detailed
   file:
     path: /data/traces.json
 processors:
   batch: {}
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
 service:
+  extensions: [health_check]
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, file]
+      exporters: [debug, file]

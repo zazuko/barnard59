@@ -57,35 +57,56 @@ jobs:
         with:
           node-version: "lts/*"
           cache: npm
-      - name: Start OpenTelemetry Collector (background)
-        run: |
-          docker run -d --name otelcol \
-            -p 4318:4318 \
-            -v "$GITHUB_WORKSPACE/test/e2e/otel-collector.yaml:/etc/otelcol/config.yaml:ro" \
-            -v "$GITHUB_WORKSPACE/test/e2e:/data" \
-            ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.154.0
-          # optional: wait until it’s up
-          for i in {1..20}; do
-            docker logs otelcol 2>&1 | grep -q "Everything is ready. Begin running and processing data." && break
-            sleep 0.5
-          done
       - run: npm ci
       - run: npm run -w barnard59-test-e2e test
+
+  test-otel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
+      - name: Prepare otel data dir
+        run: mkdir -p test/e2e/otel-data
+      - name: Start OpenTelemetry Collector
+        working-directory: test/e2e
+        run: |
+          docker compose up -d otelcol
+          # Wait up to ~20s for health endpoint (fast, readable)
+          for i in {1..20}; do
+            if curl -fsS http://localhost:13133/healthz >/dev/null; then
+              echo "otelcol is ready"; break
+            fi
+            sleep 1
+          done
+      - run: npm ci
+      - run: npm run -s barnard59-test-e2e clock -- --otel-traces-exporter otlp
+        working-directory: test/e2e
         env:
           OTEL_TRACES_EXPORTER: otlp
           OTEL_EXPORTER_OTLP_ENDPOINT: http://localhost:4318
           OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
           OTEL_RESOURCE_ATTRIBUTES: service.name=barnard59-ci
-      - name: Inspect collected traces
+      - name: Assert collected traces exist
+        working-directory: test/e2e
         run: |
-          test -f test/e2e/traces.json || cp otel-collector.yaml test/e2e/traces.json
-          sed -n '1,200p' test/e2e/traces.json || true
-      - name: Collector logs (for debugging)
+          set -euo pipefail
+          FILE=otel-data/traces.json
+          # Wait up to 10s for flush
+          for i in {1..10}; do [ -s "$FILE" ] && break; sleep 1; done
+          test -s "$FILE" || { echo "No traces written to $FILE" >&2; exit 1; }
+          # Optional minimal sanity: peek a bit for debug context
+          sed -n '1,80p' "$FILE"
+      - name: Collector logs (on failure)
+        if: failure()
+        working-directory: test/e2e
+        run: docker compose logs --no-color otelcol || true
+      - name: Stop Collector
         if: always()
-        run: docker logs otelcol || true
-      - name: Stop collector
-        if: always()
-        run: docker rm -f otelcol || true
+        working-directory: test/e2e
+        run: docker compose down -v || true
 
   test-cli:
     runs-on: ubuntu-latest
