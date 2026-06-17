@@ -51,6 +51,17 @@ jobs:
 
   test-e2e:
     runs-on: ubuntu-latest
+    services:
+      otelcol:
+        image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.154.0
+        ports:
+          - 4318:4318
+        volumes:
+          - ${{ github.workspace }}/test/e2e/otel-collector.yaml:/etc/otelcol/config.yaml
+          - ${{ github.workspace }}/test/e2e:/data
+        options: >-
+          --health-cmd "otelcol --version"
+          --health-interval 5s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -59,6 +70,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run -w barnard59-test-e2e test
+        env:
+          OTEL_TRACES_EXPORTER: otlp
+          OTEL_EXPORTER_OTLP_ENDPOINT: http://localhost:4318
+          OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+          OTEL_RESOURCE_ATTRIBUTES: service.name=barnard59-ci
+      - name: Inspect collected traces
+        run: |
+          test -f test/e2e/traces.json || cp otel-collector.yaml test/e2e/traces.json
+          sed -n '1,200p' test/e2e/traces.json || true
 
   test-cli:
     runs-on: ubuntu-latest
