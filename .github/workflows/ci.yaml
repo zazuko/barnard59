@@ -69,7 +69,9 @@ jobs:
           node-version: "lts/*"
           cache: npm
       - name: Prepare otel data dir
-        run: mkdir -p test/e2e/otel-data
+        run: |
+          mkdir -p test/e2e/otel-data
+          chmod 0777 test/e2e/otel-data
       - name: Start OpenTelemetry Collector
         working-directory: test/e2e
         run: |
@@ -82,7 +84,7 @@ jobs:
             sleep 1
           done
       - run: npm ci
-      - run: npm run -s barnard59-test-e2e clock -- --otel-traces-exporter otlp
+      - run: npm run barnard59-test-e2e clock -- --otel-traces-exporter otlp
         working-directory: test/e2e
         env:
           OTEL_TRACES_EXPORTER: otlp
