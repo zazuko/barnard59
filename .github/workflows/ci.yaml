@@ -84,7 +84,7 @@ jobs:
             sleep 1
           done
       - run: npm ci
-      - run: npm run barnard59-test-e2e clock -- --otel-traces-exporter otlp
+      - run: npm run clock -- --otel-traces-exporter otlp
         working-directory: test/e2e
         env:
           OTEL_TRACES_EXPORTER: otlp
