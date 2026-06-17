@@ -6,3 +6,4 @@ node_modules
 .env
 *.received.txt
 test/e2e/otel-data/
+.approval_tests_temp/
