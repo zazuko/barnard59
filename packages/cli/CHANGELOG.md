@@ -1,5 +1,11 @@
 # barnard59
 
+## 5.1.5
+
+### Patch Changes
+
+- 1bf0f03: Updated OpenTelemetry packages
+
 ## 5.1.4
 
 ### Patch Changes
