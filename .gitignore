@@ -5,3 +5,5 @@ node_modules
 *.js.map
 .env
 *.received.txt
+test/e2e/otel-data/
+.approval_tests_temp/

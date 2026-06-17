@@ -60,6 +60,56 @@ jobs:
       - run: npm ci
       - run: npm run -w barnard59-test-e2e test
 
+  test-otel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
+      - name: Prepare otel data dir
+        run: |
+          mkdir -p test/e2e/otel-data
+          chmod 0777 test/e2e/otel-data
+      - name: Start OpenTelemetry Collector
+        working-directory: test/e2e
+        run: |
+          docker compose up -d otelcol
+          # Wait up to ~20s for health endpoint (fast, readable)
+          for i in {1..20}; do
+            if curl -fsS http://localhost:13133/healthz >/dev/null; then
+              echo "otelcol is ready"; break
+            fi
+            sleep 1
+          done
+      - run: npm ci
+      - run: npm run clock -- --otel-traces-exporter otlp
+        working-directory: test/e2e
+        env:
+          OTEL_TRACES_EXPORTER: otlp
+          OTEL_EXPORTER_OTLP_ENDPOINT: http://localhost:4318
+          OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+          OTEL_RESOURCE_ATTRIBUTES: service.name=barnard59-ci
+      - name: Assert collected traces exist
+        working-directory: test/e2e
+        run: |
+          set -euo pipefail
+          FILE=otel-data/traces.json
+          # Wait up to 10s for flush
+          for i in {1..10}; do [ -s "$FILE" ] && break; sleep 1; done
+          test -s "$FILE" || { echo "No traces written to $FILE" >&2; exit 1; }
+          # Optional minimal sanity: peek a bit for debug context
+          sed -n '1,80p' "$FILE"
+      - name: Collector logs (on failure)
+        if: failure()
+        working-directory: test/e2e
+        run: docker compose logs --no-color otelcol || true
+      - name: Stop Collector
+        if: always()
+        working-directory: test/e2e
+        run: docker compose down -v || true
+
   test-cli:
     runs-on: ubuntu-latest
     strategy:
