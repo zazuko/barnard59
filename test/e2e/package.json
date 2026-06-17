@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha *.test.js",
-    "clock": "barnard59 run definitions/world-clock/file.ttl"
+    "clock": "dotenv -- barnard59 run definitions/world-clock/file.ttl"
   },
   "dependencies": {
     "@zazuko/rdf-utils-fs": "^3.3.1",
@@ -15,6 +15,7 @@
     "barnard59-formats": "^4.0.0",
     "barnard59-http": "^2.0.0",
     "chai": "^4.3.7",
+    "dotenv-cli": "^11",
     "get-stream": "^6.0.0",
     "nock": "^13.3.1",
     "barnard59-test-support": "^0.0.3",
