@@ -80,6 +80,12 @@ jobs:
         run: |
           test -f test/e2e/traces.json || cp otel-collector.yaml test/e2e/traces.json
           sed -n '1,200p' test/e2e/traces.json || true
+      - name: Collector logs (for debugging)
+        if: always()
+        run: docker logs otelcol || true
+      - name: Stop collector
+        if: always()
+        run: docker rm -f otelcol || true
 
   test-cli:
     runs-on: ubuntu-latest
