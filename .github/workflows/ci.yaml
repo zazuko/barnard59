@@ -210,3 +210,22 @@ jobs:
       - run: barnard59 shacl validate --shapes test/support/pipeline-shapes.ttl < test/e2e/definitions/file-loader.ttl
         if: matrix.os == 'windows-latest'
         shell: cmd
+
+
+  test-npx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "lts/*"
+          cache: npm
+      - run: npm ci
+      - name: Pack CLI workspace
+        id: pack
+        run: |
+          FILENAME=$(npm -s pack -w barnard59)
+          echo "filename=$FILENAME" >> "$GITHUB_OUTPUT"
+      - name: Run CLI via npx from local tarball (outside workspace)
+        working-directory: ${{ runner.temp }}
+        run: npx --yes --package "$GITHUB_WORKSPACE/${{ steps.pack.outputs.filename }}" barnard59 --help
