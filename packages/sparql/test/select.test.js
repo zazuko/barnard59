@@ -1,4 +1,4 @@
-import { strictEqual } from 'node:assert'
+import { strictEqual, rejects } from 'node:assert'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import nock from 'nock'
@@ -10,6 +10,21 @@ const select = selectUnbound.bind({ env: rdf })
 describe('select', () => {
   it('should be a function', () => {
     strictEqual(typeof select, 'function')
+  })
+
+  it('should reject when query is not a string', async () => {
+    await rejects(() => select({ endpoint: new URL('http://example.org/'), query: 42 }),
+      /query must be a non-empty string/)
+  })
+
+  it('should reject when query is an empty string', async () => {
+    await rejects(() => select({ endpoint: new URL('http://example.org/'), query: '' }),
+      /query must be a non-empty string/)
+  })
+
+  it('should reject when query is a whitespace-only string', async () => {
+    await rejects(() => select({ endpoint: new URL('http://example.org/'), query: '   ' }),
+      /query must be a non-empty string/)
   })
 
   it('should return a readable stream', async () => {
