@@ -1,5 +1,13 @@
 # barnard59-formats
 
+## 4.0.2
+
+### Patch Changes
+
+- 8a6c1ae: Updated OpenTelemetry packages
+- Updated dependencies [8a6c1ae]
+  - barnard59-base@2.5.2
+
 ## 4.0.1
 
 ### Patch Changes

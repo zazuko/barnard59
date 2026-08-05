@@ -1,5 +1,11 @@
 # barnard59-core
 
+## 6.1.4
+
+### Patch Changes
+
+- 8a6c1ae: Updated OpenTelemetry packages
+
 ## 6.1.3
 
 ### Patch Changes

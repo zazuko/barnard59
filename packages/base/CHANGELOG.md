@@ -1,5 +1,11 @@
 # barnard59-base
 
+## 2.5.2
+
+### Patch Changes
+
+- 8a6c1ae: Updated OpenTelemetry packages
+
 ## 2.5.1
 
 ### Patch Changes
