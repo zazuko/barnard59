@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
-    "@opentelemetry/api": "^1.0.1",
+    "@opentelemetry/api": "^1.9.1",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.0.0",
     "node-fetch": "^3.3.2",
