@@ -1,10 +1,33 @@
 import readable from 'duplex-to/readable.js'
 import Client from 'sparql-http-client'
+import { Parser } from 'sparqljs'
 
-// Matches an optional prologue (comments, PREFIX/BASE declarations) followed by SELECT or ASK.
-// Rejects queries that are actually update/other operations (e.g. INSERT, DELETE, DROP),
-// preventing a query string from being used to perform unintended write operations.
-const ALLOWED_OPERATION = /^(?:\s*#[^\n]*\n|\s*(?:BASE|PREFIX)\s+(?:[^\s:]*:)?\s*<[^>]*>)*\s*(SELECT|ASK)\b/i
+const parser = new Parser()
+
+/**
+ * Parses the query and allows only SELECT and ASK. Anything else, including
+ * SPARQL Update operations and unparseable input, is rejected.
+ *
+ * @param {unknown} query
+ */
+function assertSelectOrAsk(query) {
+  const message = 'select operation only accepts SELECT or ASK queries'
+
+  if (typeof query !== 'string') {
+    throw new Error(message)
+  }
+
+  let parsed
+  try {
+    parsed = parser.parse(query)
+  } catch {
+    throw new Error(message)
+  }
+
+  if (parsed.type !== 'query' || !['SELECT', 'ASK'].includes(parsed.queryType)) {
+    throw new Error(message)
+  }
+}
 
 /**
  * @this {import('barnard59-core').Context}
@@ -16,9 +39,7 @@ const ALLOWED_OPERATION = /^(?:\s*#[^\n]*\n|\s*(?:BASE|PREFIX)\s+(?:[^\s:]*:)?\s
  * @param {import('sparql-http-client').QueryOptions['operation']} options.operation
  */
 async function select({ endpoint, query, user, password, operation }) {
-  if (typeof query !== 'string' || !ALLOWED_OPERATION.test(query)) {
-    throw new Error('select operation only accepts SELECT or ASK queries')
-  }
+  assertSelectOrAsk(query)
 
   const client = new Client({
     factory: this.env,
