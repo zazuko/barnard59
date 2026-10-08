@@ -1,5 +1,11 @@
 # barnard59-http
 
+## 2.1.1
+
+### Patch Changes
+
+- 8a6c1ae: Updated OpenTelemetry packages
+
 ## 2.1.0
 
 ### Minor Changes

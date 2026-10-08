@@ -1,6 +1,6 @@
 {
   "name": "barnard59-base",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
-    "@opentelemetry/api": "^1.0.1",
+    "@opentelemetry/api": "^1.9.1",
     "duplexify": "^4.1.1",
     "glob": "^12",
     "onetime": "^6.0.0",
@@ -38,7 +38,7 @@
     "@types/readable-stream": "^4.0.11",
     "@types/readable-to-readable": "^0.1.0",
     "@types/through2": "^2.0.41",
-    "barnard59-core": "^6.0.0",
+    "barnard59-core": "^6.1.4",
     "chai": "^4.3.10",
     "get-stream": "^6.0.1",
     "into-stream": "^7.0.0",

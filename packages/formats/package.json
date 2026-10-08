@@ -1,6 +1,6 @@
 {
   "name": "barnard59-formats",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Support for various formats for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -23,13 +23,13 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
-    "@opentelemetry/api": "^1.0.1",
+    "@opentelemetry/api": "^1.9.1",
     "@rdfjs/parser-jsonld": "^2.1.0",
     "@rdfjs/parser-n3": "^2.0.1",
     "@rdfjs/serializer-jsonld": "^2.0.0",
     "@rdfjs/serializer-ntriples": "^2.0.1",
     "@rdfjs/sink-to-duplex": "^1.0.0",
-    "barnard59-base": "^2.0.1",
+    "barnard59-base": "^2.5.2",
     "is-stream": "^3.0.0",
     "@zazuko/rdf-parser-csvw": "^0.17.0",
     "@zazuko/rdf-parser-csvw-xlsx": "^0.3",

@@ -1,6 +1,6 @@
 {
   "name": "barnard59-http",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "HTTP protocol support for Barnard59 Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/zazuko/barnard59",
   "dependencies": {
-    "@opentelemetry/api": "^1.0.1",
+    "@opentelemetry/api": "^1.9.1",
     "duplex-to": "^1.0.1",
     "duplexify": "^4.0.0",
     "node-fetch": "^3.3.2",

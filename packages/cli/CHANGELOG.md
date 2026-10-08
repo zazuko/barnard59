@@ -1,5 +1,14 @@
 # barnard59
 
+## 5.1.6
+
+### Patch Changes
+
+- f9b51e2: When running with `npx` without global installation, the entrypoit would fail to resolve `barnard59.js`
+- 8a6c1ae: Updated OpenTelemetry packages
+- Updated dependencies [8a6c1ae]
+  - barnard59-core@6.1.4
+
 ## 5.1.5
 
 ### Patch Changes
