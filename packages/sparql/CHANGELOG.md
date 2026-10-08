@@ -1,5 +1,11 @@
 # barnard59-sparql
 
+## 2.3.1
+
+### Patch Changes
+
+- e6cec10: Validate that query argument is a non-empty string in `select`/`construct`
+
 ## 2.3.0
 
 ### Minor Changes
