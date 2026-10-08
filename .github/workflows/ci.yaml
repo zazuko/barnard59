@@ -1,7 +1,10 @@
 name: CI
-on: push
+on:
+  push:
+  pull_request:
 jobs:
   test:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -39,6 +42,7 @@ jobs:
           flags: barnard59-${{ matrix.package }}
 
   type-check:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,6 +54,7 @@ jobs:
       - run: npm run -ws --if-present build
 
   test-e2e:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +66,7 @@ jobs:
       - run: npm run -w barnard59-test-e2e test
 
   test-otel:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -111,6 +117,7 @@ jobs:
         run: docker compose down -v || true
 
   test-cli:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -135,6 +142,7 @@ jobs:
           flags: barnard59
 
   lint:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -146,6 +154,7 @@ jobs:
       - run: npm run lint
 
   ensure-manifests:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -157,6 +166,7 @@ jobs:
       - run: node .github/ensureManifests.js
 
   smoke-test-cli:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:
@@ -182,6 +192,7 @@ jobs:
       - run: npx barnard59 run test/e2e/definitions/code-imports/main.ttl
 
   global-installation:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:
@@ -213,6 +224,7 @@ jobs:
 
 
   test-npx:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
