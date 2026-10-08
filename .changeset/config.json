@@ -1,6 +1,12 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "$schema": "https://unpkg.com/@changesets/config@4.0.1/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "zazuko/barnard59"
+    }
+  ],
+  "format": "auto",
   "commit": false,
   "fixed": [],
   "linked": [],

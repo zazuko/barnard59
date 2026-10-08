@@ -51,7 +51,7 @@
     "chai": "^4.3.7",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
-    "mocha-chai-jest-snapshot": "^1.1.4",
+    "mocha-chai-jest-snapshot": "^1.1.7",
     "nock": "^13.2.4",
     "sinon": "^15"
   },
