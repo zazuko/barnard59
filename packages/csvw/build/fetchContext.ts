@@ -23,5 +23,5 @@ import { contextPath, contextUrl } from '../lib/jsonLdUtils.js'
   }
 
   const fileStream = createWriteStream(contextPath)
-  await res.body.pipeTo(Writable.toWeb(fileStream) as unknown as WritableStream)
+  await res.body.pipeTo(Writable.toWeb(fileStream))
 })()
