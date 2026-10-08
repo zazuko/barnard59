@@ -1,4 +1,4 @@
-import { strictEqual } from 'node:assert'
+import { strictEqual, throws } from 'node:assert'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import nock from 'nock'
@@ -12,6 +12,21 @@ const construct = constructUnbound.bind({ env: rdf })
 describe('construct', () => {
   it('should be a function', () => {
     strictEqual(typeof construct, 'function')
+  })
+
+  it('should throw when query is not a string', () => {
+    throws(() => construct({ endpoint: new URL('http://example.org/'), query: 42 }),
+      /query must be a non-empty string/)
+  })
+
+  it('should throw when query is an empty string', () => {
+    throws(() => construct({ endpoint: new URL('http://example.org/'), query: '' }),
+      /query must be a non-empty string/)
+  })
+
+  it('should throw when query is a whitespace-only string', () => {
+    throws(() => construct({ endpoint: new URL('http://example.org/'), query: '   ' }),
+      /query must be a non-empty string/)
   })
 
   it('should return a readable stream', async () => {
