@@ -21,7 +21,7 @@ async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry
       const streamOrGenerator = await operation.apply(context, args)
 
       if (typeof streamOrGenerator === 'function') {
-        stream = <AnyStream><unknown>Duplex.from(streamOrGenerator)
+        stream = Duplex.from(streamOrGenerator)
       } else {
         stream = streamOrGenerator
       }
