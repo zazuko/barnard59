@@ -1,4 +1,4 @@
-import { strictEqual, rejects } from 'node:assert'
+import { rejects, strictEqual } from 'node:assert'
 import getStream from 'get-stream'
 import { isReadableStream, isWritableStream } from 'is-stream'
 import nock from 'nock'
@@ -120,5 +120,50 @@ describe('select', () => {
     await getStream.array(await select({ endpoint, user, password, query }))
 
     strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
+  })
+
+  describe('query validation', () => {
+    const endpoint = new URL('http://example.org/validation')
+    const insert = `INSERT DATA {
+  <http://example.com/a> <http://example.com/p> <http://example.com/b>
+}`
+    const accepted = {
+      SELECT: 'SELECT * WHERE { ?s ?p ?o }',
+      ASK: 'ASK { ?s ?p ?o }',
+      'SELECT with PREFIX': 'PREFIX ex: <http://example.com/>\nSELECT * WHERE {\n  ?s ex:p ?o\n}',
+      'SELECT after a comment': '# just a comment\nSELECT * WHERE { ?s ?p ?o }',
+    }
+    const rejected = {
+      'INSERT DATA': insert,
+      'DELETE WHERE': 'DELETE WHERE { ?s ?p ?o }',
+      LOAD: 'LOAD <http://example.com/data>',
+      'CLEAR ALL': 'CLEAR ALL',
+      'DROP ALL': 'DROP ALL',
+      CONSTRUCT: 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }',
+      DESCRIBE: 'DESCRIBE <http://example.com/a>',
+      'UPDATE with trailing SELECT comment': `${insert}\n# SELECT`,
+      'UPDATE with leading SELECT comment': `# SELECT\n${insert}`,
+      'UPDATE with leading ASK comment': `# ASK\n${insert}`,
+      'UPDATE with trailing ASK comment': `${insert}\n# ASK`,
+      'SELECT followed by an update': 'SELECT * WHERE { ?s ?p ?o } ; DROP ALL',
+      'update followed by SELECT': 'DROP ALL ; SELECT * WHERE { ?s ?p ?o }',
+      'invalid SPARQL': 'SELECT * WHERE {',
+    }
+
+    for (const [name, query] of Object.entries(accepted)) {
+      it(`should accept ${name}`, async () => {
+        nock(endpoint.origin)
+          .get(`${endpoint.pathname}?query=${encodeURIComponent(query)}`)
+          .reply(200, '{}')
+
+        await getStream.array(await select({ endpoint, query }))
+      })
+    }
+
+    for (const [name, query] of Object.entries(rejected)) {
+      it(`should reject ${name}`, async () => {
+        await rejects(() => select({ endpoint, query }), /only accepts SELECT or ASK/)
+      })
+    }
   })
 })
