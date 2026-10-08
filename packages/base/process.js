@@ -21,7 +21,7 @@ export function stdout() {
 }
 
 /**
- * @return {import('stream').Readable}
+ * @return {import('node:stream').Readable}
  */
 export function stdin() {
   return process.stdin

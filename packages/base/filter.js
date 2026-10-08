@@ -12,7 +12,7 @@ import { obj } from 'through2'
  * @this {import('barnard59-core').Context}
  * @param {Filter<T, A>} func
  * @param {A} args
- * @return {import('stream').Transform}
+ * @return {import('node:stream').Transform}
  */
 function filter(func, ...args) {
   return obj((chunk, encoding, callback) => {

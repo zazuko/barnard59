@@ -2,7 +2,7 @@ import { finished, Readable } from 'node:stream'
 
 class ConcatStream extends Readable {
   /**
-   * @param {(import('stream').Duplex)[]} streams
+   * @param {import('node:stream').Duplex[]} streams
    * @param {{
    *   objectMode?: boolean
    * }} [options]
@@ -47,7 +47,7 @@ class ConcatStream extends Readable {
 }
 
 /**
- * @param {(import('stream').Duplex)[]} streams
+ * @param {import('node:stream').Duplex[]} streams
  * @return {Readable}
  */
 function factory(...streams) {
@@ -55,7 +55,7 @@ function factory(...streams) {
 }
 
 /**
- * @param {(import('stream').Duplex)[]} streams
+ * @param {import('node:stream').Duplex[]} streams
  * @return {Readable}
  */
 const object = (...streams) => {

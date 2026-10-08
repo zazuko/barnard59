@@ -11,7 +11,7 @@ const { finished, Duplex } = stream
  *   variable: string
  * }} ForEachOptions
  *
- * @typedef {import('stream').Duplex & {
+ * @typedef {import('node:stream').Duplex & {
  *  pipeline: import('barnard59-core').Pipeline
  * }} PipelineStream
  */

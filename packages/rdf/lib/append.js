@@ -24,14 +24,14 @@ class MetadataAppend extends Transform {
   /**
    * @param {import('@rdfjs/types').Quad} chunk
    * @param {string} encoding
-   * @param {import('stream').TransformCallback} callback
+   * @param {import('node:stream').TransformCallback} callback
    */
   _transform(chunk, encoding, callback) {
     callback(null, chunk)
   }
 
   /**
-   * @param {import('stream').TransformCallback} callback
+   * @param {import('node:stream').TransformCallback} callback
    */
   async _flush(callback) {
     try {

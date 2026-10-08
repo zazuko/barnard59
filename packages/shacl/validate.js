@@ -56,7 +56,7 @@ class ValidateChunk extends Transform {
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {import('stream').Stream | { shape: import('stream').Stream, maxErrors?: number }} arg
+ * @param {import('node:stream').Stream | { shape: import('node:stream').Stream, maxErrors?: number }} arg
  * @return {Promise<Transform>}
  */
 export async function shacl(arg) {

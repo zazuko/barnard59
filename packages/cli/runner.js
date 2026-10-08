@@ -7,7 +7,7 @@ import tracer from './lib/tracer.js'
  * @param {import('barnard59-env').Environment} env
  * @param {object} options
  * @param {string} options.basePath
- * @param {import('stream').Writable} options.outputStream
+ * @param {import('node:stream').Writable} options.outputStream
  * @param {import('winston').Logger} [options.logger]
  * @param {Map<string, unknown>} [options.variables]
  * @param {import('barnard59-core/lib/defaultLogger.js').LogLevels} [options.level]

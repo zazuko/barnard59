@@ -11,7 +11,7 @@ import { obj } from 'through2'
  */
 
 /**
- * @return {import('stream').Transform} Transform
+ * @return {import('node:stream').Transform} Transform
  */
 function flatten() {
   return obj(function (/** IterableLike */ chunk, encoding, callback) {
