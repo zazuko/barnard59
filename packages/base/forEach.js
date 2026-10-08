@@ -1,9 +1,9 @@
 import { promisify } from 'node:util'
-import stream from 'node:stream'
+import * as stream from 'node:stream'
 import { context } from '@opentelemetry/api'
 import ReadableToReadable from 'readable-to-readable'
 
-const { finished, Duplex } = stream
+const finished = promisify(stream.finished)
 
 /**
  * @typedef {Pick<import('barnard59-core').Context, 'createPipeline' | 'variables'> & {
@@ -20,7 +20,7 @@ async function nextLoop() {
   return new Promise(resolve => setTimeout(resolve, 0))
 }
 
-class ForEach extends Duplex {
+class ForEach extends stream.Duplex {
   /**
    * @param {ForEachOptions} context
    */
@@ -81,7 +81,7 @@ class ForEach extends Duplex {
         this.subPipeline.stream.end(chunk)
       }
 
-      await promisify(finished)(this.subPipeline.stream)
+      await finished(this.subPipeline.stream)
 
       this.pull = null
 
@@ -96,7 +96,7 @@ class ForEach extends Duplex {
   }
 
   async _read() {
-    if (this.finished) {
+    if (this.writableFinished) {
       return this.push(null)
     }
 
