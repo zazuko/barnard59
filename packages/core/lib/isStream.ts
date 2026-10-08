@@ -7,20 +7,8 @@ import {
 
 export type AnyStream = Duplex | Readable | Writable
 
-interface HasReadableState {
-  _readableState?: {
-    objectMode?: boolean
-  }
-}
-
-interface HasWritableState {
-  _writableState?: {
-    objectMode?: boolean
-  }
-}
-
-const isReadableObjectMode = (stream: AnyStream) => isReadable(stream) && (stream as HasReadableState)._readableState?.objectMode
-const isWritableObjectMode = (stream: AnyStream) => isWritable(stream) && (stream as HasWritableState)._writableState?.objectMode
+const isReadableObjectMode = (stream: AnyStream) => isReadable(stream) && stream.readableObjectMode
+const isWritableObjectMode = (stream: AnyStream) => isWritable(stream) && stream.writableObjectMode
 
 export { isStream } from 'is-stream'
 export {

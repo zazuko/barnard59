@@ -96,7 +96,7 @@ class ForEach extends Duplex {
   }
 
   async _read() {
-    if (this._writableState.finished) {
+    if (this.finished) {
       return this.push(null)
     }
 

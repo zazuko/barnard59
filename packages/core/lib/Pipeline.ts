@@ -170,13 +170,11 @@ class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
       }
 
       for (; ;) {
-        const lastChildStream = this.lastChild.stream
-        const lastChildReadableState = (lastChildStream as { _readableState?: { destroyed?: boolean; endEmitted?: boolean } })._readableState
-        if (this.stream.destroyed || (lastChildReadableState && (lastChildReadableState.destroyed || lastChildReadableState.endEmitted))) {
+        if (this.stream.destroyed || this.lastChild.stream.destroyed || (isReadable(this.lastChild.stream) && this.lastChild.stream.readableEnded)) {
           return
         }
 
-        const chunk = 'read' in lastChildStream && typeof lastChildStream.read === 'function' ? lastChildStream.read(size) : null
+        const chunk = isReadable(this.lastChild.stream) && this.lastChild.stream.read(size)
 
         if (!chunk) {
           await nextLoop()
