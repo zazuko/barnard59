@@ -1,4 +1,4 @@
-import { Duplex as NodeDuplex } from 'node:stream'
+import { Duplex } from 'node:stream'
 import { SpanStatusCode } from '@opentelemetry/api'
 import type { GraphPointer } from 'clownface'
 import type { Logger } from 'winston'
@@ -21,7 +21,7 @@ async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry
       const streamOrGenerator = await operation.apply(context, args)
 
       if (typeof streamOrGenerator === 'function') {
-        stream = <AnyStream><unknown>NodeDuplex.from(streamOrGenerator)
+        stream = <AnyStream><unknown>Duplex.from(streamOrGenerator)
       } else {
         stream = streamOrGenerator
       }
