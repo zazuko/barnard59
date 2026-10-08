@@ -3,10 +3,15 @@ import { sort, compareOn, createStore } from 'external-merge-sort'
 import type { Context } from 'barnard59-core'
 import type { Quad } from '@rdfjs/types'
 
+declare module '@rdfjs/types' {
+  interface Stream extends AsyncIterable<Quad> {
+  }
+}
+
 export function sortBySubject(this: Context, sortChunkSize: string | number) {
   const write = async (chunk: Parameters<typeof Readable.from>[0], filename: string) => {
     await this.env.toFile(Readable.from(chunk), filename)
-    return this.env.fromFile(filename) as unknown as AsyncIterable<Quad>
+    return this.env.fromFile(filename)
   }
 
   const comparer = compareOn((x: Quad) => x.subject.value)
