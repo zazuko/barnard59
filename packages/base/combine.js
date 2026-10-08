@@ -2,9 +2,9 @@ import duplexify from 'duplexify'
 
 /**
  * Limit the amount of chunks in a pipe.
- * @returns {import('stream').Duplex} A transform stream.
- * @param {(import('stream').Duplex)[]} streams
- * @param {*} options
+ * @returns {import('node:stream').Duplex} A transform stream.
+ * @param {(import('stream').Duplex | import('node:stream').Duplex)[]} streams
+ * @param {*} [options]
  */
 function combine(streams, options) {
   if (streams.length === 0) {
@@ -12,14 +12,18 @@ function combine(streams, options) {
   }
 
   if (streams.length === 1) {
-    return streams[0]
+    return /** @type {import('node:stream').Duplex} */ (streams[0])
   }
 
   for (let index = 0; index < streams.length - 1; index++) {
     streams[index].pipe(streams[index + 1])
   }
 
-  return duplexify(streams[0], streams[streams.length - 1], options)
+  return /** @type {import('node:stream').Duplex} */ (/** @type {unknown} */ (duplexify(
+    /** @type {import('stream').Writable} */ (/** @type {unknown} */ (streams[0])),
+    /** @type {import('stream').Readable} */ (/** @type {unknown} */ (streams[streams.length - 1])),
+    options,
+  )))
 }
 
 export default combine

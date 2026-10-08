@@ -29,8 +29,7 @@
     "barnard59-formats": "^4.0.1",
     "barnard59-rdf": "^3.4.1",
     "is-stream": "^3.0.0",
-    "rdf-validate-shacl": "^0.6.3",
-    "readable-stream": "3 - 4"
+    "rdf-validate-shacl": "^0.6.3"
   },
   "devDependencies": {
     "@tpluscode/rdf-string": "^1.3.4",

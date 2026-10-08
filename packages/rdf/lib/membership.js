@@ -1,5 +1,5 @@
+import { Transform } from 'node:stream'
 import rdf from 'barnard59-env'
-import { Transform } from 'readable-stream'
 
 class AddRelations extends Transform {
   /**

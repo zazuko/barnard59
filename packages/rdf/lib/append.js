@@ -1,4 +1,4 @@
-import { Transform } from 'readable-stream'
+import { Transform } from 'node:stream'
 import { localFetch } from './localFetch/localFetch.js'
 import { applyOptions } from './metadata/applyOptions.js'
 

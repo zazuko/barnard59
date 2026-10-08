@@ -1,8 +1,8 @@
 import { strictEqual, throws } from 'node:assert'
+import { Readable } from 'node:stream'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
-import { Readable } from 'readable-stream'
 import { expect } from 'chai'
 import * as membership from '../lib/membership.js'
 

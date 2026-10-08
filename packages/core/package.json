@@ -31,13 +31,11 @@
     "onetime": "^6.0.0",
     "rdf-loader-code": "^2.2.2",
     "rdf-loaders-registry": "^1.0.3",
-    "readable-stream": "^3.6.0",
     "untildify": "^5.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "@rdfjs/namespace": "^2.0.0",
-    "@types/readable-stream": "^4.0.9",
     "barnard59-env": "^1.2.7",
     "barnard59-http": "^2.1.1",
     "barnard59-test-support": "^0.0.3",

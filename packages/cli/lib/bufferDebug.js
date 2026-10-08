@@ -1,5 +1,5 @@
 // @ts-nocheck
-import stream from 'readable-stream'
+import stream from 'node:stream'
 import Histogram from './Histogram.js'
 
 const { finished } = stream
@@ -8,7 +8,7 @@ const { finished } = stream
  * @param {{
  *   index: number,
  *   mode: string,
- *   state: import('readable-stream').ReadableState | import('readable-stream').WritableState,
+ *   state: stream.ReadableState | stream.WritableState,
  *   step: import('barnard59-core').Step
  * }} args
  * @return {{value: (number|number), key: string}}

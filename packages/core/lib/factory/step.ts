@@ -1,9 +1,9 @@
-import { Duplex } from 'node:stream'
-import type { Stream } from 'readable-stream'
+import { Duplex as NodeDuplex } from 'node:stream'
 import { SpanStatusCode } from '@opentelemetry/api'
 import type { GraphPointer } from 'clownface'
 import type { Logger } from 'winston'
 import type { LoaderRegistry } from 'rdf-loaders-registry'
+import type { AnyStream } from '../StreamObject.js'
 import { isStream } from '../isStream.js'
 import PipelineError from '../PipelineError.js'
 import Step from '../Step.js'
@@ -17,11 +17,11 @@ async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
       const operation = await createOperation(ptr.out(context.env.ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })
-      let stream: Stream
+      let stream: AnyStream
       const streamOrGenerator = await operation.apply(context, args)
 
       if (typeof streamOrGenerator === 'function') {
-        stream = <Stream><unknown>Duplex.from(streamOrGenerator)
+        stream = <AnyStream><unknown>NodeDuplex.from(streamOrGenerator)
       } else {
         stream = streamOrGenerator
       }

@@ -1,4 +1,4 @@
-import { finished } from 'readable-stream'
+import { finished } from 'node:stream'
 import command from './lib/command.js'
 
 export default async function write({ filename, ...options }) {

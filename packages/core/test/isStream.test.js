@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert'
 import { EventEmitter } from 'events'
-import { Duplex, Readable, Writable } from 'readable-stream'
+import { Duplex, Readable, Writable } from 'node:stream'
 import {
   isStream,
   isReadable,

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Duplex } from 'node:stream'
-import { PassThrough } from 'readable-stream'
+import { PassThrough } from 'node:stream'
 import type { RequestInit } from 'node-fetch'
 import nodeFetch from 'node-fetch'
 import duplexify from 'duplexify'

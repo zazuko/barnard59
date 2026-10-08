@@ -1,6 +1,6 @@
 import { promisify } from 'node:util'
+import stream from 'node:stream'
 import { context } from '@opentelemetry/api'
-import stream from 'readable-stream'
 import ReadableToReadable from 'readable-to-readable'
 
 const { finished, Duplex } = stream

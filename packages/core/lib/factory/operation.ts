@@ -2,10 +2,10 @@ import type { MultiPointer } from 'clownface'
 import type { Logger } from 'winston'
 import type { LoaderRegistry } from 'rdf-loaders-registry'
 import { isGraphPointer } from 'is-graph-pointer'
-import type { Stream } from 'readable-stream'
+import type { AnyStream } from '../StreamObject.js'
 import type { Context, VariableMap } from '../../index.js'
 
-export type Operation = (this: Context, ...args: unknown[]) => Promise<Stream | (() => AsyncGenerator)> | Stream | (() => AsyncGenerator)
+export type Operation = (this: Context, ...args: unknown[]) => Promise<AnyStream | (() => AsyncGenerator)> | AnyStream | (() => AsyncGenerator)
 
 async function createOperation(ptr: MultiPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
   if (!isGraphPointer(ptr)) {

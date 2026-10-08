@@ -1,6 +1,6 @@
 import { createWriteStream } from 'node:fs'
 import { promisify } from 'node:util'
-import { finished, PassThrough } from 'readable-stream'
+import { finished, PassThrough } from 'node:stream'
 import { SpanStatusCode } from '@opentelemetry/api'
 import env from 'barnard59-env'
 import runner from '../../runner.js'

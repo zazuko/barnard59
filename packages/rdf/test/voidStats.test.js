@@ -1,10 +1,10 @@
 import { strictEqual } from 'node:assert'
+import { Readable } from 'node:stream'
 import { expect } from 'chai'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import rdf from 'barnard59-env'
-import { Readable } from 'readable-stream'
 import voidStatsUnbound from '../lib/voidStats.js'
 
 const voidStats = voidStatsUnbound.bind({ env: rdf })

@@ -1,4 +1,4 @@
-import { Readable } from 'readable-stream'
+import { Readable } from 'node:stream'
 
 export function generate() {
   const { env } = this

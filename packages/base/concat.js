@@ -1,4 +1,4 @@
-import { finished, Readable } from 'readable-stream'
+import { finished, Readable } from 'node:stream'
 
 class ConcatStream extends Readable {
   /**

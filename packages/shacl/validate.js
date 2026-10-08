@@ -1,6 +1,6 @@
+import { Transform } from 'node:stream'
 import { isStream, isReadableStream } from 'is-stream'
 import SHACLValidator from 'rdf-validate-shacl'
-import { Transform } from 'readable-stream'
 import { ValidationError } from './lib/errors.js'
 
 /**
