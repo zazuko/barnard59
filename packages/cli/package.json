@@ -67,7 +67,7 @@
     "barnard59-shell": "^0.1.0",
     "barnard59-test-support": "^0.0.3",
     "chai": "^4.3.7",
-    "mocha-chai-jest-snapshot": "^1.1.4",
+    "mocha-chai-jest-snapshot": "^1.1.7",
     "shelljs": "^0.8.4",
     "strip-ansi": "^7.0.0"
   },
