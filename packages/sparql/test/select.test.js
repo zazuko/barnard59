@@ -12,6 +12,21 @@ describe('select', () => {
     strictEqual(typeof select, 'function')
   })
 
+  it('should reject when query is not a string', async () => {
+    await rejects(() => select({ endpoint: new URL('http://example.org/'), query: 42 }),
+      /query must be a non-empty string/)
+  })
+
+  it('should reject when query is an empty string', async () => {
+    await rejects(() => select({ endpoint: new URL('http://example.org/'), query: '' }),
+      /query must be a non-empty string/)
+  })
+
+  it('should reject when query is a whitespace-only string', async () => {
+    await rejects(() => select({ endpoint: new URL('http://example.org/'), query: '   ' }),
+      /query must be a non-empty string/)
+  })
+
   it('should return a readable stream', async () => {
     const endpoint = new URL('http://example.org/send-request')
     const query = 'SELECT * WHERE { ?s ?p ?o }'
@@ -133,7 +148,6 @@ describe('select', () => {
       'SELECT followed by an update': 'SELECT * WHERE { ?s ?p ?o } ; DROP ALL',
       'update followed by SELECT': 'DROP ALL ; SELECT * WHERE { ?s ?p ?o }',
       'invalid SPARQL': 'SELECT * WHERE {',
-      'empty string': '',
     }
 
     for (const [name, query] of Object.entries(accepted)) {
@@ -151,9 +165,5 @@ describe('select', () => {
         await rejects(() => select({ endpoint, query }), /only accepts SELECT or ASK/)
       })
     }
-
-    it('should reject a non-string query', async () => {
-      await rejects(() => select({ endpoint, query: undefined }), /only accepts SELECT or ASK/)
-    })
   })
 })
