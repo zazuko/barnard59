@@ -12,7 +12,7 @@ function combine(streams, options) {
   }
 
   if (streams.length === 1) {
-    return (streams[0])
+    return streams[0]
   }
 
   for (let index = 0; index < streams.length - 1; index++) {
