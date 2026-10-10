@@ -1,7 +1,7 @@
 import { promisify } from 'node:util'
+import { finished, Readable, Writable } from 'node:stream'
 import once from 'onetime'
 import defer from 'promise-the-world/defer.js'
-import { finished, Readable, Writable } from 'readable-stream'
 
 class SinkToWritable extends Writable {
   /**

@@ -49,16 +49,14 @@
     "lodash": "^4.17.21",
     "pkg-dir": "^8.0.0",
     "rdf-loader-code": "^2.2.2",
-    "rdf-transform-graph-imports": "^0.2.2",
-    "readable-stream": "^3.6.0"
+    "rdf-transform-graph-imports": "^0.2.2"
   },
   "devDependencies": {
     "@approval-tests/approvals": "^7.5.8",
     "@fig/complete-commander": "^3.1.0",
-    "@rdfjs-elements/formats-pretty": "^0.6.8",
+    "@rdfjs-elements/formats-pretty": "^0.6.9",
     "@types/lodash": "^4.14.202",
     "@types/npmcli__arborist": "^6.3.3",
-    "@types/readable-stream": "^4.0.10",
     "@types/shelljs": "^0.10.0",
     "barnard59-base": "^2.5.2",
     "barnard59-formats": "^4.0.2",

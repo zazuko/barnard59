@@ -38,8 +38,7 @@
     "jsonld-streaming-parser": "^5.0.0",
     "jsonld-context-parser": "^3.0.0",
     "node-fetch": "^3.0.0",
-    "proto-fetch": "^1.0.0",
-    "readable-stream": "^3.6.0"
+    "proto-fetch": "^1.0.0"
   },
   "devDependencies": {
     "barnard59-env": "^1.2.7",

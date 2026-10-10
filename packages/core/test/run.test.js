@@ -1,5 +1,5 @@
 import { deepStrictEqual, strictEqual } from 'assert'
-import { Readable, Writable } from 'readable-stream'
+import { Readable, Writable } from 'node:stream'
 import { defaultLogger } from '../index.js'
 import run from '../lib/run.js'
 

@@ -3,6 +3,11 @@ import { sort, compareOn, createStore } from 'external-merge-sort'
 import type { Context } from 'barnard59-core'
 import type { Quad } from '@rdfjs/types'
 
+declare module '@rdfjs/types' {
+  interface Stream extends AsyncIterable<Quad> {
+  }
+}
+
 export function sortBySubject(this: Context, sortChunkSize: string | number) {
   const write = async (chunk: Parameters<typeof Readable.from>[0], filename: string) => {
     await this.env.toFile(Readable.from(chunk), filename)

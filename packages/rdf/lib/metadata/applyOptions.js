@@ -67,7 +67,7 @@ function resolveNamedDate(value, metadata) {
 }
 
 /**
- * @param {import('@rdfjs/types').Stream & import('stream').EventEmitter} quadStream
+ * @param {import('@rdfjs/types').Stream & import('node:stream').EventEmitter} quadStream
  * @param {import('./namedDateLiterals.js').Metadata} [metadata]
  * @param {{
  *   dateModified?: import('./namedDateLiterals.js').NamedDateLiteral;

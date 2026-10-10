@@ -1,12 +1,14 @@
+import type { Duplex, Readable, Writable } from 'node:stream'
 import {
   isReadableStream as isReadable,
   isWritableStream as isWritable,
   isDuplexStream as isDuplex,
 } from 'is-stream'
-import type { Stream, Writable } from 'readable-stream'
 
-const isReadableObjectMode = (stream: Stream) => isReadable(stream) && stream._readableState.objectMode
-const isWritableObjectMode = (stream: Stream) => isWritable(stream) && (stream as Writable)._writableState.objectMode
+export type AnyStream = Duplex | Readable | Writable
+
+const isReadableObjectMode = (stream: AnyStream) => isReadable(stream) && stream.readableObjectMode
+const isWritableObjectMode = (stream: AnyStream) => isWritable(stream) && stream.writableObjectMode
 
 export { isStream } from 'is-stream'
 export {

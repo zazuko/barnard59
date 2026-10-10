@@ -1,6 +1,6 @@
+import { Transform } from 'node:stream'
 import type { NamedNode, DatasetCore, Term, Stream, Quad, BlankNode } from '@rdfjs/types'
 import once from 'lodash/once.js'
-import { Transform } from 'readable-stream'
 import type { AnyPointer } from 'clownface'
 import type { Environment } from 'barnard59-env'
 import type { Context as BarnardContext } from 'barnard59-core'

@@ -1,7 +1,7 @@
 import { strictEqual } from 'assert'
 import { resolve } from 'path'
+import { Readable } from 'node:stream'
 import getStream from 'get-stream'
-import { Readable } from 'readable-stream'
 import move from '../move.js'
 import fs from './support/fs.js'
 import { withServer } from './support/server.js'

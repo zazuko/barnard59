@@ -1,10 +1,10 @@
 import duplexify from 'duplexify'
 
 /**
- * Limit the amount of chunks in a pipe.
- * @returns {import('stream').Duplex} A transform stream.
- * @param {(import('stream').Duplex)[]} streams
- * @param {*} options
+ * Limit the number of chunks in a pipe.
+ * @returns {import('node:stream').Duplex} A transform stream.
+ * @param {import('node:stream').Duplex[]} streams
+ * @param {*} [options]
  */
 function combine(streams, options) {
   if (streams.length === 0) {

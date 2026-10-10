@@ -1,4 +1,4 @@
-import { Writable } from 'readable-stream'
+import { Writable } from 'node:stream'
 
 class Nul extends Writable {
   constructor() {

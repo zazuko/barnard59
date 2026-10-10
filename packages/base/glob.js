@@ -1,7 +1,7 @@
+import { Readable } from 'node:stream'
 import { SpanStatusCode } from '@opentelemetry/api'
 import { glob as globFn } from 'glob'
 import onetime from 'onetime'
-import { Readable } from 'readable-stream'
 import tracer from './lib/tracer.js'
 
 /**

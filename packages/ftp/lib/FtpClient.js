@@ -1,6 +1,6 @@
 import { promisify } from 'node:util'
+import { Readable, Writable } from 'node:stream'
 import Ftp from 'ftp'
-import { Readable, Writable } from 'readable-stream'
 
 class FtpClient {
   constructor({ host, port = 21, user, password, bufferSize = 64 * 1024 }) {

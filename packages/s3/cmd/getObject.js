@@ -1,8 +1,9 @@
 // @ts-check
-import { PassThrough } from 'node:stream'
+import { createWriteStream } from 'node:fs'
+import { PassThrough, Readable } from 'node:stream'
+import { pipeline } from 'node:stream/promises'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import { generateConfig, newClient } from '../lib/client.js'
-import { createWritableStream } from '../lib/streams.js'
 import { ensureFileDirectoryExists } from '../lib/paths.js'
 
 /**
@@ -39,9 +40,10 @@ const getObject = async ({
     throw new Error('There was an issue while fetching the requested S3 object.')
   }
 
-  const stream = data.Body.transformToWebStream()
-  const writeStream = createWritableStream(destinationPath)
-  await stream.pipeTo(writeStream)
+  await pipeline(
+    Readable.fromWeb(/** @type {import('node:stream/web').ReadableStream} */ (data.Body.transformToWebStream())),
+    createWriteStream(destinationPath),
+  )
 
   return new PassThrough()
 }

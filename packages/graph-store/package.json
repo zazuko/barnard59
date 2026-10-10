@@ -28,7 +28,6 @@
     "duplex-to": "^1.0.0",
     "onetime": "^7.0.0",
     "promise-the-world": "^1.0.1",
-    "readable-stream": "^3.6.0",
     "sparql-http-client": "^3.0.0"
   },
   "devDependencies": {
@@ -36,7 +35,6 @@
     "@tpluscode/sparql-builder": "^2.0.0",
     "@types/duplex-to": "^1.0.3",
     "@types/promise-the-world": "^1.0.6",
-    "@types/readable-stream": "^4.0.10",
     "@types/sparql-http-client": "^3.0.0",
     "@zazuko/env": "^3.0.1",
     "barnard59-core": "^6.1.3",

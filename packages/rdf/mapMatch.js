@@ -1,4 +1,4 @@
-import { Transform } from 'readable-stream'
+import { Transform } from 'node:stream'
 import PatternMatcher from './lib/PatternMatcher.js'
 
 /**

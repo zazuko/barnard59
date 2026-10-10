@@ -1,6 +1,6 @@
 import { URL } from 'node:url'
+import { Transform } from 'node:stream'
 import type { NamedNode, Literal, DatasetCore, Term } from '@rdfjs/types'
-import { Transform } from 'readable-stream'
 import { isLiteral, isNamedNode } from 'is-graph-pointer'
 import type { Environment } from 'barnard59-env'
 import type { Context as BarnardContext } from 'barnard59-core'
