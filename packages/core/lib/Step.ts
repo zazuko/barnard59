@@ -1,6 +1,5 @@
 import once from 'onetime'
-import type { Stream } from 'readable-stream'
-import type { Options as BaseOptions } from './StreamObject.js'
+import type { Options as BaseOptions, AnyStream } from './StreamObject.js'
 import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
 import type { Operation } from './factory/operation.js'
@@ -8,15 +7,15 @@ import type { Operation } from './factory/operation.js'
 export interface StepOptions extends BaseOptions {
   args: unknown[]
   operation: Operation
-  stream: Stream
+  stream: AnyStream
 }
 
 // eslint-disable-next-line no-use-before-define
-class Step extends StreamObject<Stream & { step: Step }> {
+class Step extends StreamObject<AnyStream & { step: Step }> {
   private args: unknown[]
   private operation: Operation
   // eslint-disable-next-line no-use-before-define
-  private readonly _stream: Stream & { step: Step }
+  private readonly _stream: AnyStream & { step: Step }
 
   constructor({
     args,
@@ -34,7 +33,7 @@ class Step extends StreamObject<Stream & { step: Step }> {
 
     this.args = args
     this.operation = operation
-    this._stream = stream as unknown as Stream & { step: Step }
+    this._stream = stream as unknown as AnyStream & { step: Step }
 
     if (typeof this._stream.step === 'undefined') {
       this._stream.step = this

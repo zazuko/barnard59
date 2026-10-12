@@ -1,4 +1,4 @@
-import stream from 'readable-stream'
+import stream from 'node:stream'
 
 const { Transform } = stream
 

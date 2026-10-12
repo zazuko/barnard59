@@ -1,7 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'node:assert'
+import { Readable } from 'node:stream'
 import { array } from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
-import { Readable } from 'readable-stream'
 import batch from '../batch.js'
 
 describe('batch', () => {

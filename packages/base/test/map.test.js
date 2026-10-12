@@ -1,7 +1,7 @@
 import { deepStrictEqual } from 'assert'
+import { Readable } from 'node:stream'
 import getStream, { array } from 'get-stream'
 import intoStream from 'into-stream'
-import { Readable } from 'readable-stream'
 import map from '../map.js'
 
 describe('map', () => {

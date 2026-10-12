@@ -1,6 +1,6 @@
 import { promisify } from 'node:util'
+import { finished } from 'node:stream'
 import { SpanStatusCode } from '@opentelemetry/api'
-import { finished } from 'readable-stream'
 import tracer from './tracer.js'
 import type Pipeline from './Pipeline.js'
 import { isWritable } from './factory/stream.js'

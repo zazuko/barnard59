@@ -1,7 +1,7 @@
 import { strictEqual, rejects } from 'node:assert'
 import { promisify } from 'node:util'
+import stream from 'node:stream'
 import getStream from 'get-stream'
-import stream from 'readable-stream'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
 import createPipeline from '../lib/factory/pipeline.js'

@@ -23,7 +23,6 @@
   "dependencies": {
     "duplex-to": "^1.0.1",
     "oxigraph": "^0.4.0-alpha.2",
-    "readable-stream": "^4.5.2",
     "sparql-http-client": "^3.0.0"
   },
   "devDependencies": {

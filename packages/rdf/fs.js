@@ -1,4 +1,4 @@
-import { Transform } from 'readable-stream'
+import { Transform } from 'node:stream'
 
 /**
  * @this {import('barnard59-core').Context}

@@ -1,4 +1,4 @@
-import { Transform } from 'readable-stream'
+import { Transform } from 'node:stream'
 
 class StdOut extends Transform {
   /**
@@ -21,7 +21,7 @@ export function stdout() {
 }
 
 /**
- * @return {import('stream').Readable}
+ * @return {import('node:stream').Readable}
  */
 export function stdin() {
   return process.stdin

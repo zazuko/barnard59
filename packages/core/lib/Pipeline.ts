@@ -1,7 +1,7 @@
+import type { Duplex } from 'node:stream'
+import { finished } from 'node:stream'
 import * as otel from '@opentelemetry/api'
 import once from 'onetime'
-import type { Stream } from 'readable-stream'
-import { finished } from 'readable-stream'
 import createStream, { assertWritable } from './factory/stream.js'
 import { isReadable, isWritable } from './isStream.js'
 import nextLoop from './nextLoop.js'
@@ -19,7 +19,7 @@ export interface PipelineOptions extends BaseOptions {
 }
 
 // eslint-disable-next-line no-use-before-define
-class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
+class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
   public readonly readable: boolean | undefined
   public readonly readableObjectMode: boolean | undefined
   public readonly writable: boolean | undefined
@@ -29,11 +29,11 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
   private readonly ctx: otel.Context
   public readonly init: () => Promise<void>
   public readonly read: (size: number) => Promise<void>
-  public readonly write: (chunk: unknown, encoding: string, callback: (error?: (Error | null)) => void) => Promise<boolean>
+  public readonly write: (chunk: unknown, encoding: BufferEncoding, callback: (error?: (Error | null)) => void) => Promise<boolean>
   public readonly final: (callback: (error?: (Error | null)) => void) => Promise<void>
   public error: Error | undefined
   // eslint-disable-next-line no-use-before-define
-  private readonly _stream: Stream & { pipeline: Pipeline }
+  private readonly _stream: Duplex & { pipeline: Pipeline }
 
   constructor({
     basePath,
@@ -69,7 +69,7 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
     this.write = otel.context.bind(this.ctx, this._write.bind(this))
     this.final = otel.context.bind(this.ctx, this._final.bind(this))
 
-    this._stream = createStream(this) as unknown as Stream & { pipeline: Pipeline }
+    this._stream = createStream(this) as unknown as Duplex & { pipeline: Pipeline }
     this._stream.pipeline = this
 
     this.onInit = onInit || (() => { })
@@ -170,11 +170,11 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
       }
 
       for (; ;) {
-        if (this.stream._readableState.destroyed || this.lastChild.stream._readableState.destroyed || this.lastChild.stream._readableState.endEmitted) {
+        if (this.stream.destroyed || this.lastChild.stream.destroyed || (isReadable(this.lastChild.stream) && this.lastChild.stream.readableEnded)) {
           return
         }
 
-        const chunk = this.lastChild.stream.read(size)
+        const chunk = isReadable(this.lastChild.stream) && this.lastChild.stream.read(size)
 
         if (!chunk) {
           await nextLoop()
@@ -195,7 +195,7 @@ class Pipeline extends StreamObject<Stream & { pipeline?: Pipeline }> {
     }
   }
 
-  async _write(chunk: unknown, encoding: string, callback: (error?: Error | null) => void) {
+  async _write(chunk: unknown, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
     await this.init()
 
     assertWritable(this.firstChild)

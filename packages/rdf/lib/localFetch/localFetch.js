@@ -86,7 +86,7 @@ async function fetchFileWithMeta(env, input) {
 /**
  * Tries to fetch or read locally one file
  * @this import('barnard59-core').Context
- * @param {import('stream').Readable | string} input
+ * @param {import('node:stream').Readable | string} input
  * @param {string} [basePath]
  * @return {Promise<LocalFetchResponse>}
  */

@@ -1,4 +1,4 @@
-import { Readable, Writable, Duplex } from 'readable-stream'
+import { Readable, Writable, Duplex } from 'node:stream'
 import type Pipeline from '../Pipeline.js'
 import type StreamObject from '../StreamObject.js'
 import { isWritable as streamIsWritable } from '../isStream.js'

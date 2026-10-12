@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { Readable } from 'readable-stream'
+import { Readable } from 'node:stream'
 import command from './lib/command.js'
 
 async function list({ pathname, ...options }) {

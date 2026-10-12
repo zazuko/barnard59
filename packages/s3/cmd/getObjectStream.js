@@ -33,8 +33,7 @@ const getStreamObject = async ({
     throw new Error('There was an issue while fetching the requested S3 object.')
   }
 
-  const stream = data.Body.transformToWebStream()
-  // @ts-ignore
+  const stream = /** @type {import('node:stream/web').ReadableStream} */ (data.Body.transformToWebStream())
   return Readable.fromWeb(stream)
 }
 

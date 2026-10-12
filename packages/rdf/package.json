@@ -36,8 +36,7 @@
     "rdf-literal": "^2.0.0",
     "rdf-transform-graph-imports": "^0.2.2",
     "rdf-transform-triple-to-quad": "^2.0.0",
-    "rdf-stream-to-dataset-stream": "^1.0.0",
-    "readable-stream": "^3.6.0"
+    "rdf-stream-to-dataset-stream": "^1.0.0"
   },
   "devDependencies": {
     "@rdfjs/to-ntriples": "^3.0.0",
