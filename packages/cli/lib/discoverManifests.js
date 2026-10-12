@@ -1,7 +1,7 @@
 import * as module from 'module'
 import { exec } from 'child_process'
 import { dirname } from 'path'
-import { getInstalledPackage } from 'pkgscan'
+import Arborist from '@npmcli/arborist'
 import isInstalledGlobally from 'is-installed-globally'
 import rdf from 'barnard59-env'
 import { packageDirectory } from 'pkg-dir'
@@ -45,6 +45,8 @@ export default async function * ({ basePath = import.meta.url, all = false } = {
   }
 }
 
+const installedPackagesCache = new Map()
+
 /**
  * @param {boolean} [all]
  * @return {Promise<string[]>}
@@ -66,11 +68,30 @@ async function getInstalledPackages(all) {
     })
   }
 
-  const packagePath = await findUp(['package-lock.json', 'yarn.lock'])
+  const packagePath = await findUp(['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml'])
   if (!packagePath) {
     return []
   }
-  return (getInstalledPackage('barnard59-*', dirname(packagePath)) || []).map(pkg => pkg.name)
+  const rootDir = dirname(packagePath)
+  if (!installedPackagesCache.has(rootDir)) {
+    installedPackagesCache.set(rootDir, (async () => {
+      const arb = new Arborist({ path: rootDir })
+      let tree
+      try {
+        tree = await arb.loadVirtual()
+      } catch {
+        tree = await arb.loadActual()
+      }
+      const packages = new Set()
+      for (const node of tree.inventory.values()) {
+        if (node.name && packagePattern.test(node.name)) {
+          packages.add(node.name)
+        }
+      }
+      return [...packages]
+    })())
+  }
+  return installedPackagesCache.get(rootDir)
 }
 
 /**

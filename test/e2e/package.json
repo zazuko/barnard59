@@ -19,7 +19,6 @@
     "get-stream": "^6.0.0",
     "nock": "^13.3.1",
     "barnard59-test-support": "^0.0.3",
-    "readable-stream": "^3",
     "rdf-dataset-ext": "^1.0.1",
     "rdf-loader-code": "^2.2.2",
     "string-to-stream": "^3.0.1"

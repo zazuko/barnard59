@@ -1,6 +1,6 @@
 import { deepStrictEqual } from 'assert'
+import { Readable } from 'node:stream'
 import { array } from 'get-stream'
-import { Readable } from 'readable-stream'
 import filter from '../filter.js'
 
 describe('filter', () => {

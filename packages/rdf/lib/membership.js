@@ -1,5 +1,5 @@
+import { Transform } from 'node:stream'
 import rdf from 'barnard59-env'
-import { Transform } from 'readable-stream'
 
 class AddRelations extends Transform {
   /**
@@ -24,7 +24,7 @@ class AddRelations extends Transform {
   /**
    * @param {import('@rdfjs/types').Quad} chunk
    * @param {string} encoding
-   * @param {import('stream').TransformCallback} callback
+   * @param {import('node:stream').TransformCallback} callback
    */
   _transform(chunk, encoding, callback) {
     if (chunk.predicate.equals(this.rdf.ns.rdf.type) && this.classes.has(chunk.object) && chunk.subject.termType === 'NamedNode') {
@@ -35,7 +35,7 @@ class AddRelations extends Transform {
   }
 
   /**
-   * @param {import('stream').TransformCallback} callback
+   * @param {import('node:stream').TransformCallback} callback
    */
   async _flush(callback) {
     this.additionalQuads.forEach(quad => this.push(quad))

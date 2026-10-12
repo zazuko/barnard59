@@ -1,4 +1,4 @@
-import { Readable } from 'readable-stream'
+import { Readable } from 'node:stream'
 
 function chunksAndContent() {
   const chunks = []

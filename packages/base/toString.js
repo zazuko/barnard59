@@ -1,4 +1,4 @@
-import { Transform } from 'readable-stream'
+import { Transform } from 'node:stream'
 
 class ToString extends Transform {
   constructor() {
@@ -11,7 +11,7 @@ class ToString extends Transform {
   /**
    * @param {Uint8Array | string} chunk
    * @param {BufferEncoding} encoding
-   * @param {import('stream').TransformCallback} callback
+   * @param {import('node:stream').TransformCallback} callback
    */
   _transform(chunk, encoding, callback) {
     callback(null, chunk.toString())

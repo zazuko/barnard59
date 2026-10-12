@@ -1,4 +1,4 @@
-import { Readable } from 'readable-stream'
+import { Readable } from 'node:stream'
 
 export default function () {
   this.logger.trace('test trace')
