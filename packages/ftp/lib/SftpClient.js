@@ -26,7 +26,7 @@ class SftpClient {
   }
 
   async disconnect() {
-    this.client.end()
+    return this.client.end()
   }
 
   async list(path) {
