@@ -1,5 +1,19 @@
 # barnard59
 
+## 6.0.0
+
+### Major Changes
+
+- [#399](https://github.com/zazuko/barnard59/pull/399) [`e5b0100`](https://github.com/zazuko/barnard59/commit/e5b01008eefe180859da3dc940fdb1b90a866abe) Thanks [@tpluscode](https://github.com/tpluscode)! - Removed `readable-stream` and replaced all usages with `node:stream`
+
+### Patch Changes
+
+- [#398](https://github.com/zazuko/barnard59/pull/398) [`3578df0`](https://github.com/zazuko/barnard59/commit/3578df059e0516105ec799c2b5edabd5d7e21c95) Thanks [@tpluscode](https://github.com/tpluscode)! - Replaces unmaintained `pkgscan` with `@npmcli/arborist`
+
+- [#400](https://github.com/zazuko/barnard59/pull/400) [`0665311`](https://github.com/zazuko/barnard59/commit/066531186f95095cbed0abe97de137c18589040f) Thanks [@tpluscode](https://github.com/tpluscode)! - Updated OpenTelemetry packages
+- Updated dependencies [[`e5b0100`](https://github.com/zazuko/barnard59/commit/e5b01008eefe180859da3dc940fdb1b90a866abe)]:
+  - barnard59-core@7.0.0
+
 ## 5.1.6
 
 ### Patch Changes
