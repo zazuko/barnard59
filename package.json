@@ -15,6 +15,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^3",
+    "@changesets/changelog-github": "^1.0.1",
     "@tpluscode/eslint-config": "^0.4.9",
     "@types/chai": "^4.3.16",
     "@types/node": "^18",
