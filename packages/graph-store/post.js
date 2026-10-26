@@ -8,7 +8,7 @@ import { toTerm } from './lib/graph.js'
  *   endpoint: string,
  *   graph: string | import('clownface').GraphPointer<import('@rdfjs/types').NamedNode> | import('@rdfjs/types').NamedNode,
  * }} options
- * @returns {import('readable-stream').Writable}
+ * @returns {import('node:stream').Writable}
  */
 function post({ endpoint, graph, user, password }) {
   if (!graph) {

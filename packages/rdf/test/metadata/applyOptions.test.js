@@ -1,7 +1,7 @@
 import { strictEqual } from 'node:assert'
+import { Readable } from 'node:stream'
 import { expect } from 'chai'
 import rdf from 'barnard59-env'
-import { Readable } from 'readable-stream'
 import { applyOptions } from '../../lib/metadata/applyOptions.js'
 
 const ex = rdf.namespace('http://example.org/')

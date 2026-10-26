@@ -1,6 +1,6 @@
 import { readdir } from 'fs'
 import { resolve } from 'path'
-import stream from 'readable-stream'
+import stream from 'node:stream'
 
 const { Readable } = stream
 

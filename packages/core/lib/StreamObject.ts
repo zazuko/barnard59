@@ -1,10 +1,12 @@
-import type { Stream } from 'readable-stream'
+import type { Duplex, Readable, Writable } from 'node:stream'
 import type { LoaderRegistry } from 'rdf-loaders-registry'
 import type { Logger } from 'winston'
 import type { GraphPointer } from 'clownface'
 import type * as otel from '@opentelemetry/api'
 import type { Context, VariableMap } from '../index.js'
 import { VariableMap as VariableMapImpl } from './VariableMap.js'
+
+export type AnyStream = Duplex | Readable | Writable
 
 export interface Options {
   basePath: string
@@ -17,7 +19,7 @@ export interface Options {
   variables?: VariableMap
 }
 
-abstract class StreamObject<S extends Stream = Stream> {
+abstract class StreamObject<S extends AnyStream = AnyStream> {
   public basePath: string
   // eslint-disable-next-line no-use-before-define
   public readonly children: StreamObject[]

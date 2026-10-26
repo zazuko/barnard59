@@ -1,11 +1,11 @@
 import { strictEqual } from 'node:assert'
 import { promisify } from 'node:util'
+import { finished } from 'node:stream'
 import rdf from '@zazuko/env'
 import quadToNTriples from '@rdfjs/to-ntriples'
 import withServer from 'express-as-promise/withServer.js'
 import getStream from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
-import { finished } from 'readable-stream'
 import postUnbound from '../post.js'
 
 const post = postUnbound.bind({ env: rdf })

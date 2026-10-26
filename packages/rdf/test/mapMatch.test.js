@@ -1,8 +1,8 @@
 import { strictEqual } from 'node:assert'
+import { Readable } from 'node:stream'
 import getStream from 'get-stream'
 import { isDuplexStream } from 'is-stream'
 import rdf from 'barnard59-env'
-import { Readable } from 'readable-stream'
 import mapMatchUnbound from '../mapMatch.js'
 import * as ns from './support/namespaces.js'
 

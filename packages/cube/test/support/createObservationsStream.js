@@ -1,5 +1,5 @@
+import { Readable } from 'node:stream'
 import rdf from 'barnard59-env'
-import { Readable } from 'readable-stream'
 import { ex } from './namespaces.js'
 
 function createObservationsStream({ observations = [{ [ex.property.value]: rdf.literal('test') }] } = {}) {

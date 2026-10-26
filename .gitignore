@@ -7,3 +7,4 @@ node_modules
 *.received.txt
 test/e2e/otel-data/
 .approval_tests_temp/
+packages/cube/**/*.js
