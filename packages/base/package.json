@@ -1,6 +1,6 @@
 {
   "name": "barnard59-base",
-  "version": "2.5.2",
+  "version": "3.0.0",
   "description": "Linked Data pipelines",
   "main": "index.js",
   "type": "module",
@@ -36,7 +36,7 @@
     "@types/parallel-transform": "^1.1.4",
     "@types/readable-to-readable": "^0.1.0",
     "@types/through2": "^2.0.41",
-    "barnard59-core": "^6.1.4",
+    "barnard59-core": "^7.0.0",
     "chai": "^4.3.10",
     "get-stream": "^6.0.1",
     "into-stream": "^7.0.0",
