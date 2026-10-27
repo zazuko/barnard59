@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import rdf from 'barnard59-env'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import * as parser from './parser.js'
@@ -17,7 +17,7 @@ export default async function validate({ file, checks }) {
 
   const manifestGraph = await parser.readGraph(manifestPath, checks)
   const operations = manifestGraph.has(rdf.ns.rdf.type, ns.p.Operation)
-    .map(operation => {
+    .map((operation) => {
       const implementedBy = operation.out(ns.code.implementedBy)
       const codeLink = implementedBy.out(ns.code.link)
       const identifier = codeLink.term

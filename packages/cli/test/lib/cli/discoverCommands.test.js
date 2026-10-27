@@ -3,8 +3,8 @@ import rdf from 'barnard59-env'
 import { discoverCommands } from '../../../lib/cli/dynamicCommands.js'
 import discoverManifests from '../../../lib/discoverManifests.js'
 
-describe('lib/cli/discoverCommands.js', () => {
-  it('finds graph-store command', async () => {
+describe('lib/cli/discoverCommands.js', function () {
+  it('finds graph-store command', async function () {
     // given
     const commands = []
 
@@ -14,11 +14,11 @@ describe('lib/cli/discoverCommands.js', () => {
     }
 
     // then
-    expect(commands.map((c) => c.name()))
+    expect(commands.map(c => c.name()))
       .to.contain.all.members(['put'])
   })
 
-  it('creates flag with default value', async () => {
+  it('creates flag with default value', async function () {
     // given
     let command
     const manifest = rdf.clownface()

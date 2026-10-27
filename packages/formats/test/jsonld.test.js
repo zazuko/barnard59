@@ -5,9 +5,9 @@ import rdf from './support/env.js'
 
 const parse = unbound.bind({ env: rdf })
 
-describe('jsonld', () => {
-  describe('parse', () => {
-    it('should load a file with a remote context', async () => {
+describe('jsonld', function () {
+  describe('parse', function () {
+    it('should load a file with a remote context', async function () {
       const input = fs.createReadStream(new URL('./assets/remote.json', import.meta.url))
 
       const parser = parse()
@@ -16,7 +16,7 @@ describe('jsonld', () => {
       expect(dataset).to.have.property('size').gt(0)
     })
 
-    it('should load a file with a local context', async () => {
+    it('should load a file with a local context', async function () {
       const input = fs.createReadStream(new URL('./assets/local.json', import.meta.url))
 
       const parser = parse({
@@ -29,7 +29,7 @@ describe('jsonld', () => {
       expect(dataset).to.have.property('size').gt(0)
     })
 
-    it('should load a file with a local context given as string', async () => {
+    it('should load a file with a local context given as string', async function () {
       const input = fs.createReadStream(new URL('./assets/local.json', import.meta.url))
 
       const parser = parse({
@@ -42,7 +42,7 @@ describe('jsonld', () => {
       expect(dataset).to.have.property('size').gt(0)
     })
 
-    it('should use factory from context', async () => {
+    it('should use factory from context', async function () {
       const input = fs.createReadStream(new URL('./assets/test.json', import.meta.url))
 
       const parser = parse()

@@ -7,27 +7,27 @@ import selectUnbound from '../select.js'
 
 const select = selectUnbound.bind({ env: rdf })
 
-describe('select', () => {
-  it('should be a function', () => {
+describe('select', function () {
+  it('should be a function', function () {
     strictEqual(typeof select, 'function')
   })
 
-  it('should reject when query is not a string', async () => {
+  it('should reject when query is not a string', async function () {
     await rejects(() => select({ endpoint: new URL('http://example.org/'), query: 42 }),
       /query must be a non-empty string/)
   })
 
-  it('should reject when query is an empty string', async () => {
+  it('should reject when query is an empty string', async function () {
     await rejects(() => select({ endpoint: new URL('http://example.org/'), query: '' }),
       /query must be a non-empty string/)
   })
 
-  it('should reject when query is a whitespace-only string', async () => {
+  it('should reject when query is a whitespace-only string', async function () {
     await rejects(() => select({ endpoint: new URL('http://example.org/'), query: '   ' }),
       /query must be a non-empty string/)
   })
 
-  it('should return a readable stream', async () => {
+  it('should return a readable stream', async function () {
     const endpoint = new URL('http://example.org/send-request')
     const query = 'SELECT * WHERE { ?s ?p ?o }'
 
@@ -41,7 +41,7 @@ describe('select', () => {
     strictEqual(isWritableStream(result), false)
   })
 
-  it('should send a GET request', async () => {
+  it('should send a GET request', async function () {
     let called = false
     const endpoint = new URL('http://example.org/send-request')
     const query = 'SELECT * WHERE { ?s ?p ?o }'
@@ -59,7 +59,7 @@ describe('select', () => {
     strictEqual(called, true)
   })
 
-  it('should send a POST request', async () => {
+  it('should send a POST request', async function () {
     let called = false
     const endpoint = new URL('http://example.org/send-request')
     const query = 'SELECT * WHERE { ?s ?p ?o }'
@@ -77,7 +77,7 @@ describe('select', () => {
     strictEqual(called, true)
   })
 
-  it('should parse the response', async () => {
+  it('should parse the response', async function () {
     const endpoint = new URL('http://example.org/parse-response')
     const query = 'SELECT * WHERE { ?s ?p ?o }'
     const content = {
@@ -102,7 +102,7 @@ describe('select', () => {
     strictEqual(result[1].a.value, content.results.bindings[1].a.value)
   })
 
-  it('should support authentication headers', async () => {
+  it('should support authentication headers', async function () {
     let credentials = null
     const endpoint = new URL('http://example.org/authentication')
     const user = 'testuser'
@@ -122,25 +122,25 @@ describe('select', () => {
     strictEqual(credentials, 'Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk')
   })
 
-  describe('query validation', () => {
+  describe('query validation', function () {
     const endpoint = new URL('http://example.org/validation')
     const insert = `INSERT DATA {
   <http://example.com/a> <http://example.com/p> <http://example.com/b>
 }`
     const accepted = {
-      SELECT: 'SELECT * WHERE { ?s ?p ?o }',
-      ASK: 'ASK { ?s ?p ?o }',
+      'SELECT': 'SELECT * WHERE { ?s ?p ?o }',
+      'ASK': 'ASK { ?s ?p ?o }',
       'SELECT with PREFIX': 'PREFIX ex: <http://example.com/>\nSELECT * WHERE {\n  ?s ex:p ?o\n}',
       'SELECT after a comment': '# just a comment\nSELECT * WHERE { ?s ?p ?o }',
     }
     const rejected = {
       'INSERT DATA': insert,
       'DELETE WHERE': 'DELETE WHERE { ?s ?p ?o }',
-      LOAD: 'LOAD <http://example.com/data>',
+      'LOAD': 'LOAD <http://example.com/data>',
       'CLEAR ALL': 'CLEAR ALL',
       'DROP ALL': 'DROP ALL',
-      CONSTRUCT: 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }',
-      DESCRIBE: 'DESCRIBE <http://example.com/a>',
+      'CONSTRUCT': 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }',
+      'DESCRIBE': 'DESCRIBE <http://example.com/a>',
       'UPDATE with trailing SELECT comment': `${insert}\n# SELECT`,
       'UPDATE with leading SELECT comment': `# SELECT\n${insert}`,
       'UPDATE with leading ASK comment': `# ASK\n${insert}`,
@@ -151,7 +151,7 @@ describe('select', () => {
     }
 
     for (const [name, query] of Object.entries(accepted)) {
-      it(`should accept ${name}`, async () => {
+      it(`should accept ${name}`, async function () {
         nock(endpoint.origin)
           .get(`${endpoint.pathname}?query=${encodeURIComponent(query)}`)
           .reply(200, '{}')
@@ -161,7 +161,7 @@ describe('select', () => {
     }
 
     for (const [name, query] of Object.entries(rejected)) {
-      it(`should reject ${name}`, async () => {
+      it(`should reject ${name}`, async function () {
         await rejects(() => select({ endpoint, query }), /only accepts SELECT or ASK/)
       })
     }

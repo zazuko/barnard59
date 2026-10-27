@@ -3,14 +3,14 @@ import { expect } from 'chai'
 import getStream from 'get-stream'
 import offset from '../offset.js'
 
-describe('offset', () => {
-  it('should return generator', () => {
+describe('offset', function () {
+  it('should return generator', function () {
     const step = offset(1)
 
     expect(step).to.be.instanceOf(Function)
   })
 
-  it('stop processing chunks when limit is reached', async () => {
+  it('stop processing chunks when limit is reached', async function () {
     // given
     const step = offset(2)
 

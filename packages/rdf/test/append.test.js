@@ -1,6 +1,6 @@
 import { equal, strictEqual } from 'node:assert'
 import fs from 'node:fs'
-import fsp from 'fs/promises'
+import fsp from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { resolve } from 'node:path'
 import { Readable } from 'node:stream'
@@ -32,28 +32,28 @@ async function applyStep(transform) {
 
 const append = appendUnbound.bind({ env: rdf })
 
-describe('metadata.append', () => {
-  it('should throw an error if no argument is given', async () => {
+describe('metadata.append', function () {
+  it('should throw an error if no argument is given', async function () {
     await assertThrows(async () => {
       await append()
     }, Error, /Needs input as parameter/)
   })
 
-  it('should return a duplex stream with a stream metadata parameter', async () => {
+  it('should return a duplex stream with a stream metadata parameter', async function () {
     const step = await append({
       input: rdf.fromFile(metadataPath),
     })
     strictEqual(isDuplex(step), true)
   })
 
-  it('should return a duplex stream with a path (string) metadata parameter', async () => {
+  it('should return a duplex stream with a path (string) metadata parameter', async function () {
     const step = await append({
       input: metadataPath,
     })
     strictEqual(isDuplex(step), true)
   })
 
-  it('should return a duplex stream with an URL pointing to a public resource', async () => {
+  it('should return a duplex stream with an URL pointing to a public resource', async function () {
     // Mocking a remote file.
     const fileStr = fs.readFileSync(new URL(metadataPath, import.meta.url), 'utf8')
     nock('https://example.com')
@@ -66,7 +66,7 @@ describe('metadata.append', () => {
     strictEqual(isDuplex(stream), true)
   })
 
-  it('should append data and metadata with default values', async () => {
+  it('should append data and metadata with default values', async function () {
     const all = rdf.dataset()
       .addAll(await getRDFDataset(dataPath))
       .addAll(await getRDFDataset(metadataPath))
@@ -82,7 +82,7 @@ describe('metadata.append', () => {
     )
   })
 
-  it('should append data and metadata with default values, and path as string', async () => {
+  it('should append data and metadata with default values, and path as string', async function () {
     const all = rdf.dataset()
       .addAll(await getRDFDataset(dataPath))
       .addAll(await getRDFDataset(metadataPath))
@@ -99,7 +99,7 @@ describe('metadata.append', () => {
     )
   })
 
-  it('should append data with the specified graph', async () => {
+  it('should append data with the specified graph', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -128,7 +128,7 @@ describe('metadata.append', () => {
     strictEqual(result[2].graph.value, graph.value)
   })
 
-  it('fails at unknown protocol', async () => {
+  it('fails at unknown protocol', async function () {
     await assertThrows(async () => {
       const step = await append({
         input: 'unknown::protocol',
@@ -137,7 +137,7 @@ describe('metadata.append', () => {
     }, Error, /unknown protocol/)
   })
 
-  it.skip('fails at file not found', async () => {
+  it.skip('fails at file not found', async function () {
     await assertThrows(async () => {
       const step = await append({
         input: 'file:///not/found.ttl',
@@ -147,8 +147,8 @@ describe('metadata.append', () => {
   })
 })
 
-describe('File System: metadata.append', () => {
-  it('should use resolved literal TIME_FILE_CREATION with dateCreated', async () => {
+describe('File System: metadata.append', function () {
+  it('should use resolved literal TIME_FILE_CREATION with dateCreated', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -173,7 +173,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
-  it('should use resolved literal TIME_FILE_CREATION with dateModified', async () => {
+  it('should use resolved literal TIME_FILE_CREATION with dateModified', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -199,7 +199,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[6].object.value, rdf.literal((new Date(stats.birthtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
-  it('should use resolved literal TIME_FILE_MODIFICATION with dateCreated', async () => {
+  it('should use resolved literal TIME_FILE_MODIFICATION with dateCreated', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -224,7 +224,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
-  it('should use resolved literal TIME_FILE_MODIFICATION with dateModified', async () => {
+  it('should use resolved literal TIME_FILE_MODIFICATION with dateModified', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -250,7 +250,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[6].object.value, rdf.literal((new Date(stats.mtimeMs)).toISOString(), rdf.ns.xsd.dateTime).value)
   })
 
-  it('should use resolved literal TIME_NOW with dateModified', async () => {
+  it('should use resolved literal TIME_NOW with dateModified', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -275,7 +275,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
   })
 
-  it('should use resolved literal TIME_NOW with dateCreated', async () => {
+  it('should use resolved literal TIME_NOW with dateCreated', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -300,7 +300,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[3].object.value === rdf.literal('2020-05-30').value, false)
   })
 
-  it('should use specified literal with dateModified (string)', async () => {
+  it('should use specified literal with dateModified (string)', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -321,7 +321,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 
-  it('should use specified literal with dateCreated (string)', async () => {
+  it('should use specified literal with dateCreated (string)', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -342,7 +342,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 
-  it('should use specified literal with dateModified', async () => {
+  it('should use specified literal with dateModified', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]
@@ -363,7 +363,7 @@ describe('File System: metadata.append', () => {
     strictEqual(result[2].object.value, rdf.literal('1999-12-31').value)
   })
 
-  it('should use specified literal with dateCreated', async () => {
+  it('should use specified literal with dateCreated', async function () {
     const data = [
       rdf.quad(ex.subject0, ex.predicate0, ex.object0, ex.graph0),
     ]

@@ -1,5 +1,5 @@
-import readline from 'readline'
-import { promisify } from 'util'
+import readline from 'node:readline'
+import { promisify } from 'node:util'
 import padStart from 'lodash/padStart.js'
 import range from 'lodash/range.js'
 

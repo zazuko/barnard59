@@ -1,4 +1,4 @@
-import { Readable } from 'stream'
+import { Readable } from 'node:stream'
 import deepEqual from 'deep-equal'
 import rdf from 'barnard59-env'
 
@@ -11,11 +11,11 @@ export async function turtleToCF(str) {
 }
 
 export function checkArrayContainsField(array, field, value) {
-  return Boolean(array.find((element) => element[field] === value))
+  return Boolean(array.find(element => element[field] === value))
 }
 
 export function checkArrayContainsObject(array, obj) {
-  return Boolean(array.find((element) => deepEqual(element, obj)))
+  return Boolean(array.find(element => deepEqual(element, obj)))
 }
 
 export function genericContainsMessage(checksCollection, mssg) {

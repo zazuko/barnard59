@@ -39,11 +39,12 @@ function parse(args) {
     if (typeof args.timezone !== 'undefined') {
       timezone = args.timezone
     }
-  } else {
+  }
+  else {
     metadata = args
   }
 
-  return tracer.startActiveSpan('xlsx:parse', async span => {
+  return tracer.startActiveSpan('xlsx:parse', async (span) => {
     try {
       const dataset = await toDataset(this.env, metadata)
       span.addEvent('metadata')
@@ -54,7 +55,8 @@ function parse(args) {
       }), {
         readableObjectMode: true,
       })
-    } finally {
+    }
+    finally {
       span.end()
     }
   })

@@ -1,5 +1,5 @@
-import fs from 'fs'
-import readline from 'readline'
+import fs from 'node:fs'
+import readline from 'node:readline'
 import rdf from 'barnard59-env'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import Issue from './issue.js'
@@ -26,13 +26,15 @@ export async function readGraph(file, checks) {
     issue = Issue.info({
       message: `File ${file} parsed successfully`,
     })
-  } catch (err) {
+  }
+  catch (err) {
     if (err.stack.includes('at N3')) {
       const error = await parseError(file, err)
       issue = Issue.error({
         message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`,
       })
-    } else {
+    }
+    else {
       issue = Issue.error({
         message: err.message,
       })
@@ -62,7 +64,7 @@ export function parseError(path, error) {
         rl.close()
       }
     })
-    return new Promise((resolve) => rl.on('close', () => resolve(error)))
+    return new Promise(resolve => rl.on('close', () => resolve(error)))
   }
 }
 
@@ -71,7 +73,7 @@ export function getIdentifiers(graph, checks, pipeline2find = null) {
 
   graph
     .has(rdf.ns.rdf.type, ns.p.Pipeline)
-    .forEach(pipeline => {
+    .forEach((pipeline) => {
       if (pipeline2find === null || pipeline2find === pipeline.term.value) {
         const steps = pipeline
           .out(ns.p.steps)
@@ -115,7 +117,7 @@ export function getModuleOperationProperties(graph, identifiers) {
       .in(ns.code.link)
       .in(ns.code.implementedBy)
       .out(rdf.ns.rdf.type)
-      .forEach(node => {
+      .forEach((node) => {
         const nodeComponents = node.term.value.split('/')
         const property = nodeComponents[nodeComponents.length - 1]
 
@@ -167,7 +169,7 @@ export function getPipelineProperties(graph, pipelines) {
     graph
       .namedNode(id)
       .out(rdf.ns.rdf.type)
-      .forEach(node => {
+      .forEach((node) => {
         const nodeComponents = node.term.value.split('/')
         const property = nodeComponents[nodeComponents.length - 1]
 
@@ -204,7 +206,8 @@ export async function getAllOperationProperties(dependencies, checks) {
         const manifestGraph = await readGraph(manifestPath, checks)
         const tempResults = getModuleOperationProperties(manifestGraph, dependencies[protocol][library].values())
         Object.assign(results, tempResults)
-      } else {
+      }
+      else {
         for (const codelink of dependencies[protocol][library]) {
           results[codelink] = null
         }

@@ -9,7 +9,8 @@ export default async function (pathOrUri, mediaTypeOverride) {
 
   try {
     url = new URL(pathOrUri)
-  } catch {
+  }
+  catch {
     return this.env.fromFile(pathOrUri, { implicitBaseIRI: true })
   }
 
@@ -30,7 +31,8 @@ export default async function (pathOrUri, mediaTypeOverride) {
     if (!parserStream) {
       throw new Error(`No parser found for ${mediaTypeOverride}`)
     }
-  } else {
+  }
+  else {
     parserStream = await response.quadStream()
   }
 

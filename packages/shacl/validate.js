@@ -34,7 +34,7 @@ class ValidateChunk extends Transform {
    * @param {(error?: Error | null, chunk?: unknown) => void} callback
    */
   _transform(data, encoding, callback) {
-    this.validator.validate(data).then(report => {
+    this.validator.validate(data).then((report) => {
       let shouldContinue = report.conforms
 
       if (!shouldContinue && typeof this.onViolation === 'function') {
@@ -46,11 +46,12 @@ class ValidateChunk extends Transform {
       }
 
       if (shouldContinue) {
-        return callback(null, data)
+        return setImmediate(() => callback(null, data))
       }
-      // @ts-ignore
       this.destroy(new ValidationError(report, this.validator.$shapes.dataset, data))
+      return
     })
+      .catch(err => setImmediate(() => callback(err, null)))
   }
 }
 
@@ -66,7 +67,8 @@ export async function shacl(arg) {
   let maxErrors = 1
   if (isStream(arg)) {
     shape = arg
-  } else if (arg) {
+  }
+  else if (arg) {
     ({ shape, ...options } = arg)
     maxErrors = options.maxErrors < 1 ? undefined : Number(options.maxErrors)
   }

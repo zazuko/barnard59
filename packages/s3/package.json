@@ -47,5 +47,8 @@
   },
   "mocha": {
     "loader": "ts-node/esm/transpile-only"
+  },
+  "engines": {
+    "node": ">=24 || ^22.17"
   }
 }

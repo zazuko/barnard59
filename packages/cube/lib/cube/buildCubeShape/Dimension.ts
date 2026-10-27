@@ -41,7 +41,7 @@ class Dimension {
     this.constraints.add(object)
   }
 
-  toDataset({ cube, shape }: { cube: Cube; shape: Term }) {
+  toDataset({ cube, shape }: { cube: Cube, shape: Term }) {
     const dataset = this.rdf.dataset()
 
     const graph = this.rdf.clownface({ dataset })
@@ -56,7 +56,7 @@ class Dimension {
     this.constraints.build(ptr)
 
     ptr.out(this.rdf.ns.sh.description)
-      .forEach(description => {
+      .forEach((description) => {
         this.messages.push(`${this.predicate.value}: ${description.term.value}`)
       })
 

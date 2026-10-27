@@ -42,11 +42,13 @@ function glob({ pattern, ...options }) {
 
         // @ts-ignore
         stream._read()
-      } catch (/** @type {any} */ err) {
+      }
+      catch (/** @type {any} */ err) {
         span.recordException(err)
         span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
         stream.destroy(err)
-      } finally {
+      }
+      finally {
         span.end()
       }
     },

@@ -1,4 +1,4 @@
-import { join, dirname, resolve } from 'path'
+import { join, dirname, resolve } from 'node:path'
 import fs from 'fs-extra'
 import sftpFS from 'sftp-fs'
 import { PermissionDeniedError } from 'sftp-fs/lib/errors.js'
@@ -13,10 +13,13 @@ async function loadOpenMode() {
   try {
     openModeLegacyModule = await import('ssh2')
     openModeNewModule = await import('ssh2/lib/protocol/SFTP.js')
-  } catch (err) {}
+  }
+  catch {
+    // do nothing
+  }
 
-  OPEN_MODE = (openModeNewModule && openModeNewModule.OPEN_MODE) ||
-    (openModeLegacyModule && openModeLegacyModule.default.SFTP_OPEN_MODE)
+  OPEN_MODE = (openModeNewModule && openModeNewModule.OPEN_MODE)
+    || (openModeLegacyModule && openModeLegacyModule.default.SFTP_OPEN_MODE)
 }
 
 class SftpServer {
@@ -44,7 +47,7 @@ class SftpServer {
   async start() {
     await loadOpenMode()
 
-    this.server.on('error', error => {
+    this.server.on('error', (error) => {
       console.error(error)
     })
 
@@ -73,10 +76,10 @@ class FileSystem extends sftpFS.ImplFileSystem {
     }
 
     if (
-      (method === 'none' && this.username) ||
-      (method === 'password' && (
-        request.username !== this.username ||
-        request.password !== this.password
+      (method === 'none' && this.username)
+      || (method === 'password' && (
+        request.username !== this.username
+        || request.password !== this.password
       ))
     ) {
       throw new PermissionDeniedError()
@@ -180,9 +183,11 @@ function convFlags(flags) {
 
   if ((flags & OPEN_MODE.READ) && (flags & OPEN_MODE.WRITE)) {
     mode = fs.constants.O_RDWR
-  } else if (flags & OPEN_MODE.READ) {
+  }
+  else if (flags & OPEN_MODE.READ) {
     mode = fs.constants.O_RDONLY
-  } else if (flags & OPEN_MODE.WRITE) {
+  }
+  else if (flags & OPEN_MODE.WRITE) {
     mode = fs.constants.O_WRONLY
   }
 
@@ -210,7 +215,8 @@ function longname(name, attrs, num) {
 
   if (attrs.isDirectory()) {
     str = 'd'
-  } else if (attrs.isSymbolicLink()) {
+  }
+  else if (attrs.isSymbolicLink()) {
     str = 'l'
   }
 

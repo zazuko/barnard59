@@ -9,8 +9,8 @@ const csvContent = 'id,text\n1,abc\n'
 const fileMetdataUrl = 'file:./test/support/test.metadata.json'
 const fileMetdataTtlUrl = 'file:./test/support/test.metadata.ttl'
 
-describe('fetch', () => {
-  [true, false].forEach(useRemoteCsvwContext => {
+describe('fetch', function () {
+  [true, false].forEach((useRemoteCsvwContext) => {
     const fetch = (options) => {
       return fetchUnbound.call({ env }, {
         ...options,
@@ -18,45 +18,45 @@ describe('fetch', () => {
       })
     }
 
-    context(useRemoteCsvwContext ? 'using remote context' : 'using local context', () => {
-      it('should return a readable stream', () => {
+    context(useRemoteCsvwContext ? 'using remote context' : 'using local context', function () {
+      it('should return a readable stream', function () {
         const result = fetch({ csvw: fileMetdataUrl })
 
         strictEqual(isReadableStream(result), true)
       })
 
-      it('should process file: url', async () => {
+      it('should process file: url', async function () {
         const stream = fetch({ csvw: fileMetdataUrl })
         const content = await getStream(stream)
 
         strictEqual(content, csvContent)
       })
 
-      it('should process turtle file: url', async () => {
+      it('should process turtle file: url', async function () {
         const stream = fetch({ csvw: fileMetdataTtlUrl })
         const content = await getStream(stream)
 
         strictEqual(content, csvContent)
       })
 
-      it('should throw an error for non-existing file: metadata url', async () => {
+      it('should throw an error for non-existing file: metadata url', async function () {
         const stream = fetch({ csvw: 'file:./test/support/non-existing.metadata.json' })
 
         await rejects(getStream(stream))
       })
 
-      it('should throw an error for non-existing file: data url', async () => {
+      it('should throw an error for non-existing file: data url', async function () {
         const stream = fetch({ csvw: 'file:./test/support/no-data.metadata.json' })
 
         await rejects(getStream(stream))
       })
 
-      it('should process http: url', async () => {
-        await withServer(async server => {
+      it('should process http: url', async function () {
+        await withServer(async (server) => {
           server.app.get('/metadata', (req, res) => {
             res.set('content-type', 'application/ld+json').json({
               '@context': 'http://www.w3.org/ns/csvw',
-              url: new URL('/data', baseUrl),
+              'url': new URL('/data', baseUrl),
             })
           })
 
@@ -72,8 +72,8 @@ describe('fetch', () => {
         })
       })
 
-      it('should process turtle http: url', async () => {
-        await withServer(async server => {
+      it('should process turtle http: url', async function () {
+        await withServer(async (server) => {
           server.app.get('/metadata', (req, res) => {
             res.set('content-type', 'text/turtle').end(`[
           <http://www.w3.org/ns/csvw#url> <${new URL('data', baseUrl)}>
@@ -92,8 +92,8 @@ describe('fetch', () => {
         })
       })
 
-      it('should throw an error for non-existing http: metadata url', async () => {
-        await withServer(async server => {
+      it('should throw an error for non-existing http: metadata url', async function () {
+        await withServer(async (server) => {
           const baseUrl = await server.listen()
           const stream = fetch({ csvw: new URL('/metadata', baseUrl) })
 
@@ -101,12 +101,12 @@ describe('fetch', () => {
         })
       })
 
-      it('should throw an error for non-existing http: data url', async () => {
-        await withServer(async server => {
+      it('should throw an error for non-existing http: data url', async function () {
+        await withServer(async (server) => {
           server.app.get('/metadata', (req, res) => {
             res.set('content-type', 'application/ld+json').json({
               '@context': 'http://www.w3.org/ns/csvw',
-              url: new URL('/data', baseUrl),
+              'url': new URL('/data', baseUrl),
             })
           })
 
@@ -117,12 +117,12 @@ describe('fetch', () => {
         })
       })
 
-      it('should throw an error if http connection is killed', async () => {
-        await withServer(async server => {
+      it('should throw an error if http connection is killed', async function () {
+        await withServer(async (server) => {
           server.app.get('/metadata', (req, res) => {
             res.set('content-type', 'application/ld+json').json({
               '@context': 'http://www.w3.org/ns/csvw',
-              url: new URL('/data', baseUrl),
+              'url': new URL('/data', baseUrl),
             })
           })
 

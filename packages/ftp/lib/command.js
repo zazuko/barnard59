@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
-import path from 'path'
+import { promises as fs } from 'node:fs'
+import path from 'node:path'
 import FtpClient from './FtpClient.js'
 import SftpClient from './SftpClient.js'
 
@@ -18,7 +18,8 @@ async function command(options, callback, keepAlive = false) {
     }
 
     return result
-  } catch (err) {
+  }
+  catch (err) {
     await client.disconnect()
     throw err
   }
@@ -26,9 +27,9 @@ async function command(options, callback, keepAlive = false) {
 
 function getClientClass(protocol = 'ftp') {
   switch (protocol) {
-  case 'ftp': return FtpClient
-  case 'sftp': return SftpClient
-  default: throw Error(`Invalid protocol ${protocol}`)
+    case 'ftp': return FtpClient
+    case 'sftp': return SftpClient
+    default: throw Error(`Invalid protocol ${protocol}`)
   }
 }
 
@@ -37,7 +38,8 @@ async function maybeFromFile(str) {
     const absolutePath = path.resolve(str)
     await fs.access(absolutePath)
     return fs.readFile(absolutePath)
-  } catch (err) {
+  }
+  catch (err) {
     return undefined
   }
 }

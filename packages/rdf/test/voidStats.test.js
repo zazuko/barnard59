@@ -13,14 +13,14 @@ const ex = rdf.namespace('http://example.org/')
 /**
  * https://www.w3.org/TR/void/#statistics
  */
-describe('metadata.voidStats', () => {
-  it('throws an error if no argument is given', async () => {
+describe('metadata.voidStats', function () {
+  it('throws an error if no argument is given', async function () {
     await assertThrows(async () => {
       await voidStats()
     }, Error, /Needs voidDatasetUri as parameter/)
   })
 
-  it('return a duplex stream with default values for voidDatasetUri', async () => {
+  it('return a duplex stream with default values for voidDatasetUri', async function () {
     const step = await voidStats(
       {
         voidDatasetUri: ex.dataset,
@@ -28,7 +28,7 @@ describe('metadata.voidStats', () => {
     strictEqual(isDuplex(step), true)
   })
 
-  it('includes counts at the end of the stream', async () => {
+  it('includes counts at the end of the stream', async function () {
     const data = [
       rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
@@ -51,7 +51,7 @@ describe('metadata.voidStats', () => {
     expect(result.slice(4)).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('returns zero counts for no data', async () => {
+  it('returns zero counts for no data', async function () {
     const data = []
     const expectedMetadata = [
       rdf.quad(ex.dataset, rdf.ns.rdf.type, rdf.ns._void.Dataset),
@@ -69,7 +69,7 @@ describe('metadata.voidStats', () => {
     expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('returns zero counts for 0 classes', async () => {
+  it('returns zero counts for 0 classes', async function () {
     const data = [
       rdf.quad(ex.bob, ex.knows, ex.alice),
       rdf.quad(ex.alice, ex.name, rdf.literal('Alice')),
@@ -90,7 +90,7 @@ describe('metadata.voidStats', () => {
     expect(result.slice(2)).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('uses the named-graph given as parameter', async () => {
+  it('uses the named-graph given as parameter', async function () {
     const data = []
     const expectedMetadata = [
       rdf.quad(ex.dataset, rdf.ns.rdf.type, rdf.ns._void.Dataset, ex.metadata),
@@ -109,7 +109,7 @@ describe('metadata.voidStats', () => {
     expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('does not include total counts with includeTotals: false', async () => {
+  it('does not include total counts with includeTotals: false', async function () {
     const data = [
       rdf.quad(ex.bob, ex.knows, ex.alice),
       rdf.quad(ex.alice, ex.name, rdf.literal('Alice')),
@@ -129,7 +129,7 @@ describe('metadata.voidStats', () => {
     expect(result.slice(2)).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('describes counts for class partitions', async () => {
+  it('describes counts for class partitions', async function () {
     const data = [
       rdf.quad(ex.a_1, rdf.ns.rdf.type, ex.A),
       rdf.quad(ex.a_2, rdf.ns.rdf.type, ex.A),
@@ -160,7 +160,7 @@ describe('metadata.voidStats', () => {
     expect(result.slice(4)).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('describe counts for class partitions with no matches', async () => {
+  it('describe counts for class partitions with no matches', async function () {
     const data = []
     const partition1 = rdf.namedNode('http://example.org/dataset/classPartition/0')
     const partition2 = rdf.namedNode('http://example.org/dataset/classPartition/1')
@@ -186,7 +186,7 @@ describe('metadata.voidStats', () => {
     expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('describe counts for property partitions', async () => {
+  it('describe counts for property partitions', async function () {
     const data = [
       rdf.quad(ex.a, ex.p_1, ex.b),
       rdf.quad(ex.a, ex.p_1, ex.b),
@@ -217,7 +217,7 @@ describe('metadata.voidStats', () => {
     expect(result.slice(4)).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('describe counts for property partitions with no matches', async () => {
+  it('describe counts for property partitions with no matches', async function () {
     const data = []
     const partition1 = rdf.namedNode('http://example.org/dataset/propertyPartition/0')
     const partition2 = rdf.namedNode('http://example.org/dataset/propertyPartition/1')
@@ -243,7 +243,7 @@ describe('metadata.voidStats', () => {
     expect(result).to.deep.contain.all.members(expectedMetadata)
   })
 
-  it('accepts string parameters', async () => {
+  it('accepts string parameters', async function () {
     const data = [
       rdf.quad(ex.a_1, rdf.ns.rdf.type, ex.A),
       rdf.quad(ex.a_2, rdf.ns.rdf.type, ex.A),

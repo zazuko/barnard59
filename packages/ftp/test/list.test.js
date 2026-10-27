@@ -1,4 +1,4 @@
-import { deepStrictEqual, rejects, strictEqual } from 'assert'
+import { deepStrictEqual, rejects, strictEqual } from 'node:assert'
 import { getStreamAsArray } from 'get-stream'
 import semver from 'semver'
 import list from '../list.js'
@@ -9,7 +9,7 @@ import serverConfigurations from './support/serverConfigurations.js'
 const isNode24OrNewer = semver.gte(process.versions.node, '24.0.0')
 
 describe('list', function () {
-  it('is a function', () => {
+  it('is a function', function () {
     strictEqual(typeof list, 'function')
   })
 
@@ -20,7 +20,7 @@ describe('list', function () {
         this.skip()
       }
 
-      await withServer(serverFactory, async server => {
+      await withServer(serverFactory, async (server) => {
         const options = { ...server.options, ...additionalOptions }
 
         const stream = await list({ pathname: 'data', ...options })
@@ -31,11 +31,11 @@ describe('list', function () {
     })
   })
 
-  it('throws proper error when file does not exist', async () => {
-    await withServer(() => new FtpServer(), async server => {
+  it('throws proper error when file does not exist', async function () {
+    await withServer(() => new FtpServer(), async (server) => {
       await rejects(async () => {
         await list({ pathname: 'does-not-exist', ...server.options })
-      }, err => {
+      }, (err) => {
         return err.message.includes('no such file or directory')
       })
     })

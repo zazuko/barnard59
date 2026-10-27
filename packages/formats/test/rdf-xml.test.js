@@ -3,9 +3,9 @@ import { expect } from 'chai'
 import { parse } from '../rdf-xml.js'
 import env from './support/env.js'
 
-describe('rdf/xml', () => {
-  describe('parse', () => {
-    it('successfully loads the input file', async () => {
+describe('rdf/xml', function () {
+  describe('parse', function () {
+    it('successfully loads the input file', async function () {
       const input = fs.createReadStream(new URL('./datasets/bioinformatics.rdf', import.meta.url))
 
       const parser = parse.call({ env })
@@ -14,7 +14,7 @@ describe('rdf/xml', () => {
       expect(dataset).to.have.property('size').gt(0)
     })
 
-    it('forwards argument to parser options', async () => {
+    it('forwards argument to parser options', async function () {
       const input = fs.createReadStream(new URL('./datasets/bioinformatics.rdf', import.meta.url))
 
       const parser = parse.call({ env })

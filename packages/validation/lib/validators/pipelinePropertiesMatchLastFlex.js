@@ -11,7 +11,8 @@ export default {
     const pipelineIsOfRightType = pipelineProperties.includes('Readable') || pipelineProperties.includes('ReadableObjectMode')
     if (!pipelineIsOfRightType) {
       issue = Issue.error({ rule: this, templateData: { pipeline } })
-    } else {
+    }
+    else {
       issue = Issue.info({ rule: this, templateData: { pipeline } })
     }
     return issue

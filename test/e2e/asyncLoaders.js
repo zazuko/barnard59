@@ -1,12 +1,11 @@
 import rdf from 'barnard59-env'
-// eslint-disable-next-line import/default
 import ecmaScriptModuleLoader from 'rdf-loader-code/ecmaScriptModule.js'
 
 async function promisedEcmaScriptLoader(...args) {
   return ecmaScriptModuleLoader.call(this, ...args)
 }
 
-promisedEcmaScriptLoader.register = registry => {
+promisedEcmaScriptLoader.register = (registry) => {
   registry.registerNodeLoader('http://example.org/DeferredEcmaScript', promisedEcmaScriptLoader)
 }
 
@@ -16,7 +15,7 @@ async function promisedUrlLoader({ term, dataset }) {
     .value
 }
 
-promisedUrlLoader.register = registry => {
+promisedUrlLoader.register = (registry) => {
   registry.registerNodeLoader('http://example.org/PromisedUrl', promisedUrlLoader)
 }
 

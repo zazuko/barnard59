@@ -29,12 +29,13 @@ async function run(pipeline: Pipeline, { end = false, resume = false } = {}) {
       }
       pipeline.logger.end()
       await p
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    }
+    catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       throw err
-    } finally {
+    }
+    finally {
       span.end()
     }
   })

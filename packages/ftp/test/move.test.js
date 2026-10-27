@@ -1,5 +1,5 @@
-import { strictEqual } from 'assert'
-import { resolve } from 'path'
+import { strictEqual } from 'node:assert'
+import { resolve } from 'node:path'
 import { Readable } from 'node:stream'
 import getStream from 'get-stream'
 import move from '../move.js'
@@ -7,14 +7,14 @@ import fs from './support/fs.js'
 import { withServer } from './support/server.js'
 import serverConfigurations, { base } from './support/serverConfigurations.js'
 
-describe('move', () => {
-  it('is a function', () => {
+describe('move', function () {
+  it('is a function', function () {
     strictEqual(typeof move, 'function')
   })
 
   serverConfigurations.forEach(([label, serverFactory, additionalOptions]) => {
-    it(`moves a file from the given place to another place ${label}`, async () => {
-      await withServer(serverFactory, async server => {
+    it(`moves a file from the given place to another place ${label}`, async function () {
+      await withServer(serverFactory, async (server) => {
         const options = { ...server.options, ...additionalOptions }
 
         const root = resolve(base, 'tmp/move')

@@ -1,14 +1,15 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import ChecksCollection from '../lib/checksCollection.js'
 import { containsMessage } from './helpers.js'
 
 let checks
-beforeEach(() => {
+
+beforeEach(function () {
   checks = new ChecksCollection()
 })
 
-describe('addGenericCheck', () => {
-  it('should add check to this.generic', () => {
+describe('addGenericCheck', function () {
+  it('should add check to this.generic', function () {
     checks.addGenericCheck('abc')
     const actual = checks.generic
     const expected = ['abc']
@@ -16,8 +17,8 @@ describe('addGenericCheck', () => {
   })
 })
 
-describe('addPipelineCheck', () => {
-  it('should add check to this.pipelines[pipeline]', () => {
+describe('addPipelineCheck', function () {
+  it('should add check to this.pipelines[pipeline]', function () {
     checks.addPipelineCheck('check1', 'pipelineA')
     checks.addPipelineCheck('check2', 'pipelineA')
     checks.addPipelineCheck('check3', 'pipelineB')
@@ -27,8 +28,8 @@ describe('addPipelineCheck', () => {
   })
 })
 
-describe('getGenericChecks', () => {
-  it('should get all generic checks', () => {
+describe('getGenericChecks', function () {
+  it('should get all generic checks', function () {
     checks.addGenericCheck('abc')
     checks.addPipelineCheck('check1', 'pipelineA')
     checks.addGenericCheck('def')
@@ -37,7 +38,8 @@ describe('getGenericChecks', () => {
     const expected = ['abc', 'def']
     assert.deepStrictEqual(actual, expected)
   })
-  it('should get all generic checks of given level', () => {
+
+  it('should get all generic checks of given level', function () {
     checks.addGenericCheck({ name: 'volleyball', level: 'beginner' })
     checks.addGenericCheck({ name: 'beach volley', level: 'beginner' })
     checks.addGenericCheck({ name: 'basketball', level: 'intermediate' })
@@ -47,7 +49,8 @@ describe('getGenericChecks', () => {
     const expected = [{ name: 'volleyball', level: 'beginner' }, { name: 'beach volley', level: 'beginner' }]
     assert.deepStrictEqual(actual, expected)
   })
-  it('should get all generic checks of multiple levels', () => {
+
+  it('should get all generic checks of multiple levels', function () {
     checks.addGenericCheck({ name: 'volleyball', level: 'beginner' })
     checks.addGenericCheck({ name: 'beach volley', level: 'beginner' })
     checks.addGenericCheck({ name: 'basketball', level: 'intermediate' })
@@ -59,8 +62,8 @@ describe('getGenericChecks', () => {
   })
 })
 
-describe('getPipelineChecks', () => {
-  it('should get all pipeline checks', () => {
+describe('getPipelineChecks', function () {
+  it('should get all pipeline checks', function () {
     checks.addGenericCheck('abc')
     checks.addPipelineCheck('check1', 'pipelineA')
     checks.addPipelineCheck('check2', 'pipelineA')
@@ -70,7 +73,8 @@ describe('getPipelineChecks', () => {
     const expected = ['check1', 'check2']
     assert.deepStrictEqual(actual, expected)
   })
-  it('should get all pipline checks of multiple levels', () => {
+
+  it('should get all pipline checks of multiple levels', function () {
     checks.addPipelineCheck({ name: 'volleyball', level: 'beginner' }, 'pipelineA')
     checks.addPipelineCheck({ name: 'beach volley', level: 'beginner' }, 'pipelineA')
     checks.addPipelineCheck({ name: 'basketball', level: 'intermediate' }, 'pipelineA')
@@ -82,8 +86,8 @@ describe('getPipelineChecks', () => {
   })
 })
 
-describe('getChecks', () => {
-  it('should get all checks', () => {
+describe('getChecks', function () {
+  it('should get all checks', function () {
     checks.addGenericCheck('abc')
     checks.addPipelineCheck('check1', 'pipelineA')
     checks.addPipelineCheck('check2', 'pipelineA')
@@ -93,7 +97,8 @@ describe('getChecks', () => {
     const expected = ['abc', 'check1', 'check2', 'check3']
     assert.deepStrictEqual(actual, expected)
   })
-  it('should get all pipline checks of multiple levels', () => {
+
+  it('should get all pipline checks of multiple levels', function () {
     checks.addPipelineCheck({ name: 'volleyball', level: 'beginner' }, 'pipelineA')
     checks.addPipelineCheck({ name: 'beach volley', level: 'beginner' }, 'pipelineB')
     checks.addPipelineCheck({ name: 'basketball', level: 'intermediate' }, 'pipelineC')
@@ -105,15 +110,16 @@ describe('getChecks', () => {
   })
 })
 
-describe('containsMessage', () => {
-  it('should return true if message exists in checks', () => {
+describe('containsMessage', function () {
+  it('should return true if message exists in checks', function () {
     checks.addGenericCheck({ name: 'volleyball', message: 'This message exists' })
     checks.addPipelineCheck({ name: 'football', message: 'And this as well!' }, 'pipeline of awesome')
     const expected = true
     const actual = containsMessage(checks, 'This message exists')
     assert(actual === expected)
   })
-  it('should return false if message does not exists in checks', () => {
+
+  it('should return false if message does not exists in checks', function () {
     checks.addGenericCheck({ name: 'volleyball', message: 'This message exists' })
     checks.addPipelineCheck({ name: 'football', message: 'And this as well!' }, 'pipeline of awesome')
     const expected = false
@@ -122,8 +128,8 @@ describe('containsMessage', () => {
   })
 })
 
-describe('countChecks', () => {
-  it('should return checks count', () => {
+describe('countChecks', function () {
+  it('should return checks count', function () {
     checks.addGenericCheck('abc')
     checks.addPipelineCheck('check1', 'pipelineA')
     checks.addPipelineCheck('check2', 'pipelineA')

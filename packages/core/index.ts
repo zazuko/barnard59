@@ -11,10 +11,10 @@ import type Pipeline from './lib/Pipeline.js'
 export type { default as Step } from './lib/Step.js'
 export type { default as Pipeline, PipelineOptions } from './lib/Pipeline.js'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Variables {}
 
-type Keys = keyof Variables extends never ? string : keyof Variables;
+type Keys = keyof Variables extends never ? string : keyof Variables
 
 interface TypedMap extends Map<Keys, unknown> {
   get<K extends keyof Variables>(key: K): Variables[typeof key]

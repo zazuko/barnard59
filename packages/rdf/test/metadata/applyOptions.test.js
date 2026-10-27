@@ -6,12 +6,12 @@ import { applyOptions } from '../../lib/metadata/applyOptions.js'
 
 const ex = rdf.namespace('http://example.org/')
 
-describe('applyOptions', () => {
-  it('should be a function', () => {
+describe('applyOptions', function () {
+  it('should be a function', function () {
     strictEqual(typeof applyOptions, 'function')
   })
 
-  it('should return the same data if no options given', async () => {
+  it('should return the same data if no options given', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, ex.type0, ex.graph1),
     ]
@@ -24,7 +24,7 @@ describe('applyOptions', () => {
     strictEqual(result[0].equals(data[0]), true)
   })
 
-  it('should update or append schema:dateCreated for known classes', async () => {
+  it('should update or append schema:dateCreated for known classes', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
       rdf.quad(ex.subject0, rdf.ns.schema.dateCreated, rdf.literal('Not me'), ex.graph0),
@@ -46,7 +46,7 @@ describe('applyOptions', () => {
     strictEqual(result[4].equals(rdf.quad(ex.subject3, rdf.ns.schema.dateCreated, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime))), true)
   })
 
-  it('should update or append schema:dateCreated for known classes (string)', async () => {
+  it('should update or append schema:dateCreated for known classes (string)', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
     ]
@@ -62,7 +62,7 @@ describe('applyOptions', () => {
     expect(result[1]).to.deep.equal(rdf.quad(ex.subject0, rdf.ns.schema.dateCreated, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime)))
   })
 
-  it('should update or append dcterms:created for known classes', async () => {
+  it('should update or append dcterms:created for known classes', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.dcat.Dataset, ex.graph1),
       rdf.quad(ex.subject0, rdf.ns.dcterms.created, rdf.literal('Not me'), ex.graph0),
@@ -84,7 +84,7 @@ describe('applyOptions', () => {
     strictEqual(result[4].equals(rdf.quad(ex.subject3, rdf.ns.dcterms.created, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime))), true)
   })
 
-  it('should update or append schema:dateModified for known classes', async () => {
+  it('should update or append schema:dateModified for known classes', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
       rdf.quad(ex.subject0, rdf.ns.schema.dateModified, rdf.literal('Not me'), ex.graph0),
@@ -106,7 +106,7 @@ describe('applyOptions', () => {
     strictEqual(result[4].equals(rdf.quad(ex.subject3, rdf.ns.schema.dateModified, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime))), true)
   })
 
-  it('should update or append dcterms:modified for known classes', async () => {
+  it('should update or append dcterms:modified for known classes', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.dcat.Dataset, ex.graph1),
       rdf.quad(ex.subject0, rdf.ns.dcterms.modified, rdf.literal('Not me'), ex.graph0),
@@ -128,7 +128,7 @@ describe('applyOptions', () => {
     strictEqual(result[4].equals(rdf.quad(ex.subject3, rdf.ns.dcterms.modified, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime))), true)
   })
 
-  it('should update or append both dcterms:modified and schema:modified for known classes', async () => {
+  it('should update or append both dcterms:modified and schema:modified for known classes', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.dcat.Dataset, ex.graph1),
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
@@ -147,7 +147,7 @@ describe('applyOptions', () => {
     strictEqual(result[3].equals(rdf.quad(ex.subject0, rdf.ns.schema.dateModified, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime))), true)
   })
 
-  it('should update or append schema:dateModified for known (string)', async () => {
+  it('should update or append schema:dateModified for known (string)', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
     ]
@@ -163,7 +163,7 @@ describe('applyOptions', () => {
     expect(result[1]).to.deep.equal(rdf.quad(ex.subject0, rdf.ns.schema.dateModified, rdf.literal('1999-12-31', rdf.ns.xsd.dateTime)))
   })
 
-  it('should set the corresponding graph', async () => {
+  it('should set the corresponding graph', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
       rdf.quad(ex.subject0, rdf.ns.schema.dateModified, rdf.literal('Not me'), ex.graph0),
@@ -186,7 +186,7 @@ describe('applyOptions', () => {
     strictEqual(result[4].graph.equals(ex.graph2), true)
   })
 
-  it('should set the corresponding graph (string)', async () => {
+  it('should set the corresponding graph (string)', async function () {
     const data = [
       rdf.quad(ex.subject0, rdf.ns.rdf.type, rdf.ns.schema.Dataset, ex.graph1),
     ]

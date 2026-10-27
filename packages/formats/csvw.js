@@ -66,11 +66,12 @@ function parse(args) {
     if (typeof args.skipEmptyLines !== 'undefined') {
       skipEmptyLines = Boolean(args.skipEmptyLines)
     }
-  } else {
+  }
+  else {
     metadata = args
   }
 
-  return tracer.startActiveSpan('csvw:parse', async span => {
+  return tracer.startActiveSpan('csvw:parse', async (span) => {
     try {
       const dataset = await toDataset(this.env, metadata)
       span.addEvent('metadata')
@@ -85,7 +86,8 @@ function parse(args) {
       }), {
         readableObjectMode: true,
       })
-    } finally {
+    }
+    finally {
       span.end()
     }
   })

@@ -1,3 +1,4 @@
+import Process from 'node:process'
 import { CommanderError, program } from 'commander'
 import isInstalledGlobally from 'is-installed-globally'
 import { MultipleRootsError } from '../findPipeline.js'
@@ -68,7 +69,8 @@ export default async function () {
 
       try {
         await program.parseAsync(process.argv)
-      } catch (/** @type {any} */ error) {
+      }
+      catch (/** @type {any} */ error) {
         if (error instanceof CommanderError) {
           const { groups } = /unknown command '(?<command>[^']+)'/.exec(error.message) || {}
           if (groups && groups.command) {
@@ -79,13 +81,14 @@ export default async function () {
 
             console.error(`Try running 'npm install barnard59-${groups.command}'`)
           }
-          process.exit(error.exitCode)
-        } else if (error instanceof MultipleRootsError) {
+          Process.exit(error.exitCode)
+        }
+        else if (error instanceof MultipleRootsError) {
           const alternatives = error.alternatives.map(x => `\n\t--pipeline ${x}`).join('')
-          // eslint-disable-next-line no-console
           console.error(`Multiple root pipelines found. Try one of these:${alternatives}`)
-          process.exit(1)
-        } else {
+          Process.exit(1)
+        }
+        else {
           throw error
         }
       }

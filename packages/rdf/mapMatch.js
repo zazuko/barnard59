@@ -36,7 +36,8 @@ function mapMatch({ map, subject, predicate, object, graph }) {
 
       try {
         callback(null, await map.call({ rdf: this.env }, quad))
-      } catch (/** @type {any} */ err) {
+      }
+      catch (/** @type {any} */ err) {
         callback(err)
       }
     },

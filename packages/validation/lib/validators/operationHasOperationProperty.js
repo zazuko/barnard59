@@ -10,7 +10,8 @@ export default {
     let issue
     if (!isOperation) {
       issue = Issue.error({ rule: this, step, operation })
-    } else {
+    }
+    else {
       issue = Issue.info({ rule: this, step, operation })
     }
     return issue

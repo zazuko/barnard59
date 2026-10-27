@@ -1,6 +1,6 @@
 import module from 'node:module'
 import { dirname, resolve } from 'node:path'
-import * as url from 'url'
+import * as url from 'node:url'
 import rdf from 'barnard59-env'
 import { isGraphPointer } from 'is-graph-pointer'
 import { packageDirectory } from 'pkg-dir'
@@ -23,7 +23,7 @@ const discoverOperations = async (pipelinePath) => {
   for await (const { manifest } of discoverManifests({ basePath: pipelinePath, all: true })) {
     manifest
       .has(rdf.ns.rdf.type, rdf.ns.p.Operation)
-      .forEach(operation => {
+      .forEach((operation) => {
         const impl = operation.out(rdf.ns.code.implementedBy)
         const type = impl.out(rdf.ns.rdf.type).term
         const link = impl.out(rdf.ns.code.link).term
@@ -51,10 +51,10 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
 
   const ptr = rdf.clownface({ dataset })
   let n = 0
-  ptr.has(rdf.ns.p.stepList).out(rdf.ns.p.stepList).forEach(listPointer => {
+  ptr.has(rdf.ns.p.stepList).out(rdf.ns.p.stepList).forEach((listPointer) => {
     for (const step of (listPointer.list() || [])) {
-      if (isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Step)) ||
-        isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Pipeline))) {
+      if (isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Step))
+        || isGraphPointer(step.has(rdf.ns.rdf.type, rdf.ns.p.Pipeline))) {
         continue
       }
       // we expect a known operation

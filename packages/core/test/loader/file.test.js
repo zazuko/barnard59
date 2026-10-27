@@ -1,5 +1,5 @@
-import * as url from 'url'
-import * as os from 'os'
+import * as url from 'node:url'
+import * as os from 'node:os'
 import { expect } from 'chai'
 import $rdf from 'barnard59-env'
 import loader from '../../lib/loader/file.js'
@@ -7,8 +7,8 @@ import ns from '../support/namespaces.js'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
-describe('loader/file', () => {
-  it('should load file contents from given path', async () => {
+describe('loader/file', function () {
+  it('should load file contents from given path', async function () {
     // given
     const ptr = $rdf.clownface()
       .literal('file.txt', ns.p.FileContents)
@@ -23,7 +23,7 @@ describe('loader/file', () => {
     expect(contents).to.eq('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus neque ac tincidunt feugiat.\n')
   })
 
-  it('should load file contents from path in variable', async () => {
+  it('should load file contents from path in variable', async function () {
     // given
     const ptr = $rdf.clownface().literal('PATH', ns.p.FileContents)
     const variables = new Map([
@@ -40,7 +40,7 @@ describe('loader/file', () => {
     expect(contents).to.eq('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus neque ac tincidunt feugiat.\n')
   })
 
-  it('should load file contents from HOME_DIR path', async () => {
+  it('should load file contents from HOME_DIR path', async function () {
     // given
     const ptr = $rdf.clownface()
       .literal('~/file.txt', ns.p.FileContents)
@@ -51,7 +51,8 @@ describe('loader/file', () => {
         basePath: __dirname,
         variables: new Map(),
       })
-    } catch (e) {
+    }
+    catch (e) {
       // then
       expect(e.message).to.match(new RegExp(`ENOENT.+'${os.homedir()}/file\\.txt'`))
     }

@@ -58,11 +58,13 @@ export default async function (ptr, basePath, options = {}) {
       if (output !== '-') {
         await finishedAsync(outputStream)
       }
-    } catch (/** @type any */ err) {
+    }
+    catch (/** @type any */ err) {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       throw err
-    } finally {
+    }
+    finally {
       span.end()
     }
   })

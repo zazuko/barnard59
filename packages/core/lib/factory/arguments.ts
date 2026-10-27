@@ -5,7 +5,7 @@ import type { LoaderRegistry } from 'rdf-loaders-registry'
 import { unknownVariable } from '../loader/variable.js'
 import type { Context, VariableMap } from '../../index.js'
 
-async function createArguments(ptr: GraphPointer, { basePath, context, loaderRegistry, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
+async function createArguments(ptr: GraphPointer, { basePath, context, loaderRegistry, variables }: { basePath: string, context: Pick<Context, 'env'>, loaderRegistry: LoaderRegistry, logger: Logger, variables: VariableMap }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const args: any[] = await parseArguments(ptr, { basePath, context, loaderRegistry, variables })
 

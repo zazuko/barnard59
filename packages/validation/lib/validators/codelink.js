@@ -10,7 +10,8 @@ export default {
     let issue
     if (implementedBy && codeLink) {
       issue = Issue.info({ rule: this, step: currStepName })
-    } else {
+    }
+    else {
       issue = Issue.error({ rule: this, step: currStepName })
     }
     return issue

@@ -1,11 +1,12 @@
-import { deepStrictEqual } from 'assert'
+/* eslint-disable mocha/no-nested-tests */
+import { deepStrictEqual } from 'node:assert'
 import { Readable } from 'node:stream'
 import getStream, { array } from 'get-stream'
 import intoStream from 'into-stream'
 import map from '../map.js'
 
-describe('map', () => {
-  it('should pass pipeline context to mapper function', async () => {
+describe('map', function () {
+  it('should pass pipeline context to mapper function', async function () {
     const input = new Readable({
       read: () => {
         input.push('a')
@@ -25,7 +26,7 @@ describe('map', () => {
     deepStrictEqual(output, ['foo_a', 'foo_b'])
   })
 
-  it('should pass optional arguments to mapper function', async () => {
+  it('should pass optional arguments to mapper function', async function () {
     const input = new Readable({
       read: () => {
         input.push('a')
@@ -41,7 +42,7 @@ describe('map', () => {
     deepStrictEqual(output, ['foo_a', 'foo_b'])
   })
 
-  it('should pass optional arguments to mapper function when used with options object', async () => {
+  it('should pass optional arguments to mapper function when used with options object', async function () {
     const input = new Readable({
       read: () => {
         input.push('a')
@@ -59,7 +60,7 @@ describe('map', () => {
     deepStrictEqual(output, ['foo_a', 'foo_b'])
   })
 
-  it('accepts a function as parameter', async () => {
+  it('accepts a function as parameter', async function () {
     // given
     const transform = letter => letter.toUpperCase()
     const input = intoStream.object(['a', 'b', 'c'])
@@ -71,7 +72,7 @@ describe('map', () => {
     deepStrictEqual(result, 'ABC')
   })
 
-  it('binds pipeline context to transform function', async () => {
+  it('binds pipeline context to transform function', async function () {
     // const
     function transform(letter) {
       return letter + this.suffix
@@ -86,9 +87,9 @@ describe('map', () => {
     deepStrictEqual(result, 'AxBxCx')
   })
 
-  it('accepts an option to not retain order', async () => {
+  it('accepts an option to not retain order', async function () {
     // given
-    const transform = async letter => {
+    const transform = async (letter) => {
       if (letter === 'a') {
         await new Promise(resolve => setTimeout(resolve, 10))
       }
@@ -108,9 +109,9 @@ describe('map', () => {
     deepStrictEqual(result, 'BCA')
   })
 
-  it('retains input order by default', async () => {
+  it('retains input order by default', async function () {
     // given
-    const transform = async letter => {
+    const transform = async (letter) => {
       if (letter === 'a') {
         await new Promise(resolve => setTimeout(resolve, 10))
       }

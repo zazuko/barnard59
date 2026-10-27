@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { expect } from 'chai'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
@@ -10,8 +10,8 @@ import ns from '../support/namespaces.js'
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 const context = { env }
 
-describe('factory/variables', () => {
-  it('should return a VariableMap', async () => {
+describe('factory/variables', function () {
+  it('should return a VariableMap', async function () {
     const { ptr: definition } = await loadPipelineDefinition('plain')
     const ptr = definition.node(ns.ex('')).out(ns.p.variables)
 
@@ -24,7 +24,7 @@ describe('factory/variables', () => {
     expect(variables).to.be.instanceOf(VariableMap)
   })
 
-  it('should load "required" annotation', async () => {
+  it('should load "required" annotation', async function () {
     const { ptr: definition } = await loadPipelineDefinition('variables')
     const ptr = definition.node(ns.ex.inline).out(ns.p.variables)
 
@@ -37,7 +37,7 @@ describe('factory/variables', () => {
     expect(variables.get('optional')).to.be.undefined
   })
 
-  it('should load the given inline variables', async () => {
+  it('should load the given inline variables', async function () {
     const { ptr: definition } = await loadPipelineDefinition('variables')
     const ptr = definition.node(ns.ex.inline).out(ns.p.variables)
 
@@ -50,7 +50,7 @@ describe('factory/variables', () => {
     expect([...variables.entries()]).to.deep.contain.members([['foo', 'bar']])
   })
 
-  it('should load the given variables sets', async () => {
+  it('should load the given variables sets', async function () {
     const { ptr: definition } = await loadPipelineDefinition('variables')
     const ptr = definition.node(ns.ex.multiset).out(ns.p.variables)
 

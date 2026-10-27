@@ -1,4 +1,4 @@
-import { Readable } from 'stream'
+import { Readable } from 'node:stream'
 import { expect } from 'chai'
 import getStream from 'get-stream'
 import withServer from 'express-as-promise/withServer.js'
@@ -6,7 +6,7 @@ import sinon from 'sinon'
 import open from '../open.js'
 
 describe('open', function () {
-  it('should open from local path', async () => {
+  it('should open from local path', async function () {
     // given
     const env = {
       fromFile: sinon.stub().returns(Readable.from('foo')),
@@ -21,7 +21,7 @@ describe('open', function () {
     expect(env.fromFile).to.have.been.calledWith('test/support/dataset.ttl')
   })
 
-  it('should load from remote URL', async () => {
+  it('should load from remote URL', async function () {
     // given
     const quadStream = sinon.stub().returns('foo')
     const env = {
@@ -48,7 +48,7 @@ describe('open', function () {
     })
   })
 
-  it('should load from remote URL with overridden media type', async () => {
+  it('should load from remote URL with overridden media type', async function () {
     // given
     const env = {
       formats: {

@@ -9,27 +9,27 @@ import * as ns from './support/namespaces.js'
 
 const construct = constructUnbound.bind({ env: rdf })
 
-describe('construct', () => {
-  it('should be a function', () => {
+describe('construct', function () {
+  it('should be a function', function () {
     strictEqual(typeof construct, 'function')
   })
 
-  it('should throw when query is not a string', () => {
+  it('should throw when query is not a string', function () {
     throws(() => construct({ endpoint: new URL('http://example.org/'), query: 42 }),
       /query must be a non-empty string/)
   })
 
-  it('should throw when query is an empty string', () => {
+  it('should throw when query is an empty string', function () {
     throws(() => construct({ endpoint: new URL('http://example.org/'), query: '' }),
       /query must be a non-empty string/)
   })
 
-  it('should throw when query is a whitespace-only string', () => {
+  it('should throw when query is a whitespace-only string', function () {
     throws(() => construct({ endpoint: new URL('http://example.org/'), query: '   ' }),
       /query must be a non-empty string/)
   })
 
-  it('should return a readable stream', async () => {
+  it('should return a readable stream', async function () {
     const endpoint = new URL('http://example.org/send-request')
     const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
 
@@ -43,7 +43,7 @@ describe('construct', () => {
     strictEqual(isWritableStream(result), false)
   })
 
-  it('should send a GET request', async () => {
+  it('should send a GET request', async function () {
     let called = false
     const endpoint = new URL('http://example.org/send-request')
     const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
@@ -61,7 +61,7 @@ describe('construct', () => {
     strictEqual(called, true)
   })
 
-  it('should send a POST request', async () => {
+  it('should send a POST request', async function () {
     let called = false
     const endpoint = new URL('http://example.org/send-request')
     const query = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
@@ -79,7 +79,7 @@ describe('construct', () => {
     strictEqual(called, true)
   })
 
-  it('should parse the response', async () => {
+  it('should parse the response', async function () {
     const quads = [
       rdf.quad(ns.ex(''), ns.ex.p, rdf.literal('0')),
       rdf.quad(ns.ex(''), ns.ex.p, rdf.literal('0')),
@@ -99,7 +99,7 @@ describe('construct', () => {
     strictEqual(quads[0].equals(result[1]), true)
   })
 
-  it('should support authentication headers', async () => {
+  it('should support authentication headers', async function () {
     let credentials = null
     const endpoint = new URL('http://example.org/authentication')
     const user = 'testuser'

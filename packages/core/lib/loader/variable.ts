@@ -27,7 +27,8 @@ function loader(rdf: Environment, ptr: GraphPointer, { variables = new VariableM
   if (variables.has(name)) {
     // ...prioritize loading it from the arguments map
     term = rdf.literal(variables.get(name))
-  } else {
+  }
+  else {
     // ... otherwise load the term from the dataset
     term = cloneTerm(rdf, ptr.out(rdf.ns.p.value).term)
   }

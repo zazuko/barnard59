@@ -8,20 +8,20 @@ import getStream from 'get-stream'
 import { getObjectStream } from '../index.js'
 import { removeResultsDirectory } from './utils.js'
 
-describe('getObjectStream', async () => {
+describe('getObjectStream', function () {
   let s3Mock
 
-  before(async () => {
+  before(async function () {
     s3Mock = mockClient(S3Client)
     await removeResultsDirectory()
   })
 
-  after(async () => {
+  after(async function () {
     s3Mock.restore()
     await removeResultsDirectory()
   })
 
-  it('should be able to get a stream from a file', async () => {
+  it('should be able to get a stream from a file', async function () {
     const data = 'Hello world'
 
     // Create Stream from string
@@ -42,7 +42,7 @@ describe('getObjectStream', async () => {
     strictEqual(fileContent, data)
   })
 
-  it('should throw in case of empty body', async () => {
+  it('should throw in case of empty body', async function () {
     s3Mock.on(GetObjectCommand).resolves({ Body: null })
 
     await rejects(async () => {

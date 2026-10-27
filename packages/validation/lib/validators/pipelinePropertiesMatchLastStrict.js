@@ -11,7 +11,8 @@ export default {
     const pipelineIsOfRightType = pipelineProperties.includes(type)
     if (!pipelineIsOfRightType) {
       issue = Issue.error({ rule: this, templateData: { pipeline, type } })
-    } else {
+    }
+    else {
       issue = Issue.info({ rule: this, templateData: { pipeline } })
     }
     return issue

@@ -1,5 +1,5 @@
-import { readdir } from 'fs'
-import { resolve } from 'path'
+import { readdir } from 'node:fs'
+import { resolve } from 'node:path'
 import stream from 'node:stream'
 
 const { Readable } = stream
@@ -19,7 +19,7 @@ class FileIterator extends Readable {
         return
       }
 
-      files.forEach(file => {
+      files.forEach((file) => {
         this.push(resolve(directory, file))
       })
 

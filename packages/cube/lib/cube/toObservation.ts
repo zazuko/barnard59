@@ -22,7 +22,7 @@ function findRoot($rdf: Environment, { dataset }: { dataset: DatasetCore }): Nam
   return subject as unknown as NamedNode
 }
 
-function defaultObserver(this: { rdf: Environment }, { dataset, subject }: { dataset: DatasetCore; subject: NamedNode }): NamedNode {
+function defaultObserver(this: { rdf: Environment }, { dataset, subject }: { dataset: DatasetCore, subject: NamedNode }): NamedNode {
   const observer = this.rdf.clownface({ dataset }).out(this.rdf.ns.cube.observedBy)
 
   if (isNamedNode(observer)) {
@@ -46,7 +46,7 @@ function defaultObservations(this: { rdf: Environment }, { subject }: { subject:
   return this.rdf.namedNode(`${iri}/observation/`)
 }
 
-function defaultObservation(this: { rdf: Environment }, { observations, subject }: { observations: NamedNode; subject: NamedNode }) {
+function defaultObservation(this: { rdf: Environment }, { observations, subject }: { observations: NamedNode, subject: NamedNode }) {
   const url = new URL(subject.value)
   const id = url.pathname.split('/').slice(-1)[0]
 
@@ -58,7 +58,7 @@ interface DateCallback {
 }
 
 function dateByProperty(property: NamedNode): DateCallback {
-  return function (this:{ rdf: Environment }, { dataset }: { dataset: DatasetCore }): Literal {
+  return function (this: { rdf: Environment }, { dataset }: { dataset: DatasetCore }): Literal {
     const date = this.rdf.clownface({ dataset }).out(property)
 
     if (!isLiteral(date)) {
@@ -91,7 +91,7 @@ function dateByDatatype(this: { rdf: Environment }, { dataset }: { dataset: Data
   return terms[0]
 }
 
-function dateObservation(this: { rdf: Environment }, { dataset, observations, useDate }: { dataset: DatasetCore; observations: NamedNode; useDate?: DateCallback }): NamedNode {
+function dateObservation(this: { rdf: Environment }, { dataset, observations, useDate }: { dataset: DatasetCore, observations: NamedNode, useDate?: DateCallback }): NamedNode {
   if (!useDate) {
     throw new Error('useDate callback is required')
   }
@@ -101,7 +101,7 @@ function dateObservation(this: { rdf: Environment }, { dataset, observations, us
   return this.rdf.namedNode(urlJoin(observations.value, dateToId(date.value)))
 }
 
-function indexObservation(this: { rdf: Environment }, { index, observations }: { index: number; observations: NamedNode }) {
+function indexObservation(this: { rdf: Environment }, { index, observations }: { index: number, observations: NamedNode }) {
   return this.rdf.namedNode(urlJoin(observations.value, `./${index.toString()}`))
 }
 
@@ -185,45 +185,56 @@ class ToObservation extends Transform {
     if (observer) {
       if (typeof observer === 'function') {
         this.options.observer = observer
-      } else if (observer) {
+      }
+      else if (observer) {
         this.options.observer = asTermObject(rdf, observer)
       }
-    } else {
+    }
+    else {
       this.options.observer = defaultObserver.bind({ rdf })
     }
 
     if (observations) {
       if (typeof observations === 'function') {
         this.options.observations = observations
-      } else if (observations) {
+      }
+      else if (observations) {
         this.options.observations = asTermObject(rdf, observations)
       }
-    } else {
+    }
+    else {
       this.options.observations = defaultObservations.bind({ rdf })
     }
 
     if (useDate) {
       if (useDate === true || useDate === 'true') {
         this.options.useDate = dateByDatatype.bind({ rdf })
-      } else if (useDate === 'now') {
+      }
+      else if (useDate === 'now') {
         this.options.useDate = dateNow.bind({ rdf })
-      } else if (typeof useDate === 'string') {
+      }
+      else if (typeof useDate === 'string') {
         this.options.useDate = dateByProperty(this.rdf.namedNode(useDate)).bind({ rdf })
-      } else if ('term' in useDate) {
+      }
+      else if ('term' in useDate) {
         this.options.useDate = dateByProperty(useDate.term).bind({ rdf })
-      } else if (typeof useDate === 'function') {
+      }
+      else if (typeof useDate === 'function') {
         this.options.useDate = useDate
       }
     }
 
     if (observation && typeof observation === 'function') {
       this.options.observation = observation
-    } else {
+    }
+    else {
       if (this.options.useDate) {
         this.options.observation = dateObservation.bind({ rdf })
-      } else if (useIndex) {
+      }
+      else if (useIndex) {
         this.options.observation = indexObservation.bind({ rdf })
-      } else {
+      }
+      else {
         this.options.observation = defaultObservation.bind({ rdf })
       }
     }
@@ -244,7 +255,7 @@ class ToObservation extends Transform {
       const dataset = this.rdf.dataset([...context.dataset]
         .filter(quad => !quad.predicate.equals(this.rdf.ns.rdf.type))
         .filter(quad => !this.options.blacklist.has(quad.predicate))
-        .map(quad => {
+        .map((quad) => {
           return this.rdf.quad(
             quad.subject.termType === 'NamedNode' ? context.observation : quad.subject,
             quad.predicate,
@@ -277,7 +288,8 @@ class ToObservation extends Transform {
       this.options.index++
 
       callback()
-    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    }
+    catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       callback(err)
     }
   }

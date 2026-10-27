@@ -12,8 +12,8 @@ import type { Context, VariableMap } from '../../index.js'
 import createArguments from './arguments.js'
 import createOperation from './operation.js'
 
-async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Context; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
-  return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async span => {
+async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string, context: Context, loaderRegistry: LoaderRegistry, logger: Logger, variables: VariableMap }) {
+  return tracer.startActiveSpan('createStep', { attributes: { iri: ptr.value } }, async (span) => {
     try {
       const args = await createArguments(ptr, { basePath, context, loaderRegistry, logger, variables })
       const operation = await createOperation(ptr.out(context.env.ns.code.implementedBy), { basePath, context, loaderRegistry, logger, variables })
@@ -22,7 +22,8 @@ async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry
 
       if (typeof streamOrGenerator === 'function') {
         stream = Duplex.from(streamOrGenerator)
-      } else {
+      }
+      else {
         stream = streamOrGenerator
       }
 
@@ -31,12 +32,13 @@ async function createStep(ptr: GraphPointer, { basePath, context, loaderRegistry
       }
 
       return new Step({ args, basePath, context, loaderRegistry, logger, operation, ptr, stream, variables })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (cause: any) {
+    }
+    catch (cause: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       span.recordException(cause)
       span.setStatus({ code: SpanStatusCode.ERROR, message: cause.message })
       throw new PipelineError(`could not load step ${ptr.value}`, cause)
-    } finally {
+    }
+    finally {
       span.end()
     }
   })

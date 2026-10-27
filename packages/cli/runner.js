@@ -14,7 +14,7 @@ import tracer from './lib/tracer.js'
  * @param {boolean} [options.quiet]
  */
 function create(ptr, env, { basePath, outputStream, logger, variables = new Map(), level = 'error', quiet }) {
-  return tracer.startActiveSpan('createPipeline', { attributes: { 'pipeline.id': ptr.value } }, async span => {
+  return tracer.startActiveSpan('createPipeline', { attributes: { 'pipeline.id': ptr.value } }, async (span) => {
     try {
       if (!logger) {
         logger = defaultLogger({ level, quiet })
@@ -37,7 +37,8 @@ function create(ptr, env, { basePath, outputStream, logger, variables = new Map(
         finished,
         pipeline,
       }
-    } finally {
+    }
+    finally {
       span.end()
     }
   })

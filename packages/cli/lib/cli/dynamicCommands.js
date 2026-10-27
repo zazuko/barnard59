@@ -21,7 +21,7 @@ const require = module.createRequire(import.meta.url)
  * @param {AsyncIterable<Manifest>} manifests
  * @return {AsyncGenerator<import('commander').Command, void, *>}
  */
-export async function * discoverCommands(manifests) {
+export async function* discoverCommands(manifests) {
   for await (const { name, manifest, version = '0.0.0' } of manifests) {
     const commands = manifest
       .has(rdf.ns.rdf.type, rdf.ns.b59.CliCommand)
@@ -57,7 +57,8 @@ export async function * discoverCommands(manifests) {
         const option = `--${name} <${name}>`
         if (required) {
           pipelineSubCommand.requiredOption(option, description, defaultValue)
-        } else {
+        }
+        else {
           pipelineSubCommand.option(option, description, defaultValue)
         }
       }
@@ -85,7 +86,7 @@ function getAnnotatedVariables(ptr) {
     .out(rdf.ns.p.variables)
     .out(rdf.ns.p.variable)
     .toArray()
-    .map(variable => {
+    .map((variable) => {
       const requiredLiteral = variable.out(rdf.ns.p.required).term
       const required = requiredLiteral ? !requiredLiteral.equals(FALSE) : true
 

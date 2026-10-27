@@ -13,10 +13,13 @@ export default {
 
       if (typeof imported[method] !== 'function') {
         issue = Issue.error({ rule: this, templateData: { op, filename, method } })
-      } else {
+      }
+      else {
         issue = Issue.info({ rule: this, templateData: { op, filename, method } })
       }
-    } catch (err) {
+    }
+    catch {
+      // do nothing
     }
 
     return issue

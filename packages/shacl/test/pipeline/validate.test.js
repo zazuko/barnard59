@@ -1,4 +1,4 @@
-import * as url from 'url'
+import * as url from 'node:url'
 import { expect } from 'chai'
 import env from 'barnard59-env'
 import express from 'express'
@@ -15,7 +15,7 @@ const ns = env.namespace('https://barnard59.zazuko.com/pipeline/shacl/')
 const loadPipeline = pipelineDefinitionLoader(import.meta.url, '../../pipeline')
 
 describe('pipeline/validate', function () {
-  it('runs without error when input is valid', async () => {
+  it('runs without error when input is valid', async function () {
     // given
     const data = turtle`
       ${ex.Person}
@@ -38,7 +38,7 @@ describe('pipeline/validate', function () {
     expect(output).to.match(/conforms> "true"/)
   })
 
-  it('validates against shapes from input', async () => {
+  it('validates against shapes from input', async function () {
     // given
     const data = turtle`
       ${ex.Person}
@@ -68,8 +68,8 @@ describe('pipeline/validate', function () {
     expect(output).to.match(/conforms> "false"/)
   })
 
-  it('validates against remote shapes', () => {
-    return withServer(async server => {
+  it('validates against remote shapes', function () {
+    return withServer(async (server) => {
       server.app.use(express.static(url.fileURLToPath(new URL('../support', import.meta.url))))
       const baseUrl = await server.listen()
 
@@ -96,7 +96,7 @@ describe('pipeline/validate', function () {
     })
   })
 
-  it('pushes error reports when resource has errors', async () => {
+  it('pushes error reports when resource has errors', async function () {
     // given
     const data = turtle`
       ${ex.Person}

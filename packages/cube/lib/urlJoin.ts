@@ -1,5 +1,5 @@
-import { join } from 'path'
-import { URL } from 'url'
+import { join } from 'node:path'
+import { URL } from 'node:url'
 
 function urlJoin(base: string, part: string) {
   const url = new URL(base)

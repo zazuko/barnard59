@@ -1,12 +1,12 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import rdf from 'barnard59-env'
 import loaderUnbound from '../../lib/loader/variable.js'
 import ns from '../support/namespaces.js'
 
 const loader = loaderUnbound.bind(null, rdf)
 
-describe('loader/variable', () => {
-  it('should load a variable from the map by name', async () => {
+describe('loader/variable', function () {
+  it('should load a variable from the map by name', async function () {
     const ptr = rdf.clownface({ dataset: rdf.dataset() })
       .blankNode()
       .addOut(ns.rdf.type, ns.p.Variable)
@@ -18,7 +18,7 @@ describe('loader/variable', () => {
     strictEqual(result.value, 'bar')
   })
 
-  it('should add the variable name to variable value term', async () => {
+  it('should add the variable name to variable value term', async function () {
     const ptr = rdf.clownface({ dataset: rdf.dataset() })
       .blankNode()
       .addOut(ns.rdf.type, ns.p.Variable)
@@ -30,7 +30,7 @@ describe('loader/variable', () => {
     strictEqual(result.name, 'foo')
   })
 
-  it('should load the variable from the dataset if it\'s not present in the variable map', async () => {
+  it('should load the variable from the dataset if it\'s not present in the variable map', async function () {
     const ptr = rdf.clownface({ dataset: rdf.dataset() })
       .blankNode()
       .addOut(ns.rdf.type, ns.p.Variable)
@@ -42,7 +42,7 @@ describe('loader/variable', () => {
     strictEqual(result.value, 'bar')
   })
 
-  it('should prioritize the variable value from the variable map', async () => {
+  it('should prioritize the variable value from the variable map', async function () {
     const ptr = rdf.clownface({ dataset: rdf.dataset() })
       .blankNode()
       .addOut(ns.rdf.type, ns.p.Variable)
@@ -55,7 +55,7 @@ describe('loader/variable', () => {
     strictEqual(result.value, 'barer')
   })
 
-  it('should load a variable value for a given variable name', async () => {
+  it('should load a variable value for a given variable name', async function () {
     const ptr = rdf.clownface({ dataset: rdf.dataset() }).literal('foo', ns.p.VariableName)
     const variables = new Map([['foo', 'bar']])
 

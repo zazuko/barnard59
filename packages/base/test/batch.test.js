@@ -4,19 +4,19 @@ import { array } from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import batch from '../batch.js'
 
-describe('batch', () => {
-  it('should be a function', () => {
+describe('batch', function () {
+  it('should be a function', function () {
     strictEqual(typeof batch, 'function')
   })
 
-  it('should return a duplex stream', async () => {
+  it('should return a duplex stream', async function () {
     const result = batch()
 
     strictEqual(isWritable(result), true)
     strictEqual(isReadable(result), true)
   })
 
-  it('should do nothing if there are no input chunks', async () => {
+  it('should do nothing if there are no input chunks', async function () {
     const input = Readable({
       objectMode: true,
       read: () => {
@@ -29,7 +29,7 @@ describe('batch', () => {
     deepStrictEqual(result, [])
   })
 
-  it('should split input in batches', async () => {
+  it('should split input in batches', async function () {
     const expected = [['a', 'b'], ['c', 'd'], ['e']]
     const input = Readable({
       objectMode: true,
@@ -43,7 +43,7 @@ describe('batch', () => {
     deepStrictEqual(result, expected)
   })
 
-  it('should emit a single batch', async () => {
+  it('should emit a single batch', async function () {
     const expected = [['a', 'b', 'c', 'd', 'e']]
     const input = Readable({
       objectMode: true,

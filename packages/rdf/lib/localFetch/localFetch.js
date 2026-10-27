@@ -115,7 +115,8 @@ async function localFetch(
 
   try {
     return fetch(new URL(input).toString())
-  } catch {
+  }
+  catch {
     // in case of error, the input must be path string
     const absolutePath = basePath ? resolve(basePath, input) : input
 

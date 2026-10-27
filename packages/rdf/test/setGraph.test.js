@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import { Readable } from 'node:stream'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
@@ -8,14 +8,14 @@ import * as ns from './support/namespaces.js'
 
 const setGraph = setGraphUnbound.bind({ env: rdf })
 
-describe('setGraph', () => {
-  it('should return a duplex stream', () => {
+describe('setGraph', function () {
+  it('should return a duplex stream', function () {
     const stream = setGraph(ns.ex.graph)
 
     strictEqual(isDuplex(stream), true)
   })
 
-  it('should set the graph of all quads', async () => {
+  it('should set the graph of all quads', async function () {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
       rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
@@ -31,7 +31,7 @@ describe('setGraph', () => {
     strictEqual(ns.ex.graph.equals(result[1].graph), true)
   })
 
-  it('should accept string values', async () => {
+  it('should accept string values', async function () {
     const quads = [
       rdf.quad(ns.ex.subject1, ns.ex.predicate1, ns.ex.object1, ns.ex.graph1),
       rdf.quad(ns.ex.subject2, ns.ex.predicate2, ns.ex.object2, ns.ex.graph2),
@@ -47,7 +47,7 @@ describe('setGraph', () => {
     strictEqual(ns.ex.graph.equals(result[1].graph), true)
   })
 
-  it('should use default graph if an empty string is given', async () => {
+  it('should use default graph if an empty string is given', async function () {
     const quads = [
       rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph),
     ]
@@ -61,7 +61,7 @@ describe('setGraph', () => {
     strictEqual(rdf.defaultGraph().equals(result[0].graph), true)
   })
 
-  it('should use default graph if null is given', async () => {
+  it('should use default graph if null is given', async function () {
     const quads = [
       rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph),
     ]
@@ -75,7 +75,7 @@ describe('setGraph', () => {
     strictEqual(rdf.defaultGraph().equals(result[0].graph), true)
   })
 
-  it('should use default graph if undefined is given', async () => {
+  it('should use default graph if undefined is given', async function () {
     const quads = [
       rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object, ns.ex.graph),
     ]

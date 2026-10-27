@@ -9,9 +9,9 @@ import getUnbound from '../get.js'
 const ns = rdf.namespace('http://example.org/')
 const get = getUnbound.bind({ env: rdf })
 
-describe('get', () => {
-  it('should return a readable stream', async () => {
-    await withServer(async server => {
+describe('get', function () {
+  it('should return a readable stream', async function () {
+    await withServer(async (server) => {
       const baseUrl = await server.listen()
 
       const stream = get({ endpoint: baseUrl })
@@ -21,12 +21,15 @@ describe('get', () => {
 
       try {
         await array(stream)
-      } catch (err) {}
+      }
+      catch {
+        // do nothing
+      }
     })
   })
 
-  it('should send a GET request', async () => {
-    await withServer(async server => {
+  it('should send a GET request', async function () {
+    await withServer(async (server) => {
       let called = false
 
       server.app.get('/', async (req, res) => {
@@ -44,8 +47,8 @@ describe('get', () => {
     })
   })
 
-  it('should send a accept header with the value application/n-triples', async () => {
-    await withServer(async server => {
+  it('should send a accept header with the value application/n-triples', async function () {
+    await withServer(async (server) => {
       let mediaType = null
 
       server.app.get('/', async (req, res) => {
@@ -63,8 +66,8 @@ describe('get', () => {
     })
   })
 
-  it('should send a graph argument', async () => {
-    await withServer(async server => {
+  it('should send a graph argument', async function () {
+    await withServer(async (server) => {
       let graph = null
 
       server.app.get('/', async (req, res) => {
@@ -82,15 +85,15 @@ describe('get', () => {
     })
   })
 
-  it('should parse the response quad stream', async () => {
-    await withServer(async server => {
+  it('should parse the response quad stream', async function () {
+    await withServer(async (server) => {
       const expected = [
         rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3, ns.graph1),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1),
       ]
-      const content = expected.map(quad => {
+      const content = expected.map((quad) => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
       }).join('')
 
@@ -109,15 +112,15 @@ describe('get', () => {
     })
   })
 
-  it('should allow string values as graph argument', async () => {
-    await withServer(async server => {
+  it('should allow string values as graph argument', async function () {
+    await withServer(async (server) => {
       const expected = [
         rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2, ns.graph1),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3, ns.graph1),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1),
       ]
-      const content = expected.map(quad => {
+      const content = expected.map((quad) => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
       }).join('')
 
@@ -136,15 +139,15 @@ describe('get', () => {
     })
   })
 
-  it('should support default graph as graph argument', async () => {
-    await withServer(async server => {
+  it('should support default graph as graph argument', async function () {
+    await withServer(async (server) => {
       const expected = [
         rdf.quad(ns.subject1, ns.predicate1, ns.object1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
-      const content = expected.map(quad => {
+      const content = expected.map((quad) => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
       }).join('')
 
@@ -163,15 +166,15 @@ describe('get', () => {
     })
   })
 
-  it('should use default graph if the graph argument is a empty string', async () => {
-    await withServer(async server => {
+  it('should use default graph if the graph argument is a empty string', async function () {
+    await withServer(async (server) => {
       const expected = [
         rdf.quad(ns.subject1, ns.predicate1, ns.object1),
         rdf.quad(ns.subject2, ns.predicate2, ns.object2),
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
-      const content = expected.map(quad => {
+      const content = expected.map((quad) => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
       }).join('')
 
@@ -190,8 +193,8 @@ describe('get', () => {
     })
   })
 
-  it('should send a basic authentication header if user and password are given', async () => {
-    await withServer(async server => {
+  it('should send a basic authentication header if user and password are given', async function () {
+    await withServer(async (server) => {
       let credentials = null
 
       server.app.get('/', async (req, res) => {
@@ -209,8 +212,8 @@ describe('get', () => {
     })
   })
 
-  it('should handle server errors', async () => {
-    await withServer(async server => {
+  it('should handle server errors', async function () {
+    await withServer(async (server) => {
       server.app.get('/', async (req, res) => {
         res.status(500).end()
       })
@@ -222,7 +225,8 @@ describe('get', () => {
 
       try {
         await array(stream)
-      } catch (err) {
+      }
+      catch (err) {
         error = err
       }
 

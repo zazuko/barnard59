@@ -5,9 +5,9 @@ import { isReadableStream as isReadable, isWritableStream as isWritable } from '
 import get from '../get.js'
 import chunksAndContent from './support/chunksAndContent.js'
 
-describe('get', () => {
-  it('returns only a readable stream', async () => {
-    await withServer(async server => {
+describe('get', function () {
+  it('returns only a readable stream', async function () {
+    await withServer(async (server) => {
       const baseUrl = await server.listen()
 
       const response = await get({ url: baseUrl })
@@ -17,8 +17,8 @@ describe('get', () => {
     })
   })
 
-  it('provides the response content as stream', async () => {
-    await withServer(async server => {
+  it('provides the response content as stream', async function () {
+    await withServer(async (server) => {
       const expected = chunksAndContent()
 
       server.app.get('/', (req, res) => {
@@ -33,8 +33,8 @@ describe('get', () => {
     })
   })
 
-  it('can be called with 2 arguments', async () => {
-    await withServer(async server => {
+  it('can be called with 2 arguments', async function () {
+    await withServer(async (server) => {
       server.app.get('/', (req, res) => {
         res.send(req.headers['x-test'])
       })

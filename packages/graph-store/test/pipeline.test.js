@@ -37,7 +37,7 @@ describe('graph-store pipeline', function () {
     password,
   })
 
-  it('should run graph-store put pipeline without error', async () => {
+  it('should run graph-store put pipeline without error', async function () {
     const data = `${support}/data.ttl`
     const { ptr, basePath } = await loadPipelineDefinition('pipeline/put', {
       term: env.namedNode('https://barnard59.zazuko.com/pipeline/graph-store/put'),
@@ -64,7 +64,7 @@ describe('graph-store pipeline', function () {
     strictEqual(storedData.toCanonical(), expectedData.toCanonical())
   })
 
-  context.skip('given large dataset', () => {
+  context.skip('given large dataset', function () {
     const graph = 'http://example.org/large-graph'
 
     beforeEach(async function () {
@@ -73,7 +73,7 @@ describe('graph-store pipeline', function () {
     });
 
     [1000, 10000, 100000].forEach((size) => {
-      context(`with ${size} triples`, () => {
+      context(`with ${size} triples`, function () {
         it('should complete graph store operation in a timely manner', async function () {
           this.timeout(10000)
 

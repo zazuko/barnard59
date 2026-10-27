@@ -13,7 +13,8 @@ export default {
     const hasDefinedMode = pipelineProperties.some(p => acceptedPipelineProperties.includes(p))
     if (!hasDefinedMode) {
       issue = Issue.warning({ rule: this, templateData: { pipeline } })
-    } else {
+    }
+    else {
       issue = Issue.info({ rule: this, templateData: { pipeline } })
     }
     return issue

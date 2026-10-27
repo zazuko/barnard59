@@ -17,11 +17,11 @@ const prefixes = [
   ['code', 'https://code.described.at/'],
 ]
 
-describe('pipeline', () => {
+describe('pipeline', function () {
   chai.use(jestSnapshotPlugin())
 
-  context('with code:imports', () => {
-    it('merges the pipelines', async () => {
+  context('with code:imports', function () {
+    it('merges the pipelines', async function () {
       // given
       const filename = require.resolve('barnard59-test-e2e/definitions/code-imports/main.ttl')
 

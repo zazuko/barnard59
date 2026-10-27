@@ -6,13 +6,13 @@ import { withServer } from './support/server.js'
 import ftpConfigurations from './support/serverConfigurations.js'
 import { finished } from './support/stream.js'
 
-export const __dirname = dirname(new URL(import.meta.url).pathname)
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
-describe('write', () => {
+describe('write', function () {
   ftpConfigurations.forEach(
     ([label, serverFactory, additionalOptions]) => {
-      it(`writes file at the given path ${label}`, async () => {
-        await withServer(serverFactory, async server => {
+      it(`writes file at the given path ${label}`, async function () {
+        await withServer(serverFactory, async (server) => {
           const options = { ...server.options, ...additionalOptions }
 
           const stream = await write({ filename: 'tmp/foo.txt', ...options })
@@ -25,7 +25,7 @@ describe('write', () => {
         strictEqual(fs.readFileSync(resolve(__dirname, 'support/tmp/foo.txt')).toString(), '987\n654')
       })
 
-      afterEach(() => {
+      afterEach(function () {
         if (fs.existsSync(resolve(__dirname, 'support/tmp/foo.txt'))) {
           fs.rmSync(resolve(__dirname, 'support/tmp/foo.txt'))
         }

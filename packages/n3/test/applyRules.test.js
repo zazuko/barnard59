@@ -4,7 +4,7 @@ import toStream from 'rdf-dataset-ext/toStream.js'
 import env from 'barnard59-env'
 import applyRules from '../applyRules.js'
 
-const toArray = async iterable => {
+const toArray = async (iterable) => {
   const result = []
   for await (const item of iterable) {
     result.push(item)
@@ -28,17 +28,17 @@ const rulesText = `
 { ?s ex:p1 ?o } => { ?s a ex:C } .
 `
 
-describe('n3', () => {
-  describe('applyRules', () => {
-    it('should be a factory', () => {
+describe('n3', function () {
+  describe('applyRules', function () {
+    it('should be a factory', function () {
       strictEqual(typeof applyRules, 'function')
     })
 
-    it('should throw an error if no argument is given', async () => {
+    it('should throw an error if no argument is given', async function () {
       await assertThrows(() => applyRules(), Error)
     })
 
-    it('should pass the input through', async () => {
+    it('should pass the input through', async function () {
       const generator = applyRules({ rulesText: '', includeInput: true })
 
       const inputArray = getInputArray()
@@ -48,7 +48,7 @@ describe('n3', () => {
       deepEqual(outputArray, inputArray)
     })
 
-    it('should derive triples', async () => {
+    it('should derive triples', async function () {
       const generator = applyRules({ rulesText })
 
       const inputArray = getInputArray()
@@ -67,7 +67,7 @@ describe('n3', () => {
       strictEqual(output2[0].object.value, 'http://example.org/C')
     })
 
-    it('should derive triples and pass input', async () => {
+    it('should derive triples and pass input', async function () {
       const generator = applyRules({ rulesText, includeInput: true })
 
       const inputArray = getInputArray()

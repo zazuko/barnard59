@@ -49,5 +49,8 @@
     "recursive": true,
     "require": "../../test/mocha-setup.cjs",
     "loader": "ts-node/esm/transpile-only"
+  },
+  "engines": {
+    "node": ">= 16.8"
   }
 }

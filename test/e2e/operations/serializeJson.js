@@ -14,7 +14,8 @@ class JsonSerializer extends Transform {
       this.push('[\n')
 
       this.first = false
-    } else {
+    }
+    else {
       this.push(',\n')
     }
 

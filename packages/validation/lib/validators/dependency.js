@@ -12,7 +12,8 @@ export default {
     let issue
     if (isModuleInstalled(library)) {
       issue = Issue.info({ rule: this, templateData: { library, dependencyType } })
-    } else {
+    }
+    else {
       issue = Issue.error({
         rule: this,
         templateData: { library, dependencyType, operations },
