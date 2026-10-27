@@ -1,5 +1,18 @@
 # barnard59-shacl
 
+## 2.0.0
+
+### Major Changes
+
+- [#399](https://github.com/zazuko/barnard59/pull/399) [`e5b0100`](https://github.com/zazuko/barnard59/commit/e5b01008eefe180859da3dc940fdb1b90a866abe) Thanks [@tpluscode](https://github.com/tpluscode)! - Removed `readable-stream` and replaced all usages with `node:stream`
+
+### Patch Changes
+
+- Updated dependencies [[`6a7c8af`](https://github.com/zazuko/barnard59/commit/6a7c8afbbc5889c581db05d1654e38f75e914218), [`e5b0100`](https://github.com/zazuko/barnard59/commit/e5b01008eefe180859da3dc940fdb1b90a866abe)]:
+  - barnard59-base@3.0.0
+  - barnard59-rdf@4.0.0
+  - barnard59-formats@4.0.3
+
 ## 1.4.11
 
 ### Patch Changes

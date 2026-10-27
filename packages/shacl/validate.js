@@ -1,6 +1,6 @@
+import { Transform } from 'node:stream'
 import { isStream, isReadableStream } from 'is-stream'
 import SHACLValidator from 'rdf-validate-shacl'
-import { Transform } from 'readable-stream'
 import { ValidationError } from './lib/errors.js'
 
 /**
@@ -56,7 +56,7 @@ class ValidateChunk extends Transform {
 
 /**
  * @this {import('barnard59-core').Context}
- * @param {import('stream').Stream | { shape: import('stream').Stream, maxErrors?: number }} arg
+ * @param {import('node:stream').Stream | { shape: import('node:stream').Stream, maxErrors?: number }} arg
  * @return {Promise<Transform>}
  */
 export async function shacl(arg) {

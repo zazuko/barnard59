@@ -1,6 +1,6 @@
 {
   "name": "barnard59-sparql",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "SPARQL support for Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/zazuko/barnard59-sparql.git"
+    "url": "https://github.com/zazuko/barnard59"
   },
   "bugs": {
     "url": "https://github.com/zazuko/barnard59-sparql/issues"
@@ -23,7 +23,6 @@
   "dependencies": {
     "duplex-to": "^1.0.1",
     "oxigraph": "^0.4.0-alpha.2",
-    "readable-stream": "^4.5.2",
     "sparql-http-client": "^3.0.0",
     "sparqljs": "^3.7.4"
   },

@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import approvals from 'approvals'
+import approvals from '@approval-tests/approvals'
 import rdf from 'barnard59-env'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import { desugar } from '../lib/pipeline.js'

@@ -1,5 +1,15 @@
 # barnard59-sparql
 
+## 3.0.0
+
+### Major Changes
+
+- [#399](https://github.com/zazuko/barnard59/pull/399) [`e5b0100`](https://github.com/zazuko/barnard59/commit/e5b01008eefe180859da3dc940fdb1b90a866abe) Thanks [@tpluscode](https://github.com/tpluscode)! - Removed `readable-stream` and replaced all usages with `node:stream`
+
+### Patch Changes
+
+- [#384](https://github.com/zazuko/barnard59/pull/384) [`e6cec10`](https://github.com/zazuko/barnard59/commit/e6cec10b1c72ec34b80ea0c781b1d3835ca65f41) Thanks [@anupamme](https://github.com/anupamme)! - Validate that query argument is a non-empty string in `select`/`construct`
+
 ## 2.3.0
 
 ### Minor Changes

@@ -1,5 +1,15 @@
 # barnard59-ftp
 
+## 3.0.0
+
+### Major Changes
+
+- [#399](https://github.com/zazuko/barnard59/pull/399) [`e5b0100`](https://github.com/zazuko/barnard59/commit/e5b01008eefe180859da3dc940fdb1b90a866abe) Thanks [@tpluscode](https://github.com/tpluscode)! - Removed `readable-stream` and replaced all usages with `node:stream`
+
+### Patch Changes
+
+- [#403](https://github.com/zazuko/barnard59/pull/403) [`62c185a`](https://github.com/zazuko/barnard59/commit/62c185a1610a69b46350c52c3788210e3cf50d70) Thanks [@tpluscode](https://github.com/tpluscode)! - Fixes a bug where SFTP connection would be prematurely closed
+
 ## 2.2.0
 
 ### Minor Changes

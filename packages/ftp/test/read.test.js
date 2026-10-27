@@ -18,7 +18,10 @@ describe('read', () => {
           const options = { ...server.options, ...additionalOptions }
 
           const stream = await read({ filename: 'data/xyz.txt', ...options })
-          const content = await getStream(stream)
+          const [content] = await Promise.all([
+            getStream(stream),
+            new Promise(resolve => stream.on('close', resolve)),
+          ])
 
           strictEqual(content, '987\n654')
         })

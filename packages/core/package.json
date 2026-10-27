@@ -1,6 +1,6 @@
 {
   "name": "barnard59-core",
-  "version": "6.1.4",
+  "version": "7.0.0",
   "description": "Core component of Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
@@ -31,15 +31,13 @@
     "onetime": "^6.0.0",
     "rdf-loader-code": "^2.2.2",
     "rdf-loaders-registry": "^1.0.3",
-    "readable-stream": "^3.6.0",
     "untildify": "^5.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "@rdfjs/namespace": "^2.0.0",
-    "@types/readable-stream": "^4.0.9",
     "barnard59-env": "^1.2.7",
-    "barnard59-http": "^2.1.1",
+    "barnard59-http": "^3.0.0",
     "barnard59-test-support": "^0.0.3",
     "chai": "^4.3.7",
     "get-stream": "^6.0.1",

@@ -3,12 +3,12 @@ import fs from 'node:fs'
 import fsp from 'fs/promises'
 import { fileURLToPath } from 'node:url'
 import { resolve } from 'node:path'
+import { Readable } from 'node:stream'
 import assertThrows from 'assert-throws-async'
 import getStream from 'get-stream'
 import { isDuplexStream as isDuplex } from 'is-stream'
 import nock from 'nock'
 import rdf from 'barnard59-env'
-import { Readable } from 'readable-stream'
 import appendUnbound from '../lib/append.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))

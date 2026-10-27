@@ -1,4 +1,4 @@
-import { Transform } from 'readable-stream'
+import { Transform } from 'node:stream'
 import command from './lib/command.js'
 
 function move({ source, target, ...options }) {

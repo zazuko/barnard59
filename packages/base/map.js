@@ -23,7 +23,7 @@ import transform from 'parallel-transform'
  * @this {import('barnard59-core').Context}
  * @param {MapOptions<From, To, Args>} options Transform function or complex options
  * @param {Args} args Additional arguments to pass to the transform function
- * @return {import('stream').Transform}
+ * @return {import('node:stream').Transform}
  * @template From, To
  * @template {Array<unknown>} Args
  */
