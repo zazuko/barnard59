@@ -12,8 +12,7 @@
     "test": "mocha",
     "prebuild": "rimraf -g *.d.ts [!node_modules]/**/*.d.ts",
     "build": "tsc",
-    "prepack": "npm run build",
-    "generate-autocomplete-spec": "node --loader ts-node/esm --no-warnings ./bin/generate-autocomplete-spec.js > fig-spec.ts"
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -53,7 +52,6 @@
   },
   "devDependencies": {
     "@approval-tests/approvals": "^7.5.8",
-    "@fig/complete-commander": "^3.1.0",
     "@rdfjs-elements/formats-pretty": "^0.6.9",
     "@types/lodash": "^4.14.202",
     "@types/npmcli__arborist": "^6.3.3",
