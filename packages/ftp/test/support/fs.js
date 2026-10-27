@@ -1,5 +1,5 @@
-import fs, { copyFile as _copyFile, createReadStream as _createReadStream, mkdir as _mkdir, readFile as _readFile } from 'fs'
-import { promisify } from 'util'
+import fs, { copyFile as _copyFile, createReadStream as _createReadStream, mkdir as _mkdir, readFile as _readFile } from 'node:fs'
+import { promisify } from 'node:util'
 import { rimraf as rmdir } from 'rimraf'
 
 const copyFile = promisify(_copyFile)

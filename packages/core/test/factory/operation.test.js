@@ -9,12 +9,12 @@ import argsToStream from '../support/operations/argsToStream.js'
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 const context = { env }
 
-describe('factory/operation', () => {
-  it('should be a method', () => {
+describe('factory/operation', function () {
+  it('should be a method', function () {
     strictEqual(typeof createOperation, 'function')
   })
 
-  it('should load the given operation', async () => {
+  it('should load the given operation', async function () {
     const { ptr: definition, basePath } = await loadPipelineDefinition('plain')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0].out(ns.code.implementedBy)
 

@@ -90,14 +90,15 @@ function generateGraphMock() {
   return graph
 }
 
-describe('parser', () => {
+describe('parser', function () {
   let checks
-  beforeEach(async () => {
+
+  beforeEach(async function () {
     checks = new ChecksCollection()
   })
 
-  describe('getDependencies', () => {
-    it('should create tree structure for codelinks', () => {
+  describe('getDependencies', function () {
+    it('should create tree structure for codelinks', function () {
       const input = [
         { stepName: 'a', stepOperation: 'node:barnard59-base#fetch.json' },
         { stepName: 'b', stepOperation: 'node:barnard59-base#map' },
@@ -117,24 +118,25 @@ describe('parser', () => {
       assert.deepStrictEqual(expected, actual)
     })
 
-    it('should fail with noniterable input', () => {
+    it('should fail with noniterable input', function () {
       const input = 'node:barnard59-base#fetch.json'
       assert.throws(() => parser.getDependencies(input), TypeError)
     })
 
-    it('should forward iriResolve error', () => {
+    it('should forward iriResolve error', function () {
       const input = [{ stepOperation: 'abc' }]
       try {
         iriResolve(input[0].stepOperation, process.cwd())
         assert.fail('The input is invalid')
-      } catch (expectedError) {
+      }
+      catch (expectedError) {
         assert.throws(() => parser.getDependencies(input), expectedError)
       }
     })
   })
 
-  describe('getAllCodeLinks', () => {
-    it('should transform dict values to set', () => {
+  describe('getAllCodeLinks', function () {
+    it('should transform dict values to set', function () {
       const input = {
         pancakes: ['flour', 'eggs', 'milk', 'olive oil'],
         brioche: ['flour', 'milk', 'butter', 'yeast'],
@@ -145,8 +147,8 @@ describe('parser', () => {
     })
   })
 
-  describe('readGraph', () => {
-    it('should read .ttl file and create DatasetCore object', async () => {
+  describe('readGraph', function () {
+    it('should read .ttl file and create DatasetCore object', async function () {
       const input = path.join(__dirname, 'fixtures/example.ttl')
       const graph = await parser.readGraph(input, new ChecksCollection())
 
@@ -154,7 +156,7 @@ describe('parser', () => {
     })
   })
 
-  describe('getModuleOperationProperties', () => {
+  describe('getModuleOperationProperties', function () {
   // Mock input properties
     const ids = ['Christian Andersen', 'Johnny Bravo', 'Pikachu']
     const andersenNodes = [{
@@ -188,19 +190,19 @@ describe('parser', () => {
     graph.out.onCall(1).returns(bravoNodes)
     graph.out.onCall(2).returns(picachuNodes)
 
-    it('should create properties tree for identifiers', () => {
+    it('should create properties tree for identifiers', function () {
       const actual = parser.getModuleOperationProperties(graph, ids)
       const expected = {
         'Christian Andersen': ['writer', 'Dannish'],
         'Johnny Bravo': ['narcissist', 'womanizer'],
-        Pikachu: null,
+        'Pikachu': null,
       }
       assert.deepStrictEqual(actual, expected)
     })
   })
 
-  describe('getIdentifiers', () => {
-    it('should create pipelines list', () => {
+  describe('getIdentifiers', function () {
+    it('should create pipelines list', function () {
       const input = generateGraphMock()
       const expected = {
         pizza: [
@@ -219,7 +221,7 @@ describe('parser', () => {
       assert.deepStrictEqual(actual, expected)
     })
 
-    it('should return only requested pipeline', () => {
+    it('should return only requested pipeline', function () {
       const input = generateGraphMock()
       const expected = {
         pancakes: [
@@ -231,14 +233,14 @@ describe('parser', () => {
       assert.deepStrictEqual(actual, expected)
     })
 
-    it('should return empty dict if pipeline does not exist', () => {
+    it('should return empty dict if pipeline does not exist', function () {
       const input = generateGraphMock()
       const expected = {}
       const actual = parser.getIdentifiers(input, checks, 'inexistentPipeline')
       assert.deepStrictEqual(actual, expected)
     })
 
-    it('should not crash on invalid steps', async () => {
+    it('should not crash on invalid steps', async function () {
       const input = await turtleToCF(`
       @prefix p: <https://pipeline.described.at/> .
 
@@ -269,8 +271,8 @@ describe('parser', () => {
     })
   })
 
-  describe('getAllOperationProperties', () => {
-    it('should get operation properties from manifest.ttl file', async () => {
+  describe('getAllOperationProperties', function () {
+    it('should get operation properties from manifest.ttl file', async function () {
       const mockedParser = await esmock('../lib/parser.js', {
         '../lib/utils.js': {
           getManifestPath: sinon.stub().returns(path.resolve(__dirname, 'fixtures/manifest.ttl')),
@@ -292,7 +294,7 @@ describe('parser', () => {
       assert.deepStrictEqual(actual, expected)
     })
 
-    it("should return nulls if manifest.ttl doesn't exist", async () => {
+    it("should return nulls if manifest.ttl doesn't exist", async function () {
       const parser = await esmock('../lib/parser.js', {
         '../lib/utils.js': {
           getManifestPath: sinon.stub().returns(null),
@@ -317,7 +319,7 @@ describe('parser', () => {
       assert.deepStrictEqual(actual, expected)
     })
 
-    it('should return properties for existing operations, and nulls for nonexisting ones', async () => {
+    it('should return properties for existing operations, and nulls for nonexisting ones', async function () {
       const parser = await esmock('../lib/parser.js', {
         '../lib/utils.js': {
           getManifestPath: sinon.stub().returns(path.resolve(__dirname, 'fixtures/manifest.ttl')),
@@ -343,7 +345,7 @@ describe('parser', () => {
       assert.deepStrictEqual(actual, expected)
     })
 
-    it('should report missing packages', async () => {
+    it('should report missing packages', async function () {
       const parser = await esmock('../lib/parser.js', {
         '../lib/utils.js': {
           isModuleInstalled: sinon.stub().returns(false),
@@ -364,7 +366,7 @@ describe('parser', () => {
     })
   })
 
-  describe('getPipelineProperties', () => {
+  describe('getPipelineProperties', function () {
     const pipeline = {
       term: {
         value: null,
@@ -386,7 +388,8 @@ describe('parser', () => {
     })
 
     const pipelinesIDs = ['pizza', 'pancakes']
-    it('should extract pipeline properties', () => {
+
+    it('should extract pipeline properties', function () {
       graph.out.onCall(0).returns([pipeline, pipeline])
       graph.out.onCall(1).returns([pipeline, pipeline])
 
@@ -397,7 +400,8 @@ describe('parser', () => {
       }
       assert.deepStrictEqual(actual, expected)
     })
-    it('should return null when no properties exist', () => {
+
+    it('should return null when no properties exist', function () {
       graph.out.onCall(2).returns([])
       graph.out.onCall(3).returns([])
       const actual = parser.getPipelineProperties(graph, pipelinesIDs)
@@ -409,7 +413,7 @@ describe('parser', () => {
     })
   })
 
-  describe('validatePipelines', () => {
+  describe('validatePipelines', function () {
     const pipelines = {
       pizza:
   [{ stepOperation: 'Turn on the oven' },
@@ -431,7 +435,7 @@ describe('parser', () => {
     const expectedPizzaIssue = validators.pipelinePropertiesExist.validate('pizza', [])
     const expectedPancakesIssue = validators.pipelinePropertiesExist.validate('pancakes', [])
 
-    it('should issue a warning if pipeline has no readable/writable property', () => {
+    it('should issue a warning if pipeline has no readable/writable property', function () {
       const pipeline2properties = {
         pancakes: ['Pipeline'],
         pizza: ['Pipeline', 'crunchy'],
@@ -446,7 +450,7 @@ describe('parser', () => {
       assert(checkArrayContainsObject(actualPancakesIssues, expectedPancakesIssue))
     })
 
-    it('should issue an info if pipeline has readable/writable property', () => {
+    it('should issue an info if pipeline has readable/writable property', function () {
       const pipeline2properties = {
         pancakes: ['soft', 'Readable'],
         pizza: ['crunchy', 'Writable'],

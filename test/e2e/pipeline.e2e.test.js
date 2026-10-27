@@ -18,21 +18,21 @@ const dateTimeLd = {
     dateTime: 'http://purl.org/dc/elements/1.1/date',
   },
   '@id': 'https://timeapi.io/api/time/current/zone?timeZone=CET',
-  date: '2019-03-07T12:58:54.094127+01:00',
+  'date': '2019-03-07T12:58:54.094127+01:00',
 }
 
 const dateTime = {
   dateTime: '2019-03-07T12:58:54.094127+01:00',
 }
 
-describe('Pipeline', () => {
-  beforeEach(() => {
+describe('Pipeline', function () {
+  beforeEach(function () {
     nock('https://timeapi.io')
       .get('/api/time/current/zone?timeZone=CET')
       .reply(200, dateTime)
   })
 
-  it('should load code using node: scheme', async () => {
+  it('should load code using node: scheme', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('world-clock/node')
     const pipeline = await createPipeline(ptr, { env, basePath })
 
@@ -41,7 +41,7 @@ describe('Pipeline', () => {
     deepStrictEqual(JSON.parse(out), dateTimeLd)
   })
 
-  it('should load code using file: scheme', async () => {
+  it('should load code using file: scheme', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('world-clock/file')
     const pipeline = await createPipeline(ptr, { env, basePath })
 
@@ -50,7 +50,7 @@ describe('Pipeline', () => {
     deepStrictEqual(JSON.parse(out), dateTimeLd)
   })
 
-  it('should load code using async loaders', async () => {
+  it('should load code using async loaders', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('world-clock/async')
     const loaderRegistry = defaultLoaderRegistry(env)
 
@@ -64,7 +64,7 @@ describe('Pipeline', () => {
     deepStrictEqual(JSON.parse(out), dateTimeLd)
   })
 
-  it('should load file contents using loader', async () => {
+  it('should load file contents using loader', async function () {
     // given
     const { ptr, basePath } = await loadPipelineDefinition('file-loader')
     const pipeline = await createPipeline(ptr, {
@@ -80,7 +80,7 @@ describe('Pipeline', () => {
     expect(toCanonical(out)).to.eq(toCanonical(source))
   })
 
-  it('should be set to fail from sub-pipeline', async () => {
+  it('should be set to fail from sub-pipeline', async function () {
     // given
     const { ptr, basePath } = await loadPipelineDefinition('sub-pipeline-error')
     const pipeline = await createPipeline(ptr, {
@@ -97,7 +97,7 @@ describe('Pipeline', () => {
     expect(pipeline.error.message).to.eq('foo')
   })
 
-  it('works with async generator steps', async () => {
+  it('works with async generator steps', async function () {
     // given
     const { ptr, basePath } = await loadPipelineDefinition('limit-offset')
     const pipeline = await createPipeline(ptr, {

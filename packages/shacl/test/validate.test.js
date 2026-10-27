@@ -1,5 +1,5 @@
-import assert, { strictEqual } from 'assert'
-import * as url from 'url'
+import assert, { strictEqual } from 'node:assert'
+import * as url from 'node:url'
 import assertThrows from 'assert-throws-async'
 import { expect } from 'chai'
 import getStream, { getStreamAsArray } from 'get-stream'
@@ -22,19 +22,19 @@ function getRDFStream(filePath) {
   return env.fromFile(url.fileURLToPath(new URL(filePath, import.meta.url)))
 }
 
-describe('shacl', () => {
-  describe('validate', () => {
-    it('should be a factory', () => {
+describe('shacl', function () {
+  describe('validate', function () {
+    it('should be a factory', function () {
       strictEqual(typeof shacl, 'function')
     })
 
-    it('should throw an error if no argument is given', async () => {
+    it('should throw an error if no argument is given', async function () {
       await assertThrows(async () => {
         await shacl()
       }, Error, /Needs a SHACL shape as parameter/)
     })
 
-    it('should return a duplex stream with a stream shape parameter', async () => {
+    it('should return a duplex stream with a stream shape parameter', async function () {
       const stream = await shacl(getRDFStream(shapePath))
 
       strictEqual(isReadableStream(stream), true)
@@ -44,7 +44,7 @@ describe('shacl', () => {
       await getStream(stream)
     })
 
-    it('sets maxErrors for validator', async () => {
+    it('sets maxErrors for validator', async function () {
       const stream = await shacl({
         shape: getRDFStream(shapePath),
         maxErrors: 200,
@@ -54,7 +54,7 @@ describe('shacl', () => {
       stream.end()
     })
 
-    it('unsets maxErrors when argument is zero', async () => {
+    it('unsets maxErrors when argument is zero', async function () {
       const stream = await shacl({
         shape: getRDFStream(shapePath),
         maxErrors: 0,
@@ -64,7 +64,7 @@ describe('shacl', () => {
       stream.end()
     })
 
-    it('does not fail when validation ok', async () => {
+    it('does not fail when validation ok', async function () {
       const data = await getRDFDataset('support/data.ttl')
       const dataset = [data, data, data, data]
 
@@ -76,7 +76,7 @@ describe('shacl', () => {
       strictEqual(passedTrough.length, dataset.length)
     })
 
-    it('successfully fails when there are validation errors', async () => {
+    it('successfully fails when there are validation errors', async function () {
       const data = await getRDFDataset('support/data.ttl')
       const wrongData = await getRDFDataset('support/wrong-data.ttl')
       const dataset = [data, data, wrongData, data]
@@ -87,7 +87,7 @@ describe('shacl', () => {
 
       await assertThrows(async () => {
         await getStreamAsArray(validatedInput)
-      }, Error, error => {
+      }, Error, (error) => {
         strictEqual(error.report.dataset.size > 0, true)
         strictEqual(error.shapesGraph.size > 0, true)
         strictEqual(error.dataGraph.size > 0, true)
@@ -95,7 +95,7 @@ describe('shacl', () => {
       })
     })
 
-    it('does not fail when there are validation errors but callback returns true', async () => {
+    it('does not fail when there are validation errors but callback returns true', async function () {
       const data = await getRDFDataset('support/data.ttl')
       const wrongData = await getRDFDataset('support/wrong-data.ttl')
       const dataset = [data, data, wrongData, data]

@@ -1,4 +1,4 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import { expect } from 'chai'
 import shell from 'shelljs'
 import stripAnsi from 'strip-ansi'
@@ -9,8 +9,8 @@ const cwd = new URL('..', import.meta.url).pathname
 describe('barnard59', function () {
   this.timeout(20000)
 
-  describe('run', () => {
-    it('should suggest alternatives when multiple root pipelines exist', () => {
+  describe('run', function () {
+    it('should suggest alternatives when multiple root pipelines exist', function () {
       const pipelineFile = filenamePipelineDefinition('multiple-root')
       const command = `npx barnard59 run ${pipelineFile}`
 
@@ -19,7 +19,8 @@ describe('barnard59', function () {
       strictEqual(result.code, 1)
       expect(result.stderr).to.equal('Multiple root pipelines found. Try one of these:\n\t--pipeline http://example.org/pipeline/p1\n\t--pipeline http://example.org/pipeline/p2\n')
     })
-    it('should exit with error code 0 if there are no error while processing the pipeline', () => {
+
+    it('should exit with error code 0 if there are no error while processing the pipeline', function () {
       const pipelineFile = filenamePipelineDefinition('simple')
       const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
@@ -28,7 +29,7 @@ describe('barnard59', function () {
       strictEqual(result.code, 0)
     })
 
-    it('should exit with error code 1 when an error in the pipeline occurs', () => {
+    it('should exit with error code 1 when an error in the pipeline occurs', function () {
       const pipelineFile = filenamePipelineDefinition('error')
       const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
@@ -37,8 +38,8 @@ describe('barnard59', function () {
       strictEqual(result.code, 1)
     })
 
-    describe('verbose', () => {
-      it('should log info messages if verbose flag is set', () => {
+    describe('verbose', function () {
+      it('should log info messages if verbose flag is set', function () {
         const pipelineFile = filenamePipelineDefinition('logs')
         const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
@@ -47,7 +48,7 @@ describe('barnard59', function () {
         expect(result).to.match(/^info: /m)
       })
 
-      it('all logs suppressed with --quiet flag', () => {
+      it('all logs suppressed with --quiet flag', function () {
         const pipelineFile = filenamePipelineDefinition('logs')
         const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} -q`
 
@@ -56,7 +57,7 @@ describe('barnard59', function () {
         expect(result).to.be.empty
       })
 
-      it('should log info messages if verbose flag is set before command', () => {
+      it('should log info messages if verbose flag is set before command', function () {
         const pipelineFile = filenamePipelineDefinition('logs')
         const command = `npx barnard59 --verbose run --pipeline=http://example.org/pipeline/ ${pipelineFile}`
 
@@ -65,7 +66,7 @@ describe('barnard59', function () {
         expect(result).to.match(/^info: /m)
       })
 
-      it('should not log debug messages if verbose flag is set', () => {
+      it('should not log debug messages if verbose flag is set', function () {
         const pipelineFile = filenamePipelineDefinition('logs')
         const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
@@ -74,7 +75,7 @@ describe('barnard59', function () {
         expect(result).not.to.match(/^debug: /m)
       })
 
-      it('should log trace messages if verbose flag is set 4 times', () => {
+      it('should log trace messages if verbose flag is set 4 times', function () {
         const pipelineFile = filenamePipelineDefinition('logs')
         const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ -vvvv ${pipelineFile}`
 
@@ -84,8 +85,8 @@ describe('barnard59', function () {
       })
     })
 
-    describe('variable', () => {
-      it('should set the given variable to the given value', () => {
+    describe('variable', function () {
+      it('should set the given variable to the given value', function () {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `npx barnard59 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc=123`
 
@@ -94,7 +95,7 @@ describe('barnard59', function () {
         strictEqual(result.includes('abc: 123'), true)
       })
 
-      it('should set the given variable to the given value before command', () => {
+      it('should set the given variable to the given value before command', function () {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `npx barnard59 --variable=abc=123 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile}`
 
@@ -103,7 +104,7 @@ describe('barnard59', function () {
         strictEqual(result.includes('abc: 123'), true)
       })
 
-      it('should set the given variable to the value of the environment variable with the same name', () => {
+      it('should set the given variable to the value of the environment variable with the same name', function () {
         const pipelineFile = filenamePipelineDefinition('simple')
         const command = `abc=123 npx barnard59 run --pipeline=http://example.org/pipeline/ --verbose ${pipelineFile} --variable=abc`
 
@@ -113,7 +114,7 @@ describe('barnard59', function () {
       })
     })
 
-    describe('variable-all', () => {
+    describe('variable-all', function () {
       [
         ['abc=123 def=456', '--variable-all', '', 'should import all environment variables'],
         ['abc=123 def=456', '', '--variable-all', 'should import all environment variables'],
@@ -122,8 +123,8 @@ describe('barnard59', function () {
         ['abc=123 def=123', '--variable def=456', '--variable-all', 'should override single variable'],
         ['abc=123 def=123', '', '--variable-all --variable def=456', 'should override single variable'],
       ].forEach(([env, optionsBefore, optionsAfter, title]) => {
-        context(`${optionsBefore} run ${optionsAfter}`, () => {
-          it(title, () => {
+        context(`${optionsBefore} run ${optionsAfter}`, function () {
+          it(title, function () {
             const pipelineFile = filenamePipelineDefinition('simple')
             const command = `${env} npx barnard59 ${optionsBefore} run --pipeline=http://example.org/pipeline/ -vv ${pipelineFile} ${optionsAfter}`
 
@@ -138,7 +139,7 @@ describe('barnard59', function () {
   })
 
   describe('examples', function () {
-    it('should run the fetch-json-to-ntriples.json example without error', () => {
+    it('should run the fetch-json-to-ntriples.json example without error', function () {
       const pipelineFile = (new URL('../examples/fetch-json-to-ntriples.json', import.meta.url)).pathname
       const command = `npx barnard59 run --pipeline=http://example.org/pipeline/cet ${pipelineFile}`
 
@@ -147,7 +148,7 @@ describe('barnard59', function () {
       strictEqual(result.code, 0, result.stderr)
     })
 
-    it('should run the fetch-json-to-ntriples.ttl example without error', () => {
+    it('should run the fetch-json-to-ntriples.ttl example without error', function () {
       const pipelineFile = (new URL('../examples/fetch-json-to-ntriples.ttl', import.meta.url)).pathname
       const command = `npx barnard59 run --pipeline=http://example.org/pipeline/utc ${pipelineFile}`
 
@@ -156,7 +157,7 @@ describe('barnard59', function () {
       strictEqual(result.code, 0, result.stderr)
     })
 
-    it('should run the parse-csvw.ttl example without error', () => {
+    it('should run the parse-csvw.ttl example without error', function () {
       const pipelineFile = (new URL('../examples/parse-csvw.ttl', import.meta.url)).pathname
       const command = `npx barnard59 run -vv --pipeline=http://example.org/pipeline/parseCsvw ${pipelineFile}`
 

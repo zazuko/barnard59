@@ -7,7 +7,7 @@ import type { Context, VariableMap } from '../../index.js'
 
 export type Operation = (this: Context, ...args: unknown[]) => Promise<AnyStream | (() => AsyncGenerator)> | AnyStream | (() => AsyncGenerator)
 
-async function createOperation(ptr: MultiPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger; variables: VariableMap }) {
+async function createOperation(ptr: MultiPointer, { basePath, context, loaderRegistry, logger, variables }: { basePath: string, context: Pick<Context, 'env'>, loaderRegistry: LoaderRegistry, logger: Logger, variables: VariableMap }) {
   if (!isGraphPointer(ptr)) {
     throw new Error(`Expected a single node, got ${ptr.values.join(', ')}`)
   }

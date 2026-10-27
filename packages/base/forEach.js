@@ -86,7 +86,8 @@ class ForEach extends stream.Duplex {
       this.pull = null
 
       return callback()
-    } catch (/** @type {any} */ cause) {
+    }
+    catch (/** @type {any} */ cause) {
       const err = new Error(`error in forEach sub-pipeline ${this.ptr.value}`)
 
       err.stack += `\nCaused by: ${cause.stack}`

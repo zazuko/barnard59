@@ -3,12 +3,12 @@ import rdf from 'barnard59-env'
 import PatternMatcher from '../lib/PatternMatcher.js'
 import { ex } from './support/namespaces.js'
 
-describe('PatternMatcher', () => {
-  it('should be a constructor', () => {
+describe('PatternMatcher', function () {
+  it('should be a constructor', function () {
     strictEqual(typeof PatternMatcher, 'function')
   })
 
-  it('should assign the given terms to the pattern object', () => {
+  it('should assign the given terms to the pattern object', function () {
     const subject = ex.subject
     const predicate = ex.predicate
     const object = ex.object
@@ -22,7 +22,7 @@ describe('PatternMatcher', () => {
     strictEqual(matcher.pattern.graph.has(graph), true)
   })
 
-  it('should assign the given iterable to the pattern object', () => {
+  it('should assign the given iterable to the pattern object', function () {
     const subject1 = ex.subject1
     const subject2 = ex.subject2
     const predicate1 = ex.predicate1
@@ -49,14 +49,14 @@ describe('PatternMatcher', () => {
     strictEqual(matcher.pattern.graph.has(graph2), true)
   })
 
-  describe('.test', () => {
-    it('should be a method', () => {
+  describe('.test', function () {
+    it('should be a method', function () {
       const matcher = new PatternMatcher()
 
       strictEqual(typeof matcher.test, 'function')
     })
 
-    it('should return false if the quad doesn\'t match the pattern', () => {
+    it('should return false if the quad doesn\'t match the pattern', function () {
       const subject = ex.subject
       const predicate = ex.predicate
       const object = ex.object
@@ -69,7 +69,7 @@ describe('PatternMatcher', () => {
       strictEqual(result, false)
     })
 
-    it('should return true if the subject matches', () => {
+    it('should return true if the subject matches', function () {
       const subject = ex.subject
       const predicate = ex.predicate
       const object = ex.object
@@ -82,7 +82,7 @@ describe('PatternMatcher', () => {
       strictEqual(result, true)
     })
 
-    it('should return true if the predicate matches', () => {
+    it('should return true if the predicate matches', function () {
       const subject = ex.subject
       const predicate = ex.predicate
       const object = ex.object
@@ -95,7 +95,7 @@ describe('PatternMatcher', () => {
       strictEqual(result, true)
     })
 
-    it('should return true if the object matches', () => {
+    it('should return true if the object matches', function () {
       const subject = ex.subject
       const predicate = ex.predicate
       const object = ex.object
@@ -108,7 +108,7 @@ describe('PatternMatcher', () => {
       strictEqual(result, true)
     })
 
-    it('should return true if the graph matches', () => {
+    it('should return true if the graph matches', function () {
       const subject = ex.subject
       const predicate = ex.predicate
       const object = ex.object

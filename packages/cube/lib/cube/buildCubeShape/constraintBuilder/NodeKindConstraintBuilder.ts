@@ -43,6 +43,8 @@ export class NodeKindConstraintBuilder implements Builder {
         return this.sh.BlankNodeOrLiteral
       }
     }
+
+    return undefined
   }
 
   build(ptr: GraphPointer) {

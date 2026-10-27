@@ -1,18 +1,18 @@
-import assert from 'assert'
-import fs from 'fs'
+import assert from 'node:assert'
+import fs from 'node:fs'
 import * as utils from '../lib/utils.js'
 import { checkArrayContainsField, checkArrayContainsObject } from './helpers.js'
 
-describe('utils', () => {
-  describe('removeFilePart', () => {
-    it('should remove last file part', () => {
+describe('utils', function () {
+  describe('removeFilePart', function () {
+    it('should remove last file part', function () {
       const input = 'a/b/c'
       const expected = 'a/b'
       const actual = utils.removeFilePart(input)
       assert.strictEqual(actual, expected)
     })
 
-    it('should remove last file part, if it has extension', () => {
+    it('should remove last file part, if it has extension', function () {
       const input = 'a/b/c.txt'
       const expected = 'a/b'
       const actual = utils.removeFilePart(input)
@@ -20,37 +20,39 @@ describe('utils', () => {
     })
   })
 
-  describe('checkArrayContainsField', () => {
+  describe('checkArrayContainsField', function () {
     const array = [{ gender: 'male', age: 38 }, { gender: 'male', job: 'unemployed' }]
-    it('should return true if field with given value exists in at least one object', () => {
+
+    it('should return true if field with given value exists in at least one object', function () {
       const expected = true
       const actual = checkArrayContainsField(array, 'age', 38)
       assert.strictEqual(actual, expected)
     })
 
-    it('should return false if field with given value does not exists in any object', () => {
+    it('should return false if field with given value does not exists in any object', function () {
       const expected = false
       const actual = checkArrayContainsField(array, 'age', 17)
       assert.strictEqual(actual, expected)
     })
 
-    it('should return false if field does not exists in any object', () => {
+    it('should return false if field does not exists in any object', function () {
       const expected = false
       const actual = checkArrayContainsField(array, 'address', 'Bahnhofstrasse')
       assert.strictEqual(actual, expected)
     })
   })
 
-  describe('checkArrayContainsObject', () => {
+  describe('checkArrayContainsObject', function () {
     const array = [{ gender: 'male', age: 38 }, { gender: 'male', job: 'unemployed' }]
-    it('should return true if same object exists in array', () => {
+
+    it('should return true if same object exists in array', function () {
       const obj = { gender: 'male', age: 38 }
       const expected = true
       const actual = checkArrayContainsObject(array, obj)
       assert.strictEqual(actual, expected)
     })
 
-    it('should return false if same object does not exists in array', () => {
+    it('should return false if same object does not exists in array', function () {
       const objects = [{ gender: 'male', age: 17 }, { phone: 123 }, {}]
       const expected = false
       for (const obj of objects) {
@@ -60,61 +62,61 @@ describe('utils', () => {
     })
   })
 
-  describe('isModuleInstalled', () => {
-    it('should return true if module is installed', () => {
+  describe('isModuleInstalled', function () {
+    it('should return true if module is installed', function () {
       const expected = true
       const actual = utils.isModuleInstalled('clownface')
       assert.strictEqual(actual, expected)
     })
 
-    it('should return false if module is not installed', () => {
+    it('should return false if module is not installed', function () {
       const expected = false
       const actual = utils.isModuleInstalled('inexistent-module')
       assert.strictEqual(actual, expected)
     })
   })
 
-  describe('getManifestPath', () => {
-    it('should return path if manifest exists', () => {
+  describe('getManifestPath', function () {
+    it('should return path if manifest exists', function () {
       const actual = utils.getManifestPath('barnard59-base')
       assert(fs.existsSync(actual))
     })
 
-    it('should return null if module is not installed', () => {
+    it('should return null if module is not installed', function () {
       const expected = null
       const actual = utils.getManifestPath('inexistent-module')
       assert.strictEqual(actual, expected)
     })
 
-    it('should return null if module is installed, but no manifest exists', () => {
+    it('should return null if module is installed, but no manifest exists', function () {
       const expected = null
       const actual = utils.getManifestPath('clownface')
       assert.strictEqual(actual, expected)
     })
 
-    it('should override manifest location for known packages', () => {
+    it('should override manifest location for known packages', function () {
       const actual = utils.getManifestPath('fs')
       assert(actual.endsWith('/packages/core/manifest.ttl'))
     })
   })
 
-  describe('template', () => {
+  describe('template', function () {
   /* eslint-disable no-template-curly-in-string */
     const getMenu = utils.template`Today's menu is ${'dish'} with ${'wine'}`
 
-    it('should replace key variables in template', () => {
+    it('should replace key variables in template', function () {
       const expected = 'Today\'s menu is pizza with red wine'
       const actual = getMenu({ dish: 'pizza', wine: 'red wine' })
       assert.strictEqual(actual, expected)
     })
 
-    it('should return template when no variables are passed', () => {
+    it('should return template when no variables are passed', function () {
       const expected = 'Today\'s menu is ${dish} with ${wine}'
       const actual = getMenu()
       assert.strictEqual(actual, expected)
     })
 
-    it('should return template when empty array is passed', () => {
+    it('should return template when empty array is passed', function () {
       const expected = 'Today\'s menu is ${dish} with ${wine}'
       const actual = getMenu({})
       assert.strictEqual(actual, expected)

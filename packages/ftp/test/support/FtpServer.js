@@ -1,4 +1,4 @@
-import { dirname } from 'path'
+import { dirname } from 'node:path'
 import FtpSrv from 'ftp-srv'
 
 const __dirname = dirname(new URL(import.meta.url).pathname)
@@ -35,7 +35,8 @@ class FtpServer {
         if (username !== this.user || password !== this.password) {
           return reject(new Error('invalid user or password'))
         }
-      } else {
+      }
+      else {
         if (username !== 'anonymous') {
           return reject(new Error('only anonymous access allowed'))
         }

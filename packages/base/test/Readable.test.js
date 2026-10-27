@@ -4,8 +4,8 @@ import getStream from 'get-stream'
 import { expect } from 'chai'
 import * as Readable from '../Readable.js'
 
-describe('Readable', () => {
-  it('should return a readable stream', async () => {
+describe('Readable', function () {
+  it('should return a readable stream', async function () {
     // given
     const stream = Readable.from(0, 1, 2, 3, 4)
 

@@ -1,12 +1,12 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import defaultLogger from '../lib/defaultLogger.js'
 
-describe('defaultLogger', () => {
-  it('should be a function', () => {
+describe('defaultLogger', function () {
+  it('should be a function', function () {
     strictEqual(typeof defaultLogger, 'function')
   })
 
-  it('should return a winston logger instance', () => {
+  it('should return a winston logger instance', function () {
     const logger = defaultLogger()
 
     strictEqual(typeof logger.error, 'function')

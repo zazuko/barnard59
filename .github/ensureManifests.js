@@ -1,10 +1,10 @@
-import { findWorkspaces } from 'find-workspaces'
 import { existsSync } from 'node:fs'
+import { findWorkspaces } from 'find-workspaces'
 
 let result = 0
 
 for (const workspace of findWorkspaces()) {
-  if(workspace.package.private) {
+  if (workspace.package.private) {
     continue
   }
 
@@ -13,12 +13,12 @@ for (const workspace of findWorkspaces()) {
     continue
   }
 
-  if(!workspace.package.files) {
+  if (!workspace.package.files) {
     console.log(`✅ ${workspace.package.name} - all files included in package`)
     continue
   }
 
-  if(workspace.package.files.includes('manifest.ttl')) {
+  if (workspace.package.files.includes('manifest.ttl')) {
     console.log(`✅ ${workspace.package.name} - manifest.ttl file listed`)
     continue
   }

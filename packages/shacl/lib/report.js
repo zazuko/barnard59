@@ -24,7 +24,7 @@ function getMessages(report) {
 }
 
 export function getSummary() {
-  return async function * (stream) {
+  return async function* (stream) {
     let total = 0
     for await (const dataset of stream) {
       const messages = getMessages(new ValidationReport(this.env.clownface({ dataset })))
@@ -33,7 +33,8 @@ export function getSummary() {
     }
     if (total) {
       this.error(new Error(`${total} violations found`))
-    } else {
+    }
+    else {
       yield 'successful\n'
     }
   }.bind(this)

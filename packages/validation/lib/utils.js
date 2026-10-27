@@ -1,7 +1,7 @@
-import fs from 'fs'
-import path from 'path'
-import * as url from 'url'
-import * as module from 'module'
+import fs from 'node:fs'
+import path from 'node:path'
+import * as url from 'node:url'
+import * as module from 'node:module'
 import { manifestLocation } from './config.js'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
@@ -22,9 +22,10 @@ export function isModuleInstalled(library) {
   try {
     removeFilePart(require.resolve(library, { paths: resolvePaths }))
     return true
-  } catch (err) {
   }
-  return false
+  catch {
+    return false
+  }
 }
 
 export function getManifestPath(library) {
@@ -39,7 +40,9 @@ export function getManifestPath(library) {
     if (fs.existsSync(expectedManifestPath)) {
       return expectedManifestPath
     }
-  } catch (err) {
+  }
+  catch {
+    // do nothing
   }
 
   return null
@@ -48,7 +51,7 @@ export function getManifestPath(library) {
 export function template([first, ...rest], ...fields) {
   return (values = {}) => {
     const templated = fields.map(
-      (field) => field in values ? values[field] : '${' + field + '}',
+      field => field in values ? values[field] : '${' + field + '}',
     )
     return rest.reduce((acc, str, i) => acc + templated[i] + str, first)
   }

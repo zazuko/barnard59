@@ -4,10 +4,10 @@ import sinon from 'sinon'
 import { expect } from 'chai'
 import glob from '../glob.js'
 
-describe('glob', () => {
+describe('glob', function () {
   let logger
 
-  beforeEach(() => {
+  beforeEach(function () {
     logger = {
       debug: sinon.spy(),
       info: sinon.spy(),
@@ -18,14 +18,14 @@ describe('glob', () => {
     }
   })
 
-  it('should return a Readable stream', () => {
+  it('should return a Readable stream', function () {
     const s = glob.call({ logger }, { pattern: 'test/support/*' })
 
     expect(isReadable(s)).to.be.true
     expect(isWritable(s)).to.be.false
   })
 
-  it('should emit each file name as a chunk', async () => {
+  it('should emit each file name as a chunk', async function () {
     const s = glob.call({ logger }, { pattern: '../../test/e2e/definitions/foreach/*' })
 
     const filenames = await array(s)
@@ -37,7 +37,7 @@ describe('glob', () => {
     ])
   })
 
-  it('should forward additional options', async () => {
+  it('should forward additional options', async function () {
     const s = glob.call({ logger }, {
       cwd: '../../test/e2e/definitions/foreach',
       pattern: '*',
@@ -52,7 +52,7 @@ describe('glob', () => {
     ])
   })
 
-  it('should warn when no files are matched', async () => {
+  it('should warn when no files are matched', async function () {
     const s = glob.call({ logger }, {
       cwd: '../../test/e2e/definitions/foreach',
       pattern: 'foobar',
@@ -63,7 +63,7 @@ describe('glob', () => {
     expect(logger.warn).to.have.been.called
   })
 
-  it('should not warn files have been matched', async () => {
+  it('should not warn files have been matched', async function () {
     const s = glob.call({ logger }, {
       cwd: '../../test/e2e/definitions/foreach',
       pattern: '*',

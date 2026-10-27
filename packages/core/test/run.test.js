@@ -1,14 +1,14 @@
-import { deepStrictEqual, strictEqual } from 'assert'
+import { deepStrictEqual, strictEqual } from 'node:assert'
 import { Readable, Writable } from 'node:stream'
 import { defaultLogger } from '../index.js'
 import run from '../lib/run.js'
 
-describe('run', () => {
-  it('should be a function', () => {
+describe('run', function () {
+  it('should be a function', function () {
     strictEqual(typeof run, 'function')
   })
 
-  it('should wait for the pipeline and the logger', async () => {
+  it('should wait for the pipeline and the logger', async function () {
     const pipeline = {
       stream: new Readable({
         read: () => pipeline.stream.push(null),
@@ -27,7 +27,7 @@ describe('run', () => {
     deepStrictEqual(events, ['pipeline:end', 'logger:finish'])
   })
 
-  it('should resume if resume flag is true', async () => {
+  it('should resume if resume flag is true', async function () {
     const pipeline = {
       stream: new Readable({
         read: () => pipeline.stream.push(null),
@@ -43,7 +43,7 @@ describe('run', () => {
     deepStrictEqual(events, ['pipeline:end'])
   })
 
-  it('should end if end flag is true', async () => {
+  it('should end if end flag is true', async function () {
     const pipeline = {
       stream: new Writable({
         write: (chunk, encoding, callback) => callback(),

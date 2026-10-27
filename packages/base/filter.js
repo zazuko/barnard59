@@ -18,7 +18,7 @@ function filter(func, ...args) {
   return obj((chunk, encoding, callback) => {
     Promise.resolve().then(() => {
       return func.call(this, chunk, encoding, ...args)
-    }).then(result => {
+    }).then((result) => {
       if (result) {
         return callback(null, chunk)
       }

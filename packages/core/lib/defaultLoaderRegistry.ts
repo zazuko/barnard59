@@ -1,6 +1,5 @@
 import ecmaScriptLoader from 'rdf-loader-code/ecmaScript.js'
 import ecmaScriptLiteralLoader from 'rdf-loader-code/ecmaScriptLiteral.js'
-// eslint-disable-next-line import/default
 import ecmaScriptModuleLoader from 'rdf-loader-code/ecmaScriptModule.js'
 import LoaderRegistry from 'rdf-loaders-registry'
 import type { Environment } from 'barnard59-env'

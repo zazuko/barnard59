@@ -11,12 +11,12 @@ import ns from '../support/namespaces.js'
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 const context = { env }
 
-describe('factory/step', () => {
-  it('should be a method', () => {
+describe('factory/step', function () {
+  it('should be a method', function () {
     strictEqual(typeof createStep, 'function')
   })
 
-  it('should load the given step', async () => {
+  it('should load the given step', async function () {
     const { ptr: definition, basePath } = await loadPipelineDefinition('plain')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
@@ -30,7 +30,7 @@ describe('factory/step', () => {
     strictEqual(step instanceof Step, true)
   })
 
-  it('should forward errors thrown by the loader', async () => {
+  it('should forward errors thrown by the loader', async function () {
     const { ptr: definition, basePath } = await loadPipelineDefinition('step-operation-missing-error')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
@@ -41,7 +41,7 @@ describe('factory/step', () => {
         loaderRegistry: defaultLoaderRegistry(env),
         logger: defaultLogger(),
       })
-    }, err => {
+    }, (err) => {
       strictEqual(err.message.includes('step'), true)
       strictEqual(err.message.includes(ptr.value), true)
 
@@ -49,7 +49,7 @@ describe('factory/step', () => {
     })
   })
 
-  it('should attach step to the context', async () => {
+  it('should attach step to the context', async function () {
     const { ptr: definition, basePath } = await loadPipelineDefinition('step-ptr')
     const ptr = [...definition.node(ns.ex('')).out(ns.p.steps).out(ns.p.stepList).list()][0]
 

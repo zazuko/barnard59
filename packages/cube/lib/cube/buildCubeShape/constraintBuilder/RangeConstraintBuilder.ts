@@ -63,7 +63,8 @@ export class RangeConstraintBuilder implements Builder {
 
     if (this.range) {
       this.#updateRange(object, value, this.range)
-    } else {
+    }
+    else {
       this.range = this.#initRange(object, value)
     }
 

@@ -11,7 +11,7 @@ const fromSource = membership.fromSource.bind({ env: rdf })
 
 const ex = rdf.namespace('http://example.org/')
 
-describe('membership.toTarget', () => {
+describe('membership.toTarget', function () {
   const parameterSet = [
     { targetUri: undefined, targetClass: ex.targetClass, property: ex.property, classes: [ex.class] },
     { targetUri: ex.targetUri, targetClass: undefined, property: ex.property, classes: [ex.class] },
@@ -19,15 +19,15 @@ describe('membership.toTarget', () => {
     { targetUri: ex.targetUri, targetClass: ex.targetClass, property: ex.property, classes: undefined },
     { targetUri: ex.targetUri, targetClass: ex.targetClass, property: ex.property, classes: [] },
   ]
-  parameterSet.forEach(params => {
-    it('should throw an error if a mandatory parameter is missing', async () => {
+  parameterSet.forEach((params) => {
+    it('should throw an error if a mandatory parameter is missing', async function () {
       throws(() => {
         toTarget(params)
       }, Error)
     })
   })
 
-  it('should return a duplex stream with valid parameters', () => {
+  it('should return a duplex stream with valid parameters', function () {
     const step = toTarget({
       targetUri: ex.targetUri,
       targetClass: ex.targetClass,
@@ -37,7 +37,7 @@ describe('membership.toTarget', () => {
     strictEqual(isDuplex(step), true)
   })
 
-  it('should append meta-data to the data', async () => {
+  it('should append meta-data to the data', async function () {
     const data = [
       rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
@@ -64,7 +64,7 @@ describe('membership.toTarget', () => {
     expect(result).to.deep.contain.all.members([...data, ...expectedMetadata])
   })
 
-  it('should append meta-data to the data with string parameters', async () => {
+  it('should append meta-data to the data with string parameters', async function () {
     const data = [
       rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
@@ -92,7 +92,7 @@ describe('membership.toTarget', () => {
   })
 })
 
-describe('membership.fromSource', () => {
+describe('membership.fromSource', function () {
   const parameterSet = [
     { sourceUri: undefined, sourceClass: ex.sourceClass, property: ex.property, classes: [ex.class] },
     { sourceUri: ex.sourceUri, sourceClass: undefined, property: ex.property, classes: [ex.class] },
@@ -100,15 +100,15 @@ describe('membership.fromSource', () => {
     { sourceUri: ex.sourceUri, sourceClass: ex.sourceClass, property: ex.property, classes: undefined },
     { sourceUri: ex.sourceUri, sourceClass: ex.sourceClass, property: ex.property, classes: [] },
   ]
-  parameterSet.forEach(params => {
-    it('should throw an error if a mandatory parameter is missing', async () => {
+  parameterSet.forEach((params) => {
+    it('should throw an error if a mandatory parameter is missing', async function () {
       throws(() => {
         fromSource(params)
       }, Error)
     })
   })
 
-  it('should return a duplex stream with valid parameters', () => {
+  it('should return a duplex stream with valid parameters', function () {
     const step = fromSource({
       sourceUri: ex.house,
       sourceClass: ex.Container,
@@ -118,7 +118,7 @@ describe('membership.fromSource', () => {
     strictEqual(isDuplex(step), true)
   })
 
-  it('should append meta-data to the data', async () => {
+  it('should append meta-data to the data', async function () {
     const data = [
       rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),
@@ -145,7 +145,7 @@ describe('membership.fromSource', () => {
     expect(result).to.deep.contain.all.members([...data, ...expectedMetadata])
   })
 
-  it('should append meta-data to the data with string parameters', async () => {
+  it('should append meta-data to the data with string parameters', async function () {
     const data = [
       rdf.quad(ex.bob, rdf.ns.rdf.type, ex.Person),
       rdf.quad(ex.alice, rdf.ns.rdf.type, ex.Person),

@@ -12,9 +12,9 @@ const post = postUnbound.bind({ env: rdf })
 
 const ns = rdf.namespace('http://example.org/')
 
-describe('post', () => {
-  it('should return a writable stream', async () => {
-    await withServer(async server => {
+describe('post', function () {
+  it('should return a writable stream', async function () {
+    await withServer(async (server) => {
       const baseUrl = await server.listen()
 
       const stream = post({ endpoint: baseUrl, graph: 'default' })
@@ -26,8 +26,8 @@ describe('post', () => {
     })
   })
 
-  it('should send a POST request', async () => {
-    await withServer(async server => {
+  it('should send a POST request', async function () {
+    await withServer(async (server) => {
       let called = false
       const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
 
@@ -49,8 +49,8 @@ describe('post', () => {
     })
   })
 
-  it('should do nothing if the stream was closed and no quads have been written', async () => {
-    await withServer(async server => {
+  it('should do nothing if the stream was closed and no quads have been written', async function () {
+    await withServer(async (server) => {
       let called = false
 
       server.app.post('/', async (req, res) => {
@@ -70,8 +70,8 @@ describe('post', () => {
     })
   })
 
-  it('should send a content-type header with the value application/n-triples', async () => {
-    await withServer(async server => {
+  it('should send a content-type header with the value application/n-triples', async function () {
+    await withServer(async (server) => {
       let mediaType = null
       const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
 
@@ -93,8 +93,8 @@ describe('post', () => {
     })
   })
 
-  it('should send the quad stream as N-Triples', async () => {
-    await withServer(async server => {
+  it('should send the quad stream as N-Triples', async function () {
+    await withServer(async (server) => {
       const content = {}
       const quads = [
         rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1),
@@ -102,7 +102,7 @@ describe('post', () => {
         rdf.quad(ns.subject3, ns.predicate3, ns.object3, ns.graph1),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4, ns.graph1),
       ]
-      const expected = quads.map(quad => {
+      const expected = quads.map((quad) => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
       }).join('')
 
@@ -115,7 +115,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: ns.graph1 })
 
-      quads.forEach(quad => {
+      quads.forEach((quad) => {
         stream.write(quad)
       })
 
@@ -127,8 +127,8 @@ describe('post', () => {
     })
   })
 
-  it('should support default graph', async () => {
-    await withServer(async server => {
+  it('should support default graph', async function () {
+    await withServer(async (server) => {
       let graph = true
       let content = {}
       const quads = [
@@ -137,7 +137,7 @@ describe('post', () => {
         rdf.quad(ns.subject3, ns.predicate3, ns.object3),
         rdf.quad(ns.subject4, ns.predicate4, ns.object4),
       ]
-      const expected = quads.map(quad => {
+      const expected = quads.map((quad) => {
         return quadToNTriples(rdf.quad(quad.subject, quad.predicate, quad.object)) + '\n'
       }).join('')
 
@@ -151,7 +151,7 @@ describe('post', () => {
       const baseUrl = await server.listen()
       const stream = post({ endpoint: baseUrl, graph: 'default' })
 
-      quads.forEach(quad => {
+      quads.forEach((quad) => {
         stream.write(quad)
       })
 
@@ -164,8 +164,8 @@ describe('post', () => {
     })
   })
 
-  it('should send a basic authentication header if user and password are given', async () => {
-    await withServer(async server => {
+  it('should send a basic authentication header if user and password are given', async function () {
+    await withServer(async (server) => {
       let credentials = null
       const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
 
@@ -187,8 +187,8 @@ describe('post', () => {
     })
   })
 
-  it('should handle server errors', async () => {
-    await withServer(async server => {
+  it('should handle server errors', async function () {
+    await withServer(async (server) => {
       const quad = rdf.quad(ns.subject1, ns.predicate1, ns.object1, ns.graph1)
 
       server.app.post('/', async (req, res) => {
@@ -205,7 +205,8 @@ describe('post', () => {
 
       try {
         await promisify(finished)(stream)
-      } catch (err) {
+      }
+      catch (err) {
         error = err
       }
 

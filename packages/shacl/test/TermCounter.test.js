@@ -1,9 +1,9 @@
-import { strictEqual } from 'assert'
+import { strictEqual } from 'node:assert'
 import env from 'barnard59-env'
 import TermCounter from '../lib/TermCounter.js'
 
-describe('TermCounter', () => {
-  it('should count terms', async () => {
+describe('TermCounter', function () {
+  it('should count terms', async function () {
     const counter = new TermCounter(env)
     counter.add(env.ns.sh.Violation)
     counter.add(env.ns.sh.Violation)

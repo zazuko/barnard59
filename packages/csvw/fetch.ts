@@ -21,16 +21,21 @@ function fetch(this: Context, { csvw, useRemoteCsvwContext }: Options) {
   }
 
   Promise.resolve().then(async () => {
-    try {
-      const metadata = await fetchMetadata(this.env, csvw)
-      const url = metadata.any().has(this.env.ns.csvw.url).out(this.env.ns.csvw.url)
-      const dataStream = await fetchData(url.value!)
+    const metadata = await fetchMetadata(this.env, csvw)
+    const url = metadata.any().has(this.env.ns.csvw.url).out(this.env.ns.csvw.url)
+    const dataStream = await fetchData(url.value!)
 
-      dataStream!.pipe(output)
-    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      output.destroy(err)
-    }
+    dataStream!.pipe(output)
+    return
   })
+    .catch((err: unknown) => {
+      if (err instanceof Error) {
+        output.destroy(err)
+      }
+      else {
+        output.destroy()
+      }
+    })
 
   return toReadable(output)
 }

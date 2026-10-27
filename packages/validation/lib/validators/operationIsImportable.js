@@ -12,7 +12,10 @@ export default {
     try {
       await import(filename)
       issue = Issue.info({ rule: this, templateData: { op, filename } })
-    } catch (err) { }
+    }
+    catch {
+      // do nothing
+    }
 
     return issue
   },

@@ -20,14 +20,15 @@ function parse({ localContext } = {}) {
   if (localContext) {
     if (typeof localContext === 'string') {
       documentLoader = new FsDocumentLoader(JSON.parse(localContext))
-    } else {
+    }
+    else {
       documentLoader = new FsDocumentLoader(localContext)
     }
   }
 
-  return tracer.startActiveSpan('jsonld:parse', span => {
+  return tracer.startActiveSpan('jsonld:parse', (span) => {
     const stream = sinkToDuplex(new Parser({ factory: this.env, documentLoader }), { objectMode: true })
-    stream.on('error', /** @type {any} */ err => {
+    stream.on('error', /** @type {any} */ (err) => {
       span.recordException(err)
       span.setStatus({ code: SpanStatusCode.ERROR, message: err.message })
       span.end()
@@ -41,7 +42,7 @@ function parse({ localContext } = {}) {
  * @this {import('barnard59-core').Context}
  */
 const parseObject = function () {
-  return tracer.startActiveSpan('jsonld:parse.object', span => {
+  return tracer.startActiveSpan('jsonld:parse.object', (span) => {
     const stream = combine([jsonStringify(), parse.call(this)], { objectMode: true })
     stream.on('error', (/** @type Error */ err) => {
       span.recordException(err)

@@ -19,11 +19,14 @@ function get({ endpoint, graph, user, password }) {
   let graphTerm
   if (!graph) {
     graphTerm = this.env.defaultGraph()
-  } else if (typeof graph === 'string') {
+  }
+  else if (typeof graph === 'string') {
     graphTerm = this.env.namedNode(graph)
-  } else if (this.env.defaultGraph().equals(graph)) {
+  }
+  else if (this.env.defaultGraph().equals(graph)) {
     graphTerm = this.env.defaultGraph()
-  } else {
+  }
+  else {
     graphTerm = this.env.namedNode(graph.value)
   }
 

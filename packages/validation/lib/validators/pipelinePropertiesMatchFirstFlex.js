@@ -11,7 +11,8 @@ export default {
     const pipelineIsOfRightType = pipelineProperties.includes('Writable') || pipelineProperties.includes('WritableObjectMode')
     if (!pipelineIsOfRightType) {
       issue = Issue.error({ rule: this, templateData: { pipeline } })
-    } else {
+    }
+    else {
       issue = Issue.info({ rule: this, templateData: { pipeline } })
     }
     return issue

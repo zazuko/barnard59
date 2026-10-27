@@ -1,22 +1,22 @@
-import { deepStrictEqual, strictEqual, rejects } from 'assert'
+import { deepStrictEqual, strictEqual, rejects } from 'node:assert'
 import { Readable } from 'node:stream'
 import getStream, { array } from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import concat, { object } from '../concat.js'
 
-describe('concat', () => {
-  it('should be a function', () => {
+describe('concat', function () {
+  it('should be a function', function () {
     strictEqual(typeof concat, 'function')
   })
 
-  it('should return a Readable', () => {
+  it('should return a Readable', function () {
     const s = concat(new Readable({ read: () => {} }))
 
     strictEqual(isReadable(s), true)
     strictEqual(isWritable(s), false)
   })
 
-  it('should process one stream after another', async () => {
+  it('should process one stream after another', async function () {
     let end0 = null
     let start1 = null
 
@@ -43,7 +43,7 @@ describe('concat', () => {
     strictEqual(end0 <= start1, true)
   })
 
-  it('should emit chunks from all streams in order', async () => {
+  it('should emit chunks from all streams in order', async function () {
     const stream0 = new Readable({
       read: () => {
         stream0.push('a')
@@ -67,7 +67,7 @@ describe('concat', () => {
     strictEqual(result, 'abcd')
   })
 
-  it('should forward error events', async () => {
+  it('should forward error events', async function () {
     const stream0 = new Readable({
       read: () => {
         stream0.destroy(new Error('test'))
@@ -87,19 +87,19 @@ describe('concat', () => {
     await rejects(() => getStream(s))
   })
 
-  describe('object', () => {
-    it('should be a function', () => {
+  describe('object', function () {
+    it('should be a function', function () {
       strictEqual(typeof object, 'function')
     })
 
-    it('should return a Readable', () => {
+    it('should return a Readable', function () {
       const s = object(new Readable({ read: () => {} }))
 
       strictEqual(isReadable(s), true)
       strictEqual(isWritable(s), false)
     })
 
-    it('should process one stream after another', async () => {
+    it('should process one stream after another', async function () {
       let end0 = null
       let start1 = null
 
@@ -126,7 +126,7 @@ describe('concat', () => {
       strictEqual(end0 <= start1, true)
     })
 
-    it('should emit chunks from all streams in order', async () => {
+    it('should emit chunks from all streams in order', async function () {
       const stream0 = new Readable({
         objectMode: true,
         read: () => {
@@ -152,7 +152,7 @@ describe('concat', () => {
       deepStrictEqual(result, ['a', 'b', 'c', 'd'])
     })
 
-    it('should forward error events', async () => {
+    it('should forward error events', async function () {
       const stream0 = new Readable({
         objectMode: true,
         read: () => {

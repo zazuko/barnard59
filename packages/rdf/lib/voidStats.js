@@ -35,12 +35,12 @@ class VoidStats extends Transform {
     this.createPropertyPartitionUri = createPropertyPartitionUri
 
     this.classPartitionsCounts = new Map()
-    classPartitions.forEach(current => {
+    classPartitions.forEach((current) => {
       this.classPartitionsCounts.set(current, 0)
     })
 
     this.propertyPartitionsCounts = new Map()
-    propertyPartitions.forEach(current => {
+    propertyPartitions.forEach((current) => {
       this.propertyPartitionsCounts.set(current, 0)
     })
 
@@ -103,7 +103,7 @@ class VoidStats extends Transform {
         for (const [currentClass, count] of this.classPartitionsCounts) {
           stats
             .namedNode(datasetUri)
-            .addOut(this.rdf.ns._void.classPartition, this.createClassPartitionUri(datasetUri, index), partition => {
+            .addOut(this.rdf.ns._void.classPartition, this.createClassPartitionUri(datasetUri, index), (partition) => {
               partition
                 .addOut(this.rdf.ns._void.class, currentClass)
                 .addOut(this.rdf.ns._void.entities, count)
@@ -117,7 +117,7 @@ class VoidStats extends Transform {
         for (const [currentProperty, count] of this.propertyPartitionsCounts) {
           stats
             .namedNode(datasetUri)
-            .addOut(this.rdf.ns._void.propertyPartition, this.createPropertyPartitionUri(datasetUri, index), partition => {
+            .addOut(this.rdf.ns._void.propertyPartition, this.createPropertyPartitionUri(datasetUri, index), (partition) => {
               partition
                 .addOut(this.rdf.ns._void.property, currentProperty)
                 .addOut(this.rdf.ns._void.entities, count)
@@ -129,9 +129,11 @@ class VoidStats extends Transform {
       for (const quad of stats.dataset) {
         this.push(quad)
       }
-    } catch (/** @type {any} */ err) {
+    }
+    catch (/** @type {any} */ err) {
       this.destroy(err)
-    } finally {
+    }
+    finally {
       callback()
     }
   }

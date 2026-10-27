@@ -26,7 +26,7 @@ function createPipelineContext(
 
 async function createPipelineVariables(
   ptr: GraphPointer,
-  { basePath, context, loaderRegistry, logger, variables } :{
+  { basePath, context, loaderRegistry, logger, variables }: {
     basePath: string
     context: Pick<Context, 'env'>
     loaderRegistry: LoaderRegistry
@@ -51,7 +51,7 @@ type CreatePipeline = {
   context?: Context
 }
 
-function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: CreatePipeline) {
+function createPipeline(maybePtr: { term?: Term, dataset?: DatasetCore }, init: CreatePipeline) {
   let context: Context = init.context || { env: init.env! } as Context
 
   let {
@@ -82,6 +82,7 @@ function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: 
 
     // add pipeline factory with current values as defaults
     const defaults = { basePath, context, loaderRegistry, logger, variables }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context.createPipeline = (ptr, { context: _context, ...args } = {}) => createPipeline(ptr, { ...defaults, ...args })
 
     pipeline.variables = variables
@@ -90,7 +91,8 @@ function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: 
     for (const stepPtr of ptr.out(context.env.ns.p.steps).out(context.env.ns.p.stepList).list()!) {
       if (stepPtr.has(context.env.ns.rdf.type, context.env.ns.p.Pipeline).terms.length > 0) {
         pipeline.addChild(createPipeline(stepPtr, { basePath, context, loaderRegistry, logger, variables }))
-      } else {
+      }
+      else {
         pipeline.addChild(await createStep(stepPtr, { basePath, context, loaderRegistry, logger, variables }))
       }
     }
@@ -102,7 +104,7 @@ function createPipeline(maybePtr: { term?: Term; dataset?: DatasetCore }, init: 
 function logVariables(ptr: MultiPointer, { env, logger }: Pick<Context, 'env' | 'logger'>, variables: VariableMap) {
   if (variables.size) {
     for (const [key, value] of variables) {
-      let level : 'verbose' | 'info' = 'verbose'
+      let level: 'verbose' | 'info' = 'verbose'
       if (ptr.out(env.ns.p.variables).out(env.ns.p.variable).has(env.ns.p.name, key).term) {
         level = 'info'
       }

@@ -1,3 +1,4 @@
+import Process from 'node:process'
 import { diag, DiagLogLevel } from '@opentelemetry/api'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http'
@@ -29,18 +30,20 @@ const onError = async (err) => {
     if (err.skipTrace) {
       // eslint-disable-next-line no-console
       console.log(err.message)
-    } else {
+    }
+    else {
       // eslint-disable-next-line no-console
       console.error(err)
     }
   }
   try {
     await sdk?.shutdown()
-  } catch (e) {
+  }
+  catch (e) {
     // eslint-disable-next-line no-console
     console.error('Error during SDK shutdown', e)
   }
-  process.exit(1)
+  Process.exit(1)
 }
 
 const run = async () => {
@@ -76,7 +79,8 @@ const run = async () => {
   // OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable.
   if (otelTracesExporter === 'otlp') {
     otelSdkConfig.traceExporter = new OTLPTraceExporter()
-  } else {
+  }
+  else {
     process.env.OTEL_TRACES_EXPORTER = 'none'
   }
 
@@ -89,7 +93,8 @@ const run = async () => {
       exporter,
       exportIntervalMillis: otelMetricsInterval,
     })
-  } else {
+  }
+  else {
     process.env.OTEL_METRICS_EXPORTER = 'none'
   }
 

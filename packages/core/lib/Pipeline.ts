@@ -10,7 +10,7 @@ import StreamObject from './StreamObject.js'
 import tracer from './tracer.js'
 
 export interface PipelineOptions extends BaseOptions {
-  // eslint-disable-next-line no-use-before-define
+
   onInit?: (pipeline: Pipeline) => Promise<void>
   readable?: boolean
   readableObjectMode?: boolean
@@ -18,7 +18,6 @@ export interface PipelineOptions extends BaseOptions {
   writableObjectMode?: boolean
 }
 
-// eslint-disable-next-line no-use-before-define
 class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
   public readonly readable: boolean | undefined
   public readonly readableObjectMode: boolean | undefined
@@ -32,7 +31,7 @@ class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
   public readonly write: (chunk: unknown, encoding: BufferEncoding, callback: (error?: (Error | null)) => void) => Promise<boolean>
   public readonly final: (callback: (error?: (Error | null)) => void) => Promise<void>
   public error: Error | undefined
-  // eslint-disable-next-line no-use-before-define
+
   private readonly _stream: Duplex & { pipeline: Pipeline }
 
   constructor({
@@ -123,14 +122,16 @@ class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
         }
       })
 
-      finished(this.lastChild.stream, err => {
+      finished(this.lastChild.stream, (err) => {
         if (!err) {
           this.finish()
-        } else {
+        }
+        else {
           this.logger.error(err)
         }
       })
-    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    }
+    catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       this.destroy(err)
 
       this.logger.error(err, { iri: this.ptr.value })
@@ -178,9 +179,11 @@ class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
 
         if (!chunk) {
           await nextLoop()
-        } else if (!this.stream.push(chunk)) {
+        }
+        else if (!this.stream.push(chunk)) {
           return
-        } else {
+        }
+        else {
           if (this._chunks === 0) {
             this._span.addEvent('first chunk')
           }
@@ -188,8 +191,8 @@ class Pipeline extends StreamObject<Duplex & { pipeline?: Pipeline }> {
           this._span.setAttribute('stream.chunks', this._chunks)
         }
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    }
+    catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       this._span.recordException(err)
       this.lastChild.stream.destroy(err)
     }

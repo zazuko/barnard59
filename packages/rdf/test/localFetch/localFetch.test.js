@@ -18,35 +18,35 @@ async function getRDFDataset(filePath) {
 
 const localFetch = unbound.bind({ env: rdf })
 
-describe('metadata.lfetch', () => {
-  beforeEach(() => {
+describe('metadata.lfetch', function () {
+  beforeEach(function () {
     nock.cleanAll()
   })
 
-  it('should be a function', () => {
+  it('should be a function', function () {
     strictEqual(typeof localFetch, 'function')
   })
 
-  it('should throw an error if no input is given', async () => {
+  it('should throw an error if no input is given', async function () {
     await assertThrows(async () => {
       await localFetch()
     }, Error, /needs input filename or URL/)
   })
 
-  it('should throw an error if no valid input is given', async () => {
+  it('should throw an error if no valid input is given', async function () {
     await assertThrows(async () => {
       await localFetch({ not: 'this' })
     }, Error, /needs input filename or URL, got /)
   })
 
-  it('with defaults, should get the same dataset', async () => {
+  it('with defaults, should get the same dataset', async function () {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(rdf.fromFile(datasetPath))
     const actual = await rdf.dataset().import(quadStream)
     equal(expected.equals(actual), true)
   })
 
-  it('with filename and base, should get the same dataset', async () => {
+  it('with filename and base, should get the same dataset', async function () {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(datasetPath, __dirname)
     const actual = await rdf.dataset().import(quadStream)
@@ -54,7 +54,7 @@ describe('metadata.lfetch', () => {
     equal(expected.equals(actual), true)
   })
 
-  it('with absolute filename, should get the same dataset', async () => {
+  it('with absolute filename, should get the same dataset', async function () {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(datasetAbsolutePath)
     const actual = await rdf.dataset().import(quadStream)
@@ -62,7 +62,7 @@ describe('metadata.lfetch', () => {
     equal(expected.equals(actual), true)
   })
 
-  it('with absolute filename, should ignore basePath and get the same dataset', async () => {
+  it('with absolute filename, should ignore basePath and get the same dataset', async function () {
     const expected = await getRDFDataset(datasetPath)
     const { quadStream } = await localFetch(datasetAbsolutePath, '/unknown/')
     const actual = await rdf.dataset().import(quadStream)
@@ -70,19 +70,19 @@ describe('metadata.lfetch', () => {
     equal(expected.equals(actual), true)
   })
 
-  it.skip('fails at file not found', async () => {
+  it.skip('fails at file not found', async function () {
     await assertThrows(async () => {
       await localFetch('file:///not/found.ttl')
     }, Error, /ENOENT: no such file or directory/)
   })
 
-  it('fails if not string', async () => {
+  it('fails if not string', async function () {
     await assertThrows(async () => {
       await localFetch(['a', 'b'])
     }, Error, /needs input filename or URL, got \[object\]/)
   })
 
-  it('should get a dataset from URL pointing to a public resource', async () => {
+  it('should get a dataset from URL pointing to a public resource', async function () {
     // Mocking a remote file.
     const fileStr = fs.readFileSync(new URL(datasetPath, import.meta.url), 'utf8')
     nock('https://example.com')
@@ -96,13 +96,13 @@ describe('metadata.lfetch', () => {
     expect(actual.toCanonical()).to.eq(expected.toCanonical())
   })
 
-  it('fails at unknown file extension', async () => {
+  it('fails at unknown file extension', async function () {
     await assertThrows(async () => {
       await localFetch(new URL('../support/file.unknown.extension', import.meta.url).toString())
     }, Error, /No parser could be guessed for/)
   })
 
-  it('fails at unknown protocol', async () => {
+  it('fails at unknown protocol', async function () {
     await assertThrows(async () => {
       await localFetch('unknown::protocol')
     }, Error, /unknown protocol/)

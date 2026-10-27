@@ -39,9 +39,11 @@ class MetadataAppend extends Transform {
       for (const quad of await applyOptions(quadStream, metadata, this.options)) {
         this.push(quad)
       }
-    } catch (/** @type {any} */ err) {
+    }
+    catch (/** @type {any} */ err) {
       this.destroy(err)
-    } finally {
+    }
+    finally {
       callback()
     }
   }

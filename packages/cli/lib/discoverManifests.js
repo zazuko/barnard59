@@ -1,6 +1,6 @@
-import * as module from 'module'
-import { exec } from 'child_process'
-import { dirname } from 'path'
+import * as module from 'node:module'
+import { exec } from 'node:child_process'
+import { dirname } from 'node:path'
 import Arborist from '@npmcli/arborist'
 import isInstalledGlobally from 'is-installed-globally'
 import rdf from 'barnard59-env'
@@ -15,7 +15,7 @@ const packagePattern = /^barnard59-(.+)$/
  * @param {boolean} [options.all]
  * @returns {AsyncGenerator<{ name: string, manifest: import('clownface').AnyPointer, version: string }, void, unknown>}
  */
-export default async function * ({ basePath = import.meta.url, all = false } = {}) {
+export default async function* ({ basePath = import.meta.url, all = false } = {}) {
   const require = module.createRequire(basePath)
   const hasManifest = canRequireManifest.bind(null, require)
 
@@ -61,7 +61,8 @@ async function getInstalledPackages(all) {
       exec(npmList, (err, stdout) => {
         if (err) {
           reject(err)
-        } else {
+        }
+        else {
           resolve([...new Set(stdout.match(/(?<pkg>barnard59-[^@]+)/g))])
         }
       })
@@ -79,7 +80,8 @@ async function getInstalledPackages(all) {
       let tree
       try {
         tree = await arb.loadVirtual()
-      } catch {
+      }
+      catch {
         tree = await arb.loadActual()
       }
       const packages = new Set()
@@ -103,7 +105,8 @@ function canRequireManifest(require, pkg) {
   try {
     require.resolve(`${pkg}/manifest.ttl`)
     return true
-  } catch {
+  }
+  catch {
     return false
   }
 }

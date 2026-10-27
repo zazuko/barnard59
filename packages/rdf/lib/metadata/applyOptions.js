@@ -14,7 +14,7 @@ function subjectsWithDatasetType(dataset, classes) {
   const result = rdf.termSet()
   ;[...dataset]
     .filter(quad => (quad.predicate.equals(rdf.ns.rdf.type) && classes.has(quad.object)))
-    .forEach(quad => {
+    .forEach((quad) => {
       result.add(quad.subject)
     })
   return result
@@ -31,7 +31,7 @@ function updateOrInsert(dataset, datasetClasses, predicate, object) {
   const targetSubjects = subjectsWithDatasetType(dataset, datasetClasses)
 
   // Remove existent
-  dataset = rdf.dataset([...dataset].filter(quad => {
+  dataset = rdf.dataset([...dataset].filter((quad) => {
     return !(quad.predicate.equals(predicate) && targetSubjects.has(quad.subject))
   }))
 

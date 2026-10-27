@@ -6,12 +6,12 @@ import rdf from '@zazuko/env'
 import { query, update } from '../inMemory.js'
 import * as ns from './support/namespaces.js'
 
-describe('query', () => {
-  it('should be a function', () => {
+describe('query', function () {
+  it('should be a function', function () {
     strictEqual(typeof query, 'function')
   })
 
-  it('should return a readable and witable stream', () => {
+  it('should return a readable and witable stream', function () {
     const construct = 'CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }'
 
     const result = query(construct)
@@ -20,7 +20,7 @@ describe('query', () => {
     strictEqual(isWritableStream(result), true)
   })
 
-  it('should CONSTRUCT quads', async () => {
+  it('should CONSTRUCT quads', async function () {
     const chunk1 = [
       rdf.quad(ns.ex.s1, ns.ex.p, ns.ex.o1),
       rdf.quad(ns.ex.s2, ns.ex.p, ns.ex.s2),
@@ -40,12 +40,12 @@ describe('query', () => {
   })
 })
 
-describe('update', () => {
-  it('should be a function', () => {
+describe('update', function () {
+  it('should be a function', function () {
     strictEqual(typeof update, 'function')
   })
 
-  it('should return a readable and witable stream', () => {
+  it('should return a readable and witable stream', function () {
     const construct = 'DELETE { ?s ?p ?o } WHERE { ?s ?p ?o }'
 
     const result = update(construct)
@@ -53,7 +53,8 @@ describe('update', () => {
     strictEqual(isReadableStream(result), true)
     strictEqual(isWritableStream(result), true)
   })
-  it('should UPDATE quads', async () => {
+
+  it('should UPDATE quads', async function () {
     const chunk1 = [
       rdf.quad(ns.ex.s1, ns.ex.p, ns.ex.o1),
       rdf.quad(ns.ex.s2, ns.ex.p, ns.ex.s2),

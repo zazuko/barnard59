@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import 'anylogger-console'
-import path from 'path'
-import fs from 'fs'
-import * as module from 'module'
-import * as url from 'url'
+import path from 'node:path'
+import fs from 'node:fs'
+import * as module from 'node:module'
+import * as url from 'node:url'
+import Process from 'node:process'
 import { Command } from 'commander'
 import * as parser from './lib/parser.js'
 import ChecksCollection from './lib/checksCollection.js'
@@ -33,7 +34,8 @@ async function validatePipeline(file, options) {
 
     const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
     parser.validatePipelines(pipelines, operationProperties, pipelineProperties, checks)
-  } catch (err) {
+  }
+  catch (err) {
     if (options.debug) {
       log.error(err)
     }
@@ -45,8 +47,9 @@ async function validatePipeline(file, options) {
     log.log(checks.filterToJSON(options.levels))
   }
 
-  if (checks.countIssues(options.strict)) {
-    process.exit(-1)
+  const issueCount = checks.countIssues(options.strict)
+  if (issueCount) {
+    Process.exit(-1)
   }
 }
 
@@ -54,7 +57,8 @@ async function validateManifest(file, options) {
   const checks = new ChecksCollection()
   try {
     await validate({ file, checks })
-  } catch (err) {
+  }
+  catch (err) {
     if (options.debug) {
       log.error(err)
     }
@@ -66,8 +70,9 @@ async function validateManifest(file, options) {
     log.log(checks.filterToJSON(options.levels))
   }
 
-  if (checks.countIssues(options.strict)) {
-    process.exit(-1)
+  const issueCount = checks.countIssues(options.strict)
+  if (issueCount) {
+    Process.exit(-1)
   }
 }
 
@@ -91,8 +96,9 @@ program
       options.verbose = true
     }
     if (!options.manifest) {
-      validatePipeline(file, options)
-    } else {
+      await validatePipeline(file, options)
+    }
+    else {
       await validateManifest(file, options)
     }
   })

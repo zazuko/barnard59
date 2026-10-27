@@ -7,8 +7,8 @@ import loader from '../../lib/loader/pipeline.js'
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 const context = { env: rdf }
 
-describe('loader/pipeline', () => {
-  it('should use the given variables', async () => {
+describe('loader/pipeline', function () {
+  it('should use the given variables', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('plain')
 
     const variables = new Map([
@@ -23,7 +23,7 @@ describe('loader/pipeline', () => {
     strictEqual(stream.pipeline.variables.get('hello'), 'world')
   })
 
-  it('should reject if the referred resource does not have a pipeline type', async () => {
+  it('should reject if the referred resource does not have a pipeline type', async function () {
     const ptr = rdf.clownface({ dataset: rdf.dataset() }).blankNode()
 
     await rejects(async () => {

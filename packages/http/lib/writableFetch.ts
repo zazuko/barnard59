@@ -17,9 +17,11 @@ export default async function writableFetch({ method = 'POST', url, ...options }
       const response = await nodeFetch(url, { method, body: inputStream, ...options })
 
       response.body!.pipe(outputStream)
-    } catch (err) {
+    }
+    catch (err) {
       outputStream.emit('error', err)
-    } finally {
+    }
+    finally {
       span.end()
     }
   }, 0))

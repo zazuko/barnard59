@@ -1,10 +1,11 @@
-import { deepStrictEqual } from 'assert'
+/* eslint-disable mocha/no-nested-tests */
+import { deepStrictEqual } from 'node:assert'
 import { Readable } from 'node:stream'
 import { array } from 'get-stream'
 import filter from '../filter.js'
 
-describe('filter', () => {
-  it('should pass pipeline context to callback function', async () => {
+describe('filter', function () {
+  it('should pass pipeline context to callback function', async function () {
     // given
     const input = new Readable({
       objectMode: true,
@@ -28,7 +29,7 @@ describe('filter', () => {
     deepStrictEqual(output, ['a'])
   })
 
-  it('should pass additional arguments to callback function', async () => {
+  it('should pass additional arguments to callback function', async function () {
     // given
     const input = new Readable({
       objectMode: true,

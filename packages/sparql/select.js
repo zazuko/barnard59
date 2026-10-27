@@ -20,7 +20,8 @@ function assertSelectOrAsk(query) {
   let parsed
   try {
     parsed = parser.parse(query)
-  } catch {
+  }
+  catch {
     throw new Error(message)
   }
 

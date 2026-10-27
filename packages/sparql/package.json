@@ -30,14 +30,14 @@
     "@tpluscode/rdf-string": "^1.1.2",
     "@types/sparql-http-client": "^3.0.0",
     "@types/sparqljs": "^3.1.12",
-    "@zazuko/env": "^3",
+    "@zazuko/env": "^3.0.3",
     "barnard59-env": "^1.2.3",
     "get-stream": "^6.0.0",
     "is-stream": "^3.0.0",
     "nock": "^13.1.1"
   },
   "engines": {
-    "node": ">= 14.0.0"
+    "node": ">= 14.13.1"
   },
   "mocha": {
     "loader": "ts-node/esm/transpile-only"

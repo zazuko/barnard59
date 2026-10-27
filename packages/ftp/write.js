@@ -2,7 +2,7 @@ import { finished } from 'node:stream'
 import command from './lib/command.js'
 
 export default async function write({ filename, ...options }) {
-  return command(options, async client => {
+  return command(options, async (client) => {
     const stream = await client.write(filename)
 
     finished(stream, () => {

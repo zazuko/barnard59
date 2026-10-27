@@ -4,7 +4,8 @@ export async function withServer(serverFactory, callback) {
 
   try {
     await callback(server)
-  } finally {
+  }
+  finally {
     await server.stop()
   }
 }

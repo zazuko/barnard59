@@ -1,27 +1,27 @@
-import path from 'path'
-import assert from 'assert'
-import * as url from 'url'
+import path from 'node:path'
+import assert from 'node:assert'
+import * as url from 'node:url'
 import validateManifest from '../lib/manifest.js'
 import ChecksCollection from '../lib/checksCollection.js'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
-describe('manifest', () => {
-  it('finds import errors', async () => {
+describe('manifest', function () {
+  it('finds import errors', async function () {
     const checks = new ChecksCollection()
     const file = path.join(__dirname, './fixtures/manifest.ttl')
     await validateManifest({ file, checks })
-    assert.ok(checks.generic.filter((issue) => issue.level === 'error').length === 1)
+    assert.ok(checks.generic.filter(issue => issue.level === 'error').length === 1)
   })
 
-  it('finds matching imports/exports', async () => {
+  it('finds matching imports/exports', async function () {
     const checks = new ChecksCollection()
     const file = path.join(__dirname, './fixtures/manifest-good.ttl')
     await validateManifest({ file, checks })
-    assert.ok(checks.generic.filter((issue) => issue.level === 'error').length === 0)
+    assert.ok(checks.generic.filter(issue => issue.level === 'error').length === 0)
   })
 
-  it('reports faulty imports/exports', async () => {
+  it('reports faulty imports/exports', async function () {
     const checks = new ChecksCollection()
     const file = path.join(__dirname, './fixtures/manifest-bad.ttl')
     await validateManifest({ file, checks })

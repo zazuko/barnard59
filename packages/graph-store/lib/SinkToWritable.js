@@ -26,7 +26,7 @@ class SinkToWritable extends Writable {
 
         callback()
       },
-      final: async callback => {
+      final: async (callback) => {
         if (!hadQuads) {
           logger?.warn('No quads sent to the server. No request was made.')
           return callback()
@@ -39,7 +39,8 @@ class SinkToWritable extends Writable {
         try {
           await isFinished
           await returned.promise
-        } catch (/** @type {any} */ err) {
+        }
+        catch (/** @type {any} */ err) {
           return callback(err)
         }
 
@@ -50,7 +51,8 @@ class SinkToWritable extends Writable {
     const init = once(async () => {
       try {
         await factory(readable)
-      } catch (/** @type {any} */ err) {
+      }
+      catch (/** @type {any} */ err) {
         return returned.reject(err)
       }
 

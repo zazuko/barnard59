@@ -1,18 +1,18 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import validatePipelineProperty from '../lib/validatePipelineProperty.js'
 import * as validators from '../lib/validators/index.js'
 import ChecksCollection from '../lib/checksCollection.js'
 import { checkArrayContainsObject } from './helpers.js'
 let checks
 
-describe('validatePipelinePropertyModeFirst', () => {
-  beforeEach(() => {
+describe('validatePipelinePropertyModeFirst', function () {
+  beforeEach(function () {
     checks = new ChecksCollection()
   })
   const pipeline = 'pancakes'
   const mode = 'first'
 
-  it('should produce an error if first stream is writable, but pipeline is not', () => {
+  it('should produce an error if first stream is writable, but pipeline is not', function () {
     const pipelineProperties = ['Pipeline', 'WritableObjectMode']
     const opProperties = ['Writable']
     const issue = validators.pipelinePropertiesMatchFirstStrict.validate(pipeline, pipelineProperties, 'Writable')
@@ -20,7 +20,8 @@ describe('validatePipelinePropertyModeFirst', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an error if first stream is WritableObjectMode, but pipeline is not', () => {
+
+  it('should produce an error if first stream is WritableObjectMode, but pipeline is not', function () {
     const pipelineProperties = ['Pipeline', 'Writable']
     const opProperties = ['WritableObjectMode']
     const issue = validators.pipelinePropertiesMatchFirstStrict.validate(pipeline, pipelineProperties, 'WritableObjectMode')
@@ -28,7 +29,8 @@ describe('validatePipelinePropertyModeFirst', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an error if first stream is Writable or WritableObjectMode, but pipeline is not', () => {
+
+  it('should produce an error if first stream is Writable or WritableObjectMode, but pipeline is not', function () {
     const pipelineProperties = ['Pipeline', 'Readable']
     const opProperties = ['Writable', 'WritableObjectMode']
     const issue = validators.pipelinePropertiesMatchFirstFlex.validate(pipeline, pipelineProperties)
@@ -36,7 +38,8 @@ describe('validatePipelinePropertyModeFirst', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an info if first stream is writable and pipeline is', () => {
+
+  it('should produce an info if first stream is writable and pipeline is', function () {
     const pipelineProperties = ['Pipeline', 'Writable']
     const opProperties = ['Writable']
     const issue = validators.pipelinePropertiesMatchFirstStrict.validate(pipeline, pipelineProperties, 'Writable')
@@ -44,7 +47,8 @@ describe('validatePipelinePropertyModeFirst', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an info if first stream is WritableObjectMode and pipeline is', () => {
+
+  it('should produce an info if first stream is WritableObjectMode and pipeline is', function () {
     const pipelineProperties = ['Pipeline', 'WritableObjectMode']
     const opProperties = ['WritableObjectMode']
     const issue = validators.pipelinePropertiesMatchFirstStrict.validate(pipeline, pipelineProperties, 'WritableObjectMode')
@@ -52,7 +56,8 @@ describe('validatePipelinePropertyModeFirst', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an info if first stream is Writable or WritableObjectMode and pipeline is', () => {
+
+  it('should produce an info if first stream is Writable or WritableObjectMode and pipeline is', function () {
     const possiblePipelineProperties = [['Pipeline', 'Writable'], ['Pipeline', 'WritableObjectMode']]
     const opProperties = ['Writable', 'WritableObjectMode']
 
@@ -62,7 +67,8 @@ describe('validatePipelinePropertyModeFirst', () => {
       assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
     }
   })
-  it('should produce no info if first stream is writable or readable', () => {
+
+  it('should produce no info if first stream is writable or readable', function () {
     const possiblePipelineProperties = [['soft'], ['readable'], ['writable']]
     const possibleOpProperties = [['Writable', 'Readable'], ['WritableObjectMode', 'Readable'], ['Writable', 'ReadableObjectMode'], ['WritableObjectMode', 'ReadableObjectMode']]
 
@@ -76,14 +82,14 @@ describe('validatePipelinePropertyModeFirst', () => {
   })
 })
 
-describe('validatePipelinePropertyModeLast', () => {
-  beforeEach(() => {
+describe('validatePipelinePropertyModeLast', function () {
+  beforeEach(function () {
     checks = new ChecksCollection()
   })
   const pipeline = 'pancakes'
   const mode = 'last'
 
-  it('should produce an error if last stream is readable, but pipeline is not', () => {
+  it('should produce an error if last stream is readable, but pipeline is not', function () {
     const pipelineProperties = ['Pipeline', 'Writable']
     const opProperties = ['Readable']
 
@@ -92,7 +98,8 @@ describe('validatePipelinePropertyModeLast', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an error if last stream is ReadableObjectMode, but pipeline is not', () => {
+
+  it('should produce an error if last stream is ReadableObjectMode, but pipeline is not', function () {
     const pipelineProperties = ['Pipeline', 'Writable']
     const opProperties = ['ReadableObjectMode']
 
@@ -101,7 +108,8 @@ describe('validatePipelinePropertyModeLast', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an error if last stream is readable or ReadableObjectMode, but pipeline is not', () => {
+
+  it('should produce an error if last stream is readable or ReadableObjectMode, but pipeline is not', function () {
     const pipelineProperties = ['Pipeline', 'Writable']
     const opProperties = ['Readable', 'ReadableObjectMode']
 
@@ -111,7 +119,7 @@ describe('validatePipelinePropertyModeLast', () => {
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
 
-  it('should produce an info if last stream is readable, and pipeline is', () => {
+  it('should produce an info if last stream is readable, and pipeline is', function () {
     const pipelineProperties = ['Pipeline', 'Readable']
     const opProperties = ['Readable']
 
@@ -120,7 +128,8 @@ describe('validatePipelinePropertyModeLast', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an info if last stream is ReadableObjectMode, and pipeline is', () => {
+
+  it('should produce an info if last stream is ReadableObjectMode, and pipeline is', function () {
     const pipelineProperties = ['Pipeline', 'ReadableObjectMode']
     const opProperties = ['ReadableObjectMode']
 
@@ -129,7 +138,8 @@ describe('validatePipelinePropertyModeLast', () => {
     validatePipelineProperty(pipeline, pipelineProperties, opProperties, mode, checks)
     assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
   })
-  it('should produce an info if last stream is Readable or ReadableObjectMode, and pipeline is', () => {
+
+  it('should produce an info if last stream is Readable or ReadableObjectMode, and pipeline is', function () {
     const possiblePipelineProperties = [['Pipeline', 'Readable'], ['Pipeline', 'ReadableObjectMode']]
     const opProperties = ['Readable', 'ReadableObjectMode']
 
@@ -139,7 +149,8 @@ describe('validatePipelinePropertyModeLast', () => {
       assert(checkArrayContainsObject(checks.pipelines[pipeline], issue))
     }
   })
-  it('should produce no info if last stream is writable or readable', () => {
+
+  it('should produce no info if last stream is writable or readable', function () {
     const possiblePipelineProperties = [['soft'], ['readable'], ['writable']]
     const possibleOpProperties = [['Writable', 'Readable'], ['WritableObjectMode', 'Readable'], ['Writable', 'ReadableObjectMode'], ['WritableObjectMode', 'ReadableObjectMode']]
 

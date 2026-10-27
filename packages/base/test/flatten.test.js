@@ -1,22 +1,22 @@
-import { deepStrictEqual, strictEqual } from 'assert'
+import { deepStrictEqual, strictEqual } from 'node:assert'
 import { Readable } from 'node:stream'
 import { array } from 'get-stream'
 import { isReadableStream as isReadable, isWritableStream as isWritable } from 'is-stream'
 import flatten from '../flatten.js'
 
-describe('flatten', () => {
-  it('should be a function', () => {
+describe('flatten', function () {
+  it('should be a function', function () {
     strictEqual(typeof flatten, 'function')
   })
 
-  it('should return a duplex stream', async () => {
+  it('should return a duplex stream', async function () {
     const result = flatten()
 
     strictEqual(isWritable(result), true)
     strictEqual(isReadable(result), true)
   })
 
-  it('should do nothing if there are no input chunks', async () => {
+  it('should do nothing if there are no input chunks', async function () {
     const input = Readable({
       objectMode: true,
       read: () => {
@@ -29,8 +29,8 @@ describe('flatten', () => {
     deepStrictEqual(result, [])
   })
 
-  it('should flatten object with a iterator interface', async () => {
-    const toIterator = input => {
+  it('should flatten object with a iterator interface', async function () {
+    const toIterator = (input) => {
       return {
         [Symbol.iterator]: input[Symbol.iterator].bind(input),
       }
@@ -50,8 +50,8 @@ describe('flatten', () => {
     deepStrictEqual(result, expected)
   })
 
-  it('should flatten object with a forEach method', async () => {
-    const toForEach = input => {
+  it('should flatten object with a forEach method', async function () {
+    const toForEach = (input) => {
       return {
         forEach: input.forEach.bind(input),
       }
@@ -71,7 +71,7 @@ describe('flatten', () => {
     deepStrictEqual(result, expected)
   })
 
-  it('should emit an error if the chunks don\'t implement Symbol.iterator or .forEach', async () => {
+  it('should emit an error if the chunks don\'t implement Symbol.iterator or .forEach', async function () {
     let error = null
     const input = Readable({
       objectMode: true,
@@ -83,7 +83,8 @@ describe('flatten', () => {
 
     try {
       await array(input.pipe(flatten()))
-    } catch (err) {
+    }
+    catch (err) {
       error = err
     }
 

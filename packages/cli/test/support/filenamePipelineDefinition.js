@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
 const base = new URL('.', import.meta.url).pathname
 

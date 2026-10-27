@@ -10,7 +10,8 @@ export default {
     let issue
     if (operationPathExists) {
       issue = Issue.info({ rule: this, templateData: { library } })
-    } else {
+    }
+    else {
       issue = Issue.warning({
         rule: this,
         templateData: { library, operations: codelinksWithMissingMetadata },

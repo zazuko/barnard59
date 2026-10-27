@@ -45,7 +45,8 @@ class PatternMatcher {
 
     if (Symbol.iterator in value) {
       this.pattern[name] = rdf.termSet([...value])
-    } else {
+    }
+    else {
       this.pattern[name] = rdf.termSet([value])
     }
   }

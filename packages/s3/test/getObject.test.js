@@ -8,20 +8,20 @@ import { mockClient } from 'aws-sdk-client-mock'
 import { getObject } from '../index.js'
 import { removeResultsDirectory, testResultsDirectory } from './utils.js'
 
-describe('getObject', async () => {
+describe('getObject', function () {
   let s3Mock
 
-  before(async () => {
+  before(async function () {
     s3Mock = mockClient(S3Client)
     await removeResultsDirectory()
   })
 
-  after(async () => {
+  after(async function () {
     s3Mock.restore()
     await removeResultsDirectory()
   })
 
-  it('should be able to get a file', async () => {
+  it('should be able to get a file', async function () {
     const data = 'Hello world'
     const filePath = `${testResultsDirectory}/getObject/get-a-file.txt`
 
@@ -44,7 +44,7 @@ describe('getObject', async () => {
     strictEqual(fileContent, data)
   })
 
-  it('should throw for empty body', async () => {
+  it('should throw for empty body', async function () {
     const filePath = `${testResultsDirectory}/getObject/get-empty-body.txt`
 
     s3Mock.on(GetObjectCommand).resolves({ Body: null })

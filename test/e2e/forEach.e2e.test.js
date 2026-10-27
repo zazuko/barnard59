@@ -7,8 +7,8 @@ import { expect } from 'chai'
 
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, 'definitions')
 
-describe('forEach', () => {
-  it('should execute the example correctly', async () => {
+describe('forEach', function () {
+  it('should execute the example correctly', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('foreach/csv-duplicate')
     const pipeline = createPipeline(ptr, { env, basePath })
 
@@ -21,7 +21,7 @@ describe('forEach', () => {
   * This pipeline verifies that a variable can be imperatively
   * added during pipeline execution of a forEach step
   * */
-  it('should preserve variables set during forEach execution', async () => {
+  it('should preserve variables set during forEach execution', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('foreach/with-handler')
     const pipeline = createPipeline(ptr, { env, basePath })
 
@@ -31,7 +31,7 @@ describe('forEach', () => {
     strictEqual(out[0] !== out[1], true)
   })
 
-  it('should be able to access variables from higher scopes', async () => {
+  it('should be able to access variables from higher scopes', async function () {
     const { ptr, basePath } = await loadPipelineDefinition('foreach/with-variable')
     const pipeline = createPipeline(ptr, { env, basePath })
 

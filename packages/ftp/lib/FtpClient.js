@@ -29,7 +29,7 @@ class FtpClient {
   async disconnect() {
     this.client.end()
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.client.once('close', resolve)
     })
   }
@@ -56,7 +56,8 @@ class FtpClient {
         if (firstChunk) {
           firstChunk = false
           client.put(chunk, path, callback)
-        } else {
+        }
+        else {
           client.append(chunk, path, callback)
         }
       },

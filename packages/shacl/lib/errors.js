@@ -2,7 +2,7 @@
  * @param {import('rdf-validate-shacl/src/validation-report.js').ValidationReport} report
  */
 function buildErrorMessage(report) {
-  return JSON.stringify(report.results.map(x => {
+  return JSON.stringify(report.results.map((x) => {
     const result = {}
     if (x.message && x.message.length > 0) {
       result.message = x.message.map(x => x.value)

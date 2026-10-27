@@ -5,7 +5,7 @@ import { isGraphPointer } from 'is-graph-pointer'
 import { VariableMap } from '../VariableMap.js'
 import type { Context } from '../../index.js'
 
-async function createVariables(ptr: MultiPointer, { basePath, context, loaderRegistry, logger }: { basePath: string; context: Pick<Context, 'env'>; loaderRegistry: LoaderRegistry; logger: Logger }) {
+async function createVariables(ptr: MultiPointer, { basePath, context, loaderRegistry, logger }: { basePath: string, context: Pick<Context, 'env'>, loaderRegistry: LoaderRegistry, logger: Logger }) {
   const variables = new VariableMap()
 
   for (const variablePtr of ptr.out(context.env.ns.p.variable).toArray()) {

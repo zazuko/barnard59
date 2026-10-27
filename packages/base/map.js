@@ -37,7 +37,8 @@ export default function map(options, ...args) {
   let objectMode = true
   if (typeof options === 'function') {
     func = options
-  } else {
+  }
+  else {
     func = options.map
     concurrency = options.concurrency || concurrency
     ordered = typeof options.ordered === 'boolean' ? options.ordered : ordered
@@ -47,8 +48,8 @@ export default function map(options, ...args) {
   return transform(concurrency, { ordered, objectMode }, (data, callback) => {
     Promise.resolve().then(() => {
       return func.call(this, data, ...args)
-    }).then(result => {
-      callback(null, result)
-    }).catch(callback)
+    }).then((result) => {
+      return setImmediate(() => callback(null, result))
+    }).catch(err => setImmediate(() => callback(err, null)))
   })
 }

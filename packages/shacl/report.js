@@ -10,7 +10,7 @@ import TermCounter from './lib/TermCounter.js'
  * @param {number | undefined} options.maxViolations
  * @param {AsyncIterable<any>} iterable
  */
-async function * validate({ shapes, maxViolations }, iterable) {
+async function* validate({ shapes, maxViolations }, iterable) {
   let totalViolations = 0
   const counter = new TermCounter(this.env)
 
@@ -58,7 +58,8 @@ export async function shacl(arg) {
   let maxViolations
   if (isStream(arg)) {
     shape = arg
-  } else if (arg) {
+  }
+  else if (arg) {
     ({ shape, ...options } = arg)
     maxViolations = options.maxErrors < 1 ? 0 : Number(options.maxErrors)
   }
@@ -66,7 +67,8 @@ export async function shacl(arg) {
   let ds
   if (!shape) {
     this.logger.info('No shapes found. Will validate each chunk against shapes found in the chunk itself')
-  } else {
+  }
+  else {
     if (!isReadableStream(shape)) {
       throw new Error(`${shape} is not a readable stream`)
     }

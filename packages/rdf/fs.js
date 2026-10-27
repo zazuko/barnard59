@@ -23,7 +23,8 @@ export function parse() {
           failed = true
         })
         fileStream.on('end', () => !failed && callback())
-      } catch (/** @type {any} */ e) {
+      }
+      catch (/** @type {any} */ e) {
         callback(e)
       }
     },

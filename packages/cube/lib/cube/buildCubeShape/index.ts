@@ -94,7 +94,8 @@ class CubeShapeBuilder extends Transform {
   async _init() {
     if (this.options.metadataStream) {
       this.options.metadata = await this.rdf.dataset().import(this.options.metadataStream)
-    } else {
+    }
+    else {
       this.options.metadata = this.rdf.dataset()
     }
   }
@@ -102,7 +103,8 @@ class CubeShapeBuilder extends Transform {
   async _transform(chunk: Quad[], encoding: string, callback: (err: Error | null, chunk?: Quad[]) => void) {
     try {
       await this.init()
-    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    }
+    catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       return callback(err)
     }
 
@@ -155,7 +157,7 @@ class CubeShapeBuilder extends Transform {
   }
 }
 
-function buildCubeShape(this: BarnardContext, { cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize }:{
+function buildCubeShape(this: BarnardContext, { cube, shape, excludeValuesOf, metadata, graph, propertyShapeId, inListMaxSize }: {
   cube?: CubeIdCallback
   shape?: ShapeIdCallback
   excludeValuesOf?: string[]

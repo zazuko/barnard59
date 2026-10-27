@@ -9,20 +9,20 @@ import { putObject } from '../index.js'
 import { ensureFileDirectoryExists } from '../lib/paths.js'
 import { removeResultsDirectory, testResultsDirectory } from './utils.js'
 
-describe('putObject', async () => {
+describe('putObject', function () {
   let s3Mock
 
-  before(async () => {
+  before(async function () {
     s3Mock = mockClient(S3Client)
     await removeResultsDirectory()
   })
 
-  after(async () => {
+  after(async function () {
     s3Mock.restore()
     await removeResultsDirectory()
   })
 
-  it('should be able to put a file', async () => {
+  it('should be able to put a file', async function () {
     const data = 'Hello world'
     const filePath = `${testResultsDirectory}/putObject/file-to-put.txt`
     const uploadPath = `${testResultsDirectory}/putObject/uploaded-file.txt`
@@ -45,7 +45,7 @@ describe('putObject', async () => {
     })
 
     // fake sleep to wait for stream to finish
-    await new Promise((resolve) => setTimeout(resolve, 0))
+    await new Promise(resolve => setTimeout(resolve, 0))
 
     const fileContent = await readFile(uploadPath, 'utf8')
     strictEqual(fileContent, data)

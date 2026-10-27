@@ -1,4 +1,4 @@
-import { deepStrictEqual, strictEqual } from 'assert'
+import { deepStrictEqual, strictEqual } from 'node:assert'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
 import env from 'barnard59-env'
 import defaultLoaderRegistry from '../../lib/defaultLoaderRegistry.js'
@@ -9,12 +9,12 @@ import { VariableMap } from '../../lib/VariableMap.js'
 const loadPipelineDefinition = pipelineDefinitionLoader(import.meta.url, '../support/definitions')
 const context = { env }
 
-describe('factory/arguments', () => {
-  it('should be a method', () => {
+describe('factory/arguments', function () {
+  it('should be a method', function () {
     strictEqual(typeof createArguments, 'function')
   })
 
-  it('should build key-value pair arguments', async () => {
+  it('should build key-value pair arguments', async function () {
     const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.keyValues).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
@@ -26,7 +26,7 @@ describe('factory/arguments', () => {
     deepStrictEqual(args, [{ a: '1', b: '2' }])
   })
 
-  it('should build key-value pair arguments with undefined variable', async () => {
+  it('should build key-value pair arguments with undefined variable', async function () {
     const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.keyValueMissingVar).out(ns.p.steps).out(ns.p.stepList).list()][0]
     const variables = new VariableMap()
@@ -41,7 +41,7 @@ describe('factory/arguments', () => {
     deepStrictEqual(args, [{ a: undefined }])
   })
 
-  it('should build list arguments', async () => {
+  it('should build list arguments', async function () {
     const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.list).out(ns.p.steps).out(ns.p.stepList).list()][0]
 
@@ -53,7 +53,7 @@ describe('factory/arguments', () => {
     deepStrictEqual(args, ['a', 'b'])
   })
 
-  it('should build list arguments with undefined variable', async () => {
+  it('should build list arguments with undefined variable', async function () {
     const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.listMissingVar).out(ns.p.steps).out(ns.p.stepList).list()][0]
     const variables = new VariableMap()
@@ -68,7 +68,7 @@ describe('factory/arguments', () => {
     deepStrictEqual(args, [undefined])
   })
 
-  it('should forward variables to the loader', async () => {
+  it('should forward variables to the loader', async function () {
     const { ptr: definition } = await loadPipelineDefinition('arguments')
     const ptr = [...definition.node(ns.ex.variable).out(ns.p.steps).out(ns.p.stepList).list()][0]
 

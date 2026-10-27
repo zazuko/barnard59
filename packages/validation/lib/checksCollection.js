@@ -13,14 +13,15 @@ export default class ChecksCollection {
   addPipelineCheck(error, pipeline) {
     if (pipeline in this.pipelines) {
       this.pipelines[pipeline].push(error)
-    } else {
+    }
+    else {
       this.pipelines[pipeline] = [error]
     }
   }
 
   getGenericChecks(levels = null) {
     if (levels !== null) {
-      return this.generic.filter((issue) => levels.includes(issue.level))
+      return this.generic.filter(issue => levels.includes(issue.level))
     }
     return this.generic
   }
@@ -28,7 +29,7 @@ export default class ChecksCollection {
   getPipelineChecks(pipeline, levels = null) {
     if (pipeline in this.pipelines) {
       if (levels !== null) {
-        return this.pipelines[pipeline].filter((issue) => levels.includes(issue.level))
+        return this.pipelines[pipeline].filter(issue => levels.includes(issue.level))
       }
       return this.pipelines[pipeline]
     }

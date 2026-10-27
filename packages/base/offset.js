@@ -6,7 +6,7 @@ export default function (offset) {
   /**
    * @param {AsyncIterable<*>} stream
    */
-  return async function * (stream) {
+  return async function* (stream) {
     let count = 0
 
     for await (const chunk of stream) {

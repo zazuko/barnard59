@@ -18,7 +18,7 @@ export class DimensionConstraintsBuilder implements Builder {
   declare builders: Map<NamedNode, CompositeConstraintBuilder>
   declare valuesBuilder: CompositeConstraintBuilder | undefined
 
-  constructor({ rdf, datatypeParsers, inListMaxSize }: { rdf: Environment; datatypeParsers: Map<NamedNode, DatatypeParser>; inListMaxSize?: number}) {
+  constructor({ rdf, datatypeParsers, inListMaxSize }: { rdf: Environment, datatypeParsers: Map<NamedNode, DatatypeParser>, inListMaxSize?: number }) {
     this.rdf = rdf
     this.datatypeParsers = datatypeParsers
     this.inListMaxSize = inListMaxSize
@@ -30,7 +30,8 @@ export class DimensionConstraintsBuilder implements Builder {
       return new CompositeConstraintBuilder(
         new DatatypeConstraintBuilder(this.rdf, datatype),
         new RangeConstraintBuilder(this.rdf, this.datatypeParsers.get(datatype)))
-    } else {
+    }
+    else {
       return new CompositeConstraintBuilder(
         new DatatypeConstraintBuilder(this.rdf, datatype),
         new ValuesConstraintBuilder(this.rdf, this.inListMaxSize))
@@ -43,7 +44,8 @@ export class DimensionConstraintsBuilder implements Builder {
     const builder = this.builders.get(object.datatype)
     if (builder) {
       builder.add(object)
-    } else {
+    }
+    else {
       const builder = this.#createBuilder(object.datatype)
       builder.add(object)
       this.builders.set(object.datatype, builder)
@@ -53,7 +55,8 @@ export class DimensionConstraintsBuilder implements Builder {
   #addOther(object: Term) {
     if (this.valuesBuilder) {
       this.valuesBuilder.add(object)
-    } else {
+    }
+    else {
       this.valuesBuilder = new CompositeConstraintBuilder(
         new ValuesConstraintBuilder(this.rdf, this.inListMaxSize),
         new NodeKindConstraintBuilder(this.rdf))
@@ -64,7 +67,8 @@ export class DimensionConstraintsBuilder implements Builder {
   add(object: Term) {
     if ('datatype' in object) {
       this.#addDatatype(object)
-    } else {
+    }
+    else {
       this.#addOther(object)
     }
   }
@@ -85,11 +89,13 @@ export class DimensionConstraintsBuilder implements Builder {
         const merged = new ValuesConstraintBuilder(this.rdf)
         const allValues = valuesBuilders.flatMap(builder => Array.from(builder.values))
         allValues.forEach(value => merged.add(value))
-        valuesBuilders.forEach(builder => { builder.enabled = false })
+        valuesBuilders.forEach((builder) => {
+          builder.enabled = false
+        })
         merged.build(ptr)
       }
 
-      ptr.addList(this.rdf.ns.sh.or, builders.map(builder => {
+      ptr.addList(this.rdf.ns.sh.or, builders.map((builder) => {
         const blankNode = ptr.blankNode()
         builder.build(blankNode)
         return blankNode

@@ -3,14 +3,14 @@ import { expect } from 'chai'
 import getStream from 'get-stream'
 import limit from '../limit.js'
 
-describe('limit', () => {
-  it('should return generator', () => {
+describe('limit', function () {
+  it('should return generator', function () {
     const step = limit(1)
 
     expect(step).to.be.instanceOf(Function)
   })
 
-  it('stop processing chunks when limit is reached', async () => {
+  it('stop processing chunks when limit is reached', async function () {
     // given
     const step = limit(1)
 

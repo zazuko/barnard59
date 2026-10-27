@@ -1,4 +1,3 @@
-#!/usr/bin/env -S node --loader ts-node/esm/transpile-only --no-warnings
 import { Writable } from 'node:stream'
 import { createWriteStream, existsSync } from 'node:fs'
 import { contextPath, contextUrl } from '../lib/jsonLdUtils.js'

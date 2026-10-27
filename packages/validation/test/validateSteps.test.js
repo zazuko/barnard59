@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import * as parser from '../lib/parser.js'
 import ChecksCollection from '../lib/checksCollection.js'
 import * as validators from '../lib/validators/index.js'
@@ -40,12 +40,12 @@ function pipelinesToSteps(pipelines) {
 
 let checks
 
-describe('parser.validateSteps', () => {
-  beforeEach(() => {
+describe('parser.validateSteps', function () {
+  beforeEach(function () {
     checks = new ChecksCollection()
   })
 
-  it('should accept valid pipelines', () => {
+  it('should accept valid pipelines', function () {
     const pipelines = pipelinesToSteps({
       p1: ['or', 'orw', 'ow'],
       p2: ['or', 'orw', 'orw', 'orw', 'orw', 'ow'],
@@ -60,7 +60,7 @@ describe('parser.validateSteps', () => {
     })
   })
 
-  it('should accept valid pipelines -- object mode', () => {
+  it('should accept valid pipelines -- object mode', function () {
     const pipelines = pipelinesToSteps({
       p1: ['oR', 'oRW', 'oW'],
       p2: ['oR', 'oRW', 'oRW', 'oRW', 'oRW', 'oW'],
@@ -74,7 +74,7 @@ describe('parser.validateSteps', () => {
     })
   })
 
-  it('should report missing metadata', () => {
+  it('should report missing metadata', function () {
     const pipelines = pipelinesToSteps({
       p1: [
         'n',
@@ -85,7 +85,8 @@ describe('parser.validateSteps', () => {
     const expIssue = validators.operationPropertiesExist.validate(null, 'n-step', 'n')
     assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
-  it('should report found metadata', () => {
+
+  it('should report found metadata', function () {
     const pipelines = pipelinesToSteps({
       p1: [
         'rw',
@@ -97,7 +98,7 @@ describe('parser.validateSteps', () => {
     assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
 
-  it('should report operations missing p:Operation', () => {
+  it('should report operations missing p:Operation', function () {
     const pipelines = pipelinesToSteps({
       p1: [
         'e',
@@ -109,7 +110,7 @@ describe('parser.validateSteps', () => {
     assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
 
-  it('should report non-writable operation being written into', () => {
+  it('should report non-writable operation being written into', function () {
     const pipelines = pipelinesToSteps({
       p1: [
         'or',
@@ -122,7 +123,7 @@ describe('parser.validateSteps', () => {
     assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
 
-  it('should report error if first operation is writable', () => {
+  it('should report error if first operation is writable', function () {
     const pipelines = pipelinesToSteps({
       p1: [
         'ow',
@@ -134,7 +135,8 @@ describe('parser.validateSteps', () => {
     const expIssue = validators.firstOperationIsReadable.validate(false, 'ow-step', 'ow')
     assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
   })
-  it('should report bad mix of normal streams and object-mode streams', () => {
+
+  it('should report bad mix of normal streams and object-mode streams', function () {
     const pipelines = pipelinesToSteps({
       p1: [
         'or',

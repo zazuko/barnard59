@@ -5,9 +5,9 @@ import { isReadableStream as isReadable, isWritableStream as isWritable } from '
 import post from '../post.js'
 import chunksAndContent from './support/chunksAndContent.js'
 
-describe('post', () => {
-  it('returns a duplex stream', async () => {
-    await withServer(async server => {
+describe('post', function () {
+  it('returns a duplex stream', async function () {
+    await withServer(async (server) => {
       server.app.post('/', (req, res) => {
         res.status(204).end()
       })
@@ -24,8 +24,8 @@ describe('post', () => {
     })
   })
 
-  it('sends the stream to the server', async () => {
-    await withServer(async server => {
+  it('sends the stream to the server', async function () {
+    await withServer(async (server) => {
       let content = null
       const expected = chunksAndContent()
 
@@ -46,8 +46,8 @@ describe('post', () => {
     })
   })
 
-  it('can be called with 2 arguments', async () => {
-    await withServer(async server => {
+  it('can be called with 2 arguments', async function () {
+    await withServer(async (server) => {
       let response
       const expected = chunksAndContent()
 

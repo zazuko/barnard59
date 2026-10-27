@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import approvals from '@approval-tests/approvals'
 import rdf from 'barnard59-env'
 import { pipelineDefinitionLoader } from 'barnard59-test-support/loadPipelineDefinition.js'
@@ -17,7 +17,7 @@ const knownOperations = rdf.termMap([
   }],
 ])
 
-const check = async name => {
+const check = async (name) => {
   const { ptr } = await loadPipelineDefinition(name, { desugar: false })
 
   const result = await desugar(ptr.dataset, { knownOperations })
@@ -25,17 +25,20 @@ const check = async name => {
   approvals.verify(dirname, name, result.toCanonical())
 }
 
-describe('simplified syntax', () => {
-  it('should desugar simplified syntax', async () => {
+describe('simplified syntax', function () {
+  it('should desugar simplified syntax', async function () {
     await check('simplified-step-args')
   })
-  it('should ignore empty arguments', async () => {
+
+  it('should ignore empty arguments', async function () {
     await check('simplified-step-noargs')
   })
-  it('should process also sub-pipelines', async () => {
+
+  it('should process also sub-pipelines', async function () {
     await check('simplified-step-sub')
   })
-  it('should handle named arguments', async () => {
+
+  it('should handle named arguments', async function () {
     await check('simplified-step-args-named')
   })
 })

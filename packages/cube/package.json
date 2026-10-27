@@ -47,5 +47,8 @@
   },
   "mocha": {
     "loader": "ts-node/esm"
+  },
+  "engines": {
+    "node": ">= 16.8"
   }
 }

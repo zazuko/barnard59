@@ -1,9 +1,9 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { Readable } from 'node:stream'
 import command from './lib/command.js'
 
 async function list({ pathname, ...options }) {
-  const files = await command(options, async client => {
+  const files = await command(options, async (client) => {
     return client.list(pathname)
   })
 

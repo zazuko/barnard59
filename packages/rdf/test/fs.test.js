@@ -10,11 +10,11 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 const parse = unbound.bind({ env: $rdf })
 
-describe('fs', () => {
+describe('fs', function () {
   chai.use(jestSnapshotPlugin())
 
-  describe('parse', () => {
-    it('parses files from input chunks paths', async () => {
+  describe('parse', function () {
+    it('parses files from input chunks paths', async function () {
       // given
       const files = Readable.from([
         resolve(__dirname, 'support/fs-samples/A.ttl'),
@@ -29,7 +29,7 @@ describe('fs', () => {
       expect(dataset.toCanonical()).toMatchSnapshot()
     })
 
-    it('fails when file does not exist', (done) => {
+    it('fails when file does not exist', function (done) {
       // given
       const files = Readable.from([
         resolve('no-such-file.ttl'),
@@ -45,7 +45,7 @@ describe('fs', () => {
       })
     })
 
-    it('fails when file fails to parse', (done) => {
+    it('fails when file fails to parse', function (done) {
       // given
       const files = Readable.from([
         resolve(__dirname, 'support/fs-samples/bad.ttl'),
@@ -61,7 +61,7 @@ describe('fs', () => {
       })
     })
 
-    it('fails when extensions is unrecognised', (done) => {
+    it('fails when extensions is unrecognised', function (done) {
       // given
       const files = Readable.from([
         resolve(__dirname, 'support/file.unknown.extension'),

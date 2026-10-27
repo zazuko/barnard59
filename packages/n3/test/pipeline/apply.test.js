@@ -13,7 +13,7 @@ const ns = env.namespace('https://barnard59.zazuko.com/pipeline/n3/')
 const loadPipeline = pipelineDefinitionLoader(import.meta.url, '../../pipeline')
 
 describe('pipeline/apply', function () {
-  it('runs deriving triple', async () => {
+  it('runs deriving triple', async function () {
     // given
     const data = turtle`
       ${ex.Person}
@@ -37,7 +37,7 @@ describe('pipeline/apply', function () {
     expect(output).to.equal('<http://example.org/Person> <http://xmlns.com/foaf/0.1/name> "John Doe" .\n')
   })
 
-  it('runs deriving triple and passing input', async () => {
+  it('runs deriving triple and passing input', async function () {
     // given
     const data = turtle`
       ${ex.Person}
