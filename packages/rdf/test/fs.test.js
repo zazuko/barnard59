@@ -2,7 +2,7 @@ import { Readable } from 'node:stream'
 import { resolve } from 'node:path'
 import * as url from 'node:url'
 import $rdf from 'barnard59-env'
-import chai, { expect } from 'chai'
+import { use, expect } from 'chai'
 import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import { parse as unbound } from '../fs.js'
 
@@ -11,7 +11,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 const parse = unbound.bind({ env: $rdf })
 
 describe('fs', function () {
-  chai.use(jestSnapshotPlugin())
+  use(jestSnapshotPlugin())
 
   describe('parse', function () {
     it('parses files from input chunks paths', async function () {

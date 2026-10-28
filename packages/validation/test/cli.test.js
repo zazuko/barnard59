@@ -1,14 +1,13 @@
 import chaiExec from '@jsdevtools/chai-exec'
-import chai from 'chai'
-const { assert } = chai
+import { assert, use } from 'chai'
 
-chai.use(chaiExec)
+use(chaiExec)
 chaiExec.defaults = {
   command: './cli.js',
   options: {
     env: {
       ...process.env,
-      NODE_OPTIONS: '--no-warnings --loader ts-node/esm',
+      NODE_OPTIONS: '--no-warnings --require tsx',
     },
   },
 }

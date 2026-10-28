@@ -39,14 +39,14 @@
     "@rdfjs/to-ntriples": "^3.0.0",
     "@types/rdfjs__term-set": "^2.0.9",
     "barnard59-env": "^1.2.7",
-    "chai": "^4.3.7",
+    "chai": "^6.3.0",
     "get-stream": "^6.0.1",
     "is-stream": "^3.0.0",
     "rdf-validate-shacl": "^0.6.5",
     "shelljs": "^0.10.0"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "import": "tsx"
   },
   "engines": {
     "node": ">= 16.8"
