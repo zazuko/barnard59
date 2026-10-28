@@ -58,7 +58,7 @@
     "node": ">= 21"
   },
   "mocha": {
-    "import": [
+    "require": [
       "tsx",
       "../../test/mocha-setup.js"
     ]
