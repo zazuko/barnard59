@@ -1,5 +1,15 @@
 # barnard59-formats
 
+## 4.0.4
+
+### Patch Changes
+
+- [#410](https://github.com/zazuko/barnard59/pull/410) [`63cb239`](https://github.com/zazuko/barnard59/commit/63cb239e6109462b52ba31c5bf22b4bbb01a64e7) Thanks [@tpluscode](https://github.com/tpluscode)! - Updated `@zazuko/rdf-parser-csvw` to 0.17.1
+
+- [#408](https://github.com/zazuko/barnard59/pull/408) [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922) Thanks [@tpluscode](https://github.com/tpluscode)! - Set the required node version to `>=14.13.1` in `engines`
+- Updated dependencies [[`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922)]:
+  - barnard59-base@3.0.1
+
 ## 4.0.3
 
 ### Patch Changes
