@@ -18,6 +18,7 @@
     "@changesets/cli": "^3",
     "@tpluscode/eslint-config": "^4.0.4",
     "@types/chai": "^5.2.3",
+    "@types/sinon-chai": "^4.0.1",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^8.72.1",
     "@typescript-eslint/parser": "^8.72.1",
@@ -30,7 +31,7 @@
     "lint-staged": "^16.1.4",
     "mocha": "^12",
     "sinon-chai": "^4.0.1",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.23.15",
     "typescript": "^5.4.5"
   },
   "lint-staged": {

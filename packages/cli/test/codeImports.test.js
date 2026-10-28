@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module'
 import env from 'barnard59-env'
 import formatsPretty from '@rdfjs-elements/formats-pretty'
-import chai, { expect } from 'chai'
+import { use, expect } from 'chai'
 import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import * as pipeline from '../lib/pipeline.js'
 
@@ -18,7 +18,7 @@ const prefixes = [
 ]
 
 describe('pipeline', function () {
-  chai.use(jestSnapshotPlugin())
+  use(jestSnapshotPlugin())
 
   context('with code:imports', function () {
     it('merges the pipelines', async function () {

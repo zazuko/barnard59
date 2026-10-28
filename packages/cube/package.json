@@ -46,7 +46,7 @@
     "shelljs": "^0.10.0"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "import": "tsx"
   },
   "engines": {
     "node": ">= 16.8"

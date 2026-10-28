@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`fs parse parses files from input chunks paths 1`] = `
 "<http://example.org/A> <http://www.w3.org/2000/01/rdf-schema#label> \\"A\\" .

@@ -51,6 +51,6 @@
     "node": ">= 14.13.1"
   },
   "mocha": {
-    "loader": "ts-node/esm/transpile-only"
+    "import": "tsx"
   }
 }

@@ -45,8 +45,7 @@
     "sinon": "^19"
   },
   "mocha": {
-    "require": "../../test/mocha-setup.cjs",
-    "loader": "ts-node/esm"
+    "import": [ "tsx", "../../test/mocha-setup.js" ]
   },
   "engines": {
     "node": ">=16.8"

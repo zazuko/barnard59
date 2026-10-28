@@ -48,7 +48,9 @@
     "node": ">= 16.8"
   },
   "mocha": {
-    "require": "../../test/mocha-setup.cjs",
-    "loader": "ts-node/esm/transpile-only"
+    "import": [
+      "tsx",
+      "../../test/mocha-setup.js"
+    ]
   }
 }

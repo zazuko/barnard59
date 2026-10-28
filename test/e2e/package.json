@@ -24,6 +24,6 @@
     "string-to-stream": "^3.0.1"
   },
   "mocha": {
-    "loader": "ts-node/esm"
+    "import": "tsx"
   }
 }

@@ -42,8 +42,8 @@
     "rdf-loader-code": "^2.2.2"
   },
   "mocha": {
-    "loader": [
-      "ts-node/esm",
+    "import": [
+      "tsx",
       "esmock"
     ]
   }

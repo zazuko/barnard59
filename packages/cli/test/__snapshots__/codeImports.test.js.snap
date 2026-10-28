@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`pipeline with code:imports merges the pipelines 1`] = `
 "@prefix sh: <http://www.w3.org/ns/shacl#> .
