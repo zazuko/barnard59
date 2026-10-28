@@ -1,5 +1,13 @@
 # barnard59-sparql
 
+## 3.0.1
+
+### Patch Changes
+
+- [#408](https://github.com/zazuko/barnard59/pull/408) [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922) Thanks [@tpluscode](https://github.com/tpluscode)! - Set the required node version to `>=14.13.1` in `engines`
+
+- [`a75f6a6`](https://github.com/zazuko/barnard59/commit/a75f6a6184f5c7443eb2576bf9db832e9a502595) Thanks [@anupamme](https://github.com/anupamme)! - `select` now parses the query with `sparqljs` and only accepts SELECT and ASK queries. SPARQL Update operations, including ones that contain `SELECT` or `ASK` in comments, are rejected.
+
 ## 3.0.0
 
 ### Major Changes

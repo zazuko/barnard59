@@ -1,5 +1,12 @@
 # barnard59
 
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [[`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922)]:
+  - barnard59-core@7.0.1
+
 ## 6.0.0
 
 ### Major Changes

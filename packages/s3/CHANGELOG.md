@@ -1,5 +1,11 @@
 # barnard59-s3
 
+## 0.3.2
+
+### Patch Changes
+
+- [#408](https://github.com/zazuko/barnard59/pull/408) [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922) Thanks [@tpluscode](https://github.com/tpluscode)! - Set the required node version to `>=24 || ^22.17` in `engines`
+
 ## 0.3.1
 
 ### Patch Changes

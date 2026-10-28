@@ -1,5 +1,17 @@
 # barnard59-cube
 
+## 2.0.1
+
+### Patch Changes
+
+- [#408](https://github.com/zazuko/barnard59/pull/408) [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922) Thanks [@tpluscode](https://github.com/tpluscode)! - Set the required node version to `>=16.18` in `engines`
+- Updated dependencies [[`63cb239`](https://github.com/zazuko/barnard59/commit/63cb239e6109462b52ba31c5bf22b4bbb01a64e7), [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922), [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922), [`a75f6a6`](https://github.com/zazuko/barnard59/commit/a75f6a6184f5c7443eb2576bf9db832e9a502595), [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922)]:
+  - barnard59-formats@4.0.4
+  - barnard59-base@3.0.1
+  - barnard59-shacl@2.0.1
+  - barnard59-sparql@3.0.1
+  - barnard59-rdf@4.0.1
+
 ## 2.0.0
 
 ### Major Changes

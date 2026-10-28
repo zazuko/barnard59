@@ -1,5 +1,14 @@
 # barnard59-graph-store
 
+## 7.0.1
+
+### Patch Changes
+
+- [#408](https://github.com/zazuko/barnard59/pull/408) [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922) Thanks [@tpluscode](https://github.com/tpluscode)! - Set the required node version to `>=14.13.1` in `engines`
+- Updated dependencies [[`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922), [`2359425`](https://github.com/zazuko/barnard59/commit/23594250599bbde63503ae8c0895405df669c922)]:
+  - barnard59-base@3.0.1
+  - barnard59-rdf@4.0.1
+
 ## 7.0.0
 
 ### Major Changes
