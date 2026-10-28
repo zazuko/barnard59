@@ -18,10 +18,10 @@
     "barnard59-base": "^3.0.0",
     "barnard59-core": "^7.0.0",
     "barnard59-formats": "^4.0.3",
-    "chai": "^4.3.0",
+    "chai": "^6.3.0",
     "deep-equal": "^2.0.5",
     "esmock": "^2.3.8",
-    "sinon": "^15.2.0"
+    "sinon": "^19.0.5"
   },
   "repository": {
     "type": "git",

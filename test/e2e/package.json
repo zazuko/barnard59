@@ -14,7 +14,7 @@
     "barnard59-env": "^1.2.1",
     "barnard59-formats": "^4.0.3",
     "barnard59-http": "^3.0.0",
-    "chai": "^4.3.7",
+    "chai": "^6.3.0",
     "dotenv-cli": "^11",
     "get-stream": "^6.0.0",
     "nock": "^13.3.1",

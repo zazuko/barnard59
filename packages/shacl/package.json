@@ -37,12 +37,12 @@
     "barnard59-core": "^7.0.0",
     "barnard59-env": "^1.2.7",
     "barnard59-test-support": "*",
-    "chai": "^4.3.4",
-    "express": "^4.22.3",
+    "chai": "^6.3.0",
+    "express": "^5.3.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^8.0.1",
     "rdf-dataset-ext": "^1.1.0",
-    "sinon": "^15",
+    "sinon": "^19",
     "string-to-stream": "^3.0.1"
   },
   "mocha": {

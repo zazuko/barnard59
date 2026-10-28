@@ -47,12 +47,12 @@
     "@types/rdfjs__fetch-lite": "^3.0.8",
     "@types/rdfjs__fetch": "^3.0.6",
     "assert-throws-async": "^3.0.0",
-    "chai": "^4.3.7",
+    "chai": "^6.3.0",
     "express-as-promise": "^1.2.0",
     "get-stream": "^6.0.1",
-    "mocha-chai-jest-snapshot": "^1.1.7",
+    "mocha-chai-jest-snapshot": "^1.1.8",
     "nock": "^13.2.4",
-    "sinon": "^15"
+    "sinon": "^19"
   },
   "engines": {
     "node": ">= 21"

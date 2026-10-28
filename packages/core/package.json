@@ -39,10 +39,10 @@
     "barnard59-env": "^1.2.7",
     "barnard59-http": "^3.0.0",
     "barnard59-test-support": "^0.0.3",
-    "chai": "^4.3.7",
+    "chai": "^6.3.0",
     "get-stream": "^6.0.1",
     "nock": "^13.1.0",
-    "sinon": "^15.0.4"
+    "sinon": "^19"
   },
   "mocha": {
     "require": "../../test/mocha-setup.cjs",

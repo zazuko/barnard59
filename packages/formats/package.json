@@ -41,7 +41,7 @@
     "@types/sax": "^1.2.7",
     "@zazuko/env-core": "^1.1.2",
     "barnard59-env": "^1.2.7",
-    "chai": "^4.3.7"
+    "chai": "^6.3.0"
   },
   "engines": {
     "node": ">= 14.13.1"
