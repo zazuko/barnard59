@@ -1,7 +1,7 @@
 #
 # Use the following command to run the pipeline:
 #
-# ./bin/barnard59.js run --format=text/turtle --pipeline=http://example.org/pipeline/concat examples/concat.ttl
+# npx barnard59 run examples/concat.ttl --pipeline http://example.org/pipeline/concat
 #
 
 @base <http://example.org/pipeline/> .

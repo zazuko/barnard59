@@ -48,11 +48,11 @@ npm i barnard59-base barnard59-formats barnard59-rdf
 Reads standard input and applies the rules to it, writing derived triples to standard output.
 
 ```bash
-cat data.ttl | barnard59 n3 apply --rules ./rules.n3
+cat data.ttl | barnard59 n3 apply --rules "$PWD/rules.n3"
 ```
 
 Adding the option `--include all`, also input triples are propagated to standard output.
 
 ```bash
-cat data.ttl | barnard59 n3 apply --rules ./rules.n3 --include all
+cat data.ttl | barnard59 n3 apply --rules "$PWD/rules.n3" --include all
 ```

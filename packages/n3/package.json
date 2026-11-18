@@ -14,7 +14,9 @@
     "*.d.ts",
     "lib/*.js",
     "lib/*.d.ts",
-    "manifest.ttl"
+    "manifest.ttl",
+    "pipeline",
+    "skills"
   ],
   "repository": {
     "type": "git",

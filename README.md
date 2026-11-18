@@ -25,3 +25,7 @@ In this monorepo you will find the various `barnard59-*` packages:
 | [`barnard59-validation`](packages/validation)   | [![](https://badge.fury.io/js/barnard59-validation.svg)](https://npm.im/barnard59-validation)   | Verify the consistency of your RDF pipelines                                           |
 
 More to come as we gradually consolidate other, initially separate repositories.
+
+## Agent skills
+
+After installing workspace dependencies, run `npm run skills:sync` with Node.js 22.20 or newer to load the Barnard59 skills, the `@zazuko/env` skill, and `node-cli-entrypoint` into your agent's project skills. The [Barnard59 skill](packages/cli/skills/barnard59/SKILL.md) lists the available packages and their capabilities. Each step package ships a skill under `skills/`.

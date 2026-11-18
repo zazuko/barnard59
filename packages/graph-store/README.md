@@ -30,13 +30,14 @@ The following options are supported:
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
 
-### put ({ endpoint, user, password, maxQuadsPerRequest })
+### put ({ endpoint, graph, user, password })
 
 This operation appends quads to the given SPARQL Graph store.
 A `Writable` stream of RDF/JS `Quad` objects is returned.
 The following options are supported:
 
 - `endpoint`: The URL of the graph store endpoint as a string.
+- `graph`: The target graph IRI or RDF/JS named node. Use the string `DEFAULT` for the default graph.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
 

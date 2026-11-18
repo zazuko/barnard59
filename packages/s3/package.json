@@ -32,7 +32,8 @@
     "index.js",
     "manifest.ttl",
     "lib",
-    "cmd"
+    "cmd",
+    "skills"
   ],
   "publishConfig": {
     "access": "public"
