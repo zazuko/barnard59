@@ -76,6 +76,7 @@ To pass multiple arguments to the pipeline, call `--variable` argument multiple 
 For example, to pass `$USER` as a `user`, and `$PASSWORD` as a `password` to `pipeline.json`, run:
 `barnard59 run pipeline.json --variable user=$USER --variable password=$PASSWORD`
 
+See the [Barnard59 local commands skill](skills/barnard59-local-commands/SKILL.md) to expose a project pipeline as a CLI subcommand.
 
 ## Examples
 

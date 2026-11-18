@@ -17,7 +17,8 @@
     "lib/*.js",
     "lib/*.d.ts",
     "context.jsonld",
-    "manifest.ttl"
+    "manifest.ttl",
+    "skills"
   ],
   "repository": {
     "type": "git",
