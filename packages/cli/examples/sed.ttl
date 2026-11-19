@@ -24,7 +24,7 @@
 
 <sed> a p:Step;
   code:implementedBy [
-    code:link <node:barnard59-shell/examples/sed.js>;
+    code:link <file:sed.cjs>;
     a code:EcmaScript
   ];
   code:arguments ("columnA" "columnZ").
