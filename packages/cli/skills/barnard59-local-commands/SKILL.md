@@ -40,22 +40,23 @@ For a portable source, put the manifest and pipeline in an installed `barnard59-
 
 Declare options on the selected pipeline under `p:variables` and `p:variable`. The CLI uses `p:name` as the option name and `rdfs:label` as its optional help text. A regular option takes a value and is required by default. Set `p:required false` to make it optional or provide a literal `p:value` as its default.
 
-Use the Turtle boolean `b59:flag true` for a valueless switch and `p:required false` to make the switch optional. When supplied, the switch passes the string `"true"` to the pipeline. When omitted, the pipeline uses its `p:value`, if set. In JavaScript, compare the flag value with `"true"` so that the default `"false"` is handled correctly.
+Use `sh:datatype xsd:boolean` for a valueless switch and `p:required false` to make the switch optional. When supplied, the switch passes the string `"true"` to the pipeline. When omitted, the pipeline uses its `p:value`, if set. In JavaScript, compare the flag value with `"true"` so that the default `"false"` is handled correctly.
 
 For example, place this pipeline in `pipeline/greet.ttl`.
 
 ```turtle
-@prefix b59: <https://barnard59.zazuko.com/vocab#> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <urn:local-tools:pipeline:greet> a p:Pipeline, p:Readable ;
   p:variables [
     p:variable
       [ a p:Variable ; p:name "person" ; p:value "world" ; rdfs:label "Person to greet" ],
       [ a p:Variable ; p:name "upper-case" ; p:required false ; p:value "false" ;
-        b59:flag true ; rdfs:label "Print in uppercase" ]
+        sh:datatype xsd:boolean ; rdfs:label "Print in uppercase" ]
   ] ;
   p:steps [ p:stepList (
     [ a p:Step ;

@@ -1,9 +1,10 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 @base <https://barnard59.zazuko.com/pipeline/graph-store/> .
-@prefix b59: <https://barnard59.zazuko.com/vocab#> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix op: <https://barnard59.zazuko.com/operations/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <put> a p:Pipeline ;
   p:variables
@@ -28,7 +29,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
           p:name "allow-empty" ;
           p:required false ;
           p:value false ;
-          b59:flag true ;
+          sh:datatype xsd:boolean ;
           rdfs:label "Succeed without uploading if the source contains no RDF quads" ;
         ],
         [
@@ -36,7 +37,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
           p:name "allow-clear" ;
           p:required false ;
           p:value false ;
-          b59:flag true ;
+          sh:datatype xsd:boolean ;
           rdfs:label "Clear the target graph if the source contains no RDF quads" ;
         ],
         [
