@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import readline from 'node:readline'
 import rdf from 'barnard59-env'
+import { desugar, fileToDataset } from 'barnard59/lib/pipeline.js'
 import iriResolve from 'rdf-loader-code/lib/iriResolve.js'
 import Issue from './issue.js'
 import * as utils from './utils.js'
@@ -12,39 +13,27 @@ const ns = {
   code: rdf.namespace('https://code.described.at/'),
 }
 
-export async function readGraph(file, checks) {
-  const quadStream = rdf.fromFile(file)
-  const parserPromise = new Promise((resolve, reject) => {
-    quadStream.on('error', reject)
-    quadStream.on('end', resolve)
-  })
-  const datasetPromise = rdf.dataset().import(quadStream)
-
-  let issue, dataset
+export async function readGraph(file, checks, { pipeline = false } = {}) {
   try {
-    [, dataset] = await Promise.all([parserPromise, datasetPromise])
-    issue = Issue.info({
+    const dataset = pipeline
+      ? await desugar(await fileToDataset(file), { pipelinePath: file })
+      : await rdf.dataset().import(rdf.fromFile(file))
+    checks.addGenericCheck(Issue.info({
       message: `File ${file} parsed successfully`,
-    })
+    }))
+    return rdf.clownface({ dataset })
   }
   catch (err) {
-    if (err.stack.includes('at N3')) {
+    if (err.context?.line) {
       const error = await parseError(file, err)
-      issue = Issue.error({
+      checks.addGenericCheck(Issue.error({
         message: `Cannot parse ${file}:\n  ${error.message} Line ${error.context.line}:\n  ${error.context.lineContent}`,
-      })
+      }))
     }
     else {
-      issue = Issue.error({
-        message: err.message,
-      })
+      checks.addGenericCheck(Issue.error({ message: err.message }))
     }
   }
-
-  checks.addGenericCheck(issue)
-  const clownfaceObj = rdf.clownface({ dataset })
-
-  return clownfaceObj
 }
 
 export function parseError(path, error) {
@@ -82,13 +71,26 @@ export function getIdentifiers(graph, checks, pipeline2find = null) {
 
         pipeline2identifier[pipeline.term.value] = []
 
-        for (const step of steps) {
+        for (const step of steps ?? []) {
+          if (step.has(rdf.ns.rdf.type, ns.p.Pipeline)?.term && step.out(ns.p.steps).out(ns.p.stepList).out(rdf.ns.rdf.first).term) {
+            pipeline2identifier[pipeline.term.value].push({
+              stepName: step.term.value,
+              stepOperation: step.term.value,
+              stepProperties: ['Operation', ...getTypes(step)],
+            })
+            continue
+          }
           const implementedBy = step.out(ns.code.implementedBy)
           const codeLink = implementedBy.out(ns.code.link)
           const identifier = codeLink.term
 
           const currStepName = step.term.value
           const ib = implementedBy.term
+
+          if (ib?.termType === 'Literal' && ib.datatype.equals(ns.code.EcmaScript)) {
+            pipeline2identifier[pipeline.term.value].push({ stepName: currStepName, stepOperation: currStepName, stepProperties: null })
+            continue
+          }
 
           const issue = validators.codelink.validate(ib, identifier, currStepName)
           checks.addPipelineCheck(issue, pipeline)
@@ -137,7 +139,7 @@ export function getModuleOperationProperties(graph, identifiers) {
 export function getAllCodeLinks(pipelines) {
   const codelinks = new Set()
   for (const key in pipelines) {
-    pipelines[key].forEach(step => codelinks.add(step))
+    pipelines[key].filter(step => step.stepProperties === undefined).forEach(step => codelinks.add(step))
   }
   return codelinks
 }
@@ -164,17 +166,9 @@ export function getPipelineProperties(graph, pipelines) {
   const pipeline2properties = {}
 
   for (const id of pipelines) {
-    pipeline2properties[id] = []
-
-    graph
-      .namedNode(id)
-      .out(rdf.ns.rdf.type)
-      .forEach((node) => {
-        const nodeComponents = node.term.value.split('/')
-        const property = nodeComponents[nodeComponents.length - 1]
-
-        pipeline2properties[id].push(property)
-      })
+    const types = getTypes(graph.namedNode(id))
+    const blankNode = !types.length && graph.blankNode?.(id)
+    pipeline2properties[id] = blankNode ? getTypes(blankNode) : types
   }
 
   for (const key in pipeline2properties) {
@@ -183,6 +177,19 @@ export function getPipelineProperties(graph, pipelines) {
     }
   }
   return pipeline2properties
+}
+
+function getTypes(node) {
+  const types = []
+  node.out(rdf.ns.rdf.type).forEach(type => types.push(type.term.value.split('/').at(-1)))
+  return types
+}
+
+function getStepProperties(step, properties) {
+  if (!step) {
+    return null
+  }
+  return 'stepProperties' in step ? step.stepProperties : properties[step.stepOperation] ?? null
 }
 
 export async function getAllOperationProperties(dependencies, checks) {
@@ -204,6 +211,7 @@ export async function getAllOperationProperties(dependencies, checks) {
 
       if (manifestPath) {
         const manifestGraph = await readGraph(manifestPath, checks)
+        if (!manifestGraph) continue
         const tempResults = getModuleOperationProperties(manifestGraph, dependencies[protocol][library].values())
         Object.assign(results, tempResults)
       }
@@ -219,9 +227,9 @@ export async function getAllOperationProperties(dependencies, checks) {
 
 export function validatePipelines(pipelines, operation2properties, pipeline2properties, checks) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
-    const firstOpProperties = operation2properties[steps[0].stepOperation]
-    const lastOpProperties = operation2properties[steps[steps.length - 1].stepOperation]
-    const pipelineProperties = pipeline2properties[pipeline]
+    const firstOpProperties = getStepProperties(steps[0], operation2properties)
+    const lastOpProperties = getStepProperties(steps.at(-1), operation2properties)
+    const pipelineProperties = pipeline2properties[pipeline] ?? []
 
     if (firstOpProperties !== null) {
       validatePipelineProperty(pipeline, pipelineProperties, firstOpProperties, 'first', checks)
@@ -237,9 +245,11 @@ export function validatePipelines(pipelines, operation2properties, pipeline2prop
 
 export function validateSteps({ pipelines, properties }, checks) {
   Object.entries(pipelines).forEach(([pipeline, steps]) => {
-    steps.reduce((lastOp, { stepName: step, stepOperation: operation }, idx) => {
-      const lastOperationProperties = properties[lastOp]
-      const operationProperties = properties[operation]
+    steps.forEach((current, idx) => {
+      const { stepName: step, stepOperation: operation } = current
+      const previous = steps[idx - 1]
+      const lastOperationProperties = getStepProperties(previous, properties)
+      const operationProperties = getStepProperties(current, properties)
       const isFirstStep = idx === 0
       const isOnlyStep = steps.length === 1
       const isOperation = (operationProperties || []).includes('Operation')
@@ -255,13 +265,13 @@ export function validateSteps({ pipelines, properties }, checks) {
       issue = validators.operationPropertiesExist.validate(operationProperties, step, operation)
       checks.addPipelineCheck(issue, pipeline)
       if (operationProperties === null) {
-        return operation
+        return
       }
 
       issue = validators.operationHasOperationProperty.validate(isOperation, step, operation)
       checks.addPipelineCheck(issue, pipeline)
       if (!isOperation) {
-        return operation
+        return
       }
 
       // first operation must be either Readable or ReadableObjectMode, except when only one step
@@ -270,16 +280,16 @@ export function validateSteps({ pipelines, properties }, checks) {
         checks.addPipelineCheck(issue, pipeline)
 
         if (!isReadableOrReadableObjectMode) {
-          return operation
+          return
         }
       }
 
-      if (lastOp) {
+      if (previous) {
         issue = validators.previousOperationHasMetadata.validate(lastOperationProperties, step, operation)
         checks.addPipelineCheck(issue, pipeline)
 
         if (lastOperationProperties === null) {
-          return operation
+          return
         }
 
         // a writable operation must always be preceded by a readable operation
@@ -302,8 +312,6 @@ export function validateSteps({ pipelines, properties }, checks) {
           checks.addPipelineCheck(issue, pipeline)
         }
       }
-
-      return operation
-    }, '')
+    })
   })
 }

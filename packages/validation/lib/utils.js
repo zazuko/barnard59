@@ -19,12 +19,13 @@ export function removeFilePart(dirname) {
 }
 
 export function isModuleInstalled(library) {
+  const specifier = library.startsWith('file:') ? url.fileURLToPath(library) : library
   try {
-    removeFilePart(require.resolve(library, { paths: resolvePaths }))
+    require.resolve(specifier, { paths: resolvePaths })
     return true
   }
   catch {
-    return false
+    return path.isAbsolute(specifier) && specifier.endsWith('.js') && fs.existsSync(specifier.replace(/\.js$/, '.ts'))
   }
 }
 

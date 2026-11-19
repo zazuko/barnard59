@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import 'anylogger-console'
 import path from 'node:path'
 import fs from 'node:fs'
 import * as module from 'node:module'
@@ -11,6 +10,7 @@ import ChecksCollection from './lib/checksCollection.js'
 import { removeFilePart } from './lib/utils.js'
 import * as validate from './lib/manifest.js'
 import { log } from './lib/log.js'
+import Issue from './lib/issue.js'
 
 const require = module.createRequire(url.fileURLToPath(import.meta.url))
 const { version } = JSON.parse(fs.readFileSync(require.resolve('./package.json')))
@@ -22,20 +22,22 @@ async function validatePipeline(file, options) {
   const pipelineFile = path.resolve(file)
   const pipelineDir = removeFilePart(pipelineFile)
   const checks = new ChecksCollection()
-  let pipelines
   try {
-    const pipelineGraph = await parser.readGraph(pipelineFile, checks)
-    pipelines = parser.getIdentifiers(pipelineGraph, checks, options.pipeline)
-    const codelinks = parser.getAllCodeLinks(pipelines)
-    const dependencies = parser.getDependencies(codelinks, pipelineDir)
+    const pipelineGraph = await parser.readGraph(pipelineFile, checks, { pipeline: true })
+    if (pipelineGraph) {
+      const pipelines = parser.getIdentifiers(pipelineGraph, checks, options.pipeline)
+      const codelinks = parser.getAllCodeLinks(pipelines)
+      const dependencies = parser.getDependencies(codelinks, pipelineDir)
 
-    const operationProperties = await parser.getAllOperationProperties(dependencies, checks)
-    parser.validateSteps({ pipelines, properties: operationProperties }, checks)
+      const operationProperties = await parser.getAllOperationProperties(dependencies, checks)
+      parser.validateSteps({ pipelines, properties: operationProperties }, checks)
 
-    const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
-    parser.validatePipelines(pipelines, operationProperties, pipelineProperties, checks)
+      const pipelineProperties = parser.getPipelineProperties(pipelineGraph, Object.keys(pipelines))
+      parser.validatePipelines(pipelines, operationProperties, pipelineProperties, checks)
+    }
   }
   catch (err) {
+    checks.addGenericCheck(Issue.error({ message: err.message }))
     if (options.debug) {
       log.error(err)
     }

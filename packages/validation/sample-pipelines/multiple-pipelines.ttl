@@ -3,33 +3,38 @@
 @prefix p: <https://pipeline.described.at/> .
 
 _:vars p:variable
-  [ a p:Variable; p:name "organizations"; p:value "metadata/organizations.ttl" ] ,
-  [ a p:Variable; p:name "namespaces"; p:value "metadata/namespaces.ttl" ] ,
-  [ a p:Variable; p:name "graph"; p:value "https://lindas.admin.ch/ontologies" ] .
+  [ a p:Variable; p:name "organizations" ] ,
+  [ a p:Variable; p:name "namespaces" ] .
+
+_:uploadVars p:variable
+  [ a p:Variable; p:name "graph" ] ,
+  [ a p:Variable; p:name "endpoint" ] ,
+  [ a p:Variable; p:name "user"; p:required false ] ,
+  [ a p:Variable; p:name "password"; p:required false; p:sensitive true ] .
 
 
 <mainCreateFile> a p:Pipeline, p:Readable;
   p:variables _:vars ;
   p:steps [
-    p:stepList (<concatFiles><serialize>)
+    p:stepList (<concatFiles> <serialize>)
   ].
 
 <mainUpload> a p:Pipeline;
-  p:variables _:vars ;
+  p:variables _:vars, _:uploadVars ;
   p:steps [
-    p:stepList (<concatFiles><setGraph><upload>)
+    p:stepList (<concatFiles> <upload>)
   ].
 
 
 <concatFiles> a p:Step;
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-base#concat.object>
+    code:link <node:barnard59-base/concat.js#object>
   ];
-  code:arguments (<parseNames><parseOrgs>).
+  code:arguments (<parseNames> <parseOrgs>).
 
 
 <parseNames> a p:Pipeline, p:ReadableObjectMode;
-  p:variables _:namespaces ;
+  p:variables _:vars ;
   p:steps [
     p:stepList ( <readFileNames> <parseTurtle> )
   ].
@@ -57,27 +62,24 @@ _:vars p:variable
 
 <parseTurtle> a p:Step;
   code:implementedBy [
-    code:link <node:barnard59-formats#n3.parse>;
+    code:link <node:barnard59-formats/n3.js#parse>;
     a code:EcmaScript
   ].
 
 <serialize> a p:Step;
   code:implementedBy [
-    code:link <node:barnard59-formats#ntriples.serialize> ;
+    code:link <node:barnard59-formats/ntriples.js#serialize> ;
     a code:EcmaScript
   ].
 
-<setGraph> a p:Step;
-  code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-base#setGraph>
-  ];
-  code:arguments ( "graph"^^p:VariableName ).
-
 <upload> a p:Step;
   code:implementedBy [ a code:EcmaScript;
-    code:link <node:barnard59-graph-store#put>
+    code:link <node:barnard59-graph-store/put.js#default>
   ];
   code:arguments [
+    code:name "graph";
+    code:value "graph"^^p:VariableName
+  ], [
     code:name "endpoint";
     code:value "endpoint"^^p:VariableName
   ], [

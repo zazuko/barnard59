@@ -16,6 +16,7 @@ export default async function validate({ file, checks }) {
   const manifestDirPart = manifestDir.substr(manifestDir.lastIndexOf('/') + 1)
 
   const manifestGraph = await parser.readGraph(manifestPath, checks)
+  if (!manifestGraph) return
   const operations = manifestGraph.has(rdf.ns.rdf.type, ns.p.Operation)
     .map((operation) => {
       const implementedBy = operation.out(ns.code.implementedBy)

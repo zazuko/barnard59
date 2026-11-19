@@ -18,6 +18,8 @@
     "barnard59-base": "^3.0.0",
     "barnard59-core": "^7.0.0",
     "barnard59-formats": "^4.0.3",
+    "barnard59-graph-store": "^7.0.1",
+    "barnard59-http": "^3.0.0",
     "chai": "^6.3.0",
     "deep-equal": "^2.0.5",
     "esmock": "^2.3.8",
@@ -35,8 +37,7 @@
   "dependencies": {
     "@rdfjs/namespace": "^2.0.0",
     "barnard59-env": "^1.2.7",
-    "anylogger": "^1.0.11",
-    "anylogger-console": "^1.0.0",
+    "barnard59": "^6.0.1",
     "chalk": "^4.1.0",
     "commander": "^11.0.0",
     "rdf-loader-code": "^2.2.2"
