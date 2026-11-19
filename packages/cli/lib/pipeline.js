@@ -1,5 +1,6 @@
 import module from 'node:module'
 import { dirname, resolve } from 'node:path'
+import { pipeline } from 'node:stream/promises'
 import * as url from 'node:url'
 import rdf from 'barnard59-env'
 import { isGraphPointer } from 'is-graph-pointer'
@@ -97,11 +98,16 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
  * @param {string} filename
  * @return {Promise<import('@rdfjs/types').DatasetCore>}
  */
-async function fileToDataset(filename) {
-  const stream = rdf.fromFile(filename, {
+export async function fileToDataset(filename) {
+  const input = rdf.fromFile(filename, {
     implicitBaseIRI: true,
-  }).pipe(transformImports(rdf))
-  return rdf.dataset().import(stream)
+  })
+  const imports = transformImports(rdf)
+  const [dataset] = await Promise.all([
+    rdf.dataset().import(imports),
+    pipeline(input, imports),
+  ])
+  return dataset
 }
 
 /**
