@@ -8,7 +8,7 @@
     "lint": "eslint . --quiet",
     "test": "npm run -ws --if-present test",
     "release": "changeset publish",
-    "skills:sync": "skills experimental_sync -y",
+    "postinstall": "skills experimental_sync -y",
     "skills:check": "skill-check check packages --no-security-scan --fail-on-warning"
   },
   "workspaces": [
