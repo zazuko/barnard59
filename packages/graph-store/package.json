@@ -51,6 +51,6 @@
     "node": ">= 14.13.1"
   },
   "mocha": {
-    "import": "tsx"
+    "import": "tsx/esm"
   }
 }
