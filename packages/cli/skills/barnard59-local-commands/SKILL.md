@@ -40,7 +40,7 @@ For a portable source, put the manifest and pipeline in an installed `barnard59-
 
 Declare options on the selected pipeline under `p:variables` and `p:variable`. The CLI uses `p:name` as the option name and `rdfs:label` as its optional help text. A regular option takes a value and is required by default. Set `p:required false` to make it optional or provide a literal `p:value` as its default.
 
-Use `sh:datatype xsd:boolean` for a valueless switch and `p:required false` to make the switch optional. When supplied, the switch passes the string `"true"` to the pipeline. When omitted, the pipeline uses its `p:value`, if set. In JavaScript, compare the flag value with `"true"` so that the default `"false"` is handled correctly.
+Use `sh:datatype xsd:boolean` for a valueless switch. Set `p:required false` or provide a `p:value` default to make the switch optional. When supplied, the switch passes the string `"true"` to the pipeline. When omitted, the pipeline uses its `p:value`, if set. In JavaScript, compare the flag value with `"true"` so that the default `"false"` is handled correctly.
 
 For example, place this pipeline in `pipeline/greet.ttl`.
 
@@ -55,7 +55,7 @@ For example, place this pipeline in `pipeline/greet.ttl`.
   p:variables [
     p:variable
       [ a p:Variable ; p:name "person" ; p:value "world" ; rdfs:label "Person to greet" ],
-      [ a p:Variable ; p:name "upper-case" ; p:required false ; p:value "false" ;
+      [ a p:Variable ; p:name "upper-case" ; p:value "false" ;
         sh:datatype xsd:boolean ; rdfs:label "Print in uppercase" ]
   ] ;
   p:steps [ p:stepList (

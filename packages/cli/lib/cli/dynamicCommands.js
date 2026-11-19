@@ -86,13 +86,14 @@ function getAnnotatedOptions(ptr) {
       const requiredLiteral = variable.out(rdf.ns.p.required).term
       const required = requiredLiteral ? !requiredLiteral.equals(FALSE) : true
       const flag = variable.out(rdf.ns.sh.datatype).term?.equals(rdf.ns.xsd.boolean)
+      const defaultValue = variable.out(rdf.ns.p.value)
       const name = variable.out(rdf.ns.p.name).value
       const description = variable.out(rdf.ns.rdfs.label).value
       const option = new Option(flag ? `--${name}` : `--${name} <${name}>`, description)
-        .makeOptionMandatory(required)
+        .makeOptionMandatory(required && !(flag && defaultValue.term))
 
       if (!flag) {
-        option.default(variable.out(rdf.ns.p.value).value)
+        option.default(defaultValue.value)
       }
 
       return { name, option }
