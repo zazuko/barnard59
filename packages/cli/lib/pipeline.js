@@ -45,10 +45,9 @@ const discoverOperations = async (pipelinePath) => {
  */
 export const desugar = async (dataset, { logger, knownOperations, pipelinePath }) => {
   const operations = knownOperations ?? await discoverOperations(pipelinePath)
-  const dir = await packageDirectory({
-    cwd: pipelinePath,
-  })
-  const require = module.createRequire(dir + '/')
+  const pipelineDir = pipelinePath ? dirname(resolve(pipelinePath)) : process.cwd()
+  const dir = await packageDirectory({ cwd: pipelineDir }) ?? pipelineDir
+  const require = module.createRequire(resolve(dir, 'package.json'))
 
   const ptr = rdf.clownface({ dataset })
   let n = 0

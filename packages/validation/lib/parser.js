@@ -59,51 +59,62 @@ export function parseError(path, error) {
 
 export function getIdentifiers(graph, checks, pipeline2find = null) {
   const pipeline2identifier = {}
+  const pipelines = []
+  const visited = new Set()
 
   graph
     .has(rdf.ns.rdf.type, ns.p.Pipeline)
     .forEach((pipeline) => {
       if (pipeline2find === null || pipeline2find === pipeline.term.value) {
-        const steps = pipeline
-          .out(ns.p.steps)
-          .out(ns.p.stepList)
-          .list()
-
-        pipeline2identifier[pipeline.term.value] = []
-
-        for (const step of steps ?? []) {
-          if (step.has(rdf.ns.rdf.type, ns.p.Pipeline)?.term && step.out(ns.p.steps).out(ns.p.stepList).out(rdf.ns.rdf.first).term) {
-            pipeline2identifier[pipeline.term.value].push({
-              stepName: step.term.value,
-              stepOperation: step.term.value,
-              stepProperties: ['Operation', ...getTypes(step)],
-            })
-            continue
-          }
-          const implementedBy = step.out(ns.code.implementedBy)
-          const codeLink = implementedBy.out(ns.code.link)
-          const identifier = codeLink.term
-
-          const currStepName = step.term.value
-          const ib = implementedBy.term
-
-          if (ib?.termType === 'Literal' && ib.datatype.equals(ns.code.EcmaScript)) {
-            pipeline2identifier[pipeline.term.value].push({ stepName: currStepName, stepOperation: currStepName, stepProperties: null })
-            continue
-          }
-
-          const issue = validators.codelink.validate(ib, identifier, currStepName)
-          checks.addPipelineCheck(issue, pipeline)
-
-          if (ib && identifier) {
-            pipeline2identifier[pipeline.term.value].push({
-              stepName: currStepName,
-              stepOperation: identifier.value,
-            })
-          }
-        }
+        pipelines.push(pipeline)
       }
     })
+
+  for (const pipeline of pipelines) {
+    const id = pipeline.term.value
+    if (visited.has(id)) {
+      continue
+    }
+    visited.add(id)
+
+    const identifiers = []
+    pipeline2identifier[id] = identifiers
+    const steps = pipeline.out(ns.p.steps).out(ns.p.stepList).list()
+
+    for (const step of steps ?? []) {
+      if (step.has(rdf.ns.rdf.type, ns.p.Pipeline)?.term && step.out(ns.p.steps).out(ns.p.stepList).out(rdf.ns.rdf.first).term) {
+        if (pipeline2find !== null) {
+          pipelines.push(step)
+        }
+        identifiers.push({
+          stepName: step.term.value,
+          stepOperation: step.term.value,
+          stepProperties: ['Operation', ...getTypes(step)],
+        })
+        continue
+      }
+
+      const implementedBy = step.out(ns.code.implementedBy)
+      const identifier = implementedBy.out(ns.code.link).term
+      const currStepName = step.term.value
+      const ib = implementedBy.term
+
+      if (ib?.termType === 'Literal' && ib.datatype.equals(ns.code.EcmaScript)) {
+        identifiers.push({ stepName: currStepName, stepOperation: currStepName, stepProperties: null })
+        continue
+      }
+
+      const issue = validators.codelink.validate(ib, identifier, currStepName)
+      checks.addPipelineCheck(issue, pipeline)
+
+      if (ib && identifier) {
+        identifiers.push({
+          stepName: currStepName,
+          stepOperation: identifier.value,
+        })
+      }
+    }
+  }
 
   return pipeline2identifier
 }
