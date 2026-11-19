@@ -1,4 +1,5 @@
-import { Transform } from 'node:stream'
+import { Duplex, Transform } from 'node:stream'
+import { json } from 'node:stream/consumers'
 
 class JsonParse extends Transform {
   constructor() {
@@ -43,6 +44,15 @@ function parse() {
   return new JsonParse()
 }
 
+function parseDocument() {
+  return Duplex.from(async function* (chunks) {
+    const value = await json(chunks)
+    if (value !== null) {
+      yield value
+    }
+  })
+}
+
 /**
  * @return {Transform}
  */
@@ -50,4 +60,4 @@ function stringify() {
   return new JsonStringify()
 }
 
-export { parse, stringify }
+export { parse, parseDocument, stringify }
