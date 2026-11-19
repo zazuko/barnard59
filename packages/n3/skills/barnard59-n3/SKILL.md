@@ -22,9 +22,9 @@ code:arguments [ code:name "rulesText"; code:value "rules.n3"^^p:FileContents ],
 
 ### `n3 apply`
 
-The command reads RDF from stdin, gathers it into one dataset, applies the rules, and writes serialized RDF. Install `barnard59-base`, `barnard59-formats`, and `barnard59-rdf` alongside `barnard59-n3` for the command's pipeline. Pass an absolute rules path because a relative value resolves from the installed command's pipeline definition. Use `--include all` to emit the input as well.
+The command reads RDF from stdin, gathers it into one dataset, applies the rules, and writes serialized RDF. Install `barnard59-base`, `barnard59-formats`, and `barnard59-rdf` alongside `barnard59-n3` for the command's pipeline. Relative `--rules` paths resolve from the current working directory. Use `--include all` to emit the input as well.
 
 ```sh
-barnard59 n3 apply --rules "$PWD/rules.n3" < data.ttl
-barnard59 n3 apply --rules "$PWD/rules.n3" --include all < data.ttl
+barnard59 n3 apply --rules rules.n3 < data.ttl
+barnard59 n3 apply --rules rules.n3 --include all < data.ttl
 ```

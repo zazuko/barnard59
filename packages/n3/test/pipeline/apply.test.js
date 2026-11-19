@@ -1,4 +1,5 @@
-import * as url from 'url'
+import { relative } from 'path'
+import { fileURLToPath } from 'url'
 import { expect } from 'chai'
 import env from 'barnard59-env'
 import { turtle } from '@tpluscode/rdf-string'
@@ -11,9 +12,10 @@ const ex = env.namespace('http://example.org/')
 const ns = env.namespace('https://barnard59.zazuko.com/pipeline/n3/')
 
 const loadPipeline = pipelineDefinitionLoader(import.meta.url, '../../pipeline')
+const rulesPath = fileURLToPath(new URL('../support/PersonRules.n3', import.meta.url))
 
 describe('pipeline/apply', function () {
-  it('runs deriving triple', async function () {
+  it('derives triples using a rules path relative to the working directory', async function () {
     // given
     const data = turtle`
       ${ex.Person}
@@ -25,7 +27,7 @@ describe('pipeline/apply', function () {
       term: ns._apply,
     })
     const variables = new Map([
-      ['rules', url.fileURLToPath(new URL('../support/PersonRules.n3', import.meta.url))],
+      ['rules', relative(process.cwd(), rulesPath)],
       ['include', ''],
     ])
     const pipeline = createPipeline(ptr, { basePath, env, variables })
@@ -37,7 +39,7 @@ describe('pipeline/apply', function () {
     expect(output).to.equal('<http://example.org/Person> <http://xmlns.com/foaf/0.1/name> "John Doe" .\n')
   })
 
-  it('runs deriving triple and passing input', async function () {
+  it('accepts an absolute rules path and includes input when requested', async function () {
     // given
     const data = turtle`
       ${ex.Person}
@@ -49,7 +51,7 @@ describe('pipeline/apply', function () {
       term: ns._apply,
     })
     const variables = new Map([
-      ['rules', url.fileURLToPath(new URL('../support/PersonRules.n3', import.meta.url))],
+      ['rules', rulesPath],
       ['include', 'all'],
     ])
     const pipeline = createPipeline(ptr, { basePath, env, variables })

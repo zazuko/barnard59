@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "files": [
     "index.ts",
-    "applyRules.ts"
+    "applyRules.ts",
+    "applyRulesFromFile.ts"
   ]
 }
