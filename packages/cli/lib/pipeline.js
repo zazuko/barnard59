@@ -98,9 +98,11 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
  * @return {Promise<import('@rdfjs/types').DatasetCore>}
  */
 export async function fileToDataset(filename) {
-  const input = rdf.fromFile(filename, {
+  const source = rdf.fromFile(filename, {
     implicitBaseIRI: true,
   })
+  // The readable-stream typings declare a narrower wrap() than Node's stream typings.
+  const input = /** @type {NodeJS.ReadableStream} */ (/** @type {unknown} */ (source))
   const imports = transformImports(rdf)
   const [dataset] = await Promise.all([
     rdf.dataset().import(imports),
