@@ -7,7 +7,6 @@ import runAction from './runAction.js'
 import { combine } from './options.js'
 
 const FALSE = rdf.literal('false', rdf.ns.xsd.boolean)
-const TRUE = rdf.literal('true', rdf.ns.xsd.boolean)
 const require = module.createRequire(import.meta.url)
 
 /**
@@ -86,7 +85,7 @@ function getAnnotatedOptions(ptr) {
     .map((variable) => {
       const requiredLiteral = variable.out(rdf.ns.p.required).term
       const required = requiredLiteral ? !requiredLiteral.equals(FALSE) : true
-      const flag = variable.out(rdf.ns.b59.flag).term?.equals(TRUE)
+      const flag = variable.out(rdf.ns.sh.datatype).term?.equals(rdf.ns.xsd.boolean)
       const name = variable.out(rdf.ns.p.name).value
       const description = variable.out(rdf.ns.rdfs.label).value
       const option = new Option(flag ? `--${name}` : `--${name} <${name}>`, description)
