@@ -1,5 +1,6 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 @base <https://barnard59.zazuko.com/pipeline/graph-store/> .
+@prefix b59: <https://barnard59.zazuko.com/vocab#> .
 @prefix code: <https://code.described.at/> .
 @prefix p: <https://pipeline.described.at/> .
 @prefix op: <https://barnard59.zazuko.com/operations/> .
@@ -16,11 +17,27 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         [
           a p:Variable ;
           p:name "graph" ;
-          p:required false ;
+          rdfs:label "Target graph IRI or DEFAULT for the default graph" ;
         ],
         [
           a p:Variable ;
           p:name "endpoint" ;
+        ],
+        [
+          a p:Variable ;
+          p:name "allow-empty" ;
+          p:required false ;
+          p:value false ;
+          b59:flag true ;
+          rdfs:label "Succeed without uploading if the source contains no RDF quads" ;
+        ],
+        [
+          a p:Variable ;
+          p:name "allow-clear" ;
+          p:required false ;
+          p:value false ;
+          b59:flag true ;
+          rdfs:label "Clear the target graph if the source contains no RDF quads" ;
         ],
         [
           a p:Variable ;
@@ -31,6 +48,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
           a p:Variable ;
           p:name "password" ;
           p:required false ;
+          p:sensitive true ;
         ] ;
     ] ;
   p:steps
@@ -42,6 +60,10 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
               [
                 code:name "pattern" ;
                 code:value "source"^^p:VariableName
+              ],
+              [
+                code:name "nodir" ;
+                code:value true
               ]
           ]
           [ op:rdf\/fs.js\#parse () ]
@@ -54,6 +76,14 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
               [
                 code:name "endpoint" ;
                 code:value "endpoint"^^p:VariableName ;
+              ],
+              [
+                code:name "allowEmpty" ;
+                code:value "allow-empty"^^p:VariableName ;
+              ],
+              [
+                code:name "allowClear" ;
+                code:value "allow-clear"^^p:VariableName ;
               ],
               [
                 code:name "user" ;

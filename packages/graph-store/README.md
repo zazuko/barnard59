@@ -30,16 +30,20 @@ The following options are supported:
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
 
-### put ({ endpoint, graph, user, password })
+### put ({ endpoint, graph, user, password, allowEmpty, allowClear })
 
-This operation appends quads to the given SPARQL Graph store.
+This operation replaces the selected graph in the SPARQL Graph Store.
 A `Writable` stream of RDF/JS `Quad` objects is returned.
 The following options are supported:
 
 - `endpoint`: The URL of the graph store endpoint as a string.
 - `graph`: The target graph IRI or RDF/JS named node. Use the string `DEFAULT` for the default graph.
+- `allowEmpty`: Defaults to `false`, so input with no quads fails. Set to `true` to warn and skip the upload successfully.
+- `allowClear`: Defaults to `false`. Set to `true` to clear the target graph with an empty PUT when the input contains no quads. This takes precedence over `allowEmpty`.
 - `user`: User for basic authentication.
 - `password`: Password for basic authentication.
+
+The `barnard59 graph-store put` command takes a file glob in `--source` and requires `--graph`. If the source contains no RDF quads, the command fails by default. Pass `--allow-empty` to warn, skip the upload, and exit successfully. Pass `--allow-clear` to clear the target graph with an empty PUT, including when the glob matches no files. If both flags are supplied, the graph is cleared on empty input. Password values are masked in pipeline logs.
 
 ## Examples
 

@@ -19,13 +19,13 @@ With `@prefix op: <https://barnard59.zazuko.com/operations/> .`, use predicates 
 
 ### `put`
 
-`<node:barnard59-graph-store/put.js#default>` consumes individual RDF/JS quads and replaces the selected graph's contents. Supply an explicit `graph`, using `DEFAULT` for the default graph. Choose `put` for a complete replacement and make sure upstream produces the full desired graph.
+`<node:barnard59-graph-store/put.js#default>` consumes individual RDF/JS quads and replaces the selected graph's contents. Supply an explicit `graph`, using `DEFAULT` for the default graph. Empty input fails by default. Pass `allowEmpty: true` to skip the upload or `allowClear: true` to clear the graph with an empty PUT. `allowClear` takes precedence if both options are set.
 
 ## CLI commands
 
 ### `graph-store put`
 
-The CLI command reads local RDF documents selected by a glob, parses them by extension, and writes the resulting quads to the target graph. Quote the pattern so the CLI receives it as one argument. Supply `--graph` explicitly. The command fails if the source contains no RDF quads. Use `--allow-empty` to warn, skip the upload, and exit successfully.
+The CLI command reads local RDF documents selected by a glob, parses them by extension, and writes the resulting quads to the target graph. Quote the pattern so the CLI receives it as one argument. Supply `--graph` explicitly. The command fails if the source contains no RDF quads. Use `--allow-empty` to warn, skip the upload, and exit successfully. Use `--allow-clear` to send an empty PUT and clear the target graph. This takes precedence if both flags are supplied.
 
 ```sh
 barnard59 graph-store put --source 'data/*.ttl' --graph https://example.org/graph --endpoint https://example.org/store
