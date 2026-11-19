@@ -1,3 +1,5 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 import chaiExec from '@jsdevtools/chai-exec'
 import { assert, use } from 'chai'
 
@@ -60,6 +62,36 @@ describe('barnard59-validate', function () {
     assert.strictEqual(errors.length, 1)
     assert.ok(errors[0].message.startsWith('ENOENT: no such file or directory'))
     assert.strictEqual(errors[0].level, 'error')
+  })
+
+  it('validates shorthand and nested pipelines from imports while emitting JSON', function () {
+    const directory = mkdtempSync('test/pipeline-import-')
+    const main = join(directory, 'main.ttl')
+    const prefixes = `
+      PREFIX p: <https://pipeline.described.at/>
+      PREFIX op: <https://barnard59.zazuko.com/operations/>
+      PREFIX ex: <https://example.org/pipelines/>
+    `
+
+    try {
+      writeFileSync(main, `${prefixes}
+        PREFIX code: <https://code.described.at/>
+        [] code:imports <./nested.ttl> .
+        ex:main a p:Pipeline, p:Readable ;
+          p:steps [ p:stepList ( [ op:base\\/stdin () ] ex:nested ) ] .
+      `)
+      writeFileSync(join(directory, 'nested.ttl'), `${prefixes}
+        ex:nested a p:Pipeline, p:Writable, p:Readable ;
+          p:steps [ p:stepList ( [ op:base\\/stdout () ] ) ] .
+      `)
+
+      const exec = chaiExec(`--strict ${main}`)
+      assert.exitCode(exec, 0, exec.stderr)
+      assert.deepEqual(JSON.parse(exec.stdout), [])
+    }
+    finally {
+      rmSync(directory, { recursive: true, force: true })
+    }
   })
 
   it('should not report warnings when quiet', function () {

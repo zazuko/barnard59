@@ -31,7 +31,7 @@
                     {
                         "@type": "Variable",
                         "name": "url",
-                        "value": "http://worldtimeapi.org/api/timezone/UTC"
+                        "value": "https://timeapi.io/api/Time/current/zone?timeZone=UTC"
                     },
                     {
                         "@id": "dateContext"
@@ -51,7 +51,7 @@
                     {
                         "@type": "Variable",
                         "name": "url",
-                        "value": "http://worldtimeapi.org/api/timezone/CET"
+                        "value": "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam"
                     },
                     {
                         "@id": "dateContext"
@@ -72,7 +72,7 @@
                 {
                     "@id": "fetch",
                     "code:implementedBy": {
-                        "code:link": "node:barnard59-base#fetch.json",
+                        "code:link": "node:barnard59-http#get",
                         "@type": "code:EcmaScript"
                     },
                     "code:arguments": [
@@ -83,14 +83,21 @@
                     ]
                 },
                 {
+                    "@id": "parseJson",
+                    "code:implementedBy": {
+                        "code:link": "node:barnard59-base/json.js#parseDocument",
+                        "@type": "code:EcmaScriptModule"
+                    }
+                },
+                {
                     "@id": "jsonldStructure",
                     "code:implementedBy": {
-                        "code:link": "node:barnard59-base#map",
+                        "code:link": "node:barnard59-base/map.js#default",
                         "@type": "code:EcmaScript"
                     },
                     "code:arguments": [
                         {
-                            "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }",
+                            "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.dateTime } }",
                             "@type": "code:EcmaScript"
                         }
                     ]
@@ -98,14 +105,14 @@
                 {
                     "@id": "parse",
                     "code:implementedBy": {
-                        "code:link": "node:barnard59-formats#jsonld.parse.object",
+                        "code:link": "node:barnard59-formats/jsonld.js#parseObject",
                         "@type": "code:EcmaScript"
                     }
                 },
                 {
                     "@id": "serialize",
                     "code:implementedBy": {
-                        "code:link": "node:barnard59-formats#ntriples.serialize",
+                        "code:link": "node:barnard59-formats/ntriples.js#serialize",
                         "@type": "code:EcmaScript"
                     }
                 }

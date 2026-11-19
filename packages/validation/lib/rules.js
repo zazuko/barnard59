@@ -8,5 +8,5 @@ export const rules = Object.values(validators)
   .sort(({ ruleId: a }, { ruleId: b }) => a - b)
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  log(JSON.stringify(rules, null, 2))
+  log.log(JSON.stringify(rules, null, 2))
 }
