@@ -68,6 +68,6 @@
     "strip-ansi": "^7.0.0"
   },
   "mocha": {
-    "import": "tsx"
+    "import": "tsx/esm"
   }
 }
