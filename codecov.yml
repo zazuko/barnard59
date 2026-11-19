@@ -20,3 +20,4 @@ ignore:
   - test
   - "packages/*/test/**/*"
   - "packages/*/test/*"
+  - "packages/cli/examples/*"
