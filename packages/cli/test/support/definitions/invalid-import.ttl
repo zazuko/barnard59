@@ -1,0 +1,3 @@
+@prefix code: <https://code.described.at/> .
+
+[] code:imports "out-pipeline.ttl" .
