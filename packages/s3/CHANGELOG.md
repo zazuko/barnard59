@@ -1,5 +1,11 @@
 # barnard59-s3
 
+## 0.3.3
+
+### Patch Changes
+
+- [#413](https://github.com/zazuko/barnard59/pull/413) [`89c46c8`](https://github.com/zazuko/barnard59/commit/89c46c8605f39aef9302a25f0e16ba7f6b073001) Thanks [@dependabot](https://github.com/apps/dependabot)! - Updated AWS SDK
+
 ## 0.3.2
 
 ### Patch Changes

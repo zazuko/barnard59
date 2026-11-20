@@ -1,5 +1,11 @@
 # barnard59-base
 
+## 3.0.2
+
+### Patch Changes
+
+- [#415](https://github.com/zazuko/barnard59/pull/415) [`2228ea1`](https://github.com/zazuko/barnard59/commit/2228ea1790ac6b988c6dbcfba4fd4f38e1c6e486) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps): bump glob from 13.0.6 to 14.0.2
+
 ## 3.0.1
 
 ### Patch Changes
