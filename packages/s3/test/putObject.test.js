@@ -1,5 +1,6 @@
 // @ts-check
 import { Readable } from 'node:stream'
+import { pipeline } from 'node:stream/promises'
 import { createWriteStream } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { strictEqual } from 'node:assert'
@@ -34,8 +35,7 @@ describe('putObject', function () {
       strictEqual(command.Key, 'uploaded-file.txt')
       strictEqual(command.Bucket, 'test-bucket')
       strictEqual(command.Body instanceof Readable, true)
-      const stream = createWriteStream(uploadPath)
-      command.Body.pipe(stream)
+      return pipeline(command.Body, createWriteStream(uploadPath))
     })
 
     await putObject({
@@ -43,9 +43,6 @@ describe('putObject', function () {
       key: 'uploaded-file.txt',
       sourcePath: filePath,
     })
-
-    // fake sleep to wait for stream to finish
-    await new Promise(resolve => setTimeout(resolve, 0))
 
     const fileContent = await readFile(uploadPath, 'utf8')
     strictEqual(fileContent, data)
