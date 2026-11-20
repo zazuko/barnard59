@@ -2,11 +2,14 @@
 @prefix code: <https://code.described.at/>.
 @prefix p: <https://pipeline.described.at/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 
 <> a p:Pipeline, p:Readable;
   p:variables
     [
       p:variable [ p:name "abc" ; p:value "foobar" ; ];
+      p:variable [ a p:Variable ; p:name "flag" ; p:value false ; sh:datatype xsd:boolean ];
     ] ;
   p:steps [
     p:stepList (<read>)

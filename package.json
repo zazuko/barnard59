@@ -7,7 +7,9 @@
   "scripts": {
     "lint": "eslint . --quiet",
     "test": "npm run -ws --if-present test",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "postinstall": "skills experimental_sync -y",
+    "skills:check": "skill-check check packages --no-security-scan --fail-on-warning"
   },
   "workspaces": [
     "packages/*",
@@ -31,6 +33,8 @@
     "lint-staged": "^16.1.4",
     "mocha": "^12",
     "sinon-chai": "^4.0.1",
+    "skill-check": "^1.2.0",
+    "skills": "^1.9.0",
     "tsx": "^4.23.15",
     "typescript": "^5.4.5"
   },
@@ -40,6 +44,22 @@
     ]
   },
   "engines": {
-    "node": ">=20.19"
-  }
+    "node": ">=22.22.2"
+  },
+  "skills": [
+    "npm:@zazuko/env",
+    "npm:barnard59",
+    "npm:barnard59-base",
+    "npm:barnard59-csvw",
+    "npm:barnard59-cube",
+    "npm:barnard59-formats",
+    "npm:barnard59-ftp",
+    "npm:barnard59-graph-store",
+    "npm:barnard59-http",
+    "npm:barnard59-n3",
+    "npm:barnard59-rdf",
+    "npm:barnard59-s3",
+    "npm:barnard59-shacl",
+    "npm:barnard59-sparql"
+  ]
 }

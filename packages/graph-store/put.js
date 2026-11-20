@@ -7,10 +7,12 @@ import { toTerm } from './lib/graph.js'
  * @param {Pick<import('sparql-http-client/StreamClient.js').Options<any>, 'user' | 'password'> & {
  *   endpoint: string,
  *   graph: string | import('clownface').GraphPointer<import('@rdfjs/types').NamedNode> | import('@rdfjs/types').NamedNode,
+ *   allowEmpty?: boolean | string,
+ *   allowClear?: boolean | string,
  * }} options
  * @returns {import('node:stream').Writable}
  */
-function put({ endpoint, graph, user, password }) {
+function put({ endpoint, graph, user, password, allowEmpty = false, allowClear = false }) {
   if (!graph) {
     throw new Error('graph is required')
   }
@@ -22,9 +24,14 @@ function put({ endpoint, graph, user, password }) {
     password,
   })
 
+  allowEmpty = allowEmpty === true || allowEmpty === 'true'
+  allowClear = allowClear === true || allowClear === 'true'
+
+  const emptyInput = allowClear ? 'upload' : allowEmpty ? 'skip' : 'reject'
+
   return new SinkToWritable(readable => client.store.put(readable, {
     graph: toTerm(this.env, graph),
-  }), this)
+  }), this, emptyInput)
 }
 
 export default put

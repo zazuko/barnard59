@@ -136,14 +136,19 @@ describe('parser', function () {
   })
 
   describe('getAllCodeLinks', function () {
-    it('should transform dict values to set', function () {
+    it('should collect dependency links across pipelines', function () {
+      const source = { stepName: 'source', stepOperation: 'node:barnard59-base#stdin' }
+      const sink = { stepName: 'sink', stepOperation: 'node:barnard59-base#stdout' }
       const input = {
-        pancakes: ['flour', 'eggs', 'milk', 'olive oil'],
-        brioche: ['flour', 'milk', 'butter', 'yeast'],
+        main: [
+          source,
+          { stepName: 'inline', stepOperation: 'inline', stepProperties: null },
+          { stepName: 'nested', stepOperation: 'nested', stepProperties: ['Operation', 'Writable'] },
+        ],
+        nested: [sink],
       }
-      const expected = new Set(['flour', 'eggs', 'milk', 'olive oil', 'butter', 'yeast'])
       const actual = parser.getAllCodeLinks(input)
-      assert.deepStrictEqual(expected, actual)
+      assert.deepStrictEqual(actual, new Set([source, sink]))
     })
   })
 
@@ -153,6 +158,26 @@ describe('parser', function () {
       const graph = await parser.readGraph(input, new ChecksCollection())
 
       assert.strictEqual(graph.dataset.size, 4)
+    })
+
+    it('should resolve relative pipeline IRIs against the file URL', async function () {
+      const input = path.join(__dirname, 'fixtures/relative-pipeline.ttl')
+      const graph = await parser.readGraph(input, checks, { pipeline: true })
+      const pipeline = new URL('main', url.pathToFileURL(input)).href
+
+      assert.deepStrictEqual(parser.getPipelineProperties(graph, [pipeline]), {
+        [pipeline]: ['Pipeline', 'Readable'],
+      })
+      assert.strictEqual(checks.getGenericChecks('info').length, 1)
+    })
+
+    it('should report a missing pipeline file', async function () {
+      const input = path.join(__dirname, 'fixtures/missing.ttl')
+
+      assert.strictEqual(await parser.readGraph(input, checks, { pipeline: true }), undefined)
+      const [error] = checks.getGenericChecks('error')
+      assert.match(error.message, /ENOENT: no such file or directory/)
+      assert.ok(error.message.includes(input))
     })
   })
 
@@ -240,6 +265,54 @@ describe('parser', function () {
       assert.deepStrictEqual(actual, expected)
     })
 
+    it('should collect reachable nested pipelines once, including blank nodes', async function () {
+      const input = await parser.readGraph(path.join(__dirname, 'fixtures/selected-nested.ttl'), checks)
+      const actual = parser.getIdentifiers(input, checks, 'urn:main')
+      const [nestedStep] = actual['urn:nested']
+      const blankPipeline = nestedStep.stepName
+      const asStep = id => ({ stepName: id, stepOperation: id, stepProperties: ['Operation', 'Pipeline', 'Readable'] })
+
+      assert.deepStrictEqual(actual, {
+        'urn:main': [asStep('urn:nested')],
+        'urn:nested': [asStep(blankPipeline)],
+        [blankPipeline]: [asStep('urn:main')],
+      })
+      assert.deepStrictEqual(parser.getPipelineProperties(input, Object.keys(actual)), {
+        'urn:main': ['Pipeline', 'Readable'],
+        'urn:nested': ['Pipeline', 'Readable'],
+        [blankPipeline]: ['Pipeline', 'Readable'],
+      })
+      assert.deepStrictEqual(checks.getChecks('error').map(issue => issue.step), ['urn:broken'])
+    })
+
+    it('should check every pipeline once when no pipeline is selected', async function () {
+      const input = await parser.readGraph(path.join(__dirname, 'fixtures/selected-nested.ttl'), checks)
+
+      parser.getIdentifiers(input, checks)
+
+      assert.deepStrictEqual(checks.getChecks('error').map(issue => issue.step).sort(), [
+        'urn:broken',
+        'urn:unrelated-broken',
+      ])
+    })
+
+    it('should retain inline ECMAScript steps without dependency links', async function () {
+      const input = await turtleToCF(`
+        PREFIX p: <https://pipeline.described.at/>
+        PREFIX code: <https://code.described.at/>
+
+        <urn:main> a p:Pipeline ; p:steps [ p:stepList ( <urn:inline> ) ] .
+        <urn:inline> a p:Step ; code:implementedBy "value => value"^^code:EcmaScript .
+      `)
+
+      const actual = parser.getIdentifiers(input, checks)
+
+      assert.deepStrictEqual(actual, {
+        'urn:main': [{ stepName: 'urn:inline', stepOperation: 'urn:inline', stepProperties: null }],
+      })
+      assert.deepStrictEqual(checks.getChecks(), [])
+    })
+
     it('should not crash on invalid steps', async function () {
       const input = await turtleToCF(`
       @prefix p: <https://pipeline.described.at/> .
@@ -252,7 +325,7 @@ describe('parser', function () {
 
       <mainUpload> a p:Pipeline;
         p:variables _:vars ;
-        p:steps [].
+        p:steps [ p:stepList <missingList> ] .
     `)
 
       const expected = {
@@ -364,6 +437,32 @@ describe('parser', function () {
       const expectedMssg = validators.dependency.messageFailureTemplate({ library: 'foo-bar', operations: 'node:foo-bar#fn', dependencyType: 'package' })
       assert(genericContainsMessage(checks, expectedMssg))
     })
+
+    it('should report malformed manifests and keep loading other manifests', async function () {
+      const invalidManifest = path.join(__dirname, 'fixtures/invalid.ttl')
+      const getManifestPath = sinon.stub().returns(path.join(__dirname, 'fixtures/manifest.ttl'))
+      getManifestPath.withArgs('mocha').returns(invalidManifest)
+      const mockedParser = await esmock('../lib/parser.js', {
+        '../lib/utils.js': {
+          getManifestPath,
+          isModuleInstalled: sinon.stub().returns(true),
+        },
+      })
+      const input = {
+        'node:': {
+          mocha: new Set(['node:mocha#run']),
+          sinon: new Set(['node:party-module#drink']),
+        },
+      }
+
+      assert.deepStrictEqual(await mockedParser.getAllOperationProperties(input, checks), {
+        'node:party-module#drink': ['Operation', 'Writable', 'Readable'],
+      })
+      const errors = checks.getGenericChecks('error')
+      assert.strictEqual(errors.length, 1)
+      assert.ok(errors[0].message.startsWith(`Cannot parse ${invalidManifest}:\n`))
+      assert.match(errors[0].message, /Line 8:\n\s+p:variable \{\}$/)
+    })
   })
 
   describe('getPipelineProperties', function () {
@@ -463,6 +562,27 @@ describe('parser', function () {
         parser.validatePipelines({ [pipelineID]: pipelines[pipelineID] }, operation2properties, pipeline2properties, checks)
         assert(checkArrayContainsObject(checks.pipelines[pipelineID], expectedIssue))
       }
+    })
+
+    it('should check pipeline metadata for a pipeline with no steps', function () {
+      parser.validatePipelines({ empty: [] }, {}, {}, checks)
+
+      assert.deepStrictEqual(checks.getPipelineChecks('empty'), [
+        validators.pipelinePropertiesExist.validate('empty', []),
+      ])
+    })
+
+    it('should use nested step metadata to check the containing pipeline', function () {
+      const pipelines = {
+        main: [{ stepOperation: 'nested', stepProperties: ['Operation', 'Readable'] }],
+      }
+
+      parser.validatePipelines(pipelines, { nested: null }, { main: ['Pipeline'] }, checks)
+
+      assert.deepStrictEqual(checks.getPipelineChecks('main'), [
+        validators.pipelinePropertiesMatchLastStrict.validate('main', ['Pipeline'], 'Readable'),
+        validators.pipelinePropertiesExist.validate('main', ['Pipeline']),
+      ])
     })
   })
 })

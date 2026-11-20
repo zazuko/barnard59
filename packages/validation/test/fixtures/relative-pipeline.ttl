@@ -1,0 +1,3 @@
+PREFIX p: <https://pipeline.described.at/>
+
+<main> a p:Pipeline, p:Readable .

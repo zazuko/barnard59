@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "prebuild": "rimraf -g *.d.ts [!node_modules]/**/*.d.ts",
+    "prebuild": "rimraf -g \"*.d.ts\" \"bin/**/*.d.ts\" \"lib/**/*.d.ts\"",
     "build": "tsc",
     "prepack": "npm run build"
   },
@@ -68,6 +68,6 @@
     "strip-ansi": "^7.0.0"
   },
   "mocha": {
-    "import": "tsx"
+    "import": "tsx/esm"
   }
 }

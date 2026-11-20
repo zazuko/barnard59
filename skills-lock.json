@@ -1,0 +1,155 @@
+{
+  "version": 2,
+  "skills": {
+    "barnard59": {
+      "source": "barnard59",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59/SKILL.md",
+      "version": "6.0.1",
+      "via": ".",
+      "computedHash": "3f63054eac8f55a0e63ebcbac675bccea7bb21c54e0749b4c68d3feb2394ec87"
+    },
+    "barnard59-base": {
+      "source": "barnard59-base",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-base/SKILL.md",
+      "version": "3.0.1",
+      "via": ".",
+      "computedHash": "733a1024601d5ddbac31f7f5e9fd0d40cdf553d3c83898b687d5ca443502b97e"
+    },
+    "barnard59-csvw": {
+      "source": "barnard59-csvw",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-csvw/SKILL.md",
+      "version": "3.0.1",
+      "via": ".",
+      "computedHash": "5dd729abb1bca88dbb1e1b6a89fc682c4a542ec64f7721678cc7ce6b85e7f0d8"
+    },
+    "barnard59-cube": {
+      "source": "barnard59-cube",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-cube/SKILL.md",
+      "version": "2.0.1",
+      "via": ".",
+      "computedHash": "17e499c8e55be3555e744bc07352b99022b18b948ab3a6416eafb911ba4ffbae"
+    },
+    "barnard59-files": {
+      "source": "barnard59",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-files/SKILL.md",
+      "version": "6.0.1",
+      "via": ".",
+      "computedHash": "a8612c86890635973599198b54d05809a93eb56d423be37c2bbfeaddace513f1"
+    },
+    "barnard59-formats": {
+      "source": "barnard59-formats",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-formats/SKILL.md",
+      "version": "4.0.4",
+      "via": ".",
+      "computedHash": "0526faa189af9e17ac42d988c869fc3f4bf8ce65347a951a792a298d72de2b82"
+    },
+    "barnard59-ftp": {
+      "source": "barnard59-ftp",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-ftp/SKILL.md",
+      "version": "3.0.0",
+      "via": ".",
+      "computedHash": "57ae86be6170e9e424b5823224e533a8805cd47059aaad334e5f17861dad6b1b"
+    },
+    "barnard59-graph-store": {
+      "source": "barnard59-graph-store",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-graph-store/SKILL.md",
+      "version": "7.0.1",
+      "via": ".",
+      "computedHash": "20b8bade84a0ed47b551b94d3e795a5dd058b30b4f8de168cc4f71f06c7d84b0"
+    },
+    "barnard59-http": {
+      "source": "barnard59-http",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-http/SKILL.md",
+      "version": "3.0.0",
+      "via": ".",
+      "computedHash": "f59e13fccd5f6e96155c3ebbfef82528204cf9945e05ac86eb937d8e899e40f9"
+    },
+    "barnard59-local-commands": {
+      "source": "barnard59",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-local-commands/SKILL.md",
+      "version": "6.0.1",
+      "via": ".",
+      "computedHash": "9e674eb764d3308a43227cb065e8cfa3a1c1416528c06f160cb4b2fd1596ea4f"
+    },
+    "barnard59-n3": {
+      "source": "barnard59-n3",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-n3/SKILL.md",
+      "version": "0.2.0",
+      "via": ".",
+      "computedHash": "d13c33111633d41c4dc74f982ac4eff33ea178dacf1a4e2de7658fc8a779ff75"
+    },
+    "barnard59-pipeline-imports": {
+      "source": "barnard59",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-pipeline-imports/SKILL.md",
+      "version": "6.0.1",
+      "via": ".",
+      "computedHash": "38a0b3f2ff952ac8035f18dd95a7614943a3d8a5b0cb88c5f65ab3e392f64535"
+    },
+    "barnard59-rdf": {
+      "source": "barnard59-rdf",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-rdf/SKILL.md",
+      "version": "4.0.1",
+      "via": ".",
+      "computedHash": "3bc464f976e24de0657947e03eba281717a97576fa9869d4d2313abd246eed8e"
+    },
+    "barnard59-s3": {
+      "source": "barnard59-s3",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-s3/SKILL.md",
+      "version": "0.3.2",
+      "via": ".",
+      "computedHash": "b2987008944b8770b3ffa563d8e92a75b200207d14575e58d1c53e6f09014e97"
+    },
+    "barnard59-shacl": {
+      "source": "barnard59-shacl",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-shacl/SKILL.md",
+      "version": "2.0.1",
+      "via": ".",
+      "computedHash": "c203e1578360386d11f544a167e42b7552ba88c1ad7571b43f2ca170855f6c0b"
+    },
+    "barnard59-sparql": {
+      "source": "barnard59-sparql",
+      "sourceType": "node_modules",
+      "skillPath": "skills/barnard59-sparql/SKILL.md",
+      "version": "3.0.1",
+      "via": ".",
+      "computedHash": "114d64a059cc28fe6efea8ff3615792bfd5efb8523968def8ff0ee32c28e2519"
+    },
+    "env": {
+      "source": "@zazuko/env",
+      "sourceType": "node_modules",
+      "skillPath": "skills/env/SKILL.md",
+      "version": "3.0.6",
+      "via": ".",
+      "computedHash": "5249729f6129e68df358784365c81adbae504dbb39567158cd3c23201fb8bf1f"
+    },
+    "node-cli-entrypoint": {
+      "source": "tpluscode/skills",
+      "commit": "b9409681cfdb90768ae858fd8edb66bedbe4020b",
+      "sourceType": "github",
+      "skillPath": "skills/node-cli-entrypoint/SKILL.md",
+      "computedHash": "8626edc0f4e3788cef9faccef5258af5361dc23ada628fbe217a825d56f48002"
+    },
+    "skill-check": {
+      "source": "skill-check",
+      "sourceType": "node_modules",
+      "skillPath": "skills/skill-check/SKILL.md",
+      "version": "1.2.0",
+      "computedHash": "9a59c76242deeeafcb4672a0e7b4b10d8623bef0d8abc9444b17fc6000bcbf33"
+    }
+  }
+}

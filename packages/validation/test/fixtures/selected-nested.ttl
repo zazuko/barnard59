@@ -1,0 +1,15 @@
+PREFIX p: <https://pipeline.described.at/>
+
+<urn:main> a p:Pipeline, p:Readable ;
+  p:steps [ p:stepList ( <urn:nested> ) ] .
+
+<urn:nested> a p:Pipeline, p:Readable ;
+  p:steps [ p:stepList ( [ a p:Pipeline, p:Readable ;
+    p:steps [ p:stepList ( <urn:broken> <urn:main> ) ]
+  ] ) ] .
+
+<urn:unrelated> a p:Pipeline, p:Readable ;
+  p:steps [ p:stepList ( <urn:unrelated-broken> ) ] .
+
+<urn:broken> a p:Step .
+<urn:unrelated-broken> a p:Step .

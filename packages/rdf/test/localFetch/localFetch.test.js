@@ -104,7 +104,7 @@ describe('metadata.lfetch', function () {
 
   it('fails at unknown protocol', async function () {
     await assertThrows(async () => {
-      await localFetch('unknown::protocol')
+      await localFetch('unknown://example.invalid/metadata.ttl')
     }, Error, /unknown protocol/)
   })
 })

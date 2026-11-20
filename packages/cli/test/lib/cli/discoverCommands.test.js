@@ -18,7 +18,7 @@ describe('lib/cli/discoverCommands.js', function () {
       .to.contain.all.members(['put'])
   })
 
-  it('creates flag with default value', async function () {
+  it('lets a pipeline use its default when a boolean switch is omitted', async function () {
     // given
     let command
     const manifest = rdf.clownface()
@@ -36,8 +36,18 @@ describe('lib/cli/discoverCommands.js', function () {
     for await (const discovered of discoverCommands(manifests)) {
       command = discovered
     }
+    let options
+    command.exitOverride()
+      .configureOutput({ writeErr: () => {} })
+      .action((parsed) => {
+        options = parsed
+      })
+    await command.parseAsync([], { from: 'user' })
 
     // then
-    expect(command.options[0].defaultValue).to.eq('foobar')
+    expect(command.options.find(option => option.long === '--flag'))
+      .to.include({ flags: '--flag', mandatory: false })
+    expect(options).to.have.property('abc', 'foobar')
+    expect(options).not.to.have.own.property('flag')
   })
 })
