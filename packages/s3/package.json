@@ -1,6 +1,6 @@
 {
   "name": "barnard59-s3",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "S3 support for Linked Data pipelines",
   "type": "module",
   "main": "index.js",
