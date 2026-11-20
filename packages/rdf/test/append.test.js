@@ -131,7 +131,7 @@ describe('metadata.append', function () {
   it('fails at unknown protocol', async function () {
     await assertThrows(async () => {
       const step = await append({
-        input: 'unknown::protocol',
+        input: 'unknown://example.invalid/metadata.ttl',
       })
       await applyStep(step)
     }, Error, /unknown protocol/)
