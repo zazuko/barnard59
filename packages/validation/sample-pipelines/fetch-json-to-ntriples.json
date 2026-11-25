@@ -31,7 +31,7 @@
                     {
                         "@type": "Variable",
                         "name": "url",
-                        "value": "https://timeapi.io/api/Time/current/zone?timeZone=UTC"
+                        "value": "https://worldtime.timezone.io/api/timezone/Etc/UTC"
                     },
                     {
                         "@id": "dateContext"
@@ -51,7 +51,7 @@
                     {
                         "@type": "Variable",
                         "name": "url",
-                        "value": "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam"
+                        "value": "https://worldtime.timezone.io/api/timezone/Europe/Amsterdam"
                     },
                     {
                         "@id": "dateContext"
@@ -97,7 +97,7 @@
                     },
                     "code:arguments": [
                         {
-                            "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.dateTime } }",
+                            "@value": "json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }",
                             "@type": "code:EcmaScript"
                         }
                     ]
