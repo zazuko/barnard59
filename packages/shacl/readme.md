@@ -20,24 +20,24 @@ The argument is an RDF stream containing the SHACL shapes.
 
 ```turtle
 prefix : <https://pipeline.described.at/>
-prefix code: <https://code.described.at/>
-prefix shacl: <https://barnard59.zazuko.com/operations/shacl/>
-prefix fs: <https://barnard59.zazuko.com/operations/core/fs/>
+prefix op: <https://barnard59.zazuko.com/operations/>
 
-[
-  a :Pipeline ;
-  :steps
-    [
-      :stepList 
-        (
-          [ fs:createReadStream ( "path/to/data" ) ]
-          [ shacl:validate ( <#CubeShapes> ) ]
-        )
-    ] ;
-] .
+<#Validate> a :Pipeline, :Readable ;
+  :steps [ :stepList (
+    [ op:rdf\/open ("data.ttl") ]
+    [ op:rdf\/getDataset () ]
+    [ op:shacl\/validate (<#CubeShapes>) ]
+    [ op:base\/flatten () ]
+    [ op:formats\/ntriples\/serialize () ]
+  ) ] .
+
+<#CubeShapes> a :Pipeline, :ReadableObjectMode ;
+  :steps [ :stepList (
+    [ op:rdf\/open ("shapes.ttl") ]
+  ) ] .
 ```
 
-> Note that this operation does not take care of partitioning the data, using this operation requires to prepare the data accordingly.
+The example groups all input quads into one dataset. For separate validation units, group quads into one dataset per unit before the validation step.
 
 To pass additional options, initialize the step with named arguments instead. All except `shape` are optional.
 
@@ -87,27 +87,26 @@ Similar to `validate`, but instead of returning the data graph, it streams SHACL
 
 ```turtle
 prefix : <https://pipeline.described.at/>
-prefix code: <https://code.described.at/>
-prefix shacl: <https://barnard59.zazuko.com/operations/shacl/>
-prefix fs: <https://barnard59.zazuko.com/operations/core/fs/>
+prefix op: <https://barnard59.zazuko.com/operations/>
 
-[
-  a :Pipeline, :Readable ;
-  :steps
-    [
-      :stepList 
-        (
-          [ fs:createReadStream ( "path/to/data" ) ]
-          # TODO: parse input and group into dataset chunks for validation
-          [ shacl:report ( <#CubeShapes> ) ]
-        )
-    ] ;
-] .
+<#Report> a :Pipeline, :Readable ;
+  :steps [ :stepList (
+    [ op:rdf\/open ("data.ttl") ]
+    [ op:rdf\/getDataset () ]
+    [ op:shacl\/report (<#CubeShapes>) ]
+    [ op:base\/flatten () ]
+    [ op:formats\/ntriples\/serialize () ]
+  ) ] .
+
+<#CubeShapes> a :Pipeline, :ReadableObjectMode ;
+  :steps [ :stepList (
+    [ op:rdf\/open ("shapes.ttl") ]
+  ) ] .
 ```
 
 
 
-By default, the pipeline will stop when 500 validation errors are encountered across all processed datasets. This can be changed by passing a `maxErrors` argument. Specifically, to fail on first violation, set it to `0`. 
+Pass `maxErrors` to set a threshold for accumulated `sh:Violation` results. The operation checks the threshold before the next dataset. Omit it or set it to `0` to process all datasets.
 
 ```turtle
 [
@@ -136,7 +135,7 @@ cat data.ttl | barnard59 shacl validate --shapes https://example.com/shapes.ttl
 
 Shapes can also be path relative to the working directory.
 
-In cases when a remote address give to `--shapes` option does not include a correct `content-type` header (or does not provide a `content-type` header at all), the pipeline will fail. In such cases, it is possible to use the `--shapesFormat` option to select the correct RDF parser. Its value must be a media type, such as `text/turtle`.
+If a remote shapes response has a missing or incorrect Content-Type header, use `--shapesMediaType` to select an RDF parser. Pass a media type such as `text/turtle`.
 
 ### report-summary
 

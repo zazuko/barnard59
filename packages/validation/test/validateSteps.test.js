@@ -54,6 +54,7 @@ describe('parser.validateSteps', function () {
       p5: ['o'],
     })
 
+    parser.validateSteps({ pipelines, properties }, checks)
     Object.keys(pipelines).forEach((pipeline) => {
       assert.deepStrictEqual(checks.getPipelineChecks(pipeline, 'error'), [])
       assert.deepStrictEqual(checks.getPipelineChecks(pipeline, 'warning'), [])
@@ -84,6 +85,31 @@ describe('parser.validateSteps', function () {
     parser.validateSteps({ pipelines, properties }, checks)
     const expIssue = validators.operationPropertiesExist.validate(null, 'n-step', 'n')
     assert(checkArrayContainsObject(checks.pipelines.p1, expIssue))
+  })
+
+  it('should skip stream compatibility checks when the previous step has no metadata', function () {
+    const source = { stepName: 'inline', stepOperation: 'inline', stepProperties: null }
+    const sink = opToStep('ow')
+    const pipelines = { main: [source, sink] }
+
+    parser.validateSteps({ pipelines, properties: { ...properties, inline: ['Operation', 'Readable'] } }, checks)
+
+    assert.deepStrictEqual(checks.getPipelineChecks('main', 'warning'), [
+      validators.operationPropertiesExist.validate(null, source.stepName, source.stepOperation),
+      validators.previousOperationHasMetadata.validate(null, sink.stepName, sink.stepOperation),
+    ])
+    assert.deepStrictEqual(checks.getPipelineChecks('main', 'error'), [])
+  })
+
+  it('should report absent operation metadata when there is no manifest entry', function () {
+    const step = opToStep('missing')
+    const pipelines = { main: [step] }
+
+    parser.validateSteps({ pipelines, properties }, checks)
+
+    assert.deepStrictEqual(checks.getPipelineChecks('main'), [
+      validators.operationPropertiesExist.validate(null, step.stepName, step.stepOperation),
+    ])
   })
 
   it('should report found metadata', function () {
@@ -167,7 +193,7 @@ describe('parser.validateSteps', function () {
 
     Object.keys(pipelines).forEach((pipeline) => {
       const [, errorMessage] = expectedErrors[pipeline]
-      pipelineContainsMessage(checks, errorMessage, pipeline)
+      assert(pipelineContainsMessage(checks, errorMessage, pipeline))
     })
   })
 })

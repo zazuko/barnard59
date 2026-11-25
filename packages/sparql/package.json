@@ -30,7 +30,7 @@
     "@tpluscode/rdf-string": "^1.1.2",
     "@types/sparql-http-client": "^3.0.0",
     "@types/sparqljs": "^3.1.12",
-    "@zazuko/env": "^3.0.3",
+    "@zazuko/env": "^3.0.6",
     "barnard59-env": "^1.2.3",
     "get-stream": "^6.0.0",
     "is-stream": "^3.0.0",

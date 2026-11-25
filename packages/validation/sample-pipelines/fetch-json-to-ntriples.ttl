@@ -8,7 +8,7 @@
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "http://worldtimeapi.org/api/timezone/etc/UTC" ;
+      p:value "https://worldtime.timezone.io/api/timezone/Etc/UTC" ;
     ] ,
     <dateContext>
   ] ;
@@ -19,7 +19,7 @@
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "http://worldtimeapi.org/api/timezone/CET" ;
+      p:value "https://worldtime.timezone.io/api/timezone/Europe/Amsterdam" ;
     ] ,
     <dateContext>
   ] ;
@@ -31,30 +31,36 @@
   p:value """{"date\":"http://purl.org/dc/elements/1.1/date"}""" .
 
 <steps>
-  p:stepList ( <fetch> <jsonldStructure> <parse> <serialize> ) .
+  p:stepList ( <fetch> <parseJson> <jsonldStructure> <parse> <serialize> ) .
 
 <fetch> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base#fetch.json> ;
+    code:link <node:barnard59-http#get> ;
     a code:EcmaScript
   ];
   code:arguments ("url"^^p:VariableName) .
 
+<parseJson> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base/json.js#parseDocument> ;
+    a code:EcmaScriptModule
+  ] .
+
 <jsonldStructure> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-base#map> ;
+    code:link <node:barnard59-base/map.js#default> ;
     a code:EcmaScript
   ];
   code:arguments ("json => { return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"^^code:EcmaScript) .
 
 <parse> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-formats#jsonld.parse.object> ;
+    code:link <node:barnard59-formats/jsonld.js#parseObject> ;
     a code:EcmaScript
   ] .
 
 <serialize> a p:Step ;
   code:implementedBy [
-    code:link <node:barnard59-formats#ntriples.serialize> ;
+    code:link <node:barnard59-formats/ntriples.js#serialize> ;
     a code:EcmaScript
   ] .

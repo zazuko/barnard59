@@ -17,18 +17,18 @@ const dateTimeLd = {
   '@context': {
     dateTime: 'http://purl.org/dc/elements/1.1/date',
   },
-  '@id': 'https://timeapi.io/api/time/current/zone?timeZone=CET',
+  '@id': 'https://worldtime.timezone.io/api/timezone/Europe/Zurich',
   'date': '2019-03-07T12:58:54.094127+01:00',
 }
 
 const dateTime = {
-  dateTime: '2019-03-07T12:58:54.094127+01:00',
+  datetime: '2019-03-07T12:58:54.094127+01:00',
 }
 
 describe('Pipeline', function () {
   beforeEach(function () {
-    nock('https://timeapi.io')
-      .get('/api/time/current/zone?timeZone=CET')
+    nock('https://worldtime.timezone.io')
+      .get('/api/timezone/Europe/Zurich')
       .reply(200, dateTime)
   })
 

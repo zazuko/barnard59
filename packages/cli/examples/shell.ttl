@@ -27,4 +27,4 @@
     code:link <node:barnard59-shell>;
     a code:EcmaScript
   ];
-  code:arguments ("sed" "--expression=s/columnA/columnZ/g").
+  code:arguments ("sed" "-e" "s/columnA/columnZ/g").

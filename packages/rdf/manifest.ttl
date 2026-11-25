@@ -32,7 +32,7 @@
                     ].
 
 <fs.js#parse>
-  a p:Operation, p:ReadableObjectMode ;
+  a p:Operation, p:WritableObjectMode, p:ReadableObjectMode ;
   rdfs:label "Parse RDF file" ;
   rdfs:comment "Opens and parses an RDF file, choosing the correct parser based on the extension" ;
   code:implementedBy

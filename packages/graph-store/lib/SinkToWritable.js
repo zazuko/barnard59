@@ -7,8 +7,9 @@ class SinkToWritable extends Writable {
   /**
    * @param {(readable: Readable) => Promise<void>} factory
    * @param {import('barnard59-core').Context} options
+   * @param {'reject' | 'skip' | 'upload'} [emptyInput]
    */
-  constructor(factory, { logger }) {
+  constructor(factory, { logger }, emptyInput = 'skip') {
     let hadQuads = false
 
     super({
@@ -27,7 +28,10 @@ class SinkToWritable extends Writable {
         callback()
       },
       final: async (callback) => {
-        if (!hadQuads) {
+        if (!hadQuads && emptyInput !== 'upload') {
+          if (emptyInput === 'reject') {
+            return callback(new Error('No RDF quads found in the source files. Use --allow-empty to skip the upload or --allow-clear to clear the graph.'))
+          }
           logger?.warn('No quads sent to the server. No request was made.')
           return callback()
         }
@@ -37,8 +41,7 @@ class SinkToWritable extends Writable {
         readable.push(null)
 
         try {
-          await isFinished
-          await returned.promise
+          await Promise.all([isFinished, returned.promise])
         }
         catch (/** @type {any} */ err) {
           return callback(err)

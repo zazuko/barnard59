@@ -8,7 +8,7 @@
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "https://timeapi.io/api/Time/current/zone?timeZone=UTC" ;
+      p:value "https://worldtime.timezone.io/api/timezone/Etc/UTC" ;
     ] ,
     <dateContext>
   ] ;
@@ -19,7 +19,7 @@
     p:variable [
       a p:Variable;
       p:name "url" ;
-      p:value "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam" ;
+      p:value "https://worldtime.timezone.io/api/timezone/Europe/Amsterdam" ;
     ] ,
     <dateContext>
   ] ;
@@ -44,7 +44,7 @@
 
 <parseJson> a p:Step ;
   code:implementedBy [ a code:EcmaScriptModule;
-    code:link <node:barnard59-base/json.js#parse>
+    code:link <node:barnard59-base/json.js#parseDocument>
   ].
 
 <jsonldStructure> a p:Step ;
@@ -52,7 +52,7 @@
     code:link <node:barnard59-base/map.js#default>
   ];
   code:arguments ("""json => {
-          return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.dateTime } }"""^^code:EcmaScript).
+          return { '@context': JSON.parse(this.variables.get('context')), '@id': this.variables.get('url'), date: json.datetime } }"""^^code:EcmaScript).
 
 <parse> a p:Step ;
   code:implementedBy [ a code:EcmaScriptModule;

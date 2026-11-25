@@ -24,4 +24,3 @@ In this monorepo you will find the various `barnard59-*` packages:
 | [`barnard59-sparql`](packages/sparql)           | [![](https://badge.fury.io/js/barnard59-sparql.svg)](https://npm.im/barnard59-sparql)           | Query SPARQL endpoint from pipeline                                                    |
 | [`barnard59-validation`](packages/validation)   | [![](https://badge.fury.io/js/barnard59-validation.svg)](https://npm.im/barnard59-validation)   | Verify the consistency of your RDF pipelines                                           |
 
-More to come as we gradually consolidate other, initially separate repositories.

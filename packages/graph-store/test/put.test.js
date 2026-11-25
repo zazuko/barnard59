@@ -1,4 +1,4 @@
-import { strictEqual } from 'node:assert'
+import { rejects, strictEqual } from 'node:assert'
 import { promisify } from 'node:util'
 import { finished } from 'node:stream'
 import rdf from '@zazuko/env'
@@ -22,7 +22,7 @@ describe('put', function () {
       strictEqual(isReadable(stream), false)
       strictEqual(isWritable(stream), true)
 
-      stream.end()
+      stream.destroy()
     })
   })
 
@@ -49,7 +49,7 @@ describe('put', function () {
     })
   })
 
-  it('should do nothing if the stream was closed and no quads have been written', async function () {
+  it('should reject empty input by default without sending a PUT request', async function () {
     await withServer(async (server) => {
       let called = false
 
@@ -64,10 +64,63 @@ describe('put', function () {
 
       stream.end()
 
+      await rejects(promisify(finished)(stream), /No RDF quads found/)
+
+      strictEqual(called, false)
+    })
+  })
+
+  it('should skip the PUT request for empty input when allowEmpty is true', async function () {
+    await withServer(async (server) => {
+      let called = false
+
+      server.app.put('/', async (req, res) => {
+        called = true
+
+        res.status(204).end()
+      })
+
+      const baseUrl = await server.listen()
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1, allowEmpty: true })
+
+      stream.end()
+
       await promisify(finished)(stream)
 
       strictEqual(called, false)
     })
+  })
+
+  it('should send an empty PUT to the target graph when allowClear is true', async function () {
+    await withServer(async (server) => {
+      let graph
+      let content
+
+      server.app.put('/', async (req, res) => {
+        graph = req.query.graph
+        content = await getStream(req)
+
+        res.status(204).end()
+      })
+
+      const baseUrl = await server.listen()
+      const stream = put({ endpoint: baseUrl, graph: ns.graph1, allowClear: true })
+
+      stream.end()
+
+      await promisify(finished)(stream)
+
+      strictEqual(graph, ns.graph1.value)
+      strictEqual(content, '')
+    })
+  })
+
+  it('should report an invalid endpoint as a stream error when clearing a graph', async function () {
+    const stream = put({ endpoint: 'invalid', graph: ns.graph1, allowClear: true })
+
+    stream.end()
+
+    await rejects(promisify(finished)(stream), { code: 'ERR_INVALID_URL' })
   })
 
   it('should send a content-type header with the value application/n-triples', async function () {

@@ -73,6 +73,13 @@
     code:link <node:barnard59-base/json.js#stringify>
   ].
 
+<json/parse/document> a p:Operation, p:Writable, p:ReadableObjectMode;
+  rdfs:label "Parse JSON document";
+  rdfs:comment "Reads the input stream as one JSON document and emits the parsed value.";
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-base/json.js#parseDocument>
+  ].
+
 <limit> a p:Operation, p:WritableObjectMode, p:ReadableObjectMode;
   rdfs:label "Limit";
   rdfs:comment "Limits the amount of forwarded chunks and discards any chunks after reaching the limit.";

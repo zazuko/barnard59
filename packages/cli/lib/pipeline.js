@@ -1,5 +1,6 @@
 import module from 'node:module'
 import { dirname, resolve } from 'node:path'
+import { pipeline } from 'node:stream/promises'
 import * as url from 'node:url'
 import rdf from 'barnard59-env'
 import { isGraphPointer } from 'is-graph-pointer'
@@ -44,10 +45,9 @@ const discoverOperations = async (pipelinePath) => {
  */
 export const desugar = async (dataset, { logger, knownOperations, pipelinePath }) => {
   const operations = knownOperations ?? await discoverOperations(pipelinePath)
-  const dir = await packageDirectory({
-    cwd: pipelinePath,
-  })
-  const require = module.createRequire(dir + '/')
+  const pipelineDir = pipelinePath ? dirname(resolve(pipelinePath)) : process.cwd()
+  const dir = await packageDirectory({ cwd: pipelineDir }) ?? pipelineDir
+  const require = module.createRequire(resolve(dir, 'package.json'))
 
   const ptr = rdf.clownface({ dataset })
   let n = 0
@@ -97,11 +97,18 @@ export const desugar = async (dataset, { logger, knownOperations, pipelinePath }
  * @param {string} filename
  * @return {Promise<import('@rdfjs/types').DatasetCore>}
  */
-async function fileToDataset(filename) {
-  const stream = rdf.fromFile(filename, {
+export async function fileToDataset(filename) {
+  const source = rdf.fromFile(filename, {
     implicitBaseIRI: true,
-  }).pipe(transformImports(rdf))
-  return rdf.dataset().import(stream)
+  })
+  // The readable-stream typings declare a narrower wrap() than Node's stream typings.
+  const input = /** @type {NodeJS.ReadableStream} */ (/** @type {unknown} */ (source))
+  const imports = transformImports(rdf)
+  const [dataset] = await Promise.all([
+    rdf.dataset().import(imports),
+    pipeline(input, imports),
+  ])
+  return dataset
 }
 
 /**

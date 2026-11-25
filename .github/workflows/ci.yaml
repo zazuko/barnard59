@@ -153,6 +153,18 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
+  skills-check:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run skills:check
+
   ensure-manifests:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
