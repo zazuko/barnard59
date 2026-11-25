@@ -1,5 +1,15 @@
 # barnard59-validation
 
+## 0.4.4
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`0f4c6f8`](https://github.com/zazuko/barnard59/commit/0f4c6f8f22182ed7d4dc04987f6bb5c08e4195c4) - Report file read and RDF parse failures as validation errors. Keep piped stdout parseable as JSON by sending human-readable diagnostics to stderr. Recognize local `file:` code links and `.js` links backed by TypeScript sources, and update the sample pipelines to use current operation exports.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`0f4c6f8`](https://github.com/zazuko/barnard59/commit/0f4c6f8f22182ed7d4dc04987f6bb5c08e4195c4) - Align validation with `barnard59 run` for pipeline definitions that use `code:imports`, operation shorthand, nested pipelines, or inline JavaScript. Check nested stages using their declared stream types and treat inline JavaScript as a step with unknown stream metadata.
+- Updated dependencies [[`65e2b50`](https://github.com/zazuko/barnard59/commit/65e2b50ab9fe5ad36c7f2dd4562aa62dd2ffc179), [`65e2b50`](https://github.com/zazuko/barnard59/commit/65e2b50ab9fe5ad36c7f2dd4562aa62dd2ffc179), [`65e2b50`](https://github.com/zazuko/barnard59/commit/65e2b50ab9fe5ad36c7f2dd4562aa62dd2ffc179), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904)]:
+  - barnard59@6.1.0
+
 ## 0.4.3
 
 ### Patch Changes

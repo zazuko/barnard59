@@ -1,5 +1,11 @@
 # barnard59-sparql
 
+## 3.0.2
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-sparql` skill for querying remote SPARQL endpoints and running queries and updates against in-memory datasets.
+
 ## 3.0.1
 
 ### Patch Changes

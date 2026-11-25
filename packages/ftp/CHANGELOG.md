@@ -1,5 +1,11 @@
 # barnard59-ftp
 
+## 3.0.1
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-ftp` skill for listing, reading, writing, and moving files over FTP or SFTP.
+
 ## 3.0.0
 
 ### Major Changes

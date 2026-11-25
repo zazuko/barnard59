@@ -1,5 +1,17 @@
 # barnard59-shacl
 
+## 2.0.2
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Fixed `manifest.ttl`
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-shacl` skill for validating RDF datasets and emitting or summarizing SHACL reports.
+- Updated dependencies [[`e12fa2b`](https://github.com/zazuko/barnard59/commit/e12fa2bba0d1c7385473b2a33a54ff1590bdf85a), [`2228ea1`](https://github.com/zazuko/barnard59/commit/2228ea1790ac6b988c6dbcfba4fd4f38e1c6e486), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904)]:
+  - barnard59-base@3.1.0
+  - barnard59-formats@4.0.5
+  - barnard59-rdf@4.0.2
+
 ## 2.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # barnard59-rdf
 
+## 4.0.2
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-rdf` skill for opening, grouping, transforming, enriching, and combining RDF/JS quad and dataset streams.
+
 ## 4.0.1
 
 ### Patch Changes

@@ -1,5 +1,28 @@
 # barnard59-graph-store
 
+## 8.0.0
+
+### Major Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f46db0c`](https://github.com/zazuko/barnard59/commit/f46db0ce4c7c2224034e935ea1b0815ce73c761a) - The `barnard59 graph-store put` command now requires an explicit `--graph` target. Pass `--graph DEFAULT` to write to the default graph.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f46db0c`](https://github.com/zazuko/barnard59/commit/f46db0ce4c7c2224034e935ea1b0815ce73c761a) - By default, Graph Store `put` now fails when the input contains no RDF quads. To keep skipping empty uploads successfully, pass `--allow-empty` in the CLI or set `allowEmpty: true` in JavaScript or a pipeline step.
+
+### Minor Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f46db0c`](https://github.com/zazuko/barnard59/commit/f46db0ce4c7c2224034e935ea1b0815ce73c761a) - Added `--allow-clear` option to clear the target graph with an empty PUT when the input contains no RDF quads. This takes precedence over `--allow-empty`. In JavaScript and pipeline steps, set `allowClear: true`.
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f46db0c`](https://github.com/zazuko/barnard59/commit/f46db0ce4c7c2224034e935ea1b0815ce73c761a) - Mask the Graph Store upload password in CLI pipeline logs.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f46db0c`](https://github.com/zazuko/barnard59/commit/f46db0ce4c7c2224034e935ea1b0815ce73c761a) - Ignore directories matched by the Graph Store `put` command's `--source` glob so only files are passed to the RDF parser.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-graph-store` skill for reading, appending to, and replacing RDF graphs through the SPARQL Graph Store Protocol.
+- Updated dependencies [[`e12fa2b`](https://github.com/zazuko/barnard59/commit/e12fa2bba0d1c7385473b2a33a54ff1590bdf85a), [`2228ea1`](https://github.com/zazuko/barnard59/commit/2228ea1790ac6b988c6dbcfba4fd4f38e1c6e486), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904), [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904)]:
+  - barnard59-base@3.1.0
+  - barnard59-rdf@4.0.2
+
 ## 7.0.1
 
 ### Patch Changes

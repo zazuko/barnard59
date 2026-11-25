@@ -1,6 +1,6 @@
 {
   "name": "barnard59-validation",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "type": "module",
   "main": "cli.js",
   "bin": {
@@ -15,11 +15,11 @@
   "license": "MIT",
   "devDependencies": {
     "@jsdevtools/chai-exec": "^2.1.1",
-    "barnard59-base": "^3.0.0",
+    "barnard59-base": "^3.1.0",
     "barnard59-core": "^7.0.0",
-    "barnard59-formats": "^4.0.3",
-    "barnard59-graph-store": "^7.0.1",
-    "barnard59-http": "^3.0.0",
+    "barnard59-formats": "^4.0.5",
+    "barnard59-graph-store": "^8.0.0",
+    "barnard59-http": "^3.0.1",
     "chai": "^6.3.0",
     "deep-equal": "^2.0.5",
     "esmock": "^2.3.8",
@@ -37,7 +37,7 @@
   "dependencies": {
     "@rdfjs/namespace": "^2.0.0",
     "barnard59-env": "^1.2.7",
-    "barnard59": "^6.0.1",
+    "barnard59": "^6.1.0",
     "chalk": "^4.1.0",
     "commander": "^11.0.0",
     "rdf-loader-code": "^2.2.2"

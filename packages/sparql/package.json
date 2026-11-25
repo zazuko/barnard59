@@ -1,6 +1,6 @@
 {
   "name": "barnard59-sparql",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "SPARQL support for Barnard59 Linked Data pipelines",
   "type": "module",
   "main": "index.js",
