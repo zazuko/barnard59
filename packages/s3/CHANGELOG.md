@@ -1,5 +1,13 @@
 # barnard59-s3
 
+## 0.3.3
+
+### Patch Changes
+
+- [#413](https://github.com/zazuko/barnard59/pull/413) [`89c46c8`](https://github.com/zazuko/barnard59/commit/89c46c8605f39aef9302a25f0e16ba7f6b073001) - Updated AWS SDK
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-s3` skill for downloading files, streaming object bodies, and uploading files to S3.
+
 ## 0.3.2
 
 ### Patch Changes

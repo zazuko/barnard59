@@ -1,5 +1,25 @@
 # barnard59
 
+## 6.1.0
+
+### Minor Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`65e2b50`](https://github.com/zazuko/barnard59/commit/65e2b50ab9fe5ad36c7f2dd4562aa62dd2ffc179) - Support boolean switches in pipeline-defined CLI commands. Set `sh:datatype xsd:boolean` on a pipeline variable to expose it as a switch such as `--allow-empty`, with no argument required.
+
+### Patch Changes
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`65e2b50`](https://github.com/zazuko/barnard59/commit/65e2b50ab9fe5ad36c7f2dd4562aa62dd2ffc179) - Pass hyphenated CLI options to custom pipelines under their declared variable names. Previously, the CLI dropped these values because Commander returned them under camelCase keys.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`65e2b50`](https://github.com/zazuko/barnard59/commit/65e2b50ab9fe5ad36c7f2dd4562aa62dd2ffc179) - Report file read and RDF parse errors when loading pipeline definitions.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-files` skill for reading and writing local files with Node.js streams, pipeline variables, and CLI output.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-local-commands` skill for exposing local pipelines as named CLI subcommands with options and boolean switches.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59-pipeline-imports` skill for splitting pipeline definitions across RDF files and sharing subpipelines with `code:imports`.
+
+- [#416](https://github.com/zazuko/barnard59/pull/416) [`f9b9f9e`](https://github.com/zazuko/barnard59/commit/f9b9f9e23b70aa4af2254f2f308246cee0639904) - Add the `barnard59` skill for building, running, and troubleshooting RDF ETL pipelines.
+
 ## 6.0.1
 
 ### Patch Changes
