@@ -41,6 +41,18 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: barnard59-${{ matrix.package }}
 
+  test-changelog:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: node --test .github/changelog.test.js
+
   type-check:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest

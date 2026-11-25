@@ -1,9 +1,13 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@4.0.1/schema.json",
   "changelog": [
-    "@changesets/changelog-github",
+    "../.github/changelog.js",
     {
-      "repo": "zazuko/barnard59"
+      "repo": "zazuko/barnard59",
+      "excludeFromThanks": [
+        "tpluscode",
+        "dependabot"
+      ]
     }
   ],
   "format": "auto",

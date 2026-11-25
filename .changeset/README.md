@@ -6,3 +6,7 @@ find the full documentation for it [in our repository](https://github.com/change
 
 We have a quick list of common questions to get you started engaging with this project in
 [our documentation](https://github.com/changesets/changesets/blob/main/docs/common-questions.md)
+
+To omit a GitHub account from generated changelog thanks, add its login without
+the `@` prefix to `changelog[1].excludeFromThanks` in [config.json](config.json).
+Matching is case-insensitive.
